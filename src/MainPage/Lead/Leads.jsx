@@ -32,16 +32,22 @@ import {
 } from "../../Services/lead.service";
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 import { tourGet } from '../../redux/features/tour/tourSlice';
+import { clientGet, setObj } from "../../redux/features/client/clientSlice";
 const Leads = () => {
   console.log("helloe owlr");
+  const dispatch = useDispatch();
   const agents = useSelector(getAllAgents);
   const teamLeads = useSelector(getAllTeamLeadsEmployees);
   const destinations = useSelector((state) => state.tour.tours);
+  const clients = useSelector((state) => state.client.clientArr);
+  const [clientObj, setClientObj] = useState({id:"",name:""})
+  const [clientId, setClientId] = useState("")
+  const [leadObj, setLeadObj] = useState({})
+  const [leadUpdateId, setLeadUpdateId] = useState('')
 
   const [agentsArr, setAgentsArr] = useState([]);
-  const [destinationsArr, setDestinationsArr] = useState([]);
+  const [clientsArr, setClientsArr] = useState([]);
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
-  const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
@@ -50,6 +56,7 @@ const Leads = () => {
   const [phone, setPhone] = useState("");
   const [agentId, setAgentId] = useState("");
   const [leadId, setLeadId] = useState("");
+  const [spokeId, setSpokeId] = useState("");
   const [desctinationId, setDestinationId] = useState("");
   const [description, setDescription] = useState("");
   const [fileUrl, setFileUrl] = useState("");
@@ -75,15 +82,14 @@ const Leads = () => {
       status: "New",
     },
   ]);
-  useEffect(() => {
-    if ($(".select").length > 0) {
-      $(".select").select2({
-        minimumResultsForSearch: -1,
-        width: "100%",
-      });
-    }
-  });
 
+
+  useEffect(() => {
+
+ let obj = clientsArr.find(client => client._id  == clientId);
+    setClientObj(obj)
+  }, [clientId])
+  
   const customStyles = {
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
     option: (provided, { isFocused, isSelected }) => ({
@@ -140,10 +146,43 @@ const Leads = () => {
 
   useEffect(() => {
     handleGetAllLeads();
-    dispatch(tourGet());
+    dispatch(clientGet());
   }, []);
 
+
+  const handleEdit = (lead) => {
+      if(lead){
+        setLeadObj(lead);
+        setLeadUpdateId(lead._id);
+      } else {
+        setLeadObj({});
+        setLeadUpdateId("");
+
+      }
+  }
   useEffect(() => {
+ 
+    if(leadUpdateId){
+      setSubject(leadObj.subject);
+      setClientId(leadObj?.clientObj?._id);
+      setPhone(leadObj.phone);
+      setPriority(leadObj.priority);
+      setAgentId(leadObj.agentId);
+      setSpokeId(leadObj.spokeId);
+      setDescription(leadObj.description);
+    }
+}, [leadUpdateId])
+  useEffect(() => {
+ 
+      if(clients){
+        setClientsArr(clients);
+      }
+  }, [clients])
+  
+
+  useEffect(() => {
+
+    console.log(clientsArr,"clientasdsadas---------------------------------------------+++++++++++++++++++++")
     if (agents && agents.length > 0) {
       let tempArr = agents.map((el) => {
         let obj = {
@@ -157,22 +196,7 @@ const Leads = () => {
     }
   }, [agents]);
 
-  useEffect(() => {
-
-    console.log(destinations,"dfygdsfhdafjdshfdhj")
-    if (destinations && destinations.length > 0) {
-      let tempArr = destinations.map((el) => {
-        let obj = {
-          label: `${el.name}`,
-          value: el?._id,
-          desctinationId : el?.leadId,
-        };
-        return obj;
-      });
-      setDestinationsArr([...tempArr]);
-    }
-  }, [destinations]);
-
+ 
   useEffect(() => {
     if (teamLeads && teamLeads.length > 0) {
       let tempArr = teamLeads.map((el) => {
@@ -265,19 +289,23 @@ const Leads = () => {
         description,
         fileUrl,
         priority,
+        clientObj,
+        creteadBy:userObj,
+        spokeId,
+        agentId
       };
 
-      if (agentId != "" && leadId == "") {
-        obj.agentId = agentId;
-      }
-      if (leadId != "" && agentId == "") {
-        obj.leadId = leadId;
-      }
-      if (leadId != "" && agentId != "") {
-        obj.leadId = leadId;
-      } else if (role == rolesObj.TEAMLEAD) {
-        obj.leadId = userObj?._id;
-      }
+      // if (agentId != "" && leadId == "") {
+      //   obj.agentId = agentId;
+      // }
+      // if (leadId != "" && agentId == "") {
+      //   obj.leadId = leadId;
+      // }
+      // if (leadId != "" && agentId != "") {
+      //   obj.leadId = leadId;
+      // } else if (role == rolesObj.TEAMLEAD) {
+      //   obj.leadId = userObj?._id;
+      // }
 
       let { data: res } = await createLead(obj, role);
       if (res.success) {
@@ -334,19 +362,18 @@ const Leads = () => {
   };
 
   const handleAgentChange = (e) => {
-    setLeadId("");
-    setAgentId(e.value);
+    setSpokeId(e.value);
+
   };
 
   const handleDestinationChange = (e) => {
-    setLeadId("");
-    setAgentId("");
-    setDestinationId(e.value);
+    setAgentId(e.value);
+
+    // setDestinationId(e.value);
   };
 
   const handleTeamLeadChange = (e) => {
-    setLeadId(e.value);
-    setAgentId("");
+    setAgentId(e.value);
   };
 
   const options = [
@@ -640,9 +667,11 @@ const Leads = () => {
               className="dropdown-item"
               href="#"
               data-bs-toggle="modal"
-              data-bs-target="#edit_Lead"
+              data-bs-target="#add_Lead"
+              
+              onClick={() => handleEdit(record)}
             >
-              <i className="fa fa-pencil m-r-5" /> Edit
+              <i className="fa fa-pencil m-r-5"  /> Edit
             </a>
             <a
               className="dropdown-item"
@@ -821,12 +850,19 @@ const Leads = () => {
           </div> */}
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
-              <Select
+
+              <select className="form-control" >
+                <option value="">Select Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              {/* <Select
                 onChange={handleFilterByPriority}
                 menuPortalTarget={document.body}
                 styles={customStyles}
                 options={options}
-              />
+              /> */}
               {/* handleFilterByPriority */}
               {/* <select className="select floating">
                 <option> -- Select -- </option>
@@ -891,7 +927,7 @@ const Leads = () => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add Lead</h5>
+              <h5 className="modal-title">  {leadUpdateId ? 'Update':'Add'} Lead</h5>
               <button
                 type="button"
                 className="close"
@@ -917,6 +953,20 @@ const Leads = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
+                      <label>Client ({clientsArr.length})</label>
+                      
+                      <select className="select form-control" value={clientId}  onChange={(e) => {setClientId(e.target.value); }}>
+                        <option value="" > --- Select Clients</option>
+                        {clientsArr && clientsArr.map((client,i) => {
+                             return (
+                               <option  key={i} value={client._id} >{client.name}</option>
+                             )
+                        })}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
                       <label>Phone</label>
                       <input
                         value={phone}
@@ -927,27 +977,9 @@ const Leads = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Destination ({destinationsArr.length})</label>
-                        <Select
-                          ref={destinationSelect}
-                          onChange={handleDestinationChange}
-                          options={destinationsArr}
-                        />
-                      </div>
-                  </div>
+              
              
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label>Client</label>
-                      <select className="select">
-                        <option>-</option>
-                        <option>Delta Infotech</option>
-                        <option>International Software Inc</option>
-                      </select>
-                    </div>
-                  </div>
+            
 
                   <div className="col-md-6">
                     <div className="form-group">
@@ -1011,7 +1043,7 @@ const Leads = () => {
                     onClick={(e) => handleSubmitLead(e)}
                     className="btn btn-primary submit-btn"
                   >
-                    Submit
+                    {leadUpdateId ? 'Update':'Add'}
                   </button>
                 </div>
               </form>

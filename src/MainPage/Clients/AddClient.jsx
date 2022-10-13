@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import { toastError } from '../../utils/toastUtils';
 import { useSelector, useDispatch } from "react-redux";
 
@@ -7,6 +7,7 @@ import { clientAdd,clientUpdate } from '../../redux/features/client/clientSlice'
 const AddClient = () => {
 
     const dispatch = useDispatch();
+    const clientResultObj = useSelector((state) => state.client.clientObj);
     
     const [name, setName] = useState("");
     const [email, setEmail] = useState("")
@@ -16,20 +17,28 @@ const AddClient = () => {
     const [clientObj, setClientObj] = useState({})
     const [clientId, setClientId] = useState("")
     
+    useEffect(() => {
+      if (clientResultObj) {
+        setClientObj(clientResultObj);
+      }
+    }, [clientResultObj]);
 
+    useEffect(() => {
+      if (clientObj) {
+        setClientId(clientObj._id);
+        setName(clientObj.name);
+        setEmail(clientObj.email);
+        setDob(clientObj.dob);
+        setPhone(clientObj.phone);
+        setAnniversaryDate(clientObj.anniversaryDate);
+      }
+    }, [clientObj]);
 
     const handleSubmit = (e) => {
 
         console.log('jksdfjksdafdashfdslfhdslfhsdalkfsdklfdsfsdkl');
         e.preventDefault();
-        // if (name == "") {
-        //     toastError("Tour Name is mandatory");
-        //     // throw "tour name is mandatory";
-        //   }
-        //   if (email == "") {
-        //     toastError("Tour Name is mandatory");
-        //     // throw "tour name is mandatory";
-        //   }
+     
         let obj = {name,email,phone,dob,anniversaryDate};
         if (clientId) {
           dispatch(clientUpdate({obj,clientId}));

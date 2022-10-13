@@ -2,14 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { Link } from 'react-router-dom';
-import { Avatar_07 } from "../../Entryfile/imagepath"
-import Editclient from "../../_components/modelbox/Editclient"
+
 import { Table } from 'antd';
 import { useSelector, useDispatch } from "react-redux";
 import 'antd/dist/antd.css';
 import { itemRender, onShowSizeChange } from "../paginationfunction"
 import "../antdstyle.css"
-import { tourGet,updateTour,deleteTour,setTour,addTour} from '../../redux/features/tour/tourSlice';
+import { clientAdd,clientGet,setclientObj,clientUpdate,clientDelete } from '../../redux/features/client/clientSlice';
 
 import AddClient from './AddClient';
 
@@ -26,9 +25,8 @@ const Clients = () => {
 
 
   const dispatch = useDispatch();
-  const tourResultObj = useSelector((state) => state.tour.tourObj);
-  const toursResultArr = useSelector((state) => state.tour.tours);
-  const [tourMainArr, setTourMainArr] = useState([]);
+  const clientResultArr = useSelector((state) => state?.client.clientArr);
+  const [clientMainArr, setClientMainArr] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
@@ -38,24 +36,23 @@ const Clients = () => {
 
 
   const handleInit = () => {
-      dispatch(tourGet());
+      dispatch(clientGet());
     };
 
     useEffect(() => {
-          setTourMainArr(toursResultArr)
-       }, [toursResultArr]) ; 
+          setClientMainArr(clientResultArr)
+       }, [clientResultArr]) ; 
 
 
   const handleEdit = (row) => {
 
     console.log(row, "row update"); //whole object
-    setIsUpdateTour(true);
 
-    dispatch(setTour(row));
+    dispatch(setclientObj(row));
   };
 
-  const handleTourDelete = (id) => {
-    dispatch(deleteTour(id));
+  const handleDelete = (id) => {
+    dispatch(clientDelete(id));
   };
 
   const handleSatus = (row,status) => {
@@ -64,35 +61,13 @@ const Clients = () => {
     status:status
   }
  
-    dispatch(updateTour(obj));
+    dispatch(clientUpdate(obj));
    
   };
 
-useEffect(() => {
-  if (tourResultObj) {
-      setTourId(tourResultObj._id);
-    setName(tourResultObj.name);
-    setDescription(tourResultObj.description);
-  }
-}, [tourResultObj]);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  if (name == "") {
-      toastError("Tour Name is mandatory");
-      // throw "tour name is mandatory";
-    }
- 
-  let obj = {name,description};
-  if (isUpdateTour) {
-    obj.Id = tourId;
-    setIsUpdateTour(false);
-    dispatch(updateTour(obj));
 
-  } else {
-    dispatch(addTour(obj));
-  }
-};
+
   const tour_columns = [
   
     {
@@ -100,36 +75,39 @@ const handleSubmit = (e) => {
       dataIndex: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
     },
-
     {
-      title: 'Description',
-      dataIndex: 'description',
-      sorter: (a, b) => a.description.length - b.description.length,
+      title: 'Email',
+      dataIndex: 'email',
+      sorter: (a, b) => a.email.length - b.email.length,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (row, record) => (
-        <div className="dropdown">
-          <a href="#" className="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <i className={record.status ===true ? "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {record.status ?'Active':'Inactive'} </a>
-          <div className="dropdown-menu">
-            <a className="dropdown-item" href="#" onClick={() => handleSatus(record,true)} ><i className="fa fa-dot-circle-o text-success" /> Active</a>
-            <a className="dropdown-item" href="#" onClick={() => handleSatus(record,false)}><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
-          </div>
-        </div>
-      ),
+      title: 'Phone',
+      dataIndex: 'phone',
+      sorter: (a, b) => a.phone.length - b.phone.length,
     },
+    // {
+    //   title: 'Status',
+    //   dataIndex: 'status',
+    //   render: (row, record) => (
+    //     <div className="dropdown">
+    //       <a href="#" className="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    //         <i className={record.status ===true ? "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {record.status ?'Active':'Inactive'} </a>
+    //       <div className="dropdown-menu">
+    //         <a className="dropdown-item" href="#" onClick={() => handleSatus(record,true)} ><i className="fa fa-dot-circle-o text-success" /> Active</a>
+    //         <a className="dropdown-item" href="#" onClick={() => handleSatus(record,false)}><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
     {
       title: 'Action',
       render: (row, record) => (
-        <div className="dropdown dropdown-action text-end">
-          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_destination" onClick={() => handleEdit(row)}><i className="fa fa-pencil m-r-5" /> Edit</a>
-            <a className="dropdown-item" onClick={() => handleTourDelete(row._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
-          </div>
+
+        <div className='d-flex'>
+          <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_client" onClick={() => handleEdit(row)}><i className="fa fa-pencil m-r-5" /> Edit</a>
+            <a className="dropdown-item" onClick={() => handleDelete(row._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
         </div>
+       
       ),
     },
   ];
@@ -197,14 +175,14 @@ const handleSubmit = (e) => {
         
               <Table className="table-striped"
                 pagination={{
-                  total: tourMainArr.length,
+                  total: clientMainArr.length,
                   showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                   showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
                 }}
                 style={{ overflowX: 'auto' }}
                 columns={tour_columns}
                 // bordered
-                dataSource={tourMainArr}
+                dataSource={clientMainArr}
                 rowKey={record => record.id}
               
               />

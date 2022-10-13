@@ -5,7 +5,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import Clients from './clients';
 import ClientsList from './clientslist';
 import Leades from './leades';
-import Leads from './Leads';
+import Leads from '../Lead/Leads';
 import LeadView from './LeadView';
 import CreateQuote  from './CreateQuote';
 import  QuotationFollowup  from './QuotationFollowup';

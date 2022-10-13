@@ -28,8 +28,7 @@ import Employee from "../MainPage/Employees/Employees";
 import AllEmployees from "../MainPage/Employees/Employees/allemployees";
 import Clients from "../MainPage/Clients/Clients";
 import ViewDestination from "../MainPage/Destination/ViewDestination";
-import Leads from "../MainPage/Employees/Leads";
-import LeadView from "../MainPage/Employees/LeadView";
+import Leads from "../MainPage/Lead/Leads";
 import CreateQuote from "../MainPage/Employees/CreateQuote";
 
 // import

@@ -31,12 +31,13 @@ export const clientGet = createAsyncThunk(
 );
 export const clientAdd = createAsyncThunk(
   "auth/clientAdd",
-  async (payload) => {
+  async (payload,thunkApi) => {
     try {
       console.log(payload, "payloadpayload21");
       let { data: response } = await AddClient(payload);
       console.log(response, "responsess2");
       toastSuccess(response.message);
+      thunkApi.dispatch(clientGet())
       return response;
     } catch (error) {
       toastError(error);

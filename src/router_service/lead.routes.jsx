@@ -1,5 +1,5 @@
 
-import LeadView from "../MainPage/Employees/LeadView";
+import LeadView from "../MainPage/Lead/LeadView";
 import Quotation from "../MainPage/Lead/Quotation/Quotation";
 export default [
 
