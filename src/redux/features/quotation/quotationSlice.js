@@ -8,7 +8,7 @@ import {
 
 let initialState = {
   quotationArr: [],
-  quotationObj: {},
+  quotationObj: null,
   quotaionAddLoading: {},
   quotaionAddError: {},
 };

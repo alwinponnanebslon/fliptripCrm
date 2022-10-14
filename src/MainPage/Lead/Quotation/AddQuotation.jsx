@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { quotationAdd ,quotationUpdate} from "../../../redux/features/quotation/quotationSlice";
 import { tourGet } from "../../../redux/features/tour/tourSlice";
+import { clientGet } from "../../../redux/features/client/clientSlice";
+import { toastError } from "../../../utils/toastUtils";
 const AddQuotation = () => {
 
 const {leadId} =  useParams();
@@ -16,15 +18,19 @@ console.log(leadId,"leadId")
   const [adultCount, setAdultCount] = useState(0);
   const tourValueArr = useSelector((state) => state.tour.tours);
   const quotationStateObj = useSelector((state) => state.quotation.quotationObj);
-  const [noOfTravellerArray ,setNoOfTravellerArray] = useState([])
+  const clients = useSelector((state) => state.client.clientArr);
+  const [noOfTravellerArray ,setNoOfTravellerArray] = useState([{name:"",age:"",passengerType:"Adult",bed:'false',isNew:false}])
   const [isAirport, setIsAirport] = useState(false)
   const [island, setIsLand] = useState(false);
   const [perPersonLandPrice, setPerPersonLandPrice] = useState(0);
   const [perPersonAirPortPrice, setPerPersonAirportPrice] = useState(0);
   const [totalPersonLandPrice, setTotalPersonLandPrice] = useState(0);
   const [totalPersonAirPortPrice, setTotalPersonAirportPrice] = useState(0);
-  const [quotationObj, setQuotationObj] = useState({})
+  const [quotationObj, setQuotationObj] = useState(null)
   const [quotationId, setQuotationId] = useState('')
+  const [clientsArr, setClientsArr] = useState([]);
+  const [clientId, setClientId] = useState("")
+const [clientObj, setclientObj] = useState(null)
 
 
   // useEffect(() => {
@@ -67,6 +73,9 @@ useEffect(() => {
 
   useEffect(() => {
     dispatch(tourGet());
+    dispatch(clientGet());
+
+    console.log("teave",travelList.length  )
   }, []);
 
 
@@ -76,6 +85,13 @@ useEffect(() => {
     }
   }, [quotationStateObj])
   
+
+  useEffect(() => {
+ 
+    if(clients){
+      setClientsArr(clients);
+    }
+}, [clients])
 
   useEffect(() => {
     if(quotationObj){
@@ -106,7 +122,7 @@ useEffect(() => {
     }
   }, [quotationObj])
   useEffect(() => {
-    console.log(tourValueArr,"tyuertret--------------------------------------------------------")
+    console.log(travelList,"tyuertret--------------------------------------------------------")
  if(tourValueArr && tourValueArr.length) {
     setTourArr(tourValueArr)
  }
@@ -176,6 +192,7 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
     }
     const list = [...noOfTravellerArray];
     list[index][name] = value;
+
     setNoOfTravellerArray(list);
   };
   const handleGuestBedRadio = (e, index) => {
@@ -183,6 +200,16 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   
     const list = [...noOfTravellerArray];
     list[index]["bed"] = value;
+    setNoOfTravellerArray(list);
+  };
+
+  const handleGuestIsNew = (value, index) => {
+  
+    const list = [...noOfTravellerArray];
+    list[index]["isNew"] = value;
+  console.log(list,value, "selectedTourIdArrLidt");
+  console.log(index,value, "selectedTourIdArrLidt");
+
     setNoOfTravellerArray(list);
   };
   
@@ -256,7 +283,7 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   const handleaddGuestArray = () => {
     setNoOfTravellerArray([
       ...noOfTravellerArray,
-      {name:"",age:"",passengerType:"Adult",bed:'false'}
+      {name:"",age:"",passengerType:"Adult",bed:'false',isNew:false}
     ]);
   };
 
@@ -474,7 +501,7 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                           return (
                             <div className="row mb-3" key={i}>
 
-                          <div className="form-group col-md-3">
+                          <div className="form-group col-md-4">
                                 <label>Guest Type </label>
                               <select className="form-control" name="passengerType" value={guest.passengerType}  onChange={(e) => handleGuestchange(e, i)}>
 
@@ -484,19 +511,45 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                               </select>
                              
                               </div>
-                            
-                              <div className="form-group col-md-3">
-                                <label>Guest Name</label>
-                                <input
-                                  type="text"
-                                  name="name"
-                                  className="form-control"
-                                  placeholder="Enter Name"
-                                  value={guest.name}
-                                  onChange={(e) => handleGuestchange(e, i)}
-                                />
+                            <div className=" form-group col-md-3">
+                            <label>Is Guest New   </label>
+                            <input type="checkbox" name="isNew" value={guest.isNew} checked={guest.isNew} onChange={(e) => handleGuestIsNew(!guest.isNew, i)} />
                               </div>
-                              <div className="form-group col-md-2">
+                              {guest.isNew === true ? (   
+                                
+                                  <div className="form-group col-md-4">
+                                      <label>Guest Name</label>
+                                      <input
+                                        type="text"
+                                        name="name"
+                                        className="form-control"
+                                        placeholder="Enter Name"
+                                        value={guest.name}
+                                        onChange={(e) => handleGuestchange(e, i)}
+                                      />
+                                    </div>
+                              
+                              ) : (
+
+                                  <div className="form-group col-md-4">
+                                    <label>Guest Name</label>
+
+                                        
+                                    <select className="select form-control"  name="name"  value={guest.name}
+                                        onChange={(e) => handleGuestchange(e, i)} >
+                                      <option value="" > --- Select Clients</option>
+                                      {clientsArr && clientsArr.map((client,i) => {
+                                          return (
+                                            <option  key={i} value={client.name} >{client.name}</option>
+                                          )
+                                      })}
+                                    </select>
+                                  
+                                  </div>
+                                
+                              )}
+                          
+                              <div className="form-group col-md-4">
                                 <label>Age</label>
                                 <input
                                   type="number"
@@ -753,7 +806,7 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                     <div className="content">
                     <div className="row">
                       <div className="col-sm-12">
-                        <h3 className="mt-3 mb-4">Tour Details</h3>
+                        <h3 className="mt-3 mb-4">Tour Details </h3>
                         </div>
               {travelList  &&  travelList.map((item,index) => {
                   return (
@@ -764,16 +817,13 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                     
                     <select className="form-control" name="name"    value={item.name}       onChange={(e) => handleTourValueChange(e, index)}>
                     <option  value="" disabled>--select an option--</option>
-                     
                       { tourArr && tourArr.length > 0 && 
                           tourArr.map((el,inde) => (
                             <option  key={inde} value={el.name}>{el.name}</option>
                           )
                       )}
                     </select>
-
                     </div>
-
                     <div className="col-md-6">
                         <label className="col-form-label ">
                           Start Date <span className="text-danger">*</span>

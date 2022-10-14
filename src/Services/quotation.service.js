@@ -9,7 +9,7 @@ export const AddQuotation = (obj) => {
 };
 
 export const get = (query) => {
-  return axios.get(`${serverUrl}/?${query}`);
+  return axios.get(`${serverUrl}?${query}`);
 };
 
 export const deleteQuotation = (id) => {

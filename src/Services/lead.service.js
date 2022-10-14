@@ -35,3 +35,7 @@ export const getById = (id) => {
   return axios.get(`${serverUrl}/getById/${id}`);
 };
 
+export const updatelead = (formData, id) => {
+  return axios.patch(`${serverUrl}/updateLead/${id}`, formData);
+};
+

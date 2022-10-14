@@ -29,6 +29,7 @@ import {
   createLead,
   getLeadsByRole,
   updateLeadStatus,
+  updatelead
 } from "../../Services/lead.service";
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 import { tourGet } from '../../redux/features/tour/tourSlice';
@@ -170,8 +171,18 @@ const Leads = () => {
       setAgentId(leadObj.agentId);
       setSpokeId(leadObj.spokeId);
       setDescription(leadObj.description);
+    } else {
+      setSubject('');
+      setClientId('');
+      setPhone('');
+      setPriority('');
+      setAgentId('');
+      setSpokeId('');
+      setDescription('');
     }
 }, [leadUpdateId])
+
+
   useEffect(() => {
  
       if(clients){
@@ -295,6 +306,11 @@ const Leads = () => {
         agentId
       };
 
+      if (role == rolesObj.TEAMLEAD) {
+          obj.agentId = userObj?._id;
+        }
+       
+
       // if (agentId != "" && leadId == "") {
       //   obj.agentId = agentId;
       // }
@@ -306,12 +322,24 @@ const Leads = () => {
       // } else if (role == rolesObj.TEAMLEAD) {
       //   obj.leadId = userObj?._id;
       // }
-
+      if(!leadUpdateId){
+        if (res.success) {
       let { data: res } = await createLead(obj, role);
+
+          toastSuccess(res.message);
+          handleGetAllLeads();
+        }
+      } else {
+
+      let { data: res } = await updatelead(obj, leadUpdateId);
       if (res.success) {
         toastSuccess(res.message);
+        setLeadObj({});
+        setLeadUpdateId("");
         handleGetAllLeads();
       }
+      }
+     
     } catch (err) {
       toastError(err);
       console.error(err);
@@ -851,7 +879,7 @@ const Leads = () => {
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
 
-              <select className="form-control" >
+              <select className="select form-control" >
                 <option value="">Select Priority</option>
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
@@ -984,10 +1012,16 @@ const Leads = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label>Priority</label>
-                      <Select
+                      <select value={priority} className="form-control"  onChange={(e)=>setPriority(e.target.value)}>
+                        <option value="High">High</option>
+                        <option value="Medium"> Medium</option>
+                        <option value="Low" >Low</option>
+
+                      </select>
+                      {/* <Select
                         onChange={handlePriorityChange}
                         options={options}
-                      />
+                      /> */}
                     </div>
                   </div>
              
@@ -999,12 +1033,21 @@ const Leads = () => {
                           <label>
                             Assign to Team Lead ({agentsArr.length})
                           </label>
-                          <Select
+
+                          <select className="select form-control" value={agentId}  onChange={(e) => {setAgentId(e.target.value); }}>
+                        <option value="" > --- Select Team Lead</option>
+                        {teamLeadsArr && teamLeadsArr.map((agent,i) => {
+                             return (
+                               <option  key={i} value={agent.value} >{agent.label}</option>
+                             )
+                        })}
+                      </select>
+                          {/* <Select
                             ref={teamLeadSelect}
                             // defaultInputValue={{ value: leadId }}
                             onChange={handleTeamLeadChange}
                             options={teamLeadsArr}
-                          />
+                          /> */}
                         </div>
                       </div>
                     )}
@@ -1012,11 +1055,20 @@ const Leads = () => {
                     <div className="col-md-6">
                       <div className="form-group">
                         <label>Assign to Spoke ({agentsArr.length})</label>
-                        <Select
+                        
+                        <select className="select form-control" value={spokeId}  onChange={(e) => {setSpokeId(e.target.value); }}>
+                        <option value="" > --- Select Spoke</option>
+                        {agentsArr && agentsArr.map((spoke,i) => {
+                             return (
+                               <option  key={i} value={spoke.value} >{spoke.label}</option>
+                             )
+                        })}
+                      </select>
+                        {/* <Select
                           ref={agentSelect}
                           onChange={handleAgentChange}
                           options={agentsArr}
-                        />
+                        /> */}
                       </div>
                     </div>
                     <div className="form-group">

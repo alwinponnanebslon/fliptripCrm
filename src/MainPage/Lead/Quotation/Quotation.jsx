@@ -6,7 +6,7 @@ import { Table } from 'antd';
 import { toastError,toastSuccess } from '../../../utils/toastUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { admin, leadStatus, rolesObj } from '../../../utils/roles';
-import { tourGet,updateTour,deleteTour,setTour} from '../../../redux/features/tour/tourSlice';
+import { tourGet,updateTour,setTour} from '../../../redux/features/tour/tourSlice';
 import { getById } from '../../../Services/lead.service';
 import { quotationGet,setQuotationObj,quotationDelete } from '../../../redux/features/quotation/quotationSlice';
 import AddQuotation from './AddQuotation';
@@ -29,6 +29,7 @@ import AddQuotation from './AddQuotation';
     const handleInit = () => {
       
         //  handleGetAllLeads(); 
+        console.log(leadId,"djklvdskljdsafdsdsfsdafkasdlfsdkf;l")
         dispatch(quotationGet(`leadId=${leadId}`));
       };
 
