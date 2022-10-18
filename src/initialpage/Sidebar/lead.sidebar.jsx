@@ -105,7 +105,7 @@ console.log(params.leadId,"lead Id ")
                     pathname?.includes("QuotationFollowup") ? "active" : ""
                   }
                 >
-                  <Link to="/admin/employees/QuotationFollowup">
+                  <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
                     <i className="la la-file-text-o" />{" "}
                     <div className="textblock2">
                       {" "}

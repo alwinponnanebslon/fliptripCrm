@@ -322,23 +322,24 @@ const Leads = () => {
       // } else if (role == rolesObj.TEAMLEAD) {
       //   obj.leadId = userObj?._id;
       // }
-      if(!leadUpdateId){
-        if (res.success) {
       let { data: res } = await createLead(obj, role);
+      // if(!leadUpdateId){
+      //   if (res.success) {
+      // let { data: res } = await createLead(obj, role);
 
-          toastSuccess(res.message);
-          handleGetAllLeads();
-        }
-      } else {
+      //     // toastSuccess(res.message);
+      //     // handleGetAllLeads();
+      //   }
+      // } else {
 
-      let { data: res } = await updatelead(obj, leadUpdateId);
-      if (res.success) {
-        toastSuccess(res.message);
-        setLeadObj({});
-        setLeadUpdateId("");
-        handleGetAllLeads();
-      }
-      }
+      // let { data: res } = await updatelead(obj, leadUpdateId);
+      // if (res.success) {
+      //   toastSuccess(res.message);
+      //   setLeadObj({});
+      //   setLeadUpdateId("");
+      //   handleGetAllLeads();
+      // }
+      // }
      
     } catch (err) {
       toastError(err);

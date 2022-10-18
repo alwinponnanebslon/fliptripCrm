@@ -9,6 +9,7 @@ import {
 let initialState = {
   leadArr: [],
   leadObj: {},
+  lead:null
 };
 
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
@@ -17,6 +18,18 @@ export const leadGet = createAsyncThunk("auth/leadGet", async (payload) => {
   try {
     console.log(payload, "payload-lead-get");
     let { data: response } = await getAllLeadName(payload);
+    console.log(response, "lead-get");
+    return response;
+  } catch (error) {
+    toastError(error);
+    throw error;
+  }
+});
+
+export const leadGetById = createAsyncThunk("auth/leadGetById", async (payload) => {
+  try {
+    console.log(payload, "payload-lead-get");
+    let { data: response } = await getById(payload);
     console.log(response, "lead-get");
     return response;
   } catch (error) {
@@ -69,6 +82,10 @@ const leadSlice = createSlice({
     [leadGet.fulfilled]: (state, { payload }) => {
       //   console.log(payload, "payload12-lead");
       state.leadArr = payload.data;
+    },
+    [leadGetById.fulfilled]: (state, { payload }) => {
+      //   console.log(payload, "payload12-lead");
+      state.lead = payload.data;
     },
     [leadGet.rejected]: (state, action) => {
       state.loading = false;
