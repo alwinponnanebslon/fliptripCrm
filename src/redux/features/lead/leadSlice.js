@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AddLead,
   getAllLead,
+  getById,
   deleteLead,
   update,getAllLeadName
 } from "../../../Services/lead.service";
