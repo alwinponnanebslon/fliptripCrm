@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { quotationAdd ,quotationUpdate} from "../../../redux/features/quotation/quotationSlice";
+import { quotationAdd, quotationUpdate } from "../../../redux/features/quotation/quotationSlice";
 import { tourGet } from "../../../redux/features/tour/tourSlice";
 import { clientGet } from "../../../redux/features/client/clientSlice";
 import { toastError } from "../../../utils/toastUtils";
 const AddQuotation = () => {
 
-const {leadId} =  useParams();
+  const { leadId } = useParams();
 
-console.log(leadId,"leadId")
+  console.log(leadId, "leadId")
 
   const dispatch = useDispatch();
   const [destinationName, setDestinationName] = useState("");
   const [durationOfTour, setDurationOfTour] = useState(0);
+  const [days, setDays] = useState(0);
   const [numberOfGuest, setNumberOfGuest] = useState(0);
   const [adultCount, setAdultCount] = useState(0);
   const tourValueArr = useSelector((state) => state.tour.tours);
   const quotationStateObj = useSelector((state) => state.quotation.quotationObj);
   const clients = useSelector((state) => state.client.clientArr);
-  const [noOfTravellerArray ,setNoOfTravellerArray] = useState([{name:"",age:"",passengerType:"Adult",bed:'false',isNew:false}])
+  const [noOfTravellerArray, setNoOfTravellerArray] = useState([{ name: "", age: "", passengerType: "Adult", bed: 'false', isNew: false }])
   const [isAirport, setIsAirport] = useState(false)
   const [island, setIsLand] = useState(false);
   const [perPersonLandPrice, setPerPersonLandPrice] = useState(0);
@@ -30,7 +31,7 @@ console.log(leadId,"leadId")
   const [quotationId, setQuotationId] = useState('')
   const [clientsArr, setClientsArr] = useState([]);
   const [clientId, setClientId] = useState("")
-const [clientObj, setclientObj] = useState(null)
+  const [clientObj, setclientObj] = useState(null)
 
 
   // useEffect(() => {
@@ -44,10 +45,10 @@ const [clientObj, setclientObj] = useState(null)
   //   //   }
   //   // }
   // }, [numberOfGuest])
-  
-useEffect(() => {
- console.log(noOfTravellerArray,"travereere")
-}, [noOfTravellerArray])
+
+  useEffect(() => {
+    console.log(noOfTravellerArray, "travereere")
+  }, [noOfTravellerArray])
 
   const [childWithoutBed, setChildWithoutBed] = useState(0);
   const [childWithBed, setChildWithBed] = useState(0);
@@ -65,7 +66,7 @@ useEffect(() => {
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [tourArr, setTourArr] = useState([]);
   const [airportTransfer, setAirportTransfer] = useState("");
-  const [travelList, setTravelList] = useState([{ name: "", startDate: "",endDate:"" }]);
+  const [travelList, setTravelList] = useState([{ name: "", startDate: "", endDate: "" }]);
   const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [leadName, setLeadName] = useState("");
@@ -75,27 +76,27 @@ useEffect(() => {
     dispatch(tourGet());
     dispatch(clientGet());
 
-    console.log("teave",travelList.length  )
+    console.log("teave", travelList.length)
   }, []);
 
 
   useEffect(() => {
-    if(quotationStateObj){
+    if (quotationStateObj) {
       setQuotationObj(quotationStateObj);
     }
   }, [quotationStateObj])
-  
+
 
   useEffect(() => {
- 
-    if(clients){
+
+    if (clients) {
       setClientsArr(clients);
     }
-}, [clients])
+  }, [clients])
 
   useEffect(() => {
-    if(quotationObj){
-      console.log(quotationObj,"qoationboj----------");
+    if (quotationObj) {
+      console.log(quotationObj, "qoationboj----------");
       setQuotationId(quotationObj._id);
       setDestinationName(quotationObj.destinationName);
       setDurationOfTour(quotationObj.durationOfTour);
@@ -106,15 +107,15 @@ useEffect(() => {
       setIsLand(quotationObj.isLand);
       setPerPersonLandPrice(quotationObj.perPersonLandPrice);
       setPerPersonAirportPrice(quotationObj.perPersonAirPortPrice)
-      setTotalPersonAirportPrice(quotationObj.numberOfGuest*quotationObj.perPersonAirPortPrice);
-      setTotalPersonLandPrice(quotationObj.numberOfGuest*quotationObj.perPersonLandPrice);
+      setTotalPersonAirportPrice(quotationObj.numberOfGuest * quotationObj.perPersonAirPortPrice);
+      setTotalPersonLandPrice(quotationObj.numberOfGuest * quotationObj.perPersonLandPrice);
       setItineraryList(quotationObj.itineraryList);
       setTravelList(quotationObj.tourListArr);
       setHotelList(quotationObj.hotelDetail);
       setAirportTransfer(quotationObj.airportTransfer)
       setAmount(quotationObj.amount)
 
-      console.log(quotationObj.travelPassengerArr,"sadfsaf")
+      console.log(quotationObj.travelPassengerArr, "sadfsaf")
       // set(quotationObj.destinationName);
       // setDestinationName(quotationObj.destinationName);
       // setDestinationName(quotationObj.destinationName);
@@ -122,66 +123,66 @@ useEffect(() => {
     }
   }, [quotationObj])
   useEffect(() => {
-    console.log(travelList,"tyuertret--------------------------------------------------------")
- if(tourValueArr && tourValueArr.length) {
-    setTourArr(tourValueArr)
- }
+    console.log(travelList, "tyuertret--------------------------------------------------------")
+    if (tourValueArr && tourValueArr.length) {
+      setTourArr(tourValueArr)
+    }
   }, [tourValueArr]);
 
   useEffect(() => {
 
-let landPrice = 0;
-let AirportPrice = 0;
-let totalPersonLandPriceInt = parseInt(totalPersonLandPrice);
-let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
+    let landPrice = 0;
+    let AirportPrice = 0;
+    let totalPersonLandPriceInt = parseInt(totalPersonLandPrice);
+    let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
 
 
-    if((totalPersonAirPortPriceInt && totalPersonAirPortPriceInt != NaN)) {  
-       AirportPrice =  totalPersonAirPortPriceInt;
-    }  else {
+    if ((totalPersonAirPortPriceInt && totalPersonAirPortPriceInt != NaN)) {
+      AirportPrice = totalPersonAirPortPriceInt;
+    } else {
       AirportPrice = 0;
     }
-    if((totalPersonLandPriceInt && totalPersonAirPortPriceInt != NaN)) {  
+    if ((totalPersonLandPriceInt && totalPersonAirPortPriceInt != NaN)) {
 
-       landPrice =  totalPersonLandPriceInt;
+      landPrice = totalPersonLandPriceInt;
 
-    }  else {
+    } else {
       landPrice = 0;
 
     }
 
-    console.log(landPrice,"landPrice")
-    console.log(AirportPrice,"AirportPrice")
- let totalAmountPrice = landPrice +  AirportPrice;
+    console.log(landPrice, "landPrice")
+    console.log(AirportPrice, "AirportPrice")
+    let totalAmountPrice = landPrice + AirportPrice;
     setAmount(totalAmountPrice);
-  }, [totalPersonAirPortPrice,totalPersonLandPrice])
-  
+  }, [totalPersonAirPortPrice, totalPersonLandPrice])
+
 
   useEffect(() => {
 
 
     let perPersonLandPriceInt = parseInt(perPersonLandPrice);
     let perPersonAirPortPriceInt = parseInt(perPersonAirPortPrice);
-      if(numberOfGuest > 0){
-        if((perPersonLandPriceInt && perPersonLandPriceInt != NaN) && (perPersonAirPortPriceInt && perPersonAirPortPriceInt != NaN)) { 
-          setTotalPersonAirportPrice(numberOfGuest*perPersonAirPortPriceInt);
-          setTotalPersonLandPrice(numberOfGuest*perPersonLandPriceInt);
-          let  totalAmountPrice = numberOfGuest*(perPersonLandPriceInt+perPersonAirPortPriceInt);
-            setAmount(totalAmountPrice);
-        }
+    if (numberOfGuest > 0) {
+      if ((perPersonLandPriceInt && perPersonLandPriceInt != NaN) && (perPersonAirPortPriceInt && perPersonAirPortPriceInt != NaN)) {
+        setTotalPersonAirportPrice(numberOfGuest * perPersonAirPortPriceInt);
+        setTotalPersonLandPrice(numberOfGuest * perPersonLandPriceInt);
+        let totalAmountPrice = numberOfGuest * (perPersonLandPriceInt + perPersonAirPortPriceInt);
+        setAmount(totalAmountPrice);
       }
-      }, [numberOfGuest])
-  useEffect(() => {
-    if(!isAirport){
-        setTotalPersonAirportPrice(0);
     }
-    if(!island){
+  }, [numberOfGuest])
+  useEffect(() => {
+    if (!isAirport) {
+      setTotalPersonAirportPrice(0);
+    }
+    if (!island) {
       setTotalPersonLandPrice(0);
-  }
+    }
 
 
 
-  },[island,isAirport])
+  }, [island, isAirport])
   console.log(selectedTourIdArr, "selectedTourIdArr");
   const handleGuestchange = (e, index) => {
     const { name, value } = e.target;
@@ -197,22 +198,22 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   };
   const handleGuestBedRadio = (e, index) => {
     const { name, value } = e.target;
-  
+
     const list = [...noOfTravellerArray];
     list[index]["bed"] = value;
     setNoOfTravellerArray(list);
   };
 
   const handleGuestIsNew = (value, index) => {
-  
+
     const list = [...noOfTravellerArray];
     list[index]["isNew"] = value;
-  console.log(list,value, "selectedTourIdArrLidt");
-  console.log(index,value, "selectedTourIdArrLidt");
+    console.log(list, value, "selectedTourIdArrLidt");
+    console.log(index, value, "selectedTourIdArrLidt");
 
     setNoOfTravellerArray(list);
   };
-  
+
 
   const handleRemoveTravel = (index) => {
     const list = [...travelList];
@@ -283,7 +284,7 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   const handleaddGuestArray = () => {
     setNoOfTravellerArray([
       ...noOfTravellerArray,
-      {name:"",age:"",passengerType:"Adult",bed:'false',isNew:false}
+      { name: "", age: "", passengerType: "Adult", bed: 'false', isNew: false }
     ]);
   };
 
@@ -319,11 +320,11 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   };
 
   const handleaddclickItinerary = () => {
-    setItineraryList([...itineraryList, { day: "", itineraryName: "" }]);
+    setItineraryList([...itineraryList, { day: "", itineraryName: "", itineraryHeading: "" }]);
   };
 
   const handleAddClickTour = () => {
-    setTravelList([...travelList, { name: "", startDate: "",endDate:"" }]);
+    setTravelList([...travelList, { name: "", startDate: "", endDate: "" }]);
   };
   //tour
   // useEffect(() => {
@@ -338,8 +339,19 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
   };
 
 
-  const handleTourValueChange = (e,index) => {
-    let {name,value } = e.target
+
+  const handleEnterNumberOfDays = (value) => {
+    setDurationOfTour(value); setDays(parseInt(value) + 1)
+    let itenaryArr = []
+    for (let i = 0; i < (parseInt(value) + 1); i++) {
+      itenaryArr.push({ day: i + 1, itineraryName: "", itineraryHeading: "" })
+    }
+    setItineraryList([...itenaryArr]);
+  }
+
+
+  const handleTourValueChange = (e, index) => {
+    let { name, value } = e.target
     const list = [...travelList];
     console.log(list, "travelList");
     list[index][name] = value;
@@ -372,26 +384,26 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
       destinationName,
       durationOfTour,
       numberOfGuest,
-     "travelPassengerArr":noOfTravellerArray,
+      "travelPassengerArr": noOfTravellerArray,
       hotelList,
-      "tourListArr":travelList,
+      "tourListArr": travelList,
       "visa": visaRequired,
       airportTransfer,
       leadId,
-      "isFlight":isAirport,
-      "isLand":island,
+      "isFlight": isAirport,
+      "isLand": island,
       perPersonAirPortPrice,
       perPersonLandPrice,
       amount,
       itineraryList,
     };
 
-    console.log(quotationId,"quotationId----------sdfsdsdfasfdf")
-    if(!quotationId) {
-    dispatch(quotationAdd(obj));
+    console.log(quotationId, "quotationId----------sdfsdsdfasfdf")
+    if (!quotationId) {
+      dispatch(quotationAdd(obj));
 
     } else {
-    dispatch(quotationUpdate({obj,quotationId}));
+      dispatch(quotationUpdate({ obj, quotationId }));
 
     }
     console.log(obj, "send Obj9");
@@ -403,56 +415,139 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
 
 
   return (
-          <div id="add_quote" className="modal custom-modal fade" role="dialog">
-        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{isUpdateTour ? "Edit":"Add"} Quote</h5>
-              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div className="modal-body">
+    <div id="add_quote" className="modal custom-modal fade" role="dialog">
+      <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">{isUpdateTour ? "Edit" : "Add"} Quote</h5>
+            <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div className="modal-body">
             <form onSubmit={handleSubmit}>
-                  {/* <form action="#"> */}
+              {/* <form action="#"> */}
 
+              <div className="row">
+                <div className=" form-group col-md-12">
+                  <label className="col-form-label ">
+                    Destination Name <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={destinationName}
+                    onChange={(e) => setDestinationName(e.target.value)}
+                  />
+                </div>
+
+                <div className="content">
                   <div className="row">
-                    <div className=" form-group col-md-12">
-                    <label className="col-form-label ">
-                      Destination Name <span className="text-danger">*</span>
-                    </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={destinationName}
-                        onChange={(e) => setDestinationName(e.target.value)}
-                      />
+                    <div className="col-sm-12">
+                      <h3 className="mt-3 mb-4">Tour Details </h3>
                     </div>
-                  
-                    <div className=" form-group col-md-6">
-                    <label className="col-form-label ">
-                      Duration Of Tour <span className="text-danger">*</span>
-                    </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={durationOfTour}
-                        onChange={(e) => setDurationOfTour(e.target.value)}
-                      />
-                    </div>
-                      <div className="col-md-6">
-                        <label className="col-form-label ">
-                          Number Of Guest <span className="text-danger">*</span>
-                        </label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={numberOfGuest}
-                            onChange={(e) => setNumberOfGuest(e.target.value)}
-                          />
-                      </div>
+                    {travelList && travelList.map((item, index) => {
+                      return (
+                        <div className="row" key={index}>
 
-                      {/* <div className="col-md-6">
+                          <div className="col-md-12 mb-3">
+                            <label className="blue-1 fs-12">Tour</label>
+
+                            <select className="form-control" name="name" value={item.name} onChange={(e) => handleTourValueChange(e, index)}>
+                              <option value="" disabled>--select an option--</option>
+                              {tourArr && tourArr.length > 0 &&
+                                tourArr.map((el, inde) => (
+                                  <option key={inde} value={el.name}>{el.name}</option>
+                                )
+                                )}
+                            </select>
+                          </div>
+                          <div className="col-md-6">
+                            <label className="col-form-label ">
+                              Start Date <span className="text-danger">*</span>
+                            </label>
+                            <div className="col-sm-8">
+                              <input
+                                type="date"
+                                className="form-control"
+                                name="startDate"
+                                value={item.startDate}
+                                onChange={(e) => handleTourValueChange(e, index)}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <label className="col-form-label ">
+                              Expiration Date
+                            </label>
+                            <div className="col-sm-8">
+                              <input
+                                type="date"
+                                className="form-control"
+                                name="endDate"
+                                value={item.endDate}
+                                onChange={(e) => handleTourValueChange(e, index)}
+                              />
+                            </div>
+                          </div>
+                          <div className="form-group col-md-2 mt-4">
+                            {travelList.length !== 1 && (
+                              <button
+                                type="button"
+                                className="btn btn-danger"
+                                // className="btn btn-success"
+                                onClick={() => handleRemoveTravel(index)}
+                              >
+                                Remove
+                              </button>
+                            )}
+
+                          </div>
+                          <div className="col-md-12">
+                            {travelList.length - 1 === index && (
+                              <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={handleAddClickTour}
+                              >
+                                Add More
+                              </button>
+                            )}
+                          </div>
+                        </div>
+
+
+                      )
+                    })}
+
+                  </div>
+                </div>
+
+
+                <div className=" form-group col-md-6">
+                  <label className="col-form-label ">
+                    Duration Of Tour <span className="text-danger">*</span> (in Nights) ({`${durationOfTour}N/${days}D`})
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={durationOfTour}
+                    onChange={(e) => { handleEnterNumberOfDays(e.target.value) }}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <label className="col-form-label ">
+                    Number Of Guest <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    value={numberOfGuest}
+                    onChange={(e) => setNumberOfGuest(e.target.value)}
+                  />
+                </div>
+
+                {/* <div className="col-md-6">
                         <label className="col-form-label ">
                             Adult Count <span className="text-danger">*</span>
                           </label>
@@ -487,294 +582,294 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                             onChange={(e) => setChildWithBed(e.target.value)}
                           />
                       </div> */}
-                </div>
-                 
-                  {/*
+              </div>
+
+              {/*
                    http://localhost:8080/app/quotation/forms
                    */}
-                  <div className="content">
-                    <div className="row">
-                      <div className="col-sm-12">
-                        <h3 className="mt-3 mb-4 ">Traveller Details</h3>
-                        {/* <h3 className="blue-1 m-0">Traveller Details</h3> */}
-                        { noOfTravellerArray   &&   noOfTravellerArray.map((guest, i) => {
-                          return (
-                            <div className="row mb-3" key={i}>
-
-                          <div className="form-group col-md-4">
-                                <label>Guest Type </label>
-                              <select className="form-control" name="passengerType" value={guest.passengerType}  onChange={(e) => handleGuestchange(e, i)}>
-
-                                <option value="Adult"  >Adult</option>
-                                <option value="Child">Child</option>
-                                <option value="Infant">Infant</option>
-                              </select>
-                             
-                              </div>
-                            <div className=" form-group col-md-3">
-                            <label>Is Guest New   </label>
-                            <input type="checkbox" name="isNew" value={guest.isNew} checked={guest.isNew} onChange={(e) => handleGuestIsNew(!guest.isNew, i)} />
-                              </div>
-                              {guest.isNew === true ? (   
-                                
-                                  <div className="form-group col-md-4">
-                                      <label>Guest Name</label>
-                                      <input
-                                        type="text"
-                                        name="name"
-                                        className="form-control"
-                                        placeholder="Enter Name"
-                                        value={guest.name}
-                                        onChange={(e) => handleGuestchange(e, i)}
-                                      />
-                                    </div>
-                              
-                              ) : (
-
-                                  <div className="form-group col-md-4">
-                                    <label>Guest Name</label>
-
-                                        
-                                    <select className="select form-control"  name="name"  value={guest.name}
-                                        onChange={(e) => handleGuestchange(e, i)} >
-                                      <option value="" > --- Select Clients</option>
-                                      {clientsArr && clientsArr.map((client,i) => {
-                                          return (
-                                            <option  key={i} value={client.name} >{client.name}</option>
-                                          )
-                                      })}
-                                    </select>
-                                  
-                                  </div>
-                                
-                              )}
-                          
-                              <div className="form-group col-md-4">
-                                <label>Age</label>
-                                <input
-                                  type="number"
-                                  name="age"
-                                  className="form-control"
-                                  placeholder="Enter Age"
-                                  value={guest.age}
-                                  onChange={(e) => handleGuestchange(e, i)}
-                                />
-                              </div>
-                              <div className="form-group col-md-3">
-                                <label >Bed</label>
-                                <div className="mt-2">
-                                <input type="radio" value="false" checked={guest.bed === 'false'}   name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With &nbsp;
-                              
-
-                                  <input type="radio" value="true"  checked={guest.bed === 'true'}  name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With Out
-                                  </div>
-                              </div>
-                              <div className="form-group col-md-1 ">
-                                {noOfTravellerArray.length !== 1 && (
-                                  <button
-                                    type="button"
-                                    // className="btn btn-success"
-                                    className="btn btn-danger mx-1"
-                                    onClick={() => handleremoveGuest(i)}
-                                  >
-                                    <i className="fa fa-trash"></i>
-                                  </button>
-                                )}
-                              
-                              </div>
-                              <div className="col-md-12">
-                                {noOfTravellerArray.length - 1 === i && (
-                                    <button
-                                      className="btn btn-success"
-                                      onClick={handleaddGuestArray}
-                                    >
-                                      Add More
-                                    </button>
-                                  )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 
-                     http://localhost:8080/app/quotation/forms
-                    */}
-
-                  <div className="content">
-                    {/* <div className="row"> */}
-                    <h3 className="mt-3 mb-4 ">Hotel details</h3>
-                    {/* <h3 className="card-title mb-0">Hotel details</h3> */}
-                    {/* </div> */}
-                    {hotelList  && hotelList.map((hotel, i) => {
+              <div className="content">
+                <div className="row">
+                  <div className="col-sm-12">
+                    <h3 className="mt-3 mb-4 ">Traveller Details</h3>
+                    {/* <h3 className="blue-1 m-0">Traveller Details</h3> */}
+                    {noOfTravellerArray && noOfTravellerArray.map((guest, i) => {
                       return (
                         <div className="row mb-3" key={i}>
-                          <div className="form-group col-md-4">
-                            <label>Hotel Name</label>
-                            <input
-                              type="text"
-                              name="hotelName"
-                              className="form-control"
-                              placeholder="Name"
-                              value={hotel.hotelName}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
 
                           <div className="form-group col-md-4">
-                            <label> Number Of Night</label>
+                            <label>Guest Type </label>
+                            <select className="form-control" name="passengerType" value={guest.passengerType} onChange={(e) => handleGuestchange(e, i)}>
+
+                              <option value="Adult"  >Adult</option>
+                              <option value="Child">Child</option>
+                              <option value="Infant">Infant</option>
+                            </select>
+
+                          </div>
+                          <div className=" form-group col-md-3">
+                            <label>Is Guest New   </label>
+                            <input type="checkbox" name="isNew" value={guest.isNew} checked={guest.isNew} onChange={(e) => handleGuestIsNew(!guest.isNew, i)} />
+                          </div>
+                          {guest.isNew === true ? (
+
+                            <div className="form-group col-md-4">
+                              <label>Guest Name</label>
+                              <input
+                                type="text"
+                                name="name"
+                                className="form-control"
+                                placeholder="Enter Name"
+                                value={guest.name}
+                                onChange={(e) => handleGuestchange(e, i)}
+                              />
+                            </div>
+
+                          ) : (
+
+                            <div className="form-group col-md-4">
+                              <label>Guest Name</label>
+
+
+                              <select className="select form-control" name="name" value={guest.name}
+                                onChange={(e) => handleGuestchange(e, i)} >
+                                <option value="" > --- Select Clients</option>
+                                {clientsArr && clientsArr.map((client, i) => {
+                                  return (
+                                    <option key={i} value={client.name} >{client.name}</option>
+                                  )
+                                })}
+                              </select>
+
+                            </div>
+
+                          )}
+
+                          <div className="form-group col-md-4">
+                            <label>Age</label>
                             <input
                               type="number"
-                              name="numberOfNight"
-                              value={hotel.numberOfNight}
+                              name="age"
                               className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
+                              placeholder="Enter Age"
+                              value={guest.age}
+                              onChange={(e) => handleGuestchange(e, i)}
                             />
                           </div>
+                          <div className="form-group col-md-3">
+                            <label >Bed</label>
+                            <div className="mt-2">
+                              <input type="radio" value="false" checked={guest.bed === 'false'} name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With &nbsp;
 
-                          <div className="form-group col-md-4">
-                            <label> Room Type</label>
-                            <input
-                              type="text"
-                              name="roomType"
-                              value={hotel.roomType}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
-                          <div className="form-group col-md-4">
-                            <label> Check In</label>
-                            <input
-                              type="date"
-                              // type="text"
-                              name="checkIn"
-                              value={hotel.checkIn}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
 
-                          <div className="form-group col-md-4">
-                            <label> Check Out</label>
-                            <input
-                              type="date"
-                              // type="text"
-                              name="checkOut"
-                              value={hotel.checkOut}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
+                              <input type="radio" value="true" checked={guest.bed === 'true'} name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With Out
+                            </div>
                           </div>
-
-                          <div className="form-group col-md-4">
-                            <label>Rating</label>
-                            <input
-                              type="number"
-                              name="rating"
-                              className="form-control"
-                              value={hotel.rating}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
-
-                          <div className="form-group col-md-4">
-                            <label>Hotel Address</label>
-                            <input
-                              type="text"
-                              name="hotelAddress"
-                              className="form-control"
-                              value={hotel.hotelAddress}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
-
-                          <div className="form-group col-md-2 mt-4">
-                            {hotelList.length !== 1 && (
+                          <div className="form-group col-md-1 ">
+                            {noOfTravellerArray.length !== 1 && (
                               <button
                                 type="button"
                                 // className="btn btn-success"
                                 className="btn btn-danger mx-1"
-                                onClick={() => handleremoveHotel(i)}
+                                onClick={() => handleremoveGuest(i)}
                               >
-                                Remove
+                                <i className="fa fa-trash"></i>
                               </button>
                             )}
-                          
+
                           </div>
-
                           <div className="col-md-12">
-                              {hotelList.length - 1 === i && (
-                                  <button
-                                    className="btn btn-success"
-                                    onClick={handleaddclickHotel}
-                                  >
-                                    Add More
-                                  </button>
-                                )}
-
+                            {noOfTravellerArray.length - 1 === i && (
+                              <button
+                                className="btn btn-success"
+                                onClick={handleaddGuestArray}
+                              >
+                                Add More
+                              </button>
+                            )}
                           </div>
                         </div>
                       );
                     })}
                   </div>
-                  {/*
+                </div>
+              </div>
+
+              {/* 
+                     http://localhost:8080/app/quotation/forms
+                    */}
+
+              <div className="content">
+                {/* <div className="row"> */}
+                <h3 className="mt-3 mb-4 ">Hotel details</h3>
+                {/* <h3 className="card-title mb-0">Hotel details</h3> */}
+                {/* </div> */}
+                {hotelList && hotelList.map((hotel, i) => {
+                  return (
+                    <div className="row mb-3" key={i}>
+                      <div className="form-group col-md-4">
+                        <label>Hotel Name</label>
+                        <input
+                          type="text"
+                          name="hotelName"
+                          className="form-control"
+                          placeholder="Name"
+                          value={hotel.hotelName}
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-4">
+                        <label> Number Of Night</label>
+                        <input
+                          type="number"
+                          name="numberOfNight"
+                          value={hotel.numberOfNight}
+                          className="form-control"
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-4">
+                        <label> Room Type</label>
+                        <input
+                          type="text"
+                          name="roomType"
+                          value={hotel.roomType}
+                          className="form-control"
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+                      <div className="form-group col-md-4">
+                        <label> Check In</label>
+                        <input
+                          type="date"
+                          // type="text"
+                          name="checkIn"
+                          value={hotel.checkIn}
+                          className="form-control"
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-4">
+                        <label> Check Out</label>
+                        <input
+                          type="date"
+                          // type="text"
+                          name="checkOut"
+                          value={hotel.checkOut}
+                          className="form-control"
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-4">
+                        <label>Rating</label>
+                        <input
+                          type="number"
+                          name="rating"
+                          className="form-control"
+                          value={hotel.rating}
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-4">
+                        <label>Hotel Address</label>
+                        <input
+                          type="text"
+                          name="hotelAddress"
+                          className="form-control"
+                          value={hotel.hotelAddress}
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+                      <div className="form-group col-md-2 mt-4">
+                        {hotelList.length !== 1 && (
+                          <button
+                            type="button"
+                            // className="btn btn-success"
+                            className="btn btn-danger mx-1"
+                            onClick={() => handleremoveHotel(i)}
+                          >
+                            Remove
+                          </button>
+                        )}
+
+                      </div>
+
+                      <div className="col-md-12">
+                        {hotelList.length - 1 === i && (
+                          <button
+                            className="btn btn-success"
+                            onClick={handleaddclickHotel}
+                          >
+                            Add More
+                          </button>
+                        )}
+
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {/*
                    http://localhost:8080/app/quotation/forms
                    
                    */}
-                  {/* 
+              {/* 
                    
                    */}
-                   <div className="row">
-                   <div className="form-group ">
-                
-                    <div className="col-md-8">
+              <div className="row">
+                <div className="form-group ">
+
+                  <div className="col-md-8">
                     <label className="col-form-label ">
                       Visa Required
                       <span className="text-danger">*</span>
                     </label>
-                      <select className="form-control" value={visaRequired}  onChange={(e) => {setVisaRequired(e.value) }}>
+                    <select className="form-control" value={visaRequired} onChange={(e) => { setVisaRequired(e.value) }}>
                       <option value="Visa is required">Visa is Required</option>
                       <option value="Visa not Required">Visa not Required</option>
                       <option value="Visa on Approval">Visa on Approval</option>
-                      </select>
-                     
-                    </div>
-                  </div>
-             
-                  <div className="form-group col-md-6">
-                    <label className="col-form-label ">
-                        Airport  
-                      <span className="text-danger">*</span>
-                    </label>
-                    <input type="checkbox" name="IsAirport" value={isAirport} checked={isAirport}   onChange={(e) => {setIsAirport(!isAirport) }} />
+                    </select>
 
                   </div>
-                    
-                  <div className="form-group col-md-6">
-                    <label className="col-form-label ">
-                        Land  
-                      <span className="text-danger">*</span>
-                    </label>
-                    <input type="checkbox" name="Island" value={island} checked={island} onChange={(e) => {setIsLand(!island) }} />
+                </div>
 
-                  </div>
-                   </div>
-                  <div className="form-group row">
-                    <label className="col-form-label col-md-2">
-                      Airport Transfer
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={airportTransfer}
-                        onChange={(e) => setAirportTransfer(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  {/* <div className="form-group row">
+                <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Airport
+                    <span className="text-danger">*</span>
+                  </label>
+                  <input type="checkbox" name="IsAirport" value={isAirport} checked={isAirport} onChange={(e) => { setIsAirport(!isAirport) }} />
+
+                </div>
+
+                <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Land
+                    <span className="text-danger">*</span>
+                  </label>
+                  <input type="checkbox" name="Island" value={island} checked={island} onChange={(e) => { setIsLand(!island) }} />
+
+                </div>
+              </div>
+              <div className="form-group row">
+                <label className="col-form-label col-md-2">
+                  Airport Transfer
+                </label>
+                <div className="col-md-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={airportTransfer}
+                    onChange={(e) => setAirportTransfer(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* <div className="form-group row">
                     <label className="col-form-label col-md-2">Lead Name</label>
                     <div className="col-md-10">
                       <input
@@ -785,9 +880,9 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                       />
                     </div>
                   </div> */}
-                  {/*  */}
+              {/*  */}
 
-                  {/* <div className="col-12">
+              {/* <div className="col-12">
                     <label className="blue-1 fs-12">Lead Name</label>
                     <Select
                       onChange={handleLeadValueChange}
@@ -803,88 +898,9 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                       }
                     />
                   </div> */}
-                    <div className="content">
-                    <div className="row">
-                      <div className="col-sm-12">
-                        <h3 className="mt-3 mb-4">Tour Details </h3>
-                        </div>
-              {travelList  &&  travelList.map((item,index) => {
-                  return (
-                  <div className="row" key={index}>
-                  
-                    <div className="col-md-12 mb-3">
-                    <label className="blue-1 fs-12">Tour</label>
-                    
-                    <select className="form-control" name="name"    value={item.name}       onChange={(e) => handleTourValueChange(e, index)}>
-                    <option  value="" disabled>--select an option--</option>
-                      { tourArr && tourArr.length > 0 && 
-                          tourArr.map((el,inde) => (
-                            <option  key={inde} value={el.name}>{el.name}</option>
-                          )
-                      )}
-                    </select>
-                    </div>
-                    <div className="col-md-6">
-                        <label className="col-form-label ">
-                          Start Date <span className="text-danger">*</span>
-                        </label>
-                        <div className="col-sm-8">
-                          <input
-                            type="date"
-                            className="form-control"
-                            name="startDate"
-                            value={item.startDate}
-                                 onChange={(e) => handleTourValueChange(e, index)}
-                          />
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <label className="col-form-label ">
-                          Expiration Date
-                        </label>
-                        <div className="col-sm-8">
-                          <input
-                            type="date"
-                            className="form-control"
-                            name="endDate"
-                            value={item.endDate}
-                            onChange={(e) => handleTourValueChange(e, index)}
-                          />
-                        </div>
-                    </div>
-                         <div className="form-group col-md-2 mt-4">
-                                {travelList.length !== 1 && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    // className="btn btn-success"
-                                    onClick={() => handleRemoveTravel(index)}
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              
-                              </div>
-                              <div className="col-md-12">
-                              {travelList.length - 1 === index && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-success"
-                                    onClick={handleAddClickTour}
-                                  >
-                                    Add More
-                                  </button>
-                                )}
-                              </div>
-                  </div>
 
-                  
-                    )})}
 
-                    </div>
-                  </div>
-
-                    {/* <Select
+              {/* <Select
                       onChange={handleTourValueChange}
                       isMulti
                       options={
@@ -898,12 +914,12 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                       }
                     /> */}
 
-                  {/*  */}
-              
-                  {/* 
+              {/*  */}
+
+              {/* 
                   
                   */}
-                  {/* <div className="row">
+              {/* <div className="row">
                     <div className="col-sm-6">
                       <div className="form-group row">
                         <label className="col-form-label col-md-4">
@@ -933,169 +949,182 @@ let totalPersonAirPortPriceInt = parseInt(totalPersonAirPortPrice);
                       </div>
                     </div>
                   </div> */}
-                  {/*  */}
-                  {/*
+              {/*  */}
+              {/*
                    http://localhost:8080/app/quotation/forms
                    */}
-                  <div className="content">
-                    <div className="row">
-                      <div className="col-sm-12">
-                        <h3 className="mt-3 mb-4">Itinerary Details</h3>
-                        {itineraryList && itineraryList.map((itinerary, i) => {
-                          return (
-                            <div className="row mb-3" key={i}>
-                                <div className="form-group col-md-4">
-                                <label>Day </label>
-                                <input
-                                  type="number"
-                                  name="day"
-                                  value={itinerary.day}
-                                  className="form-control"
-                                  onChange={(e) =>
-                                    handleinputchangeItinerary(e, i)
-                                  }
-                                />
-                              </div>
-                              <div className="form-group col-md-4">
-                                <label>Itinerary Description</label>
-                                <input
-                                  type="text"
-                                  name="itineraryName"
-                                  className="form-control"
-                                  value={itinerary.itineraryName}
-                                  placeholder="Enter Itinerary Name"
-                                  onChange={(e) =>
-                                    handleinputchangeItinerary(e, i)
-                                  }
-                                />
-                              </div>
-                            
+              <div className="content">
+                <div className="row">
+                  <div className="col-sm-12">
+                    <h3 className="mt-3 mb-4">Itinerary Details</h3>
+                    {itineraryList && itineraryList.map((itinerary, i) => {
+                      return (
+                        <div className="row mb-3" key={i}>
+                          <div className="form-group col-md-2">
+                            <label>Day </label>
+                            <input
+                              type="number"
+                              name="day"
+                              disabled
+                              value={itinerary.day}
+                              className="form-control"
+                              onChange={(e) =>
+                                handleinputchangeItinerary(e, i)
+                              }
+                            />
+                          </div>
+                          <div className="form-group col-md-5">
+                            <label>Itinerary Heading</label>
+                            <input
+                              type="text"
+                              name="itineraryHeading"
+                              className="form-control"
+                              value={itinerary.itineraryHeading}
+                              placeholder="Enter Itinerary Heading"
+                              onChange={(e) =>
+                                handleinputchangeItinerary(e, i)
+                              }
+                            />
+                          </div>
+                          <div className="form-group col-md-5">
+                            <label>Itinerary Description</label>
+                            <input
+                              type="text"
+                              name="itineraryName"
+                              className="form-control"
+                              value={itinerary.itineraryName}
+                              placeholder="Enter Itinerary Description"
+                              onChange={(e) =>
+                                handleinputchangeItinerary(e, i)
+                              }
+                            />
+                          </div>
 
-                              <div className="form-group col-md-2 mt-4">
-                                {itineraryList.length !== 1 && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    // className="btn btn-success"
-                                    onClick={() => handleremoveItinerary(i)}
-                                  >
-                                    Remove
-                                  </button>
-                                )}
-                              
-                              </div>
-                              <div className="col-md-12">
-                              {itineraryList.length - 1 === i && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-success"
-                                    onClick={handleaddclickItinerary}
-                                  >
-                                    Add More
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+
+                          {/* <div className="form-group col-md-2 mt-4">
+                            {itineraryList.length !== 1 && (
+                              <button
+                                type="button"
+                                className="btn btn-danger"
+                                // className="btn btn-success"
+                                onClick={() => handleremoveItinerary(i)}
+                              >
+                                Remove
+                              </button>
+                            )}
+
+                          </div> */}
+                          {/* <div className="col-md-12">
+                            {itineraryList.length - 1 === i && (
+                              <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={handleaddclickItinerary}
+                              >
+                                Add More
+                              </button>
+                            )}
+                          </div> */}
+                        </div>
+                      );
+                    })}
                   </div>
-                  {/*
+                </div>
+              </div>
+              {/*
                    */}
 
-                  <div className="form-group row">
-                    <label className="col-form-label col-md-2">
-                      Term And Condition
-                    </label>
-                    <div className="col-md-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={termAndCondition}
-                        onChange={(e) => setTermAndCondition(e.target.value)}
-                      />
-                    </div>
-                  </div>
+              <div className="form-group row">
+                <label className="col-form-label col-md-2">
+                  Term And Condition
+                </label>
+                <div className="col-md-10">
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={termAndCondition}
+                    onChange={(e) => setTermAndCondition(e.target.value)}
+                  />
+                </div>
+              </div>
 
-                  <div className="form-group row">
-                    <label className="col-form-label col-md-2">
-                      Summary
-                    </label>
-                    <div className="col-md-12">
-                     <table className="table">
-                      <thead>
-                        <tr>
+              <div className="form-group row">
+                <label className="col-form-label col-md-2">
+                  Summary
+                </label>
+                <div className="col-md-12">
+                  <table className="table">
+                    <thead>
+                      <tr>
                         <td>Mode</td>
                         <td>Person</td>
                         <td>per Person Price</td>
                         <td>Total</td>
-                        </tr>
-                  
-                      </thead>
-                      <tbody>
-                        {
-                          isAirport && (
-                            <tr>
+                      </tr>
+
+                    </thead>
+                    <tbody>
+                      {
+                        isAirport && (
+                          <tr>
                             <td>Flight</td>
                             <td>{numberOfGuest}</td>
-                            <td><input type="text"   value={[perPersonAirPortPrice]}
-                                onChange={(e) =>  {
-                                  setPerPersonAirportPrice(e.target.value);
-                                  setTotalPersonAirportPrice(numberOfGuest*e.target.value);
-                                }}  /></td>
+                            <td><input type="text" value={[perPersonAirPortPrice]}
+                              onChange={(e) => {
+                                setPerPersonAirportPrice(e.target.value);
+                                setTotalPersonAirportPrice(numberOfGuest * e.target.value);
+                              }} /></td>
                             <td>{totalPersonAirPortPrice}</td>
-                            </tr>
-                       
-                          )
-                        }
+                          </tr>
 
-{
-                          island && (
-                            <tr>
-                              <td>Land</td>
-                              <td>{numberOfGuest}</td>
-                              <td><input type="text"   value={[perPersonLandPrice]}
-                                  onChange={(e) => 
-                                  {
-                                    setPerPersonLandPrice(e.target.value);
-                                    setTotalPersonLandPrice(numberOfGuest*e.target.value);
-                                  }
-                                  
-                                 }  /></td>
-                              <td>{totalPersonLandPrice}</td>
-                              </tr>
-                       
-                          )
-                        }
+                        )
+                      }
 
-                            <tr>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                             
-                              </tr>
-                        
-                              <tr>
-                              <td></td>
-                              <td></td>
-                              <td>Total</td>
-                              <td>{amount}</td>
-                             
-                              </tr>
-                      </tbody>
-                     </table>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                  <button     className='btn add-btn'> {isUpdateTour ? "Update":"Save"} </button>
-                  </div>
-                </form>
-            </div>
+                      {
+                        island && (
+                          <tr>
+                            <td>Land</td>
+                            <td>{numberOfGuest}</td>
+                            <td><input type="text" value={[perPersonLandPrice]}
+                              onChange={(e) => {
+                                setPerPersonLandPrice(e.target.value);
+                                setTotalPersonLandPrice(numberOfGuest * e.target.value);
+                              }
+
+                              } /></td>
+                            <td>{totalPersonLandPrice}</td>
+                          </tr>
+
+                        )
+                      }
+
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                      </tr>
+
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td>{amount}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div className="col-12">
+                <button className='btn add-btn'> {isUpdateTour ? "Update" : "Save"} </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
   )
 }
 
