@@ -87,22 +87,32 @@ console.log(params.leadId,"lead Id ")
                         <li className="menu-title">
                           <Link to="/admin/dashboard/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
                           </li>
-
-                     <li
-                  className={pathname?.includes("quote") ? "active" : ""}
-                >
-                  <Link to={`/admin/lead/${leadId}/quote`}>
-                    <i className="la la-file" />{" "}
-                    <div className="textblock2">
-                      {" "}
-                      <span>Create Quote</span>{" "}
-                      <span className="textsmall">PENDING TASKS</span>
-                    </div>
-                  </Link>
-                </li>
+                 <li
+                    className={pathname?.includes("lead") ? "active" : ""}
+                  >
+                    <Link to={`/admin/lead/${leadId}`}>
+                      <i className="la la-file" />{" "}
+                      <div className="textblock2">
+                        {" "}
+                        <span>Traveller Details</span>{" "}
+                      </div>
+                    </Link>
+                  </li>
+                  <li
+                    className={pathname?.includes("quote") ? "active" : ""}
+                  >
+                    <Link to={`/admin/lead/${leadId}/quote`}>
+                      <i className="la la-file" />{" "}
+                      <div className="textblock2">
+                        {" "}
+                        <span>Create Quote</span>{" "}
+                        <span className="textsmall">PENDING TASKS</span>
+                      </div>
+                    </Link>
+                  </li>
                 <li
                   className={
-                    pathname?.includes("QuotationFollowup") ? "active" : ""
+                    pathname?.includes("quotation-follow-up") ? "active" : ""
                   }
                 >
                   <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>

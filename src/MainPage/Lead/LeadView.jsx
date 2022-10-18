@@ -1,12 +1,33 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { Helmet } from "react-helmet";
 import { Link,useParams } from 'react-router-dom';
 import { Avatar_11, Avatar_08, Avatar_09, Avatar_02, Avatar_10, Avatar_05, PlaceHolder, User, Attachment } from "../../Entryfile/imagepath"
 import EditLead from "../../_components/modelbox/EditLead"
-
+import { leadGetById } from '../../redux/features/lead/leadSlice';
+import { useDispatch,useSelector } from 'react-redux';
 const LeadView = () => {
 
+  const dispatch = useDispatch();
+  const {leadId } =  useParams();
+  const currentLead = useSelector((state) => state.lead.lead);
+  const [leadObj, setLeadObj] = useState(null)
+
+  useEffect(() => {
+    setLeadObj(currentLead);
+  }, [currentLead])
+  
+
+  useEffect(() => {
+    console.log("asdfhasdsha")
+        dispatch(leadGetById(leadId));
+  },[])
+
+
+  useEffect(() => {
+    
+  }, [currentLead])
+  
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight")
@@ -31,12 +52,12 @@ const LeadView = () => {
                 <div className="navbar">
                   <div className="float-start Lead-view-details">
                     <div className="Lead-header">
-                      <span>Status: </span> <span className="badge badge-warning">New</span> <span className="m-l-15 text-muted">Client: </span>
-                      <a href="#">Delta Infotech</a>
+                      <span>Status: </span> <span className="badge badge-warning">{leadObj?.status}</span> <span className="m-l-15 text-muted">Client: </span>
+                      <a href="#">{leadObj?.clientObj?.name}</a>
                       <span className="m-l-15 text-muted">Created: </span>
-                      <span>5 Jan 2019 07:21 AM </span>
+                      <span>{new Date(leadObj?.createdAt).toDateString()} </span>
                       <span className="m-l-15 text-muted">Created by:</span>
-                      <span><Link to="/app/profile/employee-profile">John Doe</Link></span>
+                      <span><Link to="/app/profile/employee-profile">{leadObj?.createdBy?.firstName} {leadObj?.createdBy?.lastName}</Link></span>
                     </div>
                   </div>
                   <a className="task-chat profile-rightbar float-end" id="task_chat" href="#task_window"><i className="fa fa fa-comment" /></a>
@@ -51,9 +72,10 @@ const LeadView = () => {
                           <div className="card-body">
                             <div className="project-title">
                               <div className="m-b-20">
-                                <span className="h5 card-title ">Laptop Issue</span>
-                                <div className="float-end Lead-priority"><span>Priority:</span>
-                                  <div className="btn-group">
+                                <span className="h5 card-title ">{leadObj?.subject}</span>
+                                <div className="float-end Lead-priority"><span>Priority: {leadObj?.priority}</span>
+                                  
+                                  {/* <div className="btn-group">
                                     <a href="#" className="badge badge-danger dropdown-toggle" data-bs-toggle="dropdown">Highest </a>
                                     <div className="dropdown-menu dropdown-menu-right">
                                       <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-danger" /> Highest priority</a>
@@ -61,13 +83,12 @@ const LeadView = () => {
                                       <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-primary" /> Normal priority</a>
                                       <a className="dropdown-item" href="#"><i className="fa fa-dot-circle-o text-success" /> Low priority</a>
                                     </div>
-                                  </div>
+                                  </div> */}
                                 </div>
                               </div>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel elit neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum sollicitudin libero vitae est consectetur, a molestie tortor consectetur. Aenean tincidunt interdum ipsum, id pellentesque diam suscipit ut. Vivamus massa mi, fermentum eget neque eget, imperdiet tristique lectus. Proin at purus ut sem pellentesque tempor sit amet ut lectus. Sed orci augue, placerat et pretium ac, hendrerit in felis. Integer scelerisque libero non metus commodo, et hendrerit diam aliquet. Proin tincidunt porttitor ligula, a tincidunt orci pellentesque nec. Ut ultricies maximus nulla id consequat. Fusce eu consequat mi, eu euismod ligula. Aliquam porttitor neque id massa porttitor, a pretium velit vehicula. Morbi volutpat tincidunt urna, vel ullamcorper ligula fermentum at. </p>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel elit neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum sollicitudin libero vitae est consectetur, a molestie tortor consectetur. Aenean tincidunt interdum ipsum, id pellentesque diam suscipit ut. Vivamus massa mi, fermentum eget neque eget, imperdiet tristique lectus. Proin at purus ut sem pellentesque tempor sit amet ut lectus. Sed orci augue, placerat et pretium ac, hendrerit in felis. Integer scelerisque libero non metus commodo, et hendrerit diam aliquet. Proin tincidunt porttitor ligula, a tincidunt orci pellentesque nec. Ut ultricies maximus nulla id consequat. Fusce eu consequat mi, eu euismod ligula. Aliquam porttitor neque id massa porttitor, a pretium velit vehicula. Morbi volutpat tincidunt urna, vel ullamcorper ligula fermentum at. </p>
-                          </div>
+                            <p>{leadObj?.description}</p>
+                            </div>
                         </div>
                         <div className="card">
                           <div className="card-body">

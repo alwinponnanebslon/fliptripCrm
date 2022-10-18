@@ -6,6 +6,7 @@ import quotationReducer from "./features/quotation/quotationSlice";
 import leadReducer from "./features/lead/leadSlice";
 import userReducer from "./features/user/userSlice";
 import clientReducer from "./features/client/clientSlice";
+import followUpReducer from "./features/followup/followUpSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   lead: leadReducer,
   user: userReducer,
   client: clientReducer,
+  followUp: followUpReducer,
 });
 
 export default rootReducer;
