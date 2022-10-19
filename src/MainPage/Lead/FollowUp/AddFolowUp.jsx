@@ -1,37 +1,58 @@
 import React, { useState,useEffect } from "react";
 import { useDispatch ,useSelector} from "react-redux";
 import { useParams } from "react-router-dom";
-import { addfollowUp,updatefollowUp } from "../../../redux/features/followup/followUpSlice";
+import { addfollowUp,updatefollowUp,setfollowUp } from "../../../redux/features/followup/followUpSlice";
 import moment from "moment/moment";
 const AddFolowUp = () => {
   const dispatch = useDispatch();
   const followUpResultObj = useSelector((state) => state.followUp.followUpObj);
-  const [isUpdateFollowUp, setisUpdateFolloUp] = useState(false);
   const [heading, setHeading] = useState("");
   const [followDate, setFollowDate] = useState("");
   const [description, setDescription] = useState("");
   const [followupId, setFollowupId] = useState()
+  const [isUpdate, setIsUpdate] = useState(false)
   const params = useParams();
-  console.log(params);
+  
   const handleSubmit = () => {
     let obj = {
       heading,
       description,
       leadId: params?.leadId,
     };
-    if(isUpdateFollowUp){
-    dispatch(updatefollowUp(obj,followupId));
+
+    if(followUpResultObj?._id){
+      obj.Id = followupId;
+    dispatch(updatefollowUp(obj));
+    setIsUpdateFollowUp(false);
     } else{
     dispatch(addfollowUp(obj));
     }
   };
 
+  const handleClose = () =>{
+
+      dispatch(setfollowUp(null));
+      setIsUpdate(false);
+      setFollowupId("");
+      setHeading("");
+      setDescription("");
+      setFollowDate("");
+  }
+  
   useEffect(() => {
     if (followUpResultObj) {
+      setIsUpdate(true);
       setFollowupId(followUpResultObj._id);
       setHeading(followUpResultObj.heading);
       setDescription(followUpResultObj.description);
-      setFollowDate(moment(followUpResultObj.followDate).format('MM/DD/YYYY'));
+      setFollowDate(moment(followUpResultObj.followDate).format("YYYY-MM-DD"));
+    } else {
+      setIsUpdate(false);
+      setFollowupId("");
+      setHeading("");
+      setDescription("");
+      setFollowDate("");
+
     }
   }, [followUpResultObj]);
 
@@ -40,8 +61,8 @@ const AddFolowUp = () => {
       <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">{isUpdateFollowUp ? "Edit" : "Add"} FollowUp</h5>
-            <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
+            <h5 className="modal-title">{followUpResultObj?._id ? "Edit" : "Add"} FollowUp</h5>
+            <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close" onClick={() => handleClose}>
               <span aria-hidden="true">×</span>
             </button>
           </div>
@@ -69,7 +90,7 @@ const AddFolowUp = () => {
               </div>
               <div className="col-12">
                 <button onClick={() => handleSubmit()} type="button" data-bs-dismiss="modal" className="btn add-btn">
-                  {isUpdateFollowUp ? "Update" : "Save"}{" "}
+                  {followUpResultObj?._id ? "Update" : "Save"}{" "}
                 </button>
               </div>
             </form>

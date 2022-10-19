@@ -38,9 +38,14 @@ export const addfollowUp = createAsyncThunk("followUp/addfollowUp", async (paylo
 
 export const updatefollowUp = createAsyncThunk("followUp/updatefollowUp", async (formData, thunkApi) => {
   try {
+
+    console.log(formData)
     let { data: response } = await updatefollowUpApi(formData, formData.Id);
     if (response) {
       toastSuccess(response.message);
+
+      
+      thunkApi.dispatch(setfollowUp(null));
       thunkApi.dispatch(followUpGet());
     }
   } catch (error) {

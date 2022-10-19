@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { admin, rolesObj } from "../../utils/roles";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import Notes from "../../MainPage/Lead/Notes/Notes";
 // import Accordion from "react-bootstrap/Accordion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -538,80 +539,9 @@ console.log(params.leadId,"lead Id ")
                     <span > NOTES </span>{" "}
                     <span className="menu-arrow" />
                   </a>
-                  {isSideMenu == "notes" ? (
-                    <div className="notes_body">
-                      <div className="col-lg-12">
-                      <div className="notes_heading">
-                        <label> <input type="checkbox" className="radbtn" /> My Notes  </label> &nbsp; 
-                        <label> <input type="checkbox" className="radbtn" /> TT Admin</label> &nbsp;
-                        <label><input type="checkbox" className="radbtn" /> System</label> 
-                      </div>
-                      </div>
-                        <span className="adnotes" onClick={handleShow2}>add Notes</span>
-                        <div className="note_added_by_agent mt-4">
-                         <div className="textnote">
-                         <div className="alignright mb8">
-                            <span className=" flexfull" >12:02 hrs, 10 Jan 2019</span>
-                          </div>
-                          <div className="noteMessage">
-                            <p className="post-heading  f12">Talk in progress with traveler</p>
-                            <p className=" post-text-new pfc3 f12 m0">Getting Quote/package customized</p>
-                            <p className="post-heading  f12">Cna@geetanjali</p>
-                            </div>
-                         </div>
-                          <span className="notesImageCorner">
-                            <img src={"../../../src/assets/img/NotesImageCorner.webp"}  alt=""/>
-                          </span>
-                        </div>
-
-                        <div className="note_added_by_agent">
-                         <div className="textnote">
-                         <div className="alignright mb8">
-                            <span className=" flexfull" >12:02 hrs, 10 Jan 2019</span>
-                          </div>
-                          <div className="noteMessage">
-                            <p className="post-heading  f12">Talk in progress with traveler</p>
-                            <p className=" post-text-new pfc3 f12 m0">Getting Quote/package customized</p>
-                            <p className="post-heading  f12">Cna@geetanjali</p>
-                            </div>
-                         </div>
-                          <span className="notesImageCorner">
-                          <img src={"../../../src/assets/img/NotesImageCorner.webp"}  alt=""/></span>
-                        </div>
-
-                        <div className="note_added_by_agent">
-                         <div className="textnote">
-                         <div className="alignright mb8">
-                            <span className=" flexfull" >12:02 hrs, 10 Jan 2019</span>
-                          </div>
-                          <div className="noteMessage">
-                            <p className="post-heading  f12">Talk in progress with traveler</p>
-                            <p className=" post-text-new pfc3 f12 m0">Getting Quote/package customized</p>
-                            <p className="post-heading  f12">Cna@geetanjali</p>
-                            </div>
-                         </div>
-                          <span className="notesImageCorner">
-                          <img src={"../../../src/assets/img/NotesImageCorner.webp"}  alt=""/></span>
-                        </div>
-
-                         <div className="note_added_by_agent">
-                         <div className="textnote">
-                         <div className="alignright mb8">
-                            <span className=" flexfull" >12:02 hrs, 10 Jan 2019</span>
-                          </div>
-                          <div className="noteMessage">
-                            <p className="post-heading  f12">Talk in progress with traveler</p>
-                            <p className=" post-text-new pfc3 f12 m0">Getting Quote/package customized</p>
-                            <p className="post-heading  f12">Cna@geetanjali</p>
-                            </div>
-                         </div>
-                          <span className="notesImageCorner">
-                          <img src={"../../../src/assets/img/NotesImageCorner.webp"}  alt=""/></span>
-                        </div>
-                    </div>
-                  ) : (
-                    ""
-                  )}
+                    <Notes/>
+                   
+                 
 
 
 
@@ -865,52 +795,7 @@ console.log(params.leadId,"lead Id ")
         </Modal>
 {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
 {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
-<Modal show={show2} onHide={handleClose2} className="add_note">
-          <Modal.Header>
-            <Modal.Title>Add Notes</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-           
-            <div className="container">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Your Note</label>
-                      <textarea name="" className="form-control" cols="1000" rows="100" placeholder="Your Notes"></textarea>
-                    </div>
-                  </div>
-                  <div className="col-lg-12 mt-3">
-                    <div className="form-group">
-                      <label>Set Reminder </label>
-                      <DatePicker
-                      selected={startDate1}
-                      onChange={(date) => setStartDate1(date)}
-                      className="form-control"
-                    />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <div className="foter-modal">
-              <div className="container">
-                <div className="row">
-                 
-                  <div className="col-lg-12 text-end">
-                    <Button className="btn-cancle" onClick={handleClose2}>
-                      {" "}
-                      Cancel{" "}
-                    </Button>{" "}
-                    &nbsp;
-                    <Button className="btn-submit" onClick={handleClose2}>
-                      {" "}
-                      Submit
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal.Body>
-        </Modal>
+
 
       </Scrollbars>
 
