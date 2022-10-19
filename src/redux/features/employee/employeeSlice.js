@@ -18,12 +18,15 @@ const employeeSlice = createSlice({
         },
         getEmployeeById: (state, { payload }) => {
             state.employeeObj = state.employeesArr.find(el => el._id == payload)
+        },
+        serCurrentEmployee: (state, { payload }) => {
+            state.employeeObj = payload;
         }
     }
 })
 
 
-export const { addEmployee, returnAllEmployees, getEmployeeById } = employeeSlice.actions;
+export const { addEmployee, returnAllEmployees, getEmployeeById,serCurrentEmployee } = employeeSlice.actions;
 export const getAllEmployees = (state) => state.employee.employeesArr.filter(el => el.role != "ADMIN")
 export const getAllTeamLeadsEmployees = (state) => state.employee.employeesArr.filter(el => el.role == rolesObj.TEAMLEAD)
 export const getAllAgents = (state) => state.employee.employeesArr.filter(el => el.role == rolesObj.SPOKE)

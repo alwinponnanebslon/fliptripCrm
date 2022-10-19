@@ -86,7 +86,7 @@ console.log(params.leadId,"lead Id ")
               <ul>
                 
                         <li className="menu-title">
-                          <Link to="/admin/dashboard/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
+                          <Link to="/admin/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
                           </li>
                  <li
                     className={pathname?.includes("lead") ? "active" : ""}

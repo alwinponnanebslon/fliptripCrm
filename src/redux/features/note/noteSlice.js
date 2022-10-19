@@ -28,7 +28,7 @@ export const addnote = createAsyncThunk("note/addnote", async (payload, thunkApi
     let { data: response } = await addNoteApi(payload);
     if (response) {
       toastSuccess(response.message);
-      thunkApi.dispatch(noteGet());
+      thunkApi.dispatch(noteGet(`leadId=${payload?.leadId}`));
     }
   } catch (error) {
     toastError(error);
@@ -46,7 +46,7 @@ export const updatenote = createAsyncThunk("note/updatenote", async (formData, t
 
       
       thunkApi.dispatch(setnote(null));
-      thunkApi.dispatch(noteGet());
+      thunkApi.dispatch(noteGet(`leadId=${formData?.leadId}`));
     }
   } catch (error) {
     toastError(error);
@@ -56,10 +56,10 @@ export const updatenote = createAsyncThunk("note/updatenote", async (formData, t
 
 export const deletenote = createAsyncThunk("note/deletenote", async (payload, thunkApi) => {
   try {
-    let { data: response } = await NoteDeleteApi(payload);
+    let { data: response } = await NoteDeleteApi(payload.id);
     if (response) {
       toastSuccess(response.message);
-      thunkApi.dispatch(noteGet());
+      thunkApi.dispatch(noteGet(`leadId=${payload?.leadId}`));
     }
   } catch (error) {
     toastError(error);

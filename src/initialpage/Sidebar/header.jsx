@@ -9,6 +9,7 @@ import { logoutUser } from "../../redux/features/auth/authSlice";
 import { useSelector } from "react-redux";
 const Header = (props) => {
   const role = useSelector((state) => state.auth.role);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
@@ -186,7 +187,7 @@ const Header = (props) => {
             <span>{role}</span>
           </a>
           <div className="dropdown-menu">
-            <Link className="dropdown-item" to="/app/profile/employee-profile">
+            <Link className="dropdown-item" to={`/admin/employee-profile/${user?._id}`}>
               My Profile
             </Link>
             <Link className="dropdown-item" to="/settings/companysetting">

@@ -28,7 +28,7 @@ export const addfollowUp = createAsyncThunk("followUp/addfollowUp", async (paylo
     let { data: response } = await addfollowUpApi(payload);
     if (response) {
       toastSuccess(response.message);
-      thunkApi.dispatch(followUpGet());
+      thunkApi.dispatch(followUpGet(`leadId=${payload?.leadId}`));
     }
   } catch (error) {
     toastError(error);
@@ -46,7 +46,7 @@ export const updatefollowUp = createAsyncThunk("followUp/updatefollowUp", async 
 
       
       thunkApi.dispatch(setfollowUp(null));
-      thunkApi.dispatch(followUpGet());
+      thunkApi.dispatch(followUpGet(`leadId=${formData?.leadId}`));
     }
   } catch (error) {
     toastError(error);
@@ -56,10 +56,10 @@ export const updatefollowUp = createAsyncThunk("followUp/updatefollowUp", async 
 
 export const deletefollowUp = createAsyncThunk("followUp/deletefollowUp", async (payload, thunkApi) => {
   try {
-    let { data: response } = await followUpDeleteApi(payload);
+    let { data: response } = await followUpDeleteApi(payload.id);
     if (response) {
       toastSuccess(response.message);
-      thunkApi.dispatch(followUpGet());
+      thunkApi.dispatch(followUpGet(`leadId=${payload?.leadId}`));
     }
   } catch (error) {
     toastError(error);

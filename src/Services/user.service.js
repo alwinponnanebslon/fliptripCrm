@@ -12,6 +12,10 @@ export const deleteEmployees = async (id) => {
   return await axios.delete(`${serverUrl}/deleteById/${id}`);
 };
 
+export const getEmployesById = async (id) => {
+  return await axios.get(`${serverUrl}/getUserById/${id}`);
+};
+
 export const login = async (formData) => {
   console.log(formData);
   return await axios.post(`${serverUrl}/login`, formData);

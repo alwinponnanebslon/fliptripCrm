@@ -55,6 +55,8 @@ const Leads = () => {
   const [leadsArr, setLeadsArr] = useState([]);
   const [subject, setSubject] = useState("");
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [agentId, setAgentId] = useState("");
   const [leadId, setLeadId] = useState("");
   const [spokeId, setSpokeId] = useState("");
@@ -182,6 +184,9 @@ const Leads = () => {
       setSubject(leadObj.subject);
       // setClientId(leadObj?.clientObj?._id);
       setPhone(leadObj.phone);
+      setName(leadObj.phone);
+      setEmail(leadObj?.clientObj?.email);
+      setName(leadObj?.clientObj?.name);
       setPriority(leadObj.priority);
       setAgentId(leadObj.agentId);
       setLeadId(leadObj.leadId);
@@ -191,6 +196,8 @@ const Leads = () => {
       setSubject('');
       setClientId('');
       setPhone('');
+      setName('');
+      setEmail('');
       setPriority('');
       setAgentId('');
       setSpokeId('');
@@ -293,6 +300,7 @@ const Leads = () => {
   const handleSubmitLead = async (e) => {
     e.preventDefault();
     try {
+      let clientObj = {};
       if (subject == "") {
         toastError("Subject cannot be empty");
         return;
@@ -300,11 +308,29 @@ const Leads = () => {
       if (`${phone}` == "") {
         toastError("Phone cannot be empty");
         return;
-      }
+      } else {
+        clientObj.phone = phone;
+        }
       if (`${phone}`.length != 10) {
         toastError("Phone must be 10 digits long");
         return;
       }
+      if (`${email}` == "") {
+        toastError("Email cannot be empty");
+        return;
+      }  else {
+          clientObj.email = email;
+      }
+
+      if (`${name}` == "") {
+        toastError("Name cannot be empty");
+        return;
+      } else {
+        clientObj.name = name;
+
+      }
+
+
       // if (`${agentId}` == "") {
       //   toastError("Agent cannot be empty");
       //   return
@@ -313,6 +339,8 @@ const Leads = () => {
         toastError("Description cannot be empty");
         return;
       }
+
+    
       let obj = {
         subject,
         phone,
@@ -320,6 +348,7 @@ const Leads = () => {
         fileUrl,
         priority,
         creteadBy: userObj,
+        clientObj
       };
 
 
@@ -1037,6 +1066,18 @@ const Leads = () => {
                 </div> */}
                 <div className="col-md-6">
                   <div className="form-group">
+                    <label>Name</label>
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      type={"text"}
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+                
+                <div className="col-md-6">
+                  <div className="form-group">
                     <label>Phone</label>
                     <input
                       value={phone}
@@ -1048,6 +1089,17 @@ const Leads = () => {
                   </div>
                 </div>
 
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type={"text"}
+                      className="form-control"
+                    />
+                  </div>
+                </div>
 
 
 
@@ -1055,6 +1107,7 @@ const Leads = () => {
                   <div className="form-group">
                     <label>Priority</label>
                     <select value={priority} className="form-control" onChange={(e) => setPriority(e.target.value)}>
+                    <option value="">Select Priority</option>
                       <option value="High">High</option>
                       <option value="Medium"> Medium</option>
                       <option value="Low" >Low</option>

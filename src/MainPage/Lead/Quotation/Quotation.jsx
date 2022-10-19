@@ -61,7 +61,7 @@ import AddQuotation from './AddQuotation';
     };
   
     const handleDelete = (id) => {
-      dispatch(quotationDelete(id));
+      dispatch(quotationDelete({id,leadId}));
     };
   
     const handleSatus = (row,status) => {

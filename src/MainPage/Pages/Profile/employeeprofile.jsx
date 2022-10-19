@@ -6,25 +6,44 @@ import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from '../../../Entryfile/imagepath'
-import { getEmployeeById } from '../../../redux/features/employee/employeeSlice';
+import { serCurrentEmployee ,getEmployeeById} from '../../../redux/features/employee/employeeSlice';
 import { rolesObj } from '../../../utils/roles';
+import { getEmployesById } from '../../../Services/user.service';
 
 const EmployeeProfile = () => {
   const employeeObj = useSelector((state) => state.employee.employeeObj)
-
+  const role = useSelector((state) => state.auth.role);
+  const userObj = useSelector((state) => state.auth.user);
   const params = useParams()
+  console.log(params,"sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 
   const dispatch = useDispatch()
 
-  const handleGetEmployee = () => {
+  const handleGetEmployee = () => { 
     dispatch(getEmployeeById(params.id))
   }
 
 
   useEffect(() => {
+    console.log("sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
+    handleGetAllEmployees()
     handleGetEmployee()
   }, [params])
 
+
+
+  const handleGetAllEmployees = async () => {
+    try {
+      let { data: res } = await getEmployesById(params.id);
+      if (res.success) {
+        console.log(res, "res");
+        dispatch(serCurrentEmployee(res.data));
+      }
+    } catch (error) {
+      console.error(error);
+      // toastError(error);
+    }
+  };
 
   useEffect(() => {
     if ($('.select').length > 0) {

@@ -9,18 +9,18 @@ export default [
  {
     path: "/admin/lead/:leadId",
     component: LeadView,
-    roleArr:['ADMIN','TEAMLEAD'],
+    roleArr:['ADMIN','TEAMLEAD','SPOKE'],
   },
 
   {
     path: "/admin/lead/:leadId/quote",
     component: Quotation,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr:['ADMIN','TEAMLEAD','SPOKE']
   },
   {
     path: "/admin/lead/:leadId/quotation-follow-up",
     component: QuotationFollowup,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr:['ADMIN','TEAMLEAD','SPOKE']
   },
  
  

@@ -41,7 +41,7 @@ export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
   },
   {
     path: "/admin/employee",
@@ -51,23 +51,23 @@ export default [
   {
     path: "/admin/employee-profile/:id",
     component: EmployeeProfile,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
   },
   {
     path: "/admin/clients",
     component: Clients,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
   },
 
   {
     path: "/admin/destinations",
     component: ViewDestination,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD','SPOKE']
   },
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD','SPOKE']
   },
 
 

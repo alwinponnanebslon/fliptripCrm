@@ -46,7 +46,7 @@ const Notes = () => {
   };
 
   const handleDelete = (id) => {
-    dispatch(deletenote(id));
+    dispatch(deletenote({id,leadId}));
   };
 
 
@@ -60,7 +60,7 @@ const Notes = () => {
       leadId,
       createdBy
     };
-   
+   console.log(obj,"asfdsdafshfdhfd")
     if(noteResultobj?._id){
       obj.Id = noteId;
      dispatch(updatenote(obj));
@@ -93,7 +93,7 @@ const Notes = () => {
           <div className="note_added_by_agent mt-4">
           <div className="textnote">
           <div className="alignright mb8">
-             <span className=" flexfull" >{moment(noteItem?.remainderDate).format('DD-MM-YYYY')} By {noteItem?.createdAt?.firstName}</span>
+             <span className=" flexfull" >{moment(noteItem?.remainderDate).format('DD-MM-YYYY')} By {noteItem?.createdBy?.name}</span>
            </div>
            <div className="noteMessage">
              <p className="post-heading  f12">{noteItem?.note}</p>
@@ -132,6 +132,7 @@ const Notes = () => {
                     <div className="form-group">
                       <label>Set Reminder </label>
                       <input type="date"  
+                      min={moment(new Date()).format('YYYY-MM-DD')}
                       value={remainderDate}
                       onChange={(e) => setRemainderDate(e.target.value)}
                       className="form-control"

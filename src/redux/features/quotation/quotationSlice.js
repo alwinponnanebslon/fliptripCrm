@@ -68,7 +68,7 @@ export const quotationUpdate = createAsyncThunk(
       let { data: response } = await updateQuotation(obj,quotationId);
       console.log(response, "responsess2");
       toastSuccess(response.message);
-      thunkApi.dispatch(quotationGet())
+      thunkApi.dispatch(quotationGet(`leadId=${obj?.leadId}`))
       return response;
     } catch (error) {
       toastError(error);
@@ -101,10 +101,10 @@ export const quotationDelete = createAsyncThunk(
   async (payload,thunkApi) => {
     try {
       // console.log(payload,"payloadpayload21")
-      let { data: response } = await deleteQuotation(payload);
+      let { data: response } = await deleteQuotation(payload.id);
       console.log(response, "responsess");
       toastSuccess(response.message);
-      thunkApi.dispatch(quotationGet())
+      thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`))
       return response;
     } catch (error) {
       toastError(error);

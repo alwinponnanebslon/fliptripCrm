@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
@@ -17,13 +17,13 @@ export const QuotationFollowup = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
-
+const {leadId} = useParams();
   useEffect(() => {
     handleInit();
   }, []);
 
   const handleInit = () => {
-    dispatch(followUpGet());
+    dispatch(followUpGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export const QuotationFollowup = () => {
   };
 
   const handleFollowupDelete = (id) => {
-    dispatch(deletefollowUp(id));
+    dispatch(deletefollowUp({id,leadId}));
   };
 
   const handleSatus = (row, status) => {
