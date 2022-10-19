@@ -5,6 +5,7 @@ import { quotationAdd, quotationUpdate } from "../../../redux/features/quotation
 import { tourGet } from "../../../redux/features/tour/tourSlice";
 import { clientGet } from "../../../redux/features/client/clientSlice";
 import { toastError } from "../../../utils/toastUtils";
+import moment from "moment"
 const AddQuotation = () => {
 
   const { leadId } = useParams();
@@ -235,6 +236,8 @@ const AddQuotation = () => {
   ]);
 
   const handleinputchangeHotel = (e, index) => {
+    const list = [...hotelList];
+
     const { name, value } = e.target;
     // console.log(name, "name");
     if (name == "rating") {
@@ -247,17 +250,49 @@ const AddQuotation = () => {
         toastError(`Room Type should be SMALL or MEDIUM or LARGE`);
       }
     }
-    const list = [...hotelList];
+    if (name == "numberOfNight") {
+      if (value < "0") {
+        toastError(`Number of nights cannot be less than 0`);
+      }
+    }
+
+
+
+    if (name == "checkIn") {
+      let checkInDate = new Date(value);
+      let checkOutDate = new Date(value);
+      if (!list[index]["numberOfNight"] || list[index]["numberOfNight"] == "0") {
+        toastError("please enter number of nights");
+        return
+      }
+      checkOutDate.setDate(checkInDate.getDate() + parseInt(list[index]["numberOfNight"]))
+      // console.log(moment(checkOutDate).format("YYYY-MM-DD"), "checkOutDate");
+      // console.log(checkInDate.getDate(), list[index]["numberOfNight"], "asd", "checkInDate.getDate() + list[index]['numberOfNight']")
+      list[index]["checkOut"] = checkOutDate;
+    }
+
     console.log(list, "list");
     for (let el of list) {
       console.log(el, "el");
       if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
         toastError("check-Out wil be greater than checkin ");
+        return
       }
     }
     // console.log(Date.parse(list[0].checkOut), "Date.parse(list.checkout)");
     // console.log(Date.parse(list[0].checkIn), "Date.parse(list.checkIn)");
     list[index][name] = value;
+
+    if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+      toastError("Please enter duration of tour");
+      return
+    }
+    console.log(list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0), parseInt(durationOfTour))
+    if (list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) > parseInt(durationOfTour)) {
+      toastError("Total number of nights cannot be more than duration of tour");
+      return
+    }
+
     setHotelList(list);
   };
 
@@ -584,9 +619,7 @@ const AddQuotation = () => {
                       </div> */}
               </div>
 
-              {/*
-                   http://localhost:8080/app/quotation/forms
-                   */}
+
               <div className="content">
                 <div className="row">
                   <div className="col-sm-12">
@@ -694,9 +727,6 @@ const AddQuotation = () => {
                 </div>
               </div>
 
-              {/* 
-                     http://localhost:8080/app/quotation/forms
-                    */}
 
               <div className="content">
                 {/* <div className="row"> */}
@@ -745,7 +775,7 @@ const AddQuotation = () => {
                           type="date"
                           // type="text"
                           name="checkIn"
-                          value={hotel.checkIn}
+                          value={`${moment(hotel.checkIn).format("YYYY-MM-DD")}`}
                           className="form-control"
                           onChange={(e) => handleinputchangeHotel(e, i)}
                         />
@@ -757,7 +787,8 @@ const AddQuotation = () => {
                           type="date"
                           // type="text"
                           name="checkOut"
-                          value={hotel.checkOut}
+                          value={`${moment(hotel.checkOut).format("YYYY-MM-DD")}`}
+                          disabled
                           className="form-control"
                           onChange={(e) => handleinputchangeHotel(e, i)}
                         />
@@ -814,13 +845,7 @@ const AddQuotation = () => {
                   );
                 })}
               </div>
-              {/*
-                   http://localhost:8080/app/quotation/forms
-                   
-                   */}
-              {/* 
-                   
-                   */}
+
               <div className="row">
                 <div className="form-group ">
 
@@ -869,90 +894,13 @@ const AddQuotation = () => {
                   />
                 </div>
               </div>
-              {/* <div className="form-group row">
-                    <label className="col-form-label col-md-2">Lead Name</label>
-                    <div className="col-md-10">
-                      <input
-                        type="text"
-                        className="form-control"
-                        value={leadId}
-                        onChange={(e) => setLeadId(e.target.value)}
-                      />
-                    </div>
-                  </div> */}
-              {/*  */}
-
-              {/* <div className="col-12">
-                    <label className="blue-1 fs-12">Lead Name</label>
-                    <Select
-                      onChange={handleLeadValueChange}
-                      isMulti
-                      options={
-                        leadValueArr && leadValueArr.length > 0
-                          ? leadValueArr.map((el) => ({
-                              ...el,
-                              label: el.leadName,
-                              value: el._id,
-                            }))
-                          : []
-                      }
-                    />
-                  </div> */}
 
 
-              {/* <Select
-                      onChange={handleTourValueChange}
-                      isMulti
-                      options={
-                        tourValueArr && tourValueArr.length > 0
-                          ? tourValueArr.map((el) => ({
-                              ...el,
-                              label: el.tourName,
-                              value: el._id,
-                            }))
-                          : []
-                      }
-                    /> */}
 
-              {/*  */}
 
-              {/* 
-                  
-                  */}
-              {/* <div className="row">
-                    <div className="col-sm-6">
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-4">
-                          Amount <span className="text-danger">*</span>
-                        </label>
-                        <div className="col-sm-8">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-sm-6">
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-4">Tax</label>
-                        <div className="col-sm-8">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={tax}
-                            onChange={(e) => setTax(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-              {/*  */}
-              {/*
-                   http://localhost:8080/app/quotation/forms
-                   */}
+
+
+
               <div className="content">
                 <div className="row">
                   <div className="col-sm-12">
@@ -1001,30 +949,7 @@ const AddQuotation = () => {
                           </div>
 
 
-                          {/* <div className="form-group col-md-2 mt-4">
-                            {itineraryList.length !== 1 && (
-                              <button
-                                type="button"
-                                className="btn btn-danger"
-                                // className="btn btn-success"
-                                onClick={() => handleremoveItinerary(i)}
-                              >
-                                Remove
-                              </button>
-                            )}
 
-                          </div> */}
-                          {/* <div className="col-md-12">
-                            {itineraryList.length - 1 === i && (
-                              <button
-                                type="button"
-                                className="btn btn-success"
-                                onClick={handleaddclickItinerary}
-                              >
-                                Add More
-                              </button>
-                            )}
-                          </div> */}
                         </div>
                       );
                     })}

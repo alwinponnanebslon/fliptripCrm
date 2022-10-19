@@ -130,8 +130,8 @@ const Employeeslist = () => {
       dataIndex: 'name',
       render: (text, record) => (
         <h2 className="table-avatar">
-          <Link to={`/app/profile/employee-profile/${record._id}`} className="avatar"><img alt="" src={Avatar_02} /></Link>
-          <Link to={`/app/profile/employee-profile/${record._id}`}>{record?.firstName} {record?.lastName} </Link>
+          <Link to={`/admin/employee-profile/${record._id}`} className="avatar"><img alt="" src={Avatar_02} /></Link>
+          <Link to={`/admin/employee-profile/${record._id}`}>{record?.firstName} {record?.lastName} </Link>
         </h2>
       ),
       sorter: (a, b) => a.firstName - b.firstName,

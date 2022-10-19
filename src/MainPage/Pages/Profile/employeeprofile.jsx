@@ -106,7 +106,7 @@ const EmployeeProfile = () => {
                                     <img src={Avatar_16} alt="" />
                                   </div>
                                 </div>
-                                <Link to={`/app/profile/employee-profile/${employeeObj?.leadId}`}>
+                                <Link to={`/admin/employee-profile/${employeeObj?.leadId}`}>
                                   {employeeObj?.leadObj?.firstName} {employeeObj?.leadObj?.lastName}
                                 </Link>
                               </div>

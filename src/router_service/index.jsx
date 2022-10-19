@@ -35,36 +35,42 @@ import CreateQuote from "../MainPage/Employees/CreateQuote";
 import Quotation from "../MainPage/quotation";
 import Destination from '../MainPage/Destination'
 import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
+import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
 
 export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD']
   },
-   {
+  {
     path: "/admin/employee",
     component: AllEmployees,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD']
+  },
+  {
+    path: "/admin/employee-profile/:id",
+    component: EmployeeProfile,
+    roleArr: ['ADMIN', 'TEAMLEAD']
   },
   {
     path: "/admin/clients",
     component: Clients,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD']
   },
 
   {
     path: "/admin/destinations",
     component: ViewDestination,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD']
   },
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr:['ADMIN','TEAMLEAD']
+    roleArr: ['ADMIN', 'TEAMLEAD']
   },
 
- 
+
   // {
   //   path: "employees",
   //   component: Employees,

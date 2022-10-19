@@ -208,7 +208,7 @@ const AllEmployees = () => {
                     <div className="profile-widget">
                       <div className="profile-img">
                         <Link
-                          to={`/app/profile/employee-profile/${el._id}`}
+                          to={`/admin/employee-profile/${el._id}`}
                           className="avatar"
                         >
                           <img src={Avatar_02} alt="" />
@@ -241,7 +241,7 @@ const AllEmployees = () => {
                         </div>
                       )}
                       <h4 className="user-name m-t-10 mb-0 text-ellipsis">
-                        <Link to={`/app/profile/employee-profile/${el._id}`}>
+                        <Link to={`/admin/employee-profile/${el._id}`}>
                           {el.firstName} {el.lastName}
                         </Link>
                       </h4>

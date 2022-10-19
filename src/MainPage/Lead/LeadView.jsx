@@ -1,33 +1,33 @@
 
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Avatar_11, Avatar_08, Avatar_09, Avatar_02, Avatar_10, Avatar_05, PlaceHolder, User, Attachment } from "../../Entryfile/imagepath"
 import EditLead from "../../_components/modelbox/EditLead"
 import { leadGetById } from '../../redux/features/lead/leadSlice';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { generateFilePath } from '../../utils/FileURL';
 const LeadView = () => {
 
   const dispatch = useDispatch();
-  const {leadId } =  useParams();
+  const { leadId } = useParams();
   const currentLead = useSelector((state) => state.lead.lead);
   const [leadObj, setLeadObj] = useState(null)
 
   useEffect(() => {
     setLeadObj(currentLead);
   }, [currentLead])
-  
-
-  useEffect(() => {
-    console.log("asdfhasdsha")
-        dispatch(leadGetById(leadId));
-  },[])
 
 
   useEffect(() => {
-    
+    dispatch(leadGetById(leadId));
+  }, [])
+
+
+  useEffect(() => {
+
   }, [currentLead])
-  
+
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight")
@@ -57,7 +57,7 @@ const LeadView = () => {
                       <span className="m-l-15 text-muted">Created: </span>
                       <span>{new Date(leadObj?.createdAt).toDateString()} </span>
                       <span className="m-l-15 text-muted">Created by:</span>
-                      <span><Link to="/app/profile/employee-profile">{leadObj?.createdBy?.firstName} {leadObj?.createdBy?.lastName}</Link></span>
+                      <span><Link to="/app/profile/employee-profile">{leadObj?.createdBy?.firstName} {leadObj?.createdBy?.lastName} {!leadObj?.createdBy?.lastName && !leadObj?.createdBy?.firstName && "ADMIN"}</Link></span>
                     </div>
                   </div>
                   <a className="task-chat profile-rightbar float-end" id="task_chat" href="#task_window"><i className="fa fa fa-comment" /></a>
@@ -74,7 +74,7 @@ const LeadView = () => {
                               <div className="m-b-20">
                                 <span className="h5 card-title ">{leadObj?.subject}</span>
                                 <div className="float-end Lead-priority"><span>Priority: {leadObj?.priority}</span>
-                                  
+
                                   {/* <div className="btn-group">
                                     <a href="#" className="badge badge-danger dropdown-toggle" data-bs-toggle="dropdown">Highest </a>
                                     <div className="dropdown-menu dropdown-menu-right">
@@ -88,7 +88,7 @@ const LeadView = () => {
                               </div>
                             </div>
                             <p>{leadObj?.description}</p>
-                            </div>
+                          </div>
                         </div>
                         <div className="card">
                           <div className="card-body">
@@ -96,48 +96,22 @@ const LeadView = () => {
                             <div className="row">
                               <div className="col-md-3 col-sm-6">
                                 <div className="uploaded-box">
-                                  <div className="uploaded-img">
-                                    <img src={PlaceHolder} className="img-fluid" alt="" />
-                                  </div>
+                                  {
+                                    leadObj?.fileUrl != "" && leadObj?.fileUrl &&
+                                    <div className="uploaded-img">
+                                      <img src={generateFilePath(leadObj?.fileUrl)} className="img-fluid" alt="" />
+                                    </div>
+                                  }
                                   <div className="uploaded-img-name">
-                                    demo.png
+                                    {leadObj?.fileUrl != "" ? leadObj?.fileUrl : "NA"}
                                   </div>
                                 </div>
                               </div>
-                              <div className="col-md-3 col-sm-6">
-                                <div className="uploaded-box">
-                                  <div className="uploaded-img">
-                                    <img src={PlaceHolder} className="img-fluid" alt="" />
-                                  </div>
-                                  <div className="uploaded-img-name">
-                                    demo.png
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-3 col-sm-6">
-                                <div className="uploaded-box">
-                                  <div className="uploaded-img">
-                                    <img src={PlaceHolder} className="img-fluid" alt="" />
-                                  </div>
-                                  <div className="uploaded-img-name">
-                                    demo.png
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-md-3 col-sm-6">
-                                <div className="uploaded-box">
-                                  <div className="uploaded-img">
-                                    <img src={PlaceHolder} className="img-fluid" alt="" />
-                                  </div>
-                                  <div className="uploaded-img-name">
-                                    demo.png
-                                  </div>
-                                </div>
-                              </div>
+
                             </div>
                           </div>
                         </div>
-                        <div className="card mb-0">
+                        {/* <div className="card mb-0">
                           <div className="card-body">
                             <h5 className="card-title m-b-20">Uploaded files</h5>
                             <ul className="files-list">
@@ -153,7 +127,7 @@ const LeadView = () => {
                                   </div>
                                   <ul className="files-action">
                                     <li className="dropdown dropdown-action">
-                                      <a href className="dropdown-toggle btn btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_horiz</i></a>
+                                      <a className="dropdown-toggle btn btn-link" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_horiz</i></a>
                                       <div className="dropdown-menu dropdown-menu-right">
                                         <a className="dropdown-item" href="#">Download</a>
                                         <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#share_files">Share</a>
@@ -187,7 +161,7 @@ const LeadView = () => {
                               </li>
                             </ul>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="notification-popup hide">
                         <p>
@@ -207,12 +181,12 @@ const LeadView = () => {
                 <div className="navbar">
                   <div className="task-assign">
                     <span className="assign-title">Assigned to </span>
-                    <a href="#" data-bs-toggle="tooltip" data-placement="bottom" title="John Doe" className="avatar">
+                    {/* <a href="#" data-bs-toggle="tooltip" data-placement="bottom" title="John Doe" className="avatar">
                       <img src={Avatar_02} alt="" />
-                    </a>
-                    <a href="#" className="followers-add" title="Add Assignee" data-bs-toggle="modal" data-bs-target="#assignee"><i className="material-icons">add</i></a>
+                    </a> */}
+                    {/* <a href="#" className="followers-add" title="Add Assignee" data-bs-toggle="modal" data-bs-target="#assignee"><i className="material-icons">add</i></a> */}
                   </div>
-                  <ul className="nav float-end custom-menu">
+                  {/* <ul className="nav float-end custom-menu">
                     <li className="nav-item dropdown dropdown-action">
                       <a href className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
                       <div className="dropdown-menu">
@@ -220,7 +194,7 @@ const LeadView = () => {
                         <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_Lead">Delete Lead</a>
                       </div>
                     </li>
-                  </ul>
+                  </ul> */}
                 </div>
               </div>
               <div className="chat-contents task-chat-contents">
@@ -228,133 +202,79 @@ const LeadView = () => {
                   <div className="chat-wrap-inner">
                     <div className="chat-box">
                       <div className="chats">
-                        <div className="chat chat-left">
-                          <div className="chat-avatar">
-                            <Link to="/app/profile/employee-profile" className="avatar">
-                              <img src={Avatar_02} alt="" />
-                            </Link>
-                          </div>
-                          <div className="chat-body">
-                            <div className="chat-bubble">
-                              <div className="chat-content">
-                                <span className="task-chat-user">John Doe</span> <span className="chat-time">8:35 am</span>
-                                <p>I'm just looking around.</p>
-                                <p>Will you tell me something about yourself? </p>
+                        {
+                          leadObj?.spokeObj ?
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
+                              </div>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Spoke : {leadObj?.spokeObj?.firstName} {leadObj?.spokeObj?.lastName}</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="completed-task-msg">
-                          <span className="task-success">
-                            <a href="#">John Doe</a> closed this Lead.
-                          </span>
-                          <span className="task-time">Today at 9:27am</span>
-                        </div>
-                        <div className="chat chat-left">
-                          <div className="chat-avatar">
-                            <Link to="/app/profile/employee-profile" className="avatar">
-                              <img src={Avatar_02} alt="" />
-                            </Link>
-                          </div>
-                          <div className="chat-body">
-                            <div className="chat-bubble">
-                              <div className="chat-content">
-                                <span className="task-chat-user">John Doe</span>
-                                <span className="file-attached">attached 3 files <i className="fa fa-paperclip" /></span>
-                                <span className="chat-time">Feb 17, 2019 at 4:32am</span>
-                                <ul className="attach-list">
-                                  <li><i className="fa fa-file" /> <a href="#">project_document.avi</a></li>
-                                  <li><i className="fa fa-file" /> <a href="#">video_conferencing.psd</a></li>
-                                  <li><i className="fa fa-file" /> <a href="#">landing_page.psd</a></li>
-                                </ul>
+                            :
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
+                              </div>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Spoke : NA</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="chat chat-left">
-                          <div className="chat-avatar">
-                            <Link to="/app/profile/employee-profile" className="avatar">
-                              <img src={Avatar_09} alt="" />
-                            </Link>
-                          </div>
-                          <div className="chat-body">
-                            <div className="chat-bubble">
-                              <div className="chat-content">
-                                <span className="task-chat-user">Jeffery Lalor</span>
-                                <span className="file-attached">attached file <i className="fa fa-paperclip" /></span>
-                                <span className="chat-time">Yesterday at 9:16pm</span>
-                                <ul className="attach-list">
-                                  <li className="pdf-file"><i className="fa fa-file-pdf-o" /> <a href="#">Document_2016.pdf</a></li>
-                                </ul>
+                        }
+
+                        {
+                          leadObj?.agentObj ?
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
+                              </div>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Team Lead : {leadObj?.agentObj?.firstName} {leadObj?.agentObj?.lastName}</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="chat chat-left">
-                          <div className="chat-avatar">
-                            <Link to="/app/profile/employee-profile" className="avatar">
-                              <img src={Avatar_09} alt="" />
-                            </Link>
-                          </div>
-                          <div className="chat-body">
-                            <div className="chat-bubble">
-                              <div className="chat-content">
-                                <span className="task-chat-user">Jeffery Lalor</span>
-                                <span className="file-attached">attached file <i className="fa fa-paperclip" /></span>
-                                <span className="chat-time">Today at 12:42pm</span>
-                                <ul className="attach-list">
-                                  <li className="img-file">
-                                    <div className="attach-img-download"><a href="#">avatar-1.jpg</a></div>
-                                    <div className="task-attach-img"><img src={User} alt="" /></div>
-                                  </li>
-                                </ul>
+                            :
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
+                              </div>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Team Lead : NA</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                        <div className="task-information">
-                          <span className="task-info-line">
-                            <a className="task-user" href="#">John Doe</a>
-                            <span className="task-info-subject">marked Lead as reopened</span>
-                          </span>
-                          <div className="task-time">1:16pm</div>
-                        </div>
+
+                        }
+
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="chat-footer">
-                <div className="message-bar">
-                  <div className="message-inner">
-                    <a className="link attach-icon" href="#"><img src={Attachment} alt="" /></a>
-                    <div className="message-area">
-                      <div className="input-group">
-                        <textarea className="form-control" placeholder="Type message..." defaultValue={""} />
-                        <span className="input-group-append">
-                          <button className="btn btn-primary" type="button"><i className="fa fa-send" /></button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="project-members task-followers">
-                  <span className="followers-title">Followers</span>
-                  <a href="#" data-bs-toggle="tooltip" title="Richard Miles" className="avatar">
-                    <img src={Avatar_09} alt="" />
-                  </a>
-                  <a href="#" data-bs-toggle="tooltip" title="John Smith" className="avatar">
-                    <img src={Avatar_10} alt="" />
-                  </a>
-                  <a href="#" data-bs-toggle="tooltip" title="Mike Litorus" className="avatar">
-                    <img src={Avatar_05} alt="" />
-                  </a>
-                  <a href="#" data-bs-toggle="tooltip" title="Wilmer Deluna" className="avatar">
-                    <img src={Avatar_11} alt="" />
-                  </a>
-                  <a href="#" className="followers-add" data-bs-toggle="modal" data-bs-target="#task_followers"><i className="material-icons">add</i></a>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>

@@ -184,6 +184,7 @@ const Leads = () => {
       setPhone(leadObj.phone);
       setPriority(leadObj.priority);
       setAgentId(leadObj.agentId);
+      setLeadId(leadObj.leadId);
       setSpokeId(leadObj.spokeId);
       setDescription(leadObj.description);
     } else {
@@ -321,22 +322,21 @@ const Leads = () => {
         creteadBy: userObj,
       };
 
-      if (role == rolesObj.TEAMLEAD) {
-        obj.agentId = userObj?._id;
-      }
-
 
       if (agentId != "" && leadId == "") {
-        obj.agentId = agentId;
+        obj.agentId = agentId
       }
       if (leadId != "" && agentId == "") {
-        obj.leadId = leadId;
+        obj.leadId = leadId
       }
       if (leadId != "" && agentId != "") {
-        obj.leadId = leadId;
-      } else if (role == rolesObj.TEAMLEAD) {
-        obj.leadId = userObj?._id;
+        obj.leadId = leadId
       }
+      else if (role == rolesObj.TEAMLEAD) {
+        obj.leadId = userObj?._id
+      }
+
+      console.log(obj)
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
@@ -406,9 +406,9 @@ const Leads = () => {
   };
 
   const handleAgentChange = (e) => {
-    setSpokeId(e.value);
-
-  };
+    setLeadId("")
+    setAgentId(e)
+  }
 
   const handleDestinationChange = (e) => {
     setAgentId(e.value);
@@ -417,8 +417,10 @@ const Leads = () => {
   };
 
   const handleTeamLeadChange = (e) => {
-    setAgentId(e.value);
-  };
+    setLeadId(e)
+    setAgentId("")
+
+  }
 
   const options = [
     {
@@ -610,13 +612,13 @@ const Leads = () => {
           {record.agentObj ? (
             <>
               <Link
-                to={`/app/profile/employee-profile/${record?.agentObj?._id}`}
+                to={`/admin/employee-profile/${record?.agentObj?._id}`}
                 className="avatar"
               >
                 <img alt="" src={record?.image} />
               </Link>
               <Link
-                to={`/app/profile/employee-profile/${record?.agentObj?._id}`}
+                to={`/admin/employee-profile/${record?.agentObj?._id}`}
               >{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
                 } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
                 }`}</Link>
@@ -653,13 +655,13 @@ const Leads = () => {
           {record.leadObj ?
             <>
               <Link
-                to={`/app/profile/employee-profile/${record?.leadObj?._id}`}
+                to={`/admin/employee-profile/${record?.leadObj?._id}`}
                 className="avatar"
               >
                 <img alt="" src={record?.image} />
               </Link>
               <Link
-                to={`/app/profile/employee-profile/${record?.leadObj?._id}`}
+                to={`/admin/employee-profile/${record?.leadObj?._id}`}
               >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
             </>
             :
@@ -890,7 +892,7 @@ const Leads = () => {
         </div>
         {/* Search Filter */}
         <div className="row filter-row">
-          {role != admin && (
+          {role != rolesObj.SPOKE && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
                 <input
@@ -919,18 +921,18 @@ const Leads = () => {
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
 
-              <select className="select form-control" >
+              {/* <select className="select form-control" >
                 <option value="">Select Priority</option>
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
-              </select>
-              {/* <Select
+              </select> */}
+              <Select
                 onChange={handleFilterByPriority}
                 menuPortalTarget={document.body}
                 styles={customStyles}
                 options={options}
-              /> */}
+              />
               {/* handleFilterByPriority */}
               {/* <select className="select floating">
                 <option> -- Select -- </option>
@@ -1073,8 +1075,8 @@ const Leads = () => {
                       <label>
                         Assign to Team Lead ({agentsArr.length})
                       </label>
-
-                      <select className="select form-control" value={agentId} onChange={(e) => { setAgentId(e.target.value); }}>
+                      {/* setLeadId(e.target.value); */}
+                      <select className="select form-control" value={leadId} onChange={(e) => { handleTeamLeadChange(e.target.value) }}>
                         <option value="" > --- Select Team Lead</option>
                         {teamLeadsArr && teamLeadsArr.map((agent, i) => {
                           return (
@@ -1092,11 +1094,13 @@ const Leads = () => {
                   </div>
                 )}
 
+
+
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Assign to Spoke ({agentsArr.length})</label>
 
-                    <select className="select form-control" value={spokeId} onChange={(e) => { setSpokeId(e.target.value); }}>
+                    <select className="select form-control" value={agentId} onChange={(e) => { handleAgentChange(e.target.value) }}>
                       <option value="" > --- Select Spoke</option>
                       {agentsArr && agentsArr.map((spoke, i) => {
                         return (
