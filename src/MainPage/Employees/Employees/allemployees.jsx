@@ -84,6 +84,14 @@ const AllEmployees = () => {
     }
   };
 
+  const handleEdit = (row) => {
+
+    console.log(row, "row update"); //whole object
+    setIsUpdateTour(true);
+
+    dispatch(setTour(row));
+  };
+
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
@@ -217,7 +225,7 @@ const AllEmployees = () => {
                             <i className="material-icons">more_vert</i>
                           </a>
                           <div className="dropdown-menu dropdown-menu-right">
-                            {/* <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit_employee"><i className="fa fa-pencil m-r-5" /> Edit</a> */}
+                            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#add_employee" onClick={() => handleEdit(row)}><i className="fa fa-pencil m-r-5" /> Edit</a>
                             <a
                               className="dropdown-item"
                               href="#"

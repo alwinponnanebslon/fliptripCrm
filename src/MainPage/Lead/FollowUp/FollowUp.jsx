@@ -6,20 +6,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { tourGet, updateTour, deleteTour, setTour, addTour } from "../../../redux/features/tour/tourSlice";
 import AddFolowUp from "./AddFolowUp";
-import { followUpGet } from "../../../redux/features/followup/followUpSlice";
+import { followUpGet,setfollowUp,deletefollowUp ,updatefollowUp} from "../../../redux/features/followup/followUpSlice";
 import { Table } from "antd";
 
 export const QuotationFollowup = () => {
   const role = useSelector((state) => state.auth.role);
-
   const dispatch = useDispatch();
-  const tourResultObj = useSelector((state) => state.tour.tourObj);
   const toursResultArr = useSelector((state) => state.followUp.followUps);
   const [tourMainArr, setTourMainArr] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
-  const [isUpdateTour, setIsUpdateTour] = useState(false);
 
   useEffect(() => {
     handleInit();
@@ -35,13 +32,11 @@ export const QuotationFollowup = () => {
 
   const handleEdit = (row) => {
     console.log(row, "row update"); //whole object
-    setIsUpdateTour(true);
-
-    dispatch(setTour(row));
+    dispatch(setfollowUp(row));
   };
 
-  const handleTourDelete = (id) => {
-    dispatch(deleteTour(id));
+  const handleFollowupDelete = (id) => {
+    dispatch(deletefollowUp(id));
   };
 
   const handleSatus = (row, status) => {
@@ -50,33 +45,11 @@ export const QuotationFollowup = () => {
       status: status,
     };
 
-    dispatch(updateTour(obj));
+    dispatch(updatefollowUp(obj));
   };
 
-  useEffect(() => {
-    if (tourResultObj) {
-      setTourId(tourResultObj._id);
-      setName(tourResultObj.name);
-      setDescription(tourResultObj.description);
-    }
-  }, [tourResultObj]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (name == "") {
-      toastError("Tour Name is mandatory");
-      // throw "tour name is mandatory";
-    }
 
-    let obj = { name, description };
-    if (isUpdateTour) {
-      obj.Id = tourId;
-      setIsUpdateTour(false);
-      dispatch(updateTour(obj));
-    } else {
-      dispatch(addTour(obj));
-    }
-  };
   const tour_columns = [
     {
       title: "Heading",
@@ -101,7 +74,7 @@ export const QuotationFollowup = () => {
             <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_followup" onClick={() => handleEdit(row)}>
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
-            <a className="dropdown-item" onClick={() => handleTourDelete(row._id)}>
+            <a className="dropdown-item" onClick={() => handleFollowupDelete(row._id)}>
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a>
           </div>
