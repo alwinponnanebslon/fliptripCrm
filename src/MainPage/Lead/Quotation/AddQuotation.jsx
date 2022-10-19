@@ -35,17 +35,12 @@ const AddQuotation = () => {
   const [clientObj, setclientObj] = useState(null)
 
 
-  // useEffect(() => {
-  //   let numberGusetInt = parseInt(numberOfGuest)
-  //   // if(!quotationObj && numberGusetInt && numberGusetInt != NaN){
-  //   //   setNoOfTravellerArray(Array(numberGusetInt).fill(0).map(x => ({name:"",age:"",passengerType:"Adult",bed:'false'})));
-  //   // } else {
-  //   //   // setNoOfTravellerArray([]);
-  //   //   if(quotationObj){
+  ////////traveler details  
+  const [numberofAdults, setNumberofAdults] = useState(0);
+  const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState(0);
+  const [numberOfChildrenWithoutBed, setNumberOfChildrenWithoutBed] = useState(0);
+  const [numberOfInfants, setNumberOfInfants] = useState(0);
 
-  //   //   }
-  //   // }
-  // }, [numberOfGuest])
 
   useEffect(() => {
     console.log(noOfTravellerArray, "travereere")
@@ -110,12 +105,22 @@ const AddQuotation = () => {
       setPerPersonAirportPrice(quotationObj.perPersonAirPortPrice)
       setTotalPersonAirportPrice(quotationObj.numberOfGuest * quotationObj.perPersonAirPortPrice);
       setTotalPersonLandPrice(quotationObj.numberOfGuest * quotationObj.perPersonLandPrice);
-      setItineraryList(quotationObj.itineraryList);
+      setItineraryList(quotationObj.itineraryDetails);
       setTravelList(quotationObj.tourListArr);
       setHotelList(quotationObj.hotelDetail);
       setAirportTransfer(quotationObj.airportTransfer)
       setAmount(quotationObj.amount)
-
+      setTermAndCondition(quotationObj.termAndCondition)
+      setNumberofAdults(quotationObj.travelPassengerObj.noOfAdults)
+      setNumberOfChildrenWithBed(quotationObj.travelPassengerObj.noOfChildrenWithBed)
+      setNumberOfChildrenWithoutBed(quotationObj.travelPassengerObj.noOfChildrenWithoutBed)
+      setNumberOfInfants(quotationObj.travelPassengerObj.noOfInfants)
+      console.log(
+        quotationObj.noOfAdults,
+        quotationObj.noOfChildrenWithBed,
+        quotationObj.noOfChildrenWithoutBed,
+        quotationObj.noOfInfants,
+      )
       console.log(quotationObj.travelPassengerArr, "sadfsaf")
       // set(quotationObj.destinationName);
       // setDestinationName(quotationObj.destinationName);
@@ -227,7 +232,7 @@ const AddQuotation = () => {
     {
       hotelName: "",
       roomType: "",
-      numberOfNight: "",
+      numberOfNight: 0,
       checkIn: "",
       checkOut: "",
       rating: "",
@@ -243,19 +248,20 @@ const AddQuotation = () => {
     if (name == "rating") {
       if (value > 6 || value < 1) {
         toastError("invalid rating, kindly provide valid rating");
-      }
-    }
-    if (name == "roomType") {
-      if (value != "SMALL" || value != "MEDIUM" || value != "LARGE") {
-        toastError(`Room Type should be SMALL or MEDIUM or LARGE`);
-      }
-    }
-    if (name == "numberOfNight") {
-      if (value < "0") {
-        toastError(`Number of nights cannot be less than 0`);
+        return
       }
     }
 
+    if (name == "numberOfNight") {
+      if (value < "0" && value) {
+        toastError(`Number of nights cannot be less than 0`);
+        return
+      }
+      let checkInDate = new Date(list[index]["checkIn"]);
+      let checkOutDate = new Date();
+      checkOutDate.setDate(checkInDate.getDate() + parseInt(value))
+      list[index]["checkOut"] = checkOutDate;
+    }
 
 
     if (name == "checkIn") {
@@ -266,8 +272,8 @@ const AddQuotation = () => {
         return
       }
       checkOutDate.setDate(checkInDate.getDate() + parseInt(list[index]["numberOfNight"]))
-      // console.log(moment(checkOutDate).format("YYYY-MM-DD"), "checkOutDate");
-      // console.log(checkInDate.getDate(), list[index]["numberOfNight"], "asd", "checkInDate.getDate() + list[index]['numberOfNight']")
+      list[index][name] = checkInDate;
+      console.log("checkedIn", checkInDate, "checkInDate")
       list[index]["checkOut"] = checkOutDate;
     }
 
@@ -275,25 +281,22 @@ const AddQuotation = () => {
     for (let el of list) {
       console.log(el, "el");
       if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
-        toastError("check-Out wil be greater than checkin ");
+        toastError("check-Out wil be less than checkin ");
         return
       }
     }
-    // console.log(Date.parse(list[0].checkOut), "Date.parse(list.checkout)");
-    // console.log(Date.parse(list[0].checkIn), "Date.parse(list.checkIn)");
     list[index][name] = value;
 
     if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
       toastError("Please enter duration of tour");
       return
     }
-    console.log(list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0), parseInt(durationOfTour))
     if (list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) > parseInt(durationOfTour)) {
       toastError("Total number of nights cannot be more than duration of tour");
       return
     }
 
-    setHotelList(list);
+    setHotelList([...list]);
   };
 
   const handleremoveHotel = (index) => {
@@ -303,13 +306,15 @@ const AddQuotation = () => {
   };
 
   const handleaddclickHotel = () => {
+    let tempHotelArr = [...hotelList];
+
     setHotelList([
-      ...hotelList,
+      ...tempHotelArr,
       {
         hotelName: "",
         roomType: "",
-        numberOfNight: "",
-        checkIn: "",
+        numberOfNight: 0,
+        checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
         rating: "",
         hotelAddress: "",
@@ -397,49 +402,42 @@ const AddQuotation = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // if (destinationName == "") {
-    //   throw "destinationName name is mandatory";
+    //   throw "Destination Name name is mandatory";
     // }
     // if (numberOfGuest == "") {
-    //   throw "number Of Guest is mandatory";
+    //   throw "Number Of Guest is mandatory";
     // }
     // if (adultCount == "") {
-    //   throw "adult Count is mandatory";
-    // }
-    // if (visaRequired == "") {
-    //   throw "visa Required is mandatory";
-    // }
-
-    // if (startDate == "") {
-    //   throw "start Date is mandatory";
-    // }
-    // if (amount == "") {
-    //   throw "amount is mandatory";
+    //   throw "Adult Count is mandatory";
     // }
     let obj = {
       destinationName,
       durationOfTour,
       numberOfGuest,
-      "travelPassengerArr": noOfTravellerArray,
+      travelPassengerObj: {
+        noOfAdults: numberofAdults,
+        noOfChildrenWithBed: numberOfChildrenWithBed,
+        noOfChildrenWithoutBed: numberOfChildrenWithoutBed,
+        noOfInfants: numberOfInfants,
+      },
       hotelList,
-      "tourListArr": travelList,
-      "visa": visaRequired,
+      tourListArr: travelList,
+      visa: visaRequired,
       airportTransfer,
       leadId,
-      "isFlight": isAirport,
-      "isLand": island,
+      isFlight: isAirport,
+      isLand: island,
       perPersonAirPortPrice,
       perPersonLandPrice,
       amount,
       itineraryList,
+      termAndCondition,
     };
-
-    console.log(quotationId, "quotationId----------sdfsdsdfasfdf")
+    console.log(obj)
     if (!quotationId) {
       dispatch(quotationAdd(obj));
-
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
-
     }
     console.log(obj, "send Obj9");
   };
@@ -447,6 +445,47 @@ const AddQuotation = () => {
     { value: "true", label: "true" },
     { value: "false", label: "false" },
   ];
+
+
+
+  const handletravelersSelect = (value, setterFunctionName) => {
+    if (!numberOfGuest || numberOfGuest == "" || numberOfGuest == "0") {
+      toastError("Please add number of guests first");
+      return
+    }
+    if (setterFunctionName == "numberofAdults") {
+      if ((parseInt(value) + parseInt(numberOfChildrenWithBed) + parseInt(numberOfChildrenWithoutBed) + parseInt(numberOfInfants)) > parseInt(numberOfGuest)) {
+        toastError("Total Number of guests cannot be more than number of guests ('Please check Number of Adults,Number Of Children With Bed, Number Of Children Without Bed, Number Of Infants')");
+        return
+      }
+      setNumberofAdults(value)
+    }
+    else if (setterFunctionName == "numberOfChildrenWithBed") {
+      if ((parseInt(numberofAdults) + parseInt(value) + parseInt(numberOfChildrenWithoutBed) + parseInt(numberOfInfants)) > parseInt(numberOfGuest)) {
+        toastError("Total Number of guests cannot be more than number of guests ('Please check Number of Adults,Number Of Children With Bed, Number Of Children Without Bed, Number Of Infants')");
+        return
+      }
+      setNumberOfChildrenWithBed(value)
+    }
+    else if (setterFunctionName == "numberOfChildrenWithoutBed") {
+      if ((parseInt(numberofAdults) + parseInt(numberOfChildrenWithBed) + parseInt(value) + parseInt(numberOfInfants)) > parseInt(numberOfGuest)) {
+        toastError("Total Number of guests cannot be more than number of guests ('Please check Number of Adults,Number Of Children With Bed, Number Of Children Without Bed, Number Of Infants')");
+        return
+      }
+      setNumberOfChildrenWithoutBed(value)
+    }
+    else {
+      if ((parseInt(numberofAdults) + parseInt(numberOfChildrenWithBed) + parseInt(numberOfChildrenWithoutBed) + parseInt(value)) > parseInt(numberOfGuest)) {
+        toastError("Total Number of guests cannot be more than number of guests ('Please check Number of Adults,Number Of Children With Bed, Number Of Children Without Bed, Number Of Infants')");
+        return
+      }
+      setNumberOfInfants(value)
+    }
+  }
+
+  useEffect(() => {
+  }, [numberofAdults, numberOfChildrenWithBed, numberOfChildrenWithoutBed, numberOfInfants, numberOfGuest])
+
 
 
   return (
@@ -488,7 +527,7 @@ const AddQuotation = () => {
                           <div className="col-md-12 mb-3">
                             <label className="blue-1 fs-12">Tour</label>
 
-                            <select className="form-control" name="name" value={item.name} onChange={(e) => handleTourValueChange(e, index)}>
+                            <select className="form-control" name="name" value={item?.name} onChange={(e) => handleTourValueChange(e, index)}>
                               <option value="" disabled>--select an option--</option>
                               {tourArr && tourArr.length > 0 &&
                                 tourArr.map((el, inde) => (
@@ -624,115 +663,95 @@ const AddQuotation = () => {
                 <div className="row">
                   <div className="col-sm-12">
                     <h3 className="mt-3 mb-4 ">Traveller Details</h3>
-                    {/* <h3 className="blue-1 m-0">Traveller Details</h3> */}
-                    {noOfTravellerArray && noOfTravellerArray.map((guest, i) => {
-                      return (
-                        <div className="row mb-3" key={i}>
+                    <div className="row">
+                      <div className="col-4">
+                        <label className="col-form-label ">
+                          Adults
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select className="form-control" value={parseInt(numberofAdults)} onChange={(e) => { console.log(e.target.value, "value"); handletravelersSelect(e.target.value, "numberofAdults") }}>
 
-                          <div className="form-group col-md-4">
-                            <label>Guest Type </label>
-                            <select className="form-control" name="passengerType" value={guest.passengerType} onChange={(e) => handleGuestchange(e, i)}>
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          <option value={6}>6</option>
+                          <option value={7}>7</option>
+                          <option value={8}>8</option>
+                          <option value={9}>9</option>
+                          <option value={10}>10</option>
 
-                              <option value="Adult"  >Adult</option>
-                              <option value="Child">Child</option>
-                              <option value="Infant">Infant</option>
-                            </select>
+                        </select>
+                      </div>
+                      <div className="col-4">
+                        <label className="col-form-label ">
+                          Children with Bed
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select className="form-control" value={parseInt(numberOfChildrenWithBed)} onChange={(e) => { handletravelersSelect(e.target.value, "numberOfChildrenWithBed") }}>
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          <option value={6}>6</option>
+                          <option value={7}>7</option>
+                          <option value={8}>8</option>
+                          <option value={9}>9</option>
+                          <option value={10}>10</option>
+                        </select>
 
-                          </div>
-                          <div className=" form-group col-md-3">
-                            <label>Is Guest New   </label>
-                            <input type="checkbox" name="isNew" value={guest.isNew} checked={guest.isNew} onChange={(e) => handleGuestIsNew(!guest.isNew, i)} />
-                          </div>
-                          {guest.isNew === true ? (
+                      </div>
+                      <div className="col-4">
+                        <label className="col-form-label ">
+                          Children without Bed
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select className="form-control" value={parseInt(numberOfChildrenWithoutBed)} onChange={(e) => { handletravelersSelect(e.target.value, "numberOfChildrenWithoutBed") }}>
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          <option value={6}>6</option>
+                          <option value={7}>7</option>
+                          <option value={8}>8</option>
+                          <option value={9}>9</option>
+                          <option value={10}>10</option>
+                        </select>
 
-                            <div className="form-group col-md-4">
-                              <label>Guest Name</label>
-                              <input
-                                type="text"
-                                name="name"
-                                className="form-control"
-                                placeholder="Enter Name"
-                                value={guest.name}
-                                onChange={(e) => handleGuestchange(e, i)}
-                              />
-                            </div>
+                      </div>
+                      <div className="col-4">
+                        <label className="col-form-label ">
+                          Infants
+                          <span className="text-danger">*</span>
+                        </label>
+                        <select className="form-control" value={parseInt(numberOfInfants)} onChange={(e) => { handletravelersSelect(e.target.value, "numberOfInfants") }}>
+                          <option value={0}>0</option>
+                          <option value={1}>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          <option value={6}>6</option>
+                          <option value={7}>7</option>
+                          <option value={8}>8</option>
+                          <option value={9}>9</option>
+                          <option value={10}>10</option>
+                        </select>
 
-                          ) : (
-
-                            <div className="form-group col-md-4">
-                              <label>Guest Name</label>
-
-
-                              <select className="select form-control" name="name" value={guest.name}
-                                onChange={(e) => handleGuestchange(e, i)} >
-                                <option value="" > --- Select Clients</option>
-                                {clientsArr && clientsArr.map((client, i) => {
-                                  return (
-                                    <option key={i} value={client.name} >{client.name}</option>
-                                  )
-                                })}
-                              </select>
-
-                            </div>
-
-                          )}
-
-                          <div className="form-group col-md-4">
-                            <label>Age</label>
-                            <input
-                              type="number"
-                              name="age"
-                              className="form-control"
-                              placeholder="Enter Age"
-                              value={guest.age}
-                              onChange={(e) => handleGuestchange(e, i)}
-                            />
-                          </div>
-                          <div className="form-group col-md-3">
-                            <label >Bed</label>
-                            <div className="mt-2">
-                              <input type="radio" value="false" checked={guest.bed === 'false'} name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With &nbsp;
-
-
-                              <input type="radio" value="true" checked={guest.bed === 'true'} name={`bed-${i}`} onChange={(e) => handleGuestBedRadio(e, i)} /> With Out
-                            </div>
-                          </div>
-                          <div className="form-group col-md-1 ">
-                            {noOfTravellerArray.length !== 1 && (
-                              <button
-                                type="button"
-                                // className="btn btn-success"
-                                className="btn btn-danger mx-1"
-                                onClick={() => handleremoveGuest(i)}
-                              >
-                                <i className="fa fa-trash"></i>
-                              </button>
-                            )}
-
-                          </div>
-                          <div className="col-md-12">
-                            {noOfTravellerArray.length - 1 === i && (
-                              <button
-                                className="btn btn-success"
-                                onClick={handleaddGuestArray}
-                              >
-                                Add More
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-
               <div className="content">
-                {/* <div className="row"> */}
                 <h3 className="mt-3 mb-4 ">Hotel details</h3>
-                {/* <h3 className="card-title mb-0">Hotel details</h3> */}
-                {/* </div> */}
                 {hotelList && hotelList.map((hotel, i) => {
                   return (
                     <div className="row mb-3" key={i}>
@@ -753,7 +772,7 @@ const AddQuotation = () => {
                         <input
                           type="number"
                           name="numberOfNight"
-                          value={hotel.numberOfNight}
+                          value={`${hotel.numberOfNight}`}
                           className="form-control"
                           onChange={(e) => handleinputchangeHotel(e, i)}
                         />
@@ -770,7 +789,7 @@ const AddQuotation = () => {
                         />
                       </div>
                       <div className="form-group col-md-4">
-                        <label> Check In</label>
+                        <label> Check In </label>
                         <input
                           type="date"
                           // type="text"
@@ -782,7 +801,7 @@ const AddQuotation = () => {
                       </div>
 
                       <div className="form-group col-md-4">
-                        <label> Check Out</label>
+                        <label> Check Out </label>
                         <input
                           type="date"
                           // type="text"
@@ -829,77 +848,63 @@ const AddQuotation = () => {
                         )}
 
                       </div>
+                      {
+                        durationOfTour && (hotelList.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) < durationOfTour) ?
+                          <div className="col-md-12">
+                            {/* {hotelList.length - 1 === i && ( */}
+                            <button
+                              className="btn btn-success"
+                              onClick={handleaddclickHotel}
+                            >
+                              Add More
+                            </button>
+                            {/* )} */}
 
-                      <div className="col-md-12">
-                        {hotelList.length - 1 === i && (
-                          <button
-                            className="btn btn-success"
-                            onClick={handleaddclickHotel}
-                          >
-                            Add More
-                          </button>
-                        )}
+                          </div>
+                          : ""
+                      }
 
-                      </div>
                     </div>
                   );
                 })}
               </div>
 
               <div className="row">
-                <div className="form-group ">
-
-                  <div className="col-md-8">
-                    <label className="col-form-label ">
-                      Visa Required
-                      <span className="text-danger">*</span>
-                    </label>
-                    <select className="form-control" value={visaRequired} onChange={(e) => { setVisaRequired(e.value) }}>
-                      <option value="Visa is required">Visa is Required</option>
-                      <option value="Visa not Required">Visa not Required</option>
-                      <option value="Visa on Approval">Visa on Approval</option>
-                    </select>
-
-                  </div>
-                </div>
-
-                <div className="form-group col-md-6">
+                <div className="form-group col-3">
                   <label className="col-form-label ">
-                    Airport
+                    Visa Required
                     <span className="text-danger">*</span>
                   </label>
-                  <input type="checkbox" name="IsAirport" value={isAirport} checked={isAirport} onChange={(e) => { setIsAirport(!isAirport) }} />
+                </div>
+                <div className="col-md-9">
+                  <select className="form-control" value={visaRequired} onChange={(e) => { setVisaRequired(e.target.value) }}>
+                    <option value="Visa is required">Visa is Required</option>
+                    <option value="Visa not Required">Visa not Required</option>
+                    <option value="Visa on Arrival">Visa on Arrival</option>
+                  </select>
 
                 </div>
 
-                <div className="form-group col-md-6">
-                  <label className="col-form-label ">
-                    Land
-                    <span className="text-danger">*</span>
-                  </label>
-                  <input type="checkbox" name="Island" value={island} checked={island} onChange={(e) => { setIsLand(!island) }} />
 
-                </div>
               </div>
               <div className="form-group row">
-                <label className="col-form-label col-md-2">
+                <label className="col-form-label col-md-3">
                   Airport Transfer
                 </label>
-                <div className="col-md-10">
-                  <input
+                <div className="col-md-9">
+                  <select className="form-control" value={airportTransfer} onChange={(e) => { setAirportTransfer(e.target.value) }}>
+                    <option value="Private">Private</option>
+                    <option value="Seat in coach basis">Seat in coach basis</option>
+                    <option value="Private + Seat in coach basis">Private + Seat in coach basis</option>
+                  </select>
+                  {/* <input
                     type="text"
                     className="form-control"
                     value={airportTransfer}
                     onChange={(e) => setAirportTransfer(e.target.value)}
-                  />
+                  /> */}
                 </div>
               </div>
-
-
-
-
-
-
 
               <div className="content">
                 <div className="row">
@@ -908,18 +913,12 @@ const AddQuotation = () => {
                     {itineraryList && itineraryList.map((itinerary, i) => {
                       return (
                         <div className="row mb-3" key={i}>
-                          <div className="form-group col-md-2">
+                          <div className="form-group col-md-1">
                             <label>Day </label>
-                            <input
-                              type="number"
-                              name="day"
-                              disabled
-                              value={itinerary.day}
-                              className="form-control"
-                              onChange={(e) =>
-                                handleinputchangeItinerary(e, i)
-                              }
-                            />
+                            <div style={{ paddingTop: 10 }}>
+                              {itinerary.day}
+                            </div>
+
                           </div>
                           <div className="form-group col-md-5">
                             <label>Itinerary Heading</label>
@@ -956,8 +955,7 @@ const AddQuotation = () => {
                   </div>
                 </div>
               </div>
-              {/*
-                   */}
+
 
               <div className="form-group row">
                 <label className="col-form-label col-md-2">
@@ -972,6 +970,24 @@ const AddQuotation = () => {
                   />
                 </div>
               </div>
+              <div className="form-group col-md-6">
+                <label className="col-form-label ">
+                  Flight
+                  <span className="text-danger">*</span>
+                </label>
+                <input type="checkbox" name="IsAirport" style={{ marginLeft: 10 }} value={isAirport} checked={isAirport} onChange={(e) => { setIsAirport(!isAirport) }} />
+
+              </div>
+
+              <div className="form-group col-md-6">
+                <label className="col-form-label ">
+                  Land Packages
+                  <span className="text-danger">*</span>
+                </label>
+                <input type="checkbox" name="Island" style={{ marginLeft: 10 }} value={island} checked={island} onChange={(e) => { setIsLand(!island) }} />
+
+              </div>
+
 
               <div className="form-group row">
                 <label className="col-form-label col-md-2">
@@ -1008,7 +1024,7 @@ const AddQuotation = () => {
                       {
                         island && (
                           <tr>
-                            <td>Land</td>
+                            <td>Land Packages</td>
                             <td>{numberOfGuest}</td>
                             <td><input type="text" value={[perPersonLandPrice]}
                               onChange={(e) => {
