@@ -93,33 +93,33 @@ const AddQuotation = () => {
   useEffect(() => {
     if (quotationObj) {
       console.log(quotationObj, "qoationboj----------");
-      setQuotationId(quotationObj._id);
-      setDestinationName(quotationObj.destinationName);
-      setDurationOfTour(quotationObj.durationOfTour);
-      setNumberOfGuest(quotationObj.numberOfGuest);
-      setVisaRequired(quotationObj.visa);
-      setNoOfTravellerArray(quotationObj.travelPassengerArr);
-      setIsAirport(quotationObj.isFlight);
-      setIsLand(quotationObj.isLand);
-      setPerPersonLandPrice(quotationObj.perPersonLandPrice);
-      setPerPersonAirportPrice(quotationObj.perPersonAirPortPrice)
-      setTotalPersonAirportPrice(quotationObj.numberOfGuest * quotationObj.perPersonAirPortPrice);
-      setTotalPersonLandPrice(quotationObj.numberOfGuest * quotationObj.perPersonLandPrice);
-      setItineraryList(quotationObj.itineraryDetails);
-      setTravelList(quotationObj.tourListArr);
-      setHotelList(quotationObj.hotelDetail);
-      setAirportTransfer(quotationObj.airportTransfer)
-      setAmount(quotationObj.amount)
-      setTermAndCondition(quotationObj.termAndCondition)
-      setNumberofAdults(quotationObj.travelPassengerObj.noOfAdults)
-      setNumberOfChildrenWithBed(quotationObj.travelPassengerObj.noOfChildrenWithBed)
-      setNumberOfChildrenWithoutBed(quotationObj.travelPassengerObj.noOfChildrenWithoutBed)
-      setNumberOfInfants(quotationObj.travelPassengerObj.noOfInfants)
+      setQuotationId(quotationObj?._id);
+      setDestinationName(quotationObj?.destinationName);
+      setDurationOfTour(quotationObj?.durationOfTour);
+      setNumberOfGuest(quotationObj?.numberOfGuest);
+      setVisaRequired(quotationObj?.visa);
+      setNoOfTravellerArray(quotationObj?.travelPassengerArr);
+      setIsAirport(quotationObj?.isFlight);
+      setIsLand(quotationObj?.isLand);
+      setPerPersonLandPrice(quotationObj?.perPersonLandPrice);
+      setPerPersonAirportPrice(quotationObj?.perPersonAirPortPrice)
+      setTotalPersonAirportPrice(quotationObj?.numberOfGuest * quotationObj?.perPersonAirPortPrice);
+      setTotalPersonLandPrice(quotationObj?.numberOfGuest * quotationObj?.perPersonLandPrice);
+      setItineraryList(quotationObj?.itineraryDetails);
+      setTravelList(quotationObj?.tourListArr);
+      setHotelList(quotationObj?.hotelDetail);
+      setAirportTransfer(quotationObj?.airportTransfer)
+      setAmount(quotationObj?.amount)
+      setTermAndCondition(quotationObj?.termAndCondition)
+      setNumberofAdults(quotationObj?.travelPassengerObj?.noOfAdults)
+      setNumberOfChildrenWithBed(quotationObj?.travelPassengerObj?.noOfChildrenWithBed)
+      setNumberOfChildrenWithoutBed(quotationObj?.travelPassengerObj?.noOfChildrenWithoutBed)
+      setNumberOfInfants(quotationObj?.travelPassengerObj?.noOfInfants)
       console.log(
-        quotationObj.noOfAdults,
-        quotationObj.noOfChildrenWithBed,
-        quotationObj.noOfChildrenWithoutBed,
-        quotationObj.noOfInfants,
+        quotationObj?.noOfAdults,
+        quotationObj?.noOfChildrenWithBed,
+        quotationObj?.noOfChildrenWithoutBed,
+        quotationObj?.noOfInfants,
       )
       console.log(quotationObj.travelPassengerArr, "sadfsaf")
       // set(quotationObj.destinationName);
@@ -815,13 +815,13 @@ const AddQuotation = () => {
 
                       <div className="form-group col-md-4">
                         <label>Rating</label>
-                        <input
-                          type="number"
-                          name="rating"
-                          className="form-control"
-                          value={hotel.rating}
-                          onChange={(e) => handleinputchangeHotel(e, i)}
-                        />
+                        <select className="form-control"   name="rating" value={parseInt(hotel.rating)}  onChange={(e) => handleinputchangeHotel(e, i)}>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          </select>
+                       
                       </div>
 
                       <div className="form-group col-md-4">
@@ -853,6 +853,7 @@ const AddQuotation = () => {
                           <div className="col-md-12">
                             {/* {hotelList.length - 1 === i && ( */}
                             <button
+                              type="button"
                               className="btn btn-success"
                               onClick={handleaddclickHotel}
                             >
@@ -1059,7 +1060,7 @@ const AddQuotation = () => {
                 </div>
               </div>
               <div className="col-12">
-                <button className='btn add-btn'> {isUpdateTour ? "Update" : "Save"} </button>
+                <button className='btn add-btn' type="submit"> {isUpdateTour ? "Update" : "Save"} </button>
               </div>
             </form>
           </div>

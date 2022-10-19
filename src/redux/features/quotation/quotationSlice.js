@@ -31,12 +31,14 @@ export const quotationGet = createAsyncThunk(
 );
 export const quotationAdd = createAsyncThunk(
   "auth/quotationAdd",
-  async (payload) => {
+  async (payload,thunkApi) => {
     try {
       console.log(payload, "payloadpayload21");
       let { data: response } = await AddQuotation(payload);
       console.log(response, "responsess2");
+      thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`))
       toastSuccess(response.message);
+     
       return response;
     } catch (error) {
       toastError(error);

@@ -134,10 +134,10 @@ import AddQuotation from './AddQuotation';
         render: (row, record) => (
           <div className="dropdown">
             <a href="#" className="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <i className={record.status ===true ? "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {record.status ?'Active':'Inactive'} </a>
+              <i className={record.status ===true ? "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {record.status} </a>
             <div className="dropdown-menu">
-              <a className="dropdown-item" href="#" onClick={() => handleSatus(record,true)} ><i className="fa fa-dot-circle-o text-success" /> Active</a>
-              <a className="dropdown-item" href="#" onClick={() => handleSatus(record,false)}><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+              <a className="dropdown-item" href="#" onClick={() => handleSatus(record,'created')} ><i className="fa fa-dot-circle-o text-success" /> Created</a>
+              <a className="dropdown-item" href="#" onClick={() => handleSatus(record,'pending')}><i className="fa fa-dot-circle-o text-danger" /> Pending</a>
             </div>
           </div>
         ),
@@ -206,12 +206,11 @@ import AddQuotation from './AddQuotation';
                 <li className="breadcrumb-item active">Create Quote</li>
               </ul>
             </div>
-            {
-              role != rolesObj.SPOKE &&
+           
               <div className="col-auto float-end ml-auto">
                 <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_quote"><i className="fa fa-plus" /> Add Quote</a>
               </div>
-            }
+            
           </div>
           <div className='list_group_qoute pt-5'>
             <div className='row'>

@@ -150,7 +150,7 @@ const LeadSidebar = (props) => {
                       <span className="textsmall">PENDING TASKS</span>{" "}
                     </div>
                   </Link>
-                </li> */}
+                </li> 
               {/* <li className={pathname?.includes("PostStay") ? "active" : ""}>
                 <Link to="/admin/employees/PostStay">
                   <i className="la la-thumbs-o-up" />{" "}

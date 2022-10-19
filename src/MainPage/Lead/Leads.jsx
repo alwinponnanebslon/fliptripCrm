@@ -1122,7 +1122,7 @@ const Leads = () => {
 
 
 
-                {role != rolesObj.TEAMLEAD && (
+                {role != rolesObj.TEAMLEAD &&  role != rolesObj.SPOKE  && (
                   <div className="col-md-6">
                     <div className="form-group">
                       <label>
@@ -1148,7 +1148,7 @@ const Leads = () => {
                 )}
 
 
-
+                {role != rolesObj.SPOKE && (            
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Assign to Spoke ({agentsArr.length})</label>
@@ -1168,6 +1168,7 @@ const Leads = () => {
                         /> */}
                   </div>
                 </div>
+                )}
                 <div className="form-group">
                   <label>Description</label>
                   <textarea

@@ -42,6 +42,7 @@ const {leadId} = useParams();
   const handleSatus = (row, status) => {
     let obj = {
       Id: row._id,
+      leadId:leadId,
       status: status,
     };
 
@@ -168,13 +169,13 @@ const {leadId} = useParams();
                 <li className="breadcrumb-item active">Quotation Followup</li>
               </ul>
             </div>
-            {role != rolesObj.SPOKE && (
+           
               <div className="col-auto float-end ml-auto">
                 <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_followup">
                   <i className="fa fa-plus" /> Add Followup
                 </a>
               </div>
-            )}
+            
           </div>
           <div className="list_group_qoute pt-5">
             <div className="row">
