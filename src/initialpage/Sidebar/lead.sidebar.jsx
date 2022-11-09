@@ -79,53 +79,67 @@ const LeadSidebar = (props) => {
         universal={false}
         hideTracksWhenNotNeeded={true}
       >
-        
-       
-          <div className="sidebar-inner slimscroll">
-            <div id="sidebar-menu" className="sidebar-menu">
-              <ul>
-                
-                        <li className="menu-title">
-                          <Link to="/admin/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
-                          </li>
-                 <li
-                    className={pathname?.includes("lead") ? "active" : ""}
-                  >
-                    <Link to={`/admin/lead/${leadId}`}>
-                      <i className="la la-file" />{" "}
-                      <div className="textblock2">
-                        {" "}
-                        <span>Traveller Details</span>{" "}
-                      </div>
-                    </Link>
-                  </li>
-                  <li
-                    className={pathname?.includes("quote") ? "active" : ""}
-                  >
-                    <Link to={`/admin/lead/${leadId}/quote`}>
-                      <i className="la la-file" />{" "}
-                      <div className="textblock2">
-                        {" "}
-                        <span>Create Quote</span>{" "}
-                        <span className="textsmall">PENDING TASKS</span>
-                      </div>
-                    </Link>
-                  </li>
-                <li
-                  className={
-                    pathname?.includes("quotation-follow-up") ? "active" : ""
-                  }
-                >
-                  <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
-                    <i className="la la-file-text-o" />{" "}
-                    <div className="textblock2">
-                      {" "}
-                      <span>Quotation Followup</span>{" "}
-                      <span className="textsmall">PENDING TASKS</span>{" "}
-                    </div>
-                  </Link>
-                </li>
-                <li
+
+
+        <div className="sidebar-inner slimscroll">
+          <div id="sidebar-menu" className="sidebar-menu">
+            <ul>
+
+              <li className="menu-title">
+                <Link to="/admin/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
+              </li>
+              <li
+                className={pathname?.includes("lead") ? "active" : ""}
+              >
+                <Link to={`/admin/lead/${leadId}`}>
+                  <i className="la la-file" />{" "}
+                  <div className="textblock2">
+                    {" "}
+                    <span>Traveller Details</span>{" "}
+                  </div>
+                </Link>
+              </li>
+              <li
+                className={pathname?.includes("quotes") ? "active" : ""}
+              >
+                <Link to={`/admin/lead/${leadId}/quotes`}>
+                  <i className="la la-file" />{" "}
+                  <div className="textblock2">
+                    {" "}
+                    <span>Create Quote</span>{" "}
+                    <span className="textsmall">PENDING TASKS</span>
+                  </div>
+                </Link>
+              </li>
+              <li
+                className={
+                  pathname?.includes("quotation-follow-up") ? "active" : ""
+                }
+              >
+                <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
+                  <i className="la la-file-text-o" />{" "}
+                  <div className="textblock2">
+                    {" "}
+                    <span>Quotation Followup</span>{" "}
+                    <span className="textsmall">PENDING TASKS</span>{" "}
+                  </div>
+                </Link>
+              </li>
+              <li
+                className={
+                  pathname?.includes("quotePayment") ? "active" : ""
+                }
+              >
+                <Link to={`/admin/lead/${leadId}/quotePayment`}>
+                  <i className="la la-file-text-o" />{" "}
+                  <div className="textblock2">
+                    {" "}
+                    <span>Quotation Payment</span>{" "}
+                    <span className="textsmall">CREATE AND MANAGE</span>{" "}
+                  </div>
+                </Link>
+              </li>
+              {/* <li
                   className={
                     pathname?.includes("VoucherPayment") ? "active" : ""
                   }
@@ -138,19 +152,19 @@ const LeadSidebar = (props) => {
                       <span className="textsmall">PENDING TASKS</span>{" "}
                     </div>
                   </Link>
-                </li>
-                <li
-                  className={pathname?.includes("DuringStay") ? "active" : ""}
-                >
-                  <Link to="/admin/employees/DuringStay">
-                    <i className="la la-hotel" />{" "}
-                    <div className="textblock2">
-                      {" "}
-                      <span>During Stay</span>{" "}
-                      <span className="textsmall">PENDING TASKS</span>{" "}
-                    </div>
-                  </Link>
-                </li> 
+                </li> */}
+              {/* <li
+                className={pathname?.includes("DuringStay") ? "active" : ""}
+              >
+                <Link to="/admin/employees/DuringStay">
+                  <i className="la la-hotel" />{" "}
+                  <div className="textblock2">
+                    {" "}
+                    <span>During Stay</span>{" "}
+                    <span className="textsmall">PENDING TASKS</span>{" "}
+                  </div>
+                </Link>
+              </li> */}
               {/* <li className={pathname?.includes("PostStay") ? "active" : ""}>
                 <Link to="/admin/employees/PostStay">
                   <i className="la la-thumbs-o-up" />{" "}
@@ -161,7 +175,7 @@ const LeadSidebar = (props) => {
                   </div>
                 </Link>
               </li> */}
-              <li className="submenu">
+              {/* <li className="submenu">
                 <a
                   href="#"
                   className={isSideMenu == "userinfo" ? "subdrop" : ""}
@@ -252,9 +266,9 @@ const LeadSidebar = (props) => {
                 ) : (
                   ""
                 )}
-              </li>
+              </li> */}
 
-              <li className="submenu">
+              {/* <li className="submenu">
                 <a
                   className={isSideMenu == "leadprogress" ? "subdrop" : ""}
                   onClick={() =>
@@ -526,7 +540,7 @@ const LeadSidebar = (props) => {
                 ) : (
                   ""
                 )}
-              </li>
+              </li> */}
               <li className="submenu">
                 <a
                   href="#"
@@ -546,15 +560,7 @@ const LeadSidebar = (props) => {
 
 
               </li>
-              <li className={pathname?.includes("RequestedTrips") ? "active" : ""}>
-                <Link to="/admin/employees/RequestedTrips">
-                  <i className="la la-hotel" />{" "}
-                  <div className="textblock2">{" "}
-                    <span>Requested Trips</span>{" "}
-
-                  </div>
-                </Link>
-              </li>
+              {/* z */}
 
 
             </ul>

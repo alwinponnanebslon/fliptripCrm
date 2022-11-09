@@ -4,6 +4,7 @@ import {
   get,
   deleteQuotation,
   updateQuotation,
+  updateQuotationStatus,
 } from "../../../Services/quotation.service";
 
 let initialState = {
@@ -19,9 +20,7 @@ export const quotationGet = createAsyncThunk(
   "auth/quotationGet",
   async (payload) => {
     try {
-      // console.log(payload,"payloadpayload21")
       let { data: response } = await get(payload);
-      // console.log(response, "responsess");
       return response;
     } catch (error) {
       toastError(error);
@@ -31,14 +30,12 @@ export const quotationGet = createAsyncThunk(
 );
 export const quotationAdd = createAsyncThunk(
   "auth/quotationAdd",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
-      console.log(payload, "payloadpayload21");
       let { data: response } = await AddQuotation(payload);
-      console.log(response, "responsess2");
       thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`))
       toastSuccess(response.message);
-     
+
       return response;
     } catch (error) {
       toastError(error);
@@ -62,15 +59,33 @@ export const setQuotationObj = createAsyncThunk(
 
 export const quotationUpdate = createAsyncThunk(
   "auth/quotationUpdate",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
 
-      let {obj,quotationId } = payload ;
-      console.log(payload, "payloadpayload21");
-      let { data: response } = await updateQuotation(obj,quotationId);
-      console.log(response, "responsess2");
+      let { obj, quotationId } = payload;
+      let { data: response } = await updateQuotation(obj, quotationId);
       toastSuccess(response.message);
       thunkApi.dispatch(quotationGet(`leadId=${obj?.leadId}`))
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+
+export const quotationUpdateStatus = createAsyncThunk(
+  "auth/quotationStatusUpdate",
+  async (payload, thunkApi) => {
+    try {
+
+
+
+      // console.log(payload, obj, "payloadpayload21");
+      let { data: response } = await updateQuotationStatus({ status: payload.status }, payload.Id);
+      console.log(response, "responsess2");
+      toastSuccess(response.message);
+      thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`))
       return response;
     } catch (error) {
       toastError(error);
@@ -100,11 +115,10 @@ export const quotationUpdate = createAsyncThunk(
 // });
 export const quotationDelete = createAsyncThunk(
   "auth/quotationDelete",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
       // console.log(payload,"payloadpayload21")
       let { data: response } = await deleteQuotation(payload.id);
-      console.log(response, "responsess");
       toastSuccess(response.message);
       thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`))
       return response;
@@ -159,7 +173,6 @@ const quotationSlice = createSlice({
       state.error = false;
     },
     [quotationGet.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
       state.quotationArr = payload.data;
     },
     [quotationGet.rejected]: (state, action) => {
@@ -173,7 +186,6 @@ const quotationSlice = createSlice({
       state.error = false;
     },
     [quotationAdd.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload34");
     },
     [quotationAdd.rejected]: (state, action) => {
       state.loading = false;
@@ -182,12 +194,13 @@ const quotationSlice = createSlice({
       // toastError(action.data.message);
     },
     [setQuotationObj.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
       state.quotationObj = payload;
     },
 
     [quotationUpdate.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
+      state.quotationObj = {};
+    },
+    [quotationUpdateStatus.fulfilled]: (state, { payload }) => {
       state.quotationObj = {};
     },
     // //

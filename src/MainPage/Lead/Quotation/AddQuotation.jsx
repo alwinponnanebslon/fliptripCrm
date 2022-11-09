@@ -524,8 +524,10 @@ const AddQuotation = () => {
                       return (
                         <div className="row" key={index}>
 
-                          <div className="col-md-12 mb-3">
-                            <label className="blue-1 fs-12">Tour</label>
+                          <div className="col-md-4 mb-3">
+                            <label className="col-form-label ">
+                              Tour <span className="text-danger">*</span>
+                            </label>
 
                             <select className="form-control" name="name" value={item?.name} onChange={(e) => handleTourValueChange(e, index)}>
                               <option value="" disabled>--select an option--</option>
@@ -536,7 +538,7 @@ const AddQuotation = () => {
                                 )}
                             </select>
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-4">
                             <label className="col-form-label ">
                               Start Date <span className="text-danger">*</span>
                             </label>
@@ -550,7 +552,7 @@ const AddQuotation = () => {
                               />
                             </div>
                           </div>
-                          <div className="col-md-6">
+                          <div className="col-md-4">
                             <label className="col-form-label ">
                               Expiration Date
                             </label>
@@ -664,7 +666,7 @@ const AddQuotation = () => {
                   <div className="col-sm-12">
                     <h3 className="mt-3 mb-4 ">Traveller Details</h3>
                     <div className="row">
-                      <div className="col-4">
+                      <div className="col-3">
                         <label className="col-form-label ">
                           Adults
                           <span className="text-danger">*</span>
@@ -685,7 +687,7 @@ const AddQuotation = () => {
 
                         </select>
                       </div>
-                      <div className="col-4">
+                      <div className="col-3">
                         <label className="col-form-label ">
                           Children with Bed
                           <span className="text-danger">*</span>
@@ -705,7 +707,7 @@ const AddQuotation = () => {
                         </select>
 
                       </div>
-                      <div className="col-4">
+                      <div className="col-3">
                         <label className="col-form-label ">
                           Children without Bed
                           <span className="text-danger">*</span>
@@ -725,7 +727,7 @@ const AddQuotation = () => {
                         </select>
 
                       </div>
-                      <div className="col-4">
+                      <div className="col-3">
                         <label className="col-form-label ">
                           Infants
                           <span className="text-danger">*</span>
@@ -768,17 +770,6 @@ const AddQuotation = () => {
                       </div>
 
                       <div className="form-group col-md-4">
-                        <label> Number Of Night</label>
-                        <input
-                          type="number"
-                          name="numberOfNight"
-                          value={`${hotel.numberOfNight}`}
-                          className="form-control"
-                          onChange={(e) => handleinputchangeHotel(e, i)}
-                        />
-                      </div>
-
-                      <div className="form-group col-md-4">
                         <label> Room Type</label>
                         <input
                           type="text"
@@ -789,12 +780,37 @@ const AddQuotation = () => {
                         />
                       </div>
                       <div className="form-group col-md-4">
+                        <label>Rating</label>
+                        <select className="form-control" name="rating" value={parseInt(hotel.rating)} onChange={(e) => handleinputchangeHotel(e, i)}>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                        </select>
+
+                      </div>
+
+
+
+                      <div className="form-group col-md-4">
                         <label> Check In </label>
                         <input
                           type="date"
                           // type="text"
                           name="checkIn"
                           value={`${moment(hotel.checkIn).format("YYYY-MM-DD")}`}
+                          className="form-control"
+                          onChange={(e) => handleinputchangeHotel(e, i)}
+                        />
+                      </div>
+
+
+                      <div className="form-group col-md-4">
+                        <label> Number Of Night</label>
+                        <input
+                          type="number"
+                          name="numberOfNight"
+                          value={`${hotel.numberOfNight}`}
                           className="form-control"
                           onChange={(e) => handleinputchangeHotel(e, i)}
                         />
@@ -813,16 +829,7 @@ const AddQuotation = () => {
                         />
                       </div>
 
-                      <div className="form-group col-md-4">
-                        <label>Rating</label>
-                        <select className="form-control"   name="rating" value={parseInt(hotel.rating)}  onChange={(e) => handleinputchangeHotel(e, i)}>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          </select>
-                       
-                      </div>
+
 
                       <div className="form-group col-md-4">
                         <label>Hotel Address</label>
@@ -934,9 +941,9 @@ const AddQuotation = () => {
                               }
                             />
                           </div>
-                          <div className="form-group col-md-5">
+                          <div className="form-group col-md-12">
                             <label>Itinerary Description</label>
-                            <input
+                            <textarea
                               type="text"
                               name="itineraryName"
                               className="form-control"
@@ -1025,7 +1032,7 @@ const AddQuotation = () => {
                       {
                         island && (
                           <tr>
-                            <td>Land Packages</td>
+                            <td>Land Package</td>
                             <td>{numberOfGuest}</td>
                             <td><input type="text" value={[perPersonLandPrice]}
                               onChange={(e) => {
