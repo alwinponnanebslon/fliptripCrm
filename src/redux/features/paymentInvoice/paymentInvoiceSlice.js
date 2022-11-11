@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getPaymentByQuotationApi } from "../../../Services/payment.service";
 // import { rolesObj } from "../../../utils/roles";
 import {
   addPaymentInvoiceApi,
@@ -37,7 +38,8 @@ export const addPaymentInvoice = createAsyncThunk(
 	 let { data: response } = await addPaymentInvoiceApi(payload);
       if (response) {
         toastSuccess(response.message);
-        // thunkApi.dispatch(paymentInvoiceGet());
+      thunkApi.dispatch(getPaymentByQuotationApi(payload?.quotationId));
+
       
     }
     } catch (error) {
@@ -55,7 +57,8 @@ export const updatePaymentInvoice = createAsyncThunk(
 	 let { data: response } = await updatePaymentInvoiceApi(formData,formData.Id);
       if (response) {
         toastSuccess(response.message);
-        thunkApi.dispatch(paymentInvoiceGet())
+        thunkApi.dispatch(getPaymentByQuotationApi(formData?.quotationId));
+
     }
     } catch (error) {
     toastError(error);
@@ -67,12 +70,11 @@ export const updatePaymentInvoice = createAsyncThunk(
 
 export const deletePaymentInvoice = createAsyncThunk(
 	'paymentInvoice/deletePaymentInvoice',
-	async (payload,thunkApi) => {
+	async (payload) => {
        try {
 	          let { data: response } = await paymentInvoiceDeleteApi(payload);
               if (response) {
                 toastSuccess(response.message);
-                thunkApi.dispatch(paymentInvoiceGet())
                   }
         } catch (error) {
         toastError(error);
@@ -106,6 +108,10 @@ const paymentInvoiceSlice = createSlice({
     [setPaymentInvoice.fulfilled]: (state, action) => {
       state.paymentInvoiceObj =  action.payload;
       return action.payload.paymentInvoiceObj;
+    },
+    [addPaymentInvoice.fulfilled]: (state, { payload }) => {
+    },
+    [updatePaymentInvoice.fulfilled]: (state, { payload }) => {
     },
   },
 });

@@ -359,7 +359,7 @@ console.log(list[index],"paymentReceviedArr")
                                                 <th scope="row">{index + 1}</th>
                                                 <td><input type="date" min={moment(new Date()).format('YYYY-MM-DD')} onChange={(e) => { handlePaymentInput(e, index) }} name="receviedDate" value={moment(item.receviedDate).format('YYYY-MM-DD')} /></td>
                                                 <td><input type="text" name='installmentAmount' value={item.installmentAmount} onChange={(e) => { handlePaymentInput(e, index) }} /> </td>
-                                                <td><textarea onChange={(e) => { handlePaymentInput(e, index) }} name="transferStatus">{item.transferStatus}</textarea></td>
+                                                <td><textarea onChange={(e) => { handlePaymentInput(e, index) }} name="transferStatus" value={item.transferStatus}></textarea></td>
                                                 <td>
                                                     <select value={item.status} onChange={(e) => { handlePaymentInput(e, index) }} name="status">
                                                         <option value="Pending">Pending</option>
@@ -443,7 +443,7 @@ console.log(list[index],"paymentReceviedArr")
                                 <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <h5 className="modal-title"> Destination</h5>
+                                            <h5 className="modal-title"> Invoice</h5>
                                             <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
@@ -452,7 +452,7 @@ console.log(list[index],"paymentReceviedArr")
                                             <form onSubmit={handleSubmit}>
                                                 <div className="form-group row">
                                                     <label className="col-form-label col-md-2">
-                                                        Tour Name <span className="text-danger">*</span>
+                                                        Invoice No <span className="text-danger">*</span>
                                                     </label>
                                                     <div className="col-md-10">
                                                         <input
@@ -479,10 +479,10 @@ console.log(list[index],"paymentReceviedArr")
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-form-label col-md-2">
-                                                        Invoice Description
+                                                        Invoice Description 
                                                     </label>
                                                     <div className="col-md-10">
-                                                        <textarea className='form-control'   onChange={(e) => setInvoiceDescription(e.target.value)}>{invoiceDescription}</textarea>
+                                                        <textarea className='form-control' value={invoiceDescription}  onChange={(e) => setInvoiceDescription(e.target.value)}>{invoiceDescription}</textarea>
                                                       
                                                     </div>
                                                 </div>

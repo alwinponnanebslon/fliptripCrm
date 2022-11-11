@@ -9,7 +9,7 @@ export const addPaymentInvoiceApi = (obj) => {
 export const getPaymentInvoicesApi = (query) => {
   return axios.get(`${serverUrl}/?${query}`)
 };
-export const PaymentInvoiceDeleteApi = (id) => {
+export const paymentInvoiceDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
 };
 
