@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams, withRouter } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -16,26 +15,24 @@ import {
   AccordionItemHeading,
   AccordionItemButton,
   AccordionItemPanel,
-} from 'react-accessible-accordion';
+} from "react-accessible-accordion";
 
-import 'react-accessible-accordion/dist/fancy-example.css';
+import "react-accessible-accordion/dist/fancy-example.css";
 const LeadSidebar = (props) => {
   const role = useSelector((state) => state.auth.role);
 
   const [isSideMenu, setSideMenu] = useState("");
   const [level2Menu, setLevel2Menu] = useState("");
   const [level3Menu, setLevel3Menu] = useState("");
-  const [pathname, setPathName] = useState("")
+  const [pathname, setPathName] = useState("");
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
-
 
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
@@ -62,10 +59,9 @@ const LeadSidebar = (props) => {
     setPathName(location.pathname);
   }, [location]);
 
-
   const params = useParams();
-  const leadId = params.leadId
-  console.log(params.leadId, "lead Id ")
+  const leadId = params.leadId;
+  console.log(params.leadId, "lead Id ");
   return (
     <div className="sidebar leadsidebar" id="sidebar">
       <Scrollbars
@@ -79,29 +75,24 @@ const LeadSidebar = (props) => {
         universal={false}
         hideTracksWhenNotNeeded={true}
       >
-
-
         <div className="sidebar-inner slimscroll">
           <div id="sidebar-menu" className="sidebar-menu">
             <ul>
-
               <li className="menu-title">
-                <Link to="/admin/leads" className="active" ><i className="fa fa-back-arrow"></i>  Back</Link>
+                <Link to="/admin/leads" className="active">
+                  <i className="fa fa-back-arrow"></i> Back
+                </Link>
               </li>
-              <li
-                className={pathname?.includes("lead") ? "active" : ""}
-              >
+              <li className={pathname?.includes("lead") ? "active" : ""}>
                 <Link to={`/admin/lead/${leadId}`}>
-                  <i className="la la-file" />{" "}
+                  <i className="la la-file" />
                   <div className="textblock2">
                     {" "}
                     <span>Traveller Details</span>{" "}
                   </div>
                 </Link>
               </li>
-              <li
-                className={pathname?.includes("quotes") ? "active" : ""}
-              >
+              <li className={pathname?.includes("quotes") ? "active" : ""}>
                 <Link to={`/admin/lead/${leadId}/quotes`}>
                   <i className="la la-file" />{" "}
                   <div className="textblock2">
@@ -119,23 +110,30 @@ const LeadSidebar = (props) => {
                 <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
                   <i className="la la-file-text-o" />{" "}
                   <div className="textblock2">
-                    {" "}
                     <span>Quotation Followup</span>{" "}
                     <span className="textsmall">PENDING TASKS</span>{" "}
                   </div>
                 </Link>
               </li>
               <li
-                className={
-                  pathname?.includes("quotePayment") ? "active" : ""
-                }
+                className={pathname?.includes("quotePayment") ? "active" : ""}
               >
                 <Link to={`/admin/lead/${leadId}/quotePayment`}>
-                  <i className="la la-file-text-o" />{" "}
+                  <i className="la la-file-text-o" />
                   <div className="textblock2">
-                    {" "}
-                    <span>Quotation Payment</span>{" "}
-                    <span className="textsmall">CREATE AND MANAGE</span>{" "}
+                    <span>Quotation Payment</span>
+                    <span className="textsmall">CREATE AND MANAGE</span>
+                  </div>
+                </Link>
+              </li>
+              <li
+                className={pathname?.includes("costingSheet") ? "active" : ""}
+              >
+                <Link to={`/admin/lead/${leadId}/costingSheet`}>
+                  <i className="la la-file-text-o" />
+                  <div className="textblock2">
+                    <span>Costing Sheet</span>
+                    <span className="textsmall">CREATE AND MANAGE</span>
                   </div>
                 </Link>
               </li>
@@ -549,20 +547,12 @@ const LeadSidebar = (props) => {
                     toggleSidebar(isSideMenu == "notes" ? "" : "notes")
                   }
                 >
-                  <i className="fa fa-sticky-note-o" />{" "}
-                  <span > NOTES </span>{" "}
+                  <i className="fa fa-sticky-note-o" /> <span> NOTES </span>{" "}
                   <span className="menu-arrow" />
                 </a>
                 <Notes />
-
-
-
-
-
               </li>
               {/* z */}
-
-
             </ul>
           </div>
         </div>
@@ -746,7 +736,9 @@ const LeadSidebar = (props) => {
         {/* sedasdfasdfdddddddddddddddddddddddddddddddddddddd */}
         <Modal show={show1} onHide={handleClose1} className="add_note">
           <Modal.Header>
-            <Modal.Title>Add Note<span>TRIP ID 3852943</span> </Modal.Title>
+            <Modal.Title>
+              Add Note<span>TRIP ID 3852943</span>{" "}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="section_progress ">
@@ -764,7 +756,12 @@ const LeadSidebar = (props) => {
                 <div className="col-lg-12">
                   <div className="form-group">
                     <label>Your Note</label>
-                    <textarea name="" className="form-control" rows="100" placeholder="Enter additional information..."></textarea>
+                    <textarea
+                      name=""
+                      className="form-control"
+                      rows="100"
+                      placeholder="Enter additional information..."
+                    ></textarea>
                   </div>
                 </div>
                 <div className="col-lg-12 mt-3">
@@ -782,7 +779,6 @@ const LeadSidebar = (props) => {
             <div className="foter-modal">
               <div className="container">
                 <div className="row">
-
                   <div className="col-lg-12 text-end">
                     <Button className="btn-cancle" onClick={handleClose1}>
                       {" "}
@@ -801,10 +797,7 @@ const LeadSidebar = (props) => {
         </Modal>
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
-
-
       </Scrollbars>
-
     </div>
   );
 };

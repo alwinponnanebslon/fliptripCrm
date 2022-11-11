@@ -167,7 +167,7 @@ const Sidebar = (props) => {
                     <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
-                <li
+                {/* <li
                   className={
                     pathname?.includes("costing sheet") ? "active" : ""
                   }
@@ -175,7 +175,7 @@ const Sidebar = (props) => {
                   <Link to="/admin/costingSheet">
                     <i className="la la-hotel" /> <span>CostingSheet</span>
                   </Link>
-                </li>
+                </li> */}
                 <li
                   className={
                     pathname?.includes("leads")

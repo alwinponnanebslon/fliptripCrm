@@ -31,7 +31,7 @@ import ViewDestination from "../MainPage/Destination/ViewDestination";
 import Leads from "../MainPage/Lead/Leads";
 import CreateQuote from "../MainPage/Employees/CreateQuote";
 import ViewCostingSheet from "../MainPage/CostingSheet/index";
-import AddCostingSheet from "../MainPage/CostingSheet/Forms/basicinputs/CostingSheetForm";
+import AddCostingSheetForm from "../MainPage/CostingSheet/Forms/basicinputs/CostingSheetForm";
 
 // import
 import Quotation from "../MainPage/quotation";
@@ -66,16 +66,17 @@ export default [
     component: ViewDestination,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
-  {
-    path: "/admin/costingSheet",
-    component: ViewCostingSheet,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
-  },
-  {
-    path: "/admin/costingSheet/Add",
-    component: AddCostingSheet,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
-  },
+
+  // {
+  //   path: "/admin/costingSheet",
+  //   component: ViewCostingSheet,
+  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  // },
+  // {
+  //   path: "/admin/costingSheet/Add",
+  //   component: AddCostingSheetForm,
+  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  // },
   {
     path: "/admin/leads",
     component: Leads,

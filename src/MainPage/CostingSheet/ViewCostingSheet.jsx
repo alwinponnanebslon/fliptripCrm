@@ -1,366 +1,219 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
+// import { Avatar_07 } from "../../Entryfile/imagepath";
+// import Editclient from "../../_components/modelbox/Editclient";
+import { Table } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import "antd/dist/antd.css";
-import CustomButton from "../../_components/Utility/Button";
-import { toastError, toastSuccess } from "../../utils/toastUtils";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
 import "../antdstyle.css";
 import {
-  tourGet,
-  updateTour,
-  deleteTour,
-  setTour,
-  addTour,
-} from "../../redux/features/CostingSheet/CostingSheetSlice.js";
+  costingSheetGet,
+  deleteCostingSheet,
+  setCostingSheet,
+} from "../../redux/features/CostingSheet/CostingSheetSlice";
 
-const ViewDestination = () => {
+const ViewCostingSheet = () => {
   const dispatch = useDispatch();
-  const tourResultObj = useSelector((state) => state.tour.tourObj);
-  const toursResultArr = useSelector((state) => state.tour.tours);
 
-  const [leadName, setLeadName] = useState("");
-  const [locationName, setLocationName] = useState("");
-  const [isBooked, setIsBooked] = useState(false);
-  const [profit, setProfit] = useState("");
-  const [airportCost, setAirportCost] = useState("");
-  const [flightCost, setflightCost] = useState("");
-
-  const [inputList, setinputList] = useState([{ hotelName: "", location: "" }]);
-  const [flightList, setFlightDetails] = useState([
-    { day: "", flightName: "" },
-  ]);
-  console.log(inputList, "inputList23");
-  console.log(flightList, "flightList23");
-  const handleinputchange = (e, index) => {
-    const { name, value } = e.target;
-    // if (name == "age") {
-    //   if (value >= 149 || value < 1) {
-    //     toastError("invalid age, kindly provide valid age");
-    //   }
-    // }
-    const list = [...inputList];
-    list[index][name] = value;
-    setinputList(list);
-  };
-  useEffect(() => {}, [inputList]);
-
-  const handleremove = (index) => {
-    const list = [...inputList];
-    list.splice(index, 1);
-    setinputList(list);
-  };
-
-  const handleaddclick = () => {
-    setinputList([...inputList, { hotelName: "", location: "" }]);
-  };
-
-  const handleinputchangeFlight = (e, index) => {
-    const { name, value } = e.target;
-    // if (name == "day") {
-    //   if (value > 7 || value < 1) {
-    //     toastError("invalid day, kindly provide valid day");
-    //   }
-    // }
-    // const list = [...flightList];
-    // console.log(list, "listflight");
-    // list[index][name] = value;
-    // setFlightDetails(list);
-    let tempArr = flightList;
-
-    for (const el of e.target) {
-      let objectexistsObj = tempArr.find(
-        (ele) => ele.flightName == el.flightName
-      );
-      console.log(objectexistsObj, "objectexistsObj12");
-      if (objectexistsObj) {
-      }
-    }
-
-    setFlightDetails([e.target]);
-  };
-
-  const handleremoveFlightDetails = (index) => {
-    const list = [...flightList];
-    list.splice(index, 1);
-    setFlightDetails(list);
-  };
-
-  const handleaddclickFlightDetails = () => {
-    setFlightDetails([...flightList, { day: "", flightName: "" }]);
-  };
+  const costingSheetArr = useSelector(
+    (state) => state.costingSheet.costingSheets
+  );
+  // console.log(costingSheetArr, "costingSheetArr23");
+  const [costingSheetMainArr, setCostingSheetMainArr] = useState([]);
+  const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
+  const [tourId, setCostingSheetId] = useState("");
+  const [isUpdateCostingSheet, setIsUpdateCostingSheet] = useState(false);
 
   useEffect(() => {
     handleInit();
   }, []);
 
   const handleInit = () => {
-    // dispatch(tourGet());
+    dispatch(costingSheetGet());
   };
 
   useEffect(() => {
-    // setTourMainArr(toursResultArr)
-  }, [toursResultArr]);
+    setCostingSheetMainArr(costingSheetArr);
+  }, [costingSheetArr]);
 
   const handleEdit = (row) => {
     console.log(row, "row update"); //whole object
+    setIsUpdateCostingSheet(true);
 
-    dispatch(setTour(row));
+    dispatch(setCostingSheet(row));
   };
 
-  const handleTourDelete = (id) => {
-    dispatch(deleteTour(id));
+  const handleCostingSheetDelete = (id) => {
+    dispatch(deleteCostingSheet(id));
   };
 
-  const handleSatus = (row, status) => {
-    let obj = {
-      Id: row._id,
-      status: status,
-    };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   // if (name == "") {
+  //   //   toastError("Tour Name is mandatory");
+  //   //   // throw "tour name is mandatory";
+  //   // }
 
-    dispatch(updateTour(obj));
-  };
+  //   let obj = { name, description };
+  //   if (isUpdateCostingSheet) {
+  //     obj.Id = tourId;
+  //     setIsUpdateCostingSheet(false);
+  //     // dispatch(updateTour(obj));
+  //   } else {
+  //     dispatch(addTour(obj));
+  //   }
+  // };
+  const tour_columns = [
+    {
+      title: "Lead Name",
+      dataIndex: "leadName",
+      width: "15%",
+    },
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (leadName == "") {
-      toastError("Lead Name is mandatory");
-      return;
-      // throw "tour name is mandatory";
-    } else if (locationName == "") {
-      toastError("Location Name is mandatory");
-      return;
-    } else if (inputList && inputList[0].hotelName == "") {
-      toastError(" Hotel details is mandatory");
-      return;
-      // } else if (flightList && flightList[0].FlightName == "") {
-      //   toastError("Flight details is mandatory");
-      //   return;
-    } else if (profit == "") {
-      toastError("profit is mandatory");
-      return;
-    } else if (airportCost == "") {
-      toastError("Airport cost is mandatory");
-      return;
-    } else if (flightCost == "") {
-      toastError("Flight cost is mandatory");
-      return;
-    }
-
-    let obj = {
-      leadName,
-      locationName,
-      inputList,
-      flightList,
-      profit,
-      airportCost,
-      flightCost,
-    };
-    console.log(obj, "obj");
-    dispatch(addCostingSheet(obj));
-  };
+    {
+      title: "Location name",
+      dataIndex: "locationName",
+      sorter: (a, b) => a.locationName.length - b.locationName.length,
+      width: "15%",
+    },
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   render: (row, record) => (
+    //     <div className="dropdown">
+    //       <a
+    //         href="#"
+    //         className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+    //         data-bs-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i
+    //           className={
+    //             record.status === true
+    //               ? "fa fa-dot-circle-o text-success"
+    //               : "fa fa-dot-circle-o text-danger"
+    //           }
+    //         />
+    //         {record.status ? "Active" : "Inactive"}
+    //       </a>
+    //       <div className="dropdown-menu">
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, true)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-success" /> Active
+    //         </a>
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, false)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-danger" /> Inactive
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
+    {
+      title: "Total Cost",
+      dataIndex: "totalCost",
+      // sorter: (a, b) => a.totalCost.length - b.totalCost.length,
+      width: "15%",
+    },
+    {
+      title: "Profit ",
+      dataIndex: "profit",
+      // sorter: (a, b) => a.profit.length - b.profit.length,
+      width: "15%",
+    },
+    {
+      title: "Action",
+      width: "15%",
+      render: (row, record) => (
+        <div className="dropdown dropdown-action text-end">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="material-icons">more_vert</i>
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <Link
+              className="dropdown-item"
+              to="/admin/costingSheet/Add"
+              onClick={() => handleEdit(row)}
+            >
+              <i className="fa fa-pencil m-r-5" /> Edit
+            </Link>
+            <a
+              className="dropdown-item"
+              onClick={() => handleCostingSheetDelete(row._id)}
+            >
+              <i className="fa fa-trash-o m-r-5" /> Delete
+            </a>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="page-wrapper">
+      <Helmet>
+        <title>Clients - CRM created by Fliptrip Holidays</title>
+        <meta name="description" content="Login page" />
+      </Helmet>
+      {/* Page Content */}
       <div className="content container-fluid">
-        <form action="" className="form">
-          <h3 className="blue-1 mb-4">Add Costing Sheet</h3>
-          <div className="row">
-            <div className="col-12 col-md-8 mb-3">
-              <label className="blue-1 fs-12">
-                Lead Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                value={leadName}
-                onChange={(event) => setLeadName(event.target.value)}
-              />
+        {/* Page Header */}
+        <div className="page-header">
+          <div className="row align-items-center">
+            <div className="col">
+              <h3 className="page-title">Costing Sheet</h3>
+              <ul className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="/app/main/dashboard">Dashboard</Link>
+                </li>
+                <li className="breadcrumb-item active">Costing Sheet</li>
+              </ul>
             </div>
-            <div className="col-12  col-md-8 mb-3">
-              <label className="blue-1 fs-12">
-                Location Name<span className="text-danger">*</span>
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                value={locationName}
-                onChange={(e) => setLocationName(e.target.value)}
-              />
-            </div>
-            <div className="col-12 mb-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                name="category-status"
-                value="option1"
-                id="publish-checkbox"
-                checked={isBooked}
-                onChange={() => setIsBooked(!isBooked)}
-              />
-              <label
-                className="form-check-label fs-14"
-                htmlFor="publish-checkbox"
-              >
-                isBooked
-              </label>
+            <div className="col-auto float-end ml-auto">
+              <Link className="btn add-btn" to="/admin/costingSheet/Add">
+                <i className="fa fa-plus" /> Add Costing Sheet
+              </Link>
             </div>
           </div>
-
-          <div className="row">
-            <div className="content">
-              <div className="row">
-                <div className="col-sm-12">
-                  <h3 className="mt-3 mb-4 ">Hotel Details</h3>
-                  {inputList.map((x, i) => {
-                    return (
-                      <div className="row mb-3">
-                        <div class="form-group col-md-4">
-                          <label>Hotel Name</label>
-                          <input
-                            type="text"
-                            name="hotelName"
-                            class="form-control"
-                            placeholder="Enter Hotel Name"
-                            onChange={(e) => handleinputchange(e, i)}
-                          />
-                        </div>
-                        <div class="form-group col-md-4">
-                          <label>Location</label>
-                          <input
-                            type="text"
-                            name="location"
-                            class="form-control"
-                            placeholder="Enter location"
-                            onChange={(e) => handleinputchange(e, i)}
-                          />
-                        </div>
-                        <div class="form-group col-md-2 mt-4">
-                          {inputList.length !== 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-danger mx-1"
-                              onClick={() => handleremove(i)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                          {inputList.length - 1 === i && (
-                            <button
-                              className="btn btn-success"
-                              onClick={handleaddclick}
-                            >
-                              Add More
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            <div className="content">
-              <div className="row">
-                <div className="col-sm-12">
-                  <h3 className="mt-3 mb-4">Flight Details</h3>
-                  {flightList.map((x, i) => {
-                    return (
-                      <div className="row mb-3">
-                        <div class="form-group col-md-4">
-                          <label>Flight Name</label>
-                          <input
-                            type="text"
-                            name="flightName"
-                            class="form-control"
-                            placeholder="Enter Flight Name"
-                            onChange={(e) => handleinputchangeFlight(e, i)}
-                          />
-                        </div>
-                        <div class="form-group col-md-4">
-                          <label>Day </label>
-                          <input
-                            type="date"
-                            name="day"
-                            class="form-control"
-                            onChange={(e) => handleinputchangeFlight(e, i)}
-                          />
-                        </div>
-
-                        <div class="form-group col-md-2 mt-4">
-                          {flightList.length !== 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-danger"
-                              // className="btn btn-success"
-                              onClick={() => handleremoveFlightDetails(i)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                          {flightList.length - 1 === i && (
-                            <button
-                              type="button"
-                              className="btn btn-success"
-                              onClick={handleaddclickFlightDetails}
-                            >
-                              Add More
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-            <div className="content">
-              <div className="col-12 col-md-4 mb-3">
-                <label className="blue-1 fs-12">
-                  Airport Cost<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={airportCost}
-                  onChange={(e) => setAirportCost(e.target.value)}
-                />
-              </div>
-              <div className="col-12 col-md-4 mb-3">
-                <label className="blue-1 fs-12">
-                  Flight Cost<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  value={flightCost}
-                  onChange={(e) => setflightCost(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="col-12 col-md-4 mb-3">
-              <label className="blue-1 fs-12">
-                Profit<span className="text-danger">*</span>
-              </label>
-              <input
-                type="number"
-                className="form-control"
-                value={profit}
-                onChange={(e) => setProfit(e.target.value)}
-              />
-            </div>
-            <div className="col-12">
-              <CustomButton
-                isBtn
-                iconName=""
-                btnName="Save"
-                ClickEvent={handleSubmit}
+        </div>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="table-responsive">
+              <Table
+                className="table-striped"
+                pagination={{
+                  total: costingSheetMainArr.length,
+                  showTotal: (total, range) =>
+                    `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                  showSizeChanger: true,
+                  onShowSizeChange: onShowSizeChange,
+                  itemRender: itemRender,
+                }}
+                style={{ overflowX: "auto" }}
+                columns={tour_columns}
+                dataSource={costingSheetMainArr}
+                rowKey={(record) => record.id}
               />
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ViewDestination;
+export default ViewCostingSheet;

@@ -1,14 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { rolesObj } from "../../../utils/roles";
 import {
-  // add
-  // get
-  // costingDeleteApi
   updateApi,
   add,
   get,
   costingDeleteApi,
-  // updateApi,
 } from "../../../Services/costingSheet.services";
 
 let initialState = {
@@ -35,7 +31,7 @@ export const costingSheetGet = createAsyncThunk(
   }
 );
 
-export const addTour = createAsyncThunk(
+export const addCosting = createAsyncThunk(
   "costingSheet/add",
   async (payload, thunkApi) => {
     try {
@@ -43,6 +39,7 @@ export const addTour = createAsyncThunk(
       if (response) {
         toastSuccess(response.message);
         thunkApi.dispatch(costingSheetGet());
+        window.location.reload();
       }
     } catch (error) {
       toastError(error);
@@ -51,7 +48,7 @@ export const addTour = createAsyncThunk(
   }
 );
 
-export const updateTour = createAsyncThunk(
+export const update = createAsyncThunk(
   "costingSheet/update",
   async (formData, thunkApi) => {
     try {
@@ -59,6 +56,7 @@ export const updateTour = createAsyncThunk(
       if (response) {
         toastSuccess(response.message);
         thunkApi.dispatch(costingSheetGet());
+        window.location.reload();
       }
     } catch (error) {
       toastError(error);
@@ -67,7 +65,7 @@ export const updateTour = createAsyncThunk(
   }
 );
 
-export const deleteTour = createAsyncThunk(
+export const deleteCostingSheet = createAsyncThunk(
   "costingSheet/delete",
   async (payload, thunkApi) => {
     try {
@@ -83,12 +81,15 @@ export const deleteTour = createAsyncThunk(
   }
 );
 
-export const setTour = createAsyncThunk("costingSheet/set", async (row) => {
-  if (row) {
-    const costingSheetObj = row;
-    return costingSheetObj;
+export const setCostingSheet = createAsyncThunk(
+  "costingSheet/set",
+  async (row) => {
+    if (row) {
+      const costingSheetObj = row;
+      return costingSheetObj;
+    }
   }
-});
+);
 
 const costingSheetSlice = createSlice({
   name: "costingSheet",
@@ -99,7 +100,7 @@ const costingSheetSlice = createSlice({
       state.costingSheets = action.payload;
       return action.payload.costingSheets;
     },
-    [setTour.fulfilled]: (state, action) => {
+    [setCostingSheet.fulfilled]: (state, action) => {
       state.costingSheetObj = action.payload;
       return action.payload.costingSheetObj;
     },
