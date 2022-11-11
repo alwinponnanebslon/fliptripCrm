@@ -38,7 +38,7 @@ import Quotation from "../_components/quotation/Quotation";
 
 export function PrivateRoute({ children }) {
   const isAuthorized = useSelector((state) => state.auth.isAuthorized);
-  if (isAuthorized) return <>{ children }</>;
+  if (isAuthorized) return <>{children}</>;
   else {
     return <Redirect to="/" />;
   }
@@ -46,7 +46,7 @@ export function PrivateRoute({ children }) {
 
 export function PublicRoute({ children }) {
   const isAuthorized = useSelector((state) => state.auth.isAuthorized);
-  if (!isAuthorized) return <>{ children }</>;
+  if (!isAuthorized) return <>{children}</>;
   else {
     return <Redirect to="/admin/dashboard" />;
   }
@@ -115,66 +115,54 @@ const App = () => {
       </Route>
       <Route path="/forgotpassword">
         <PublicRoute>
-
-        <ForgotPassword />
+          <ForgotPassword />
         </PublicRoute>
       </Route>
       <Route path="/register">
         <PublicRoute>
-
-        <RegistrationPage />
+          <RegistrationPage />
         </PublicRoute>
       </Route>
       <Route path="/otp">
         <PublicRoute>
-
-        <OTP />
+          <OTP />
         </PublicRoute>
       </Route>
       <Route path="/lockscreen">
         <PublicRoute>
-
-        <LockScreen />
+          <LockScreen />
         </PublicRoute>
       </Route>
       <Route path="/applyjob">
-      <PublicRoute>
-
-        <ApplyJobs />
+        <PublicRoute>
+          <ApplyJobs />
         </PublicRoute>
       </Route>
 
       <Route path="/settings">
         <PublicRoute>
-
           <Settinglayout />
         </PublicRoute>
       </Route>
       <Route path="/tasks">
         <PublicRoute>
-
-        <Tasklayout />
+          <Tasklayout />
         </PublicRoute>
       </Route>
       <Route path="/email">
-      <PublicRoute>
-
-        <Emaillayout />
+        <PublicRoute>
+          <Emaillayout />
         </PublicRoute>
       </Route>
-
-
 
       <Route path="/error-404">
         <PublicRoute>
-
-        <Error404 />
+          <Error404 />
         </PublicRoute>
       </Route>
       <Route path="/error-500">
-      <PublicRoute>
-
-        <Error500 />
+        <PublicRoute>
+          <Error500 />
         </PublicRoute>
       </Route>
     </Switch>

@@ -30,10 +30,12 @@ import Clients from "../MainPage/Clients/Clients";
 import ViewDestination from "../MainPage/Destination/ViewDestination";
 import Leads from "../MainPage/Lead/Leads";
 import CreateQuote from "../MainPage/Employees/CreateQuote";
+import ViewCostingSheet from "../MainPage/CostingSheet/index";
+import AddCostingSheet from "../MainPage/CostingSheet/Forms/basicinputs/CostingSheetForm";
 
 // import
 import Quotation from "../MainPage/quotation";
-import Destination from '../MainPage/Destination'
+import Destination from "../MainPage/Destination";
 import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
 import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
 
@@ -41,35 +43,49 @@ export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
   {
     path: "/admin/employee",
     component: AllEmployees,
-    roleArr: ['ADMIN', 'TEAMLEAD']
+    roleArr: ["ADMIN", "TEAMLEAD"],
   },
   {
     path: "/admin/employee-profile/:id",
     component: EmployeeProfile,
-    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
   {
     path: "/admin/clients",
     component: Clients,
-    roleArr: ['ADMIN', 'TEAMLEAD',"SPOKE"]
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
 
   {
     path: "/admin/destinations",
     component: ViewDestination,
-    roleArr: ['ADMIN', 'TEAMLEAD','SPOKE']
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  },
+  {
+    path: "/admin/costingSheet",
+    component: ViewCostingSheet,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  },
+  {
+    path: "/admin/costingSheet/Add",
+    component: AddCostingSheet,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ['ADMIN', 'TEAMLEAD','SPOKE']
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
-
+  {
+    path: "/quotation",
+    component: Quotation,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  },
 
   // {
   //   path: "employees",

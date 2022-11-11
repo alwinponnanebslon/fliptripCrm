@@ -8,6 +8,7 @@ import userReducer from "./features/user/userSlice";
 import clientReducer from "./features/client/clientSlice";
 import followUpReducer from "./features/followup/followUpSlice";
 import noteReducer from "./features/note/noteSlice";
+import costingSheetReducer from "./features/CostingSheet/CostingSheetSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   client: clientReducer,
   followUp: followUpReducer,
   note: noteReducer,
+  costingSheet: costingSheetReducer,
 });
 
 export default rootReducer;

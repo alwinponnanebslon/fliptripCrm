@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState } from "react";
-import { Link ,useLocation,useParams,withRouter} from "react-router-dom";
+import { Link, useLocation, useParams, withRouter } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import { useSelector } from "react-redux";
 import { admin, rolesObj } from "../../utils/roles";
@@ -15,27 +14,25 @@ import {
   AccordionItemHeading,
   AccordionItemButton,
   AccordionItemPanel,
-} from 'react-accessible-accordion';
+} from "react-accessible-accordion";
 
-import 'react-accessible-accordion/dist/fancy-example.css';
+import "react-accessible-accordion/dist/fancy-example.css";
 const Sidebar = (props) => {
   const role = useSelector((state) => state.auth.role);
 
   const [isSideMenu, setSideMenu] = useState("");
   const [level2Menu, setLevel2Menu] = useState("");
   const [level3Menu, setLevel3Menu] = useState("");
-  const [pathname, setPathName] = useState("")
+  const [pathname, setPathName] = useState("");
   // const [leadId, setLeadId] = useState("")
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
-
 
   const [show2, setShow2] = useState(false);
   const handleClose2 = () => setShow2(false);
@@ -57,21 +54,20 @@ const Sidebar = (props) => {
   };
 
   const location = useLocation();
-  
+
   useEffect(() => {
     setPathName(location.pathname);
   }, [location]);
+  // console.log(pathname, "athName2");///admin/leads athName2
+  const { leadId } = useParams();
 
-
-    const  {leadId}  = useParams();
-    
   // useEffect(() => {
   //   if(params.leadId){
   //     setLeadId(params.leadId)
   //   }
   // }, [params]);
-console.log(leadId,"leadidadasdjddij")
-console.log(props,"leadidadasdjddij")
+  console.log(leadId, "leadidadasdjddij");
+  console.log(props, "leadidadasdjddij");
   return (
     <div className="sidebar" id="sidebar">
       <Scrollbars
@@ -110,7 +106,121 @@ console.log(props,"leadidadasdjddij")
                       <li>
                         <Link
                           className={
-                            pathname?.includes("admin/dashboard") ? "active" : ""
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li>
+                {/*  */}
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "costing" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(
+                        isSideMenu == "dashboard" ? "" : "dashboard"
+                      )
+                    }
+                  >
+                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "dashboard" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li>
+                {/*  */}
+
+                <li className={pathname?.includes("clients") ? "active" : ""}>
+                  <Link to="/admin/clients">
+                    <i className="la la-users" /> <span>Clients</span>
+                  </Link>
+                </li>
+                <li
+                  className={pathname?.includes("destinations") ? "active" : ""}
+                >
+                  <Link to="/admin/destinations">
+                    <i className="la la-globe" /> <span>Destinations</span>
+                  </Link>
+                </li>
+                <li
+                  className={
+                    pathname?.includes("costing sheet") ? "active" : ""
+                  }
+                >
+                  <Link to="/admin/costingSheet">
+                    <i className="la la-hotel" /> <span>CostingSheet</span>
+                  </Link>
+                </li>
+                <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/leads">
+                    <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+        {role == rolesObj.TEAMLEAD && (
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <span>Main</span>
+                </li>
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "dashboard" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(
+                        isSideMenu == "dashboard" ? "" : "dashboard"
+                      )
+                    }
+                  >
+                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "dashboard" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
                           }
                           to="/admin/dashboard"
                         >
@@ -160,11 +270,13 @@ console.log(props,"leadidadasdjddij")
                     <i className="la la-users" /> <span>Clients</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("destinations") ? "active" : ""}>
+                <li
+                  className={pathname?.includes("destinations") ? "active" : ""}
+                >
                   <Link to="/admin/destinations">
-                    <i className="la la-globe" /> <span>Destinations</span>
+                    <i className="la la-globe" /> <span>Destinations22</span>
                   </Link>
-                </li>          
+                </li>
                 <li
                   className={
                     pathname?.includes("leads")
@@ -178,174 +290,78 @@ console.log(props,"leadidadasdjddij")
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-              
               </ul>
             </div>
           </div>
         )}
-        {role == rolesObj.TEAMLEAD && (
-          <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu">
-            <ul>
-              <li className="menu-title">
-                <span>Main</span>
-              </li>
-              <li className="submenu">
-                <a
-                  href="#"
-                  className={isSideMenu == "dashboard" ? "subdrop" : ""}
-                  onClick={() =>
-                    toggleSidebar(
-                      isSideMenu == "dashboard" ? "" : "dashboard"
-                    )
-                  }
-                >
-                  <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
-                  <span className="menu-arrow" />
-                </a>
-                {isSideMenu == "dashboard" ? (
-                  <ul>
-                    <li>
-                      <Link
-                        className={
-                          pathname?.includes("admin/dashboard") ? "active" : ""
-                        }
-                        to="/admin/dashboard"
-                      >
-                        Admin Dashboard
-                      </Link>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
-              </li>
-              <li className="submenu">
-                <a
-                  href="#"
-                  className={isSideMenu == "employee" ? "subdrop" : ""}
-                  onClick={() =>
-                    toggleSidebar(isSideMenu == "employee" ? "" : "employee")
-                  }
-                >
-                  <i className="la la-user" />{" "}
-                  <span className="noti-dot"> Employees</span>{" "}
-                  <span className="menu-arrow" />
-                </a>
-                {isSideMenu == "employee" ? (
-                  <ul>
-                    <li>
-                      <Link
-                        className={
-                          pathname?.includes("allemployees")
-                            ? "active"
-                            : pathname?.includes("employees-list")
-                            ? "active"
-                            : ""
-                        }
-                        to="/admin/employee"
-                      >
-                        All Employees
-                      </Link>
-                    </li>
-                  </ul>
-                ) : (
-                  ""
-                )}
-              </li>
-              <li className={pathname?.includes("clients") ? "active" : ""}>
-                <Link to="/admin/clients">
-                  <i className="la la-users" /> <span>Clients</span>
-                </Link>
-              </li>
-              <li className={pathname?.includes("destinations") ? "active" : ""}>
-                <Link to="/admin/destinations">
-                  <i className="la la-globe" /> <span>Destinations</span>
-                </Link>
-              </li>          
-              <li
-                className={
-                  pathname?.includes("leads")
-                    ? "active"
-                    : pathname?.includes("Lead-view")
-                    ? "active"
-                    : ""
-                }
-              >
-                <Link to="/admin/leads">
-                  <i className="la la-ticket" /> <span>Leads</span>
-                </Link>
-              </li>
-            
-            </ul>
-          </div>
-        </div>
-        )}
         {role == rolesObj.SPOKE && (
-           <div className="sidebar-inner slimscroll">
-           <div id="sidebar-menu" className="sidebar-menu">
-             <ul>
-               <li className="menu-title">
-                 <span>Main</span>
-               </li>
-               <li className="submenu">
-                 <a
-                   href="#"
-                   className={isSideMenu == "dashboard" ? "subdrop" : ""}
-                   onClick={() =>
-                     toggleSidebar(
-                       isSideMenu == "dashboard" ? "" : "dashboard"
-                     )
-                   }
-                 >
-                   <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
-                   <span className="menu-arrow" />
-                 </a>
-                 {isSideMenu == "dashboard" ? (
-                   <ul>
-                     <li>
-                       <Link
-                         className={
-                           pathname?.includes("admin/dashboard") ? "active" : ""
-                         }
-                         to="/admin/dashboard"
-                       >
-                         Admin Dashboard
-                       </Link>
-                     </li>
-                   </ul>
-                 ) : (
-                   ""
-                 )}
-               </li>
-               
-               <li className={pathname?.includes("clients") ? "active" : ""}>
-                 <Link to="/admin/clients">
-                   <i className="la la-users" /> <span>Clients</span>
-                 </Link>
-               </li>
-               <li className={pathname?.includes("destinations") ? "active" : ""}>
-                 <Link to="/admin/destinations">
-                   <i className="la la-globe" /> <span>Destinations</span>
-                 </Link>
-               </li>          
-               <li
-                 className={
-                   pathname?.includes("leads")
-                     ? "active"
-                     : pathname?.includes("Lead-view")
-                     ? "active"
-                     : ""
-                 }
-               >
-                 <Link to="/admin/leads">
-                   <i className="la la-ticket" /> <span>Leads</span>
-                 </Link>
-               </li>
-             
-             </ul>
-           </div>
-         </div>
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <span>Main</span>
+                </li>
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "dashboard" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(
+                        isSideMenu == "dashboard" ? "" : "dashboard"
+                      )
+                    }
+                  >
+                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "dashboard" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li>
+
+                <li className={pathname?.includes("clients") ? "active" : ""}>
+                  <Link to="/admin/clients">
+                    <i className="la la-users" /> <span>Clients</span>
+                  </Link>
+                </li>
+                <li
+                  className={pathname?.includes("destinations") ? "active" : ""}
+                >
+                  <Link to="/admin/destinations">
+                    <i className="la la-globe" /> <span>Destinations11</span>
+                  </Link>
+                </li>
+                <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/leads">
+                    <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
         )}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
@@ -468,15 +484,17 @@ console.log(props,"leadidadasdjddij")
           </Modal.Body>
         </Modal>
 
-{/* sedasdfasdfdddddddddddddddddddddddddddddddddddddd */}
+        {/* sedasdfasdfdddddddddddddddddddddddddddddddddddddd */}
         <Modal show={show1} onHide={handleClose1} className="add_note">
           <Modal.Header>
-            <Modal.Title>Add Note<span>TRIP ID 3852943</span> </Modal.Title>
+            <Modal.Title>
+              Add Note<span>TRIP ID 3852943</span>{" "}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="section_progress ">
               <div className="icon_note">
-              <i class="fa fa-volume-up" aria-hidden="true"></i>
+                <i class="fa fa-volume-up" aria-hidden="true"></i>
               </div>
 
               <div className="icon_text">
@@ -485,29 +503,33 @@ console.log(props,"leadidadasdjddij")
               </div>
             </div>
             <div className="container mt-4">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Your Note</label>
-                      <textarea name="" className="form-control" rows="100" placeholder="Enter additional information..."></textarea>
-                    </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    <label>Your Note</label>
+                    <textarea
+                      name=""
+                      className="form-control"
+                      rows="100"
+                      placeholder="Enter additional information..."
+                    ></textarea>
                   </div>
-                  <div className="col-lg-12 mt-3">
-                    <div className="form-group">
-                      <label>Set Reminder </label>
-                      <DatePicker
+                </div>
+                <div className="col-lg-12 mt-3">
+                  <div className="form-group">
+                    <label>Set Reminder </label>
+                    <DatePicker
                       selected={startDate1}
                       onChange={(date) => setStartDate1(date)}
                       className="form-control"
                     />
-                    </div>
                   </div>
                 </div>
               </div>
+            </div>
             <div className="foter-modal">
               <div className="container">
                 <div className="row">
-                 
                   <div className="col-lg-12 text-end">
                     <Button className="btn-cancle" onClick={handleClose1}>
                       {" "}
@@ -524,38 +546,42 @@ console.log(props,"leadidadasdjddij")
             </div>
           </Modal.Body>
         </Modal>
-{/*------------------------------------------- addddddd notsssss-------------------------------------- */}
-{/*------------------------------------------- addddddd notsssss-------------------------------------- */}
-<Modal show={show2} onHide={handleClose2} className="add_note">
+        {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
+        {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
+        <Modal show={show2} onHide={handleClose2} className="add_note">
           <Modal.Header>
             <Modal.Title>Add Notes</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-           
             <div className="container">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <div className="form-group">
-                      <label>Your Note</label>
-                      <textarea name="" className="form-control" cols="1000" rows="100" placeholder="Your Notes"></textarea>
-                    </div>
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    <label>Your Note</label>
+                    <textarea
+                      name=""
+                      className="form-control"
+                      cols="1000"
+                      rows="100"
+                      placeholder="Your Notes"
+                    ></textarea>
                   </div>
-                  <div className="col-lg-12 mt-3">
-                    <div className="form-group">
-                      <label>Set Reminder </label>
-                      <DatePicker
+                </div>
+                <div className="col-lg-12 mt-3">
+                  <div className="form-group">
+                    <label>Set Reminder </label>
+                    <DatePicker
                       selected={startDate1}
                       onChange={(date) => setStartDate1(date)}
                       className="form-control"
                     />
-                    </div>
                   </div>
                 </div>
               </div>
+            </div>
             <div className="foter-modal">
               <div className="container">
                 <div className="row">
-                 
                   <div className="col-lg-12 text-end">
                     <Button className="btn-cancle" onClick={handleClose2}>
                       {" "}
@@ -572,9 +598,7 @@ console.log(props,"leadidadasdjddij")
             </div>
           </Modal.Body>
         </Modal>
-
       </Scrollbars>
-
     </div>
   );
 };

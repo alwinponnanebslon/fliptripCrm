@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link ,useParams} from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import Quotation from "../../../_components/quotation/Quotation.jsx";
 import addQuotation from "../../../_components/quotation/addQuotation";
@@ -58,9 +58,9 @@ const AdminDashboard = () => {
     setMenu(!menu);
   };
 
-  let {adminId } = useParams();
+  let { adminId } = useParams();
 
-  console.log(adminId,"AddminId ");
+  console.log(adminId, "AddminId ");
   useEffect(() => {
     let firstload = localStorage.getItem("firstload");
     if (firstload === "true") {
