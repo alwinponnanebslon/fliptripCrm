@@ -80,7 +80,7 @@ export default [
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE","ACCOUNT"],
   },
   {
     path: "/quotation",

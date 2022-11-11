@@ -9,7 +9,7 @@ import { toastError } from '../../../utils/toastUtils';
 import { paymentAdd, paymentGetByQuotation, paymentUpdate } from '../../../redux/features/payment/paymentSlice';
 import { addPaymentInvoice, deletePaymentInvoice, paymentInvoiceGet, setPaymentInvoice, updatePaymentInvoice } from '../../../redux/features/paymentInvoice/paymentInvoiceSlice';
 
-export const AddPayment = () => {
+export const ViewPayment = () => {
     const dispatch = useDispatch();
     const role = useSelector((state) => state.auth.role);
     const user = useSelector((state) => state.auth.user);
@@ -34,7 +34,6 @@ export const AddPayment = () => {
         receviedDate: new Date(),
         installmentAmount: 0,
         transferStatus: "",
-        transferAmount: 0,
         status: "Pending",
     }])
 
@@ -118,13 +117,12 @@ const [invoiceId, setInvoiceId] = useState("");
 
 
 
-    const handleAddPaymentReceviedRow = () => {
+    const handViewReceviedRow = () => {
         const list = [...paymentReceviedArr];
         list.push({
             receviedDate: moment(new Date()).format('YYYY-MM-DD'),
             installmentAmount: 0,
             transferStatus: "",
-            transferAmount:0,
             status: "Pending",
         });
         setPaymentReceviedArr(list);
@@ -268,7 +266,7 @@ console.log(list[index],"paymentReceviedArr")
     return (
         <div className="page-wrapper">
             <Helmet>
-                <title>Payment</title>
+                <title>Create Qoute</title>
                 <meta name="description" content="Login page" />
             </Helmet>
             <div className='container-fluid p-0'>
@@ -288,7 +286,7 @@ console.log(list[index],"paymentReceviedArr")
                 {
                     isQuotationapproved ?
                         <div className="modal-body">
-                            <div style={{ fontSize: 19 }}>Quotation Details  <Link  to={`/admin/lead/${leadId}/viewquotePayment`} className='btn btn-primary'>View Payment</Link></div>
+                            <div style={{ fontSize: 19 }}>Quotation Details</div>
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="form-group">
@@ -321,8 +319,8 @@ console.log(list[index],"paymentReceviedArr")
                                 <div className="col-sm-4">
                                     <div className="form-group">
                                         <label className="col-form-label">Flight Price</label><br />
-                                        <label className="col-form-label">Land Price<span className="text-danger">*</span></label><br />
-                                        <label className="col-form-label mt-4">TCS <span className="text-danger">*</span></label><br />
+                                        <label className="col-form-label">Land Price</label><br />
+                                        <label className="col-form-label">TCS </label><br />
 
                                         <label className="col-form-label mt-3">TOTAL</label><br />
 
@@ -333,9 +331,8 @@ console.log(list[index],"paymentReceviedArr")
                                     {/* <input className="form-control mt-2" value={landCharges} disabled onChange={(e) => setLandCharges(e.target.value)} type="number" /> */}
                                     <p>Rs. {flightCharges}</p>
                                     <p>Rs. {landCharges}</p>
-
-                                    <input className="form-control mt-2" value={tcs} onChange={(e) => setTcs(e.target.value)} type="number" />
-                                    <p className='mt-5'>Rs. {total}</p>
+                                    <p>Rs. {tcs}</p>
+                                    <p className='mt-4'>Rs. {total}</p>
                                 </div>
 
                             </div>
@@ -354,49 +351,25 @@ console.log(list[index],"paymentReceviedArr")
                                                 <th scope="col">Amount Transfer/ Status</th>
                                                 <th scope="col">Transferable to You</th>
                                                 <th scope="col">Mark Payment</th>
-                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {paymentReceviedArr && paymentReceviedArr.map((item, index) => <tr key={index}>
                                                 <th scope="row">{index + 1}</th>
-                                                <td><input type="date" min={moment(new Date()).format('YYYY-MM-DD')} onChange={(e) => { handlePaymentInput(e, index) }} name="receviedDate" value={moment(item.receviedDate).format('YYYY-MM-DD')} /></td>
-                                                <td><input type="text" name='installmentAmount' value={item.installmentAmount} onChange={(e) => { handlePaymentInput(e, index) }} /> </td>
-                                                <td><textarea onChange={(e) => { handlePaymentInput(e, index) }} name="transferStatus" value={item.transferStatus}></textarea></td>
-                                                <td><input type="text" name='transferAmount' value={item.transferAmount} onChange={(e) => { handlePaymentInput(e, index) }} /> </td>
-
-                                                <td>
-                                                    <select value={item.status} onChange={(e) => { handlePaymentInput(e, index) }} name="status">
-                                                        <option value="Pending">Pending</option>
-                                                        <option value="Marked" >Marked</option>
-                                                    </select>
-
-                                                </td>
-                                                <td>
-                                                    {
-                                                        index > 0 && (
-                                                            <button className='btn btn-danger' onClick={(e) => { handleRemovePaymentRow(index) }}><i className='fa fa-times'></i></button>
-                                                        )
-                                                    }
-                                                </td>
+                                                <td scope="row">{new Date(item.receviedDate).toDateString()}</td>
+                                                <td>Rs. {item.installmentAmount}</td>
+                                                <td> {item.transferStatus}</td>
+                                                <td> {item.status}</td>
+                                             
                                             </tr>
                                             )}
 
 
                                         </tbody>
                                     </table>
-                                    <div className="col-md-12">
-                                        <button className="btn btn-primary" onClick={handleAddPaymentReceviedRow}><i className='fa fa-plus'></i> Add</button>
-
-
-                                    </div>
+                                   
                                 </div>
                             </div>
-
-                            <div className="submit-section">
-                                <button className="btn btn-primary" onClick={handleSubmit}>Save Payment</button>
-                            </div>
-
                             <div style={{ fontSize: 19 }}>Perfoma Invoice</div>
 
                             <div className='row'>
@@ -409,37 +382,24 @@ console.log(list[index],"paymentReceviedArr")
                                                 <th scope="col">Invoice No.</th>
                                                 <th scope="col">Description</th>
                                                 <th scope="col">Amount</th>
-                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {perfomaInvoiceArr && perfomaInvoiceArr.map((item, index) => <tr key={index}>
                                                 <th scope="row">{index + 1}</th>
-                                                <td>{moment(item.invoiceDate).format('YYYY-MM-DD')}</td>
+                                                <td>{new Date(item.invoiceDate).toDateString()}</td>
                                                 <td>{item.invoiceNo}</td>
                                                 <td>{item.invoiceDescription}</td>
                                                 <td>{item.invoiceAmount}</td>
 
-                                                <td>
-                                                    {
-                                                          <div className="dropdown dropdown-action text-end">
-                                                          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                                                          <div className="dropdown-menu dropdown-menu-right">
-                                                            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_destination" onClick={() => handlePaymentEdit(item)}><i className="fa fa-pencil m-r-5" /> Edit</a>
-                                                            <a className="dropdown-item" onClick={() => handlePaymentDelete(item._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                                                          </div>
-                                                        </div>
-                                                    }
-                                                </td>
+                                               
                                             </tr>
                                             )}
 
 
                                         </tbody>
                                     </table>
-                                    <div className="col-md-12">
-                                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_destination"><i className="fa fa-plus" /> Add Invoice</button>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -527,4 +487,4 @@ console.log(list[index],"paymentReceviedArr")
 }
 
 
-export default AddPayment;
+export default ViewPayment;

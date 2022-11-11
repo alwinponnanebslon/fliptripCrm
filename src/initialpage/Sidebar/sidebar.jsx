@@ -124,28 +124,29 @@ const Sidebar = (props) => {
                 <li className="submenu">
                   <a
                     href="#"
-                    className={isSideMenu == "costing" ? "subdrop" : ""}
+                    className={isSideMenu == "employee" ? "subdrop" : ""}
                     onClick={() =>
-                      toggleSidebar(
-                        isSideMenu == "dashboard" ? "" : "dashboard"
-                      )
+                      toggleSidebar(isSideMenu == "employee" ? "" : "employee")
                     }
                   >
-                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <i className="la la-user" />{" "}
+                    <span className="noti-dot"> Employees</span>{" "}
                     <span className="menu-arrow" />
                   </a>
-                  {isSideMenu == "dashboard" ? (
+                  {isSideMenu == "employee" ? (
                     <ul>
                       <li>
                         <Link
                           className={
-                            pathname?.includes("admin/dashboard")
+                            pathname?.includes("allemployees")
+                              ? "active"
+                              : pathname?.includes("employees-list")
                               ? "active"
                               : ""
                           }
-                          to="/admin/dashboard"
+                          to="/admin/employee"
                         >
-                          Admin Dashboard
+                          All Employees
                         </Link>
                       </li>
                     </ul>
@@ -346,6 +347,64 @@ const Sidebar = (props) => {
                     <i className="la la-globe" /> <span>Destinations11</span>
                   </Link>
                 </li>
+                <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/leads">
+                    <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+         {role == rolesObj.ACCOUNT && (
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <span>Main</span>
+                </li>
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "dashboard" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(
+                        isSideMenu == "dashboard" ? "" : "dashboard"
+                      )
+                    }
+                  >
+                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "dashboard" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li>
+
+           
                 <li
                   className={
                     pathname?.includes("leads")
