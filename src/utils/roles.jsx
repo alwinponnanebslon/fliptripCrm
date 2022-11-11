@@ -1,6 +1,7 @@
 export const rolesObj = {
     TEAMLEAD: "TEAMLEAD",
     SPOKE: "SPOKE",
+    ACCOUNT: "ACCOUNT",
 }
 
 

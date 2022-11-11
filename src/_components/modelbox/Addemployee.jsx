@@ -219,6 +219,7 @@ const Addemployee = () => {
                         <option value="">Please Select Role</option>
                         <option value={rolesObj.TEAMLEAD}>{rolesObj.TEAMLEAD}</option>
                         <option value={rolesObj.SPOKE}>{rolesObj.SPOKE}</option>
+                        <option value={rolesObj.ACCOUNT}>{rolesObj.ACCOUNT}</option>
                       </select>
                     </div>
                   </div>
