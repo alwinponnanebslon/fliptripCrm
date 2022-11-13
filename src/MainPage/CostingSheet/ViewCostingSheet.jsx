@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 // import { Avatar_07 } from "../../Entryfile/imagepath";
 // import Editclient from "../../_components/modelbox/Editclient";
 import { Table } from "antd";
@@ -15,6 +15,10 @@ import {
 } from "../../redux/features/CostingSheet/CostingSheetSlice";
 
 const ViewCostingSheet = () => {
+  const params = useParams();
+  const leadId = params.leadId;
+  console.log(params.leadId, "lead Id 34");
+  console.log("po9")
   const dispatch = useDispatch();
 
   const costingSheetArr = useSelector(
@@ -184,7 +188,8 @@ const ViewCostingSheet = () => {
               </ul>
             </div>
             <div className="col-auto float-end ml-auto">
-              <Link className="btn add-btn" to="/admin/costingSheet/Add">
+              {/* <Link className="btn add-btn" to="/admin/costingSheet/Add"> */}
+              <Link className="btn add-btn" to={`/admin/lead/${leadId}/costingSheetAdd`}>
                 <i className="fa fa-plus" /> Add Costing Sheet
               </Link>
             </div>
@@ -212,7 +217,7 @@ const ViewCostingSheet = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

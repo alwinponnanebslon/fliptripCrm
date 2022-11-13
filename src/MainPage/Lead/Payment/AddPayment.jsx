@@ -40,11 +40,11 @@ export const AddPayment = () => {
 
     const [perfomaInvoiceArr, setPerfomaInvoiceArr] = useState([]);
 
-const [invoiceNo, setInvoiceNo] = useState("")
-const [invoiceDate, setInvoiceDate] = useState("")
-const [invoiceDescription, setInvoiceDescription] = useState("")
-const [invoiceAmount, setInvoiceAmount] = useState(0);
-const [invoiceId, setInvoiceId] = useState("");
+    const [invoiceNo, setInvoiceNo] = useState("")
+    const [invoiceDate, setInvoiceDate] = useState("")
+    const [invoiceDescription, setInvoiceDescription] = useState("")
+    const [invoiceAmount, setInvoiceAmount] = useState(0);
+    const [invoiceId, setInvoiceId] = useState("");
 
     const [emiArr, setEmiArr] = useState([
         {
@@ -63,14 +63,14 @@ const [invoiceId, setInvoiceId] = useState("");
     };
 
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        console.log(quotationPaymentObj,"quotationPaymentObj")
+        console.log(quotationPaymentObj, "quotationPaymentObj")
         setPaymentObj(quotationPaymentObj);
-    },[quotationPaymentObj])
+    }, [quotationPaymentObj])
 
-    useEffect(()=>{
-        if(paymentObj){
+    useEffect(() => {
+        if (paymentObj) {
             setFlightCharges(paymentObj?.flightPrice)
             setLandCharges(paymentObj?.landPrice)
             setTcs(paymentObj?.tcs);
@@ -78,7 +78,7 @@ const [invoiceId, setInvoiceId] = useState("");
             setPaymentReceviedArr(paymentObj?.paymentReceviedArr);
             setPaymentId(paymentObj?._id)
         }
-    },[paymentObj])
+    }, [paymentObj])
 
 
     useEffect(() => {
@@ -99,9 +99,9 @@ const [invoiceId, setInvoiceId] = useState("");
                 setFlightCharges(tempObj?.perPersonAirPortPrice ? tempObj?.perPersonAirPortPrice : 0)
                 setLandCharges(tempObj?.perPersonLandPrice ? tempObj?.perPersonLandPrice : 0)
                 setQuotationId(tempObj._id);
-            console.log(tempObj,"quotationId")
-               dispatch(paymentGetByQuotation(tempObj?._id));
-              dispatch(paymentInvoiceGet(`quotationId=${tempObj?._id}`));
+                console.log(tempObj, "quotationId")
+                dispatch(paymentGetByQuotation(tempObj?._id));
+                dispatch(paymentInvoiceGet(`quotationId=${tempObj?._id}`));
 
 
             }
@@ -124,7 +124,7 @@ const [invoiceId, setInvoiceId] = useState("");
             receviedDate: moment(new Date()).format('YYYY-MM-DD'),
             installmentAmount: 0,
             transferStatus: "",
-            transferAmount:0,
+            transferAmount: 0,
             status: "Pending",
         });
         setPaymentReceviedArr(list);
@@ -133,7 +133,7 @@ const [invoiceId, setInvoiceId] = useState("");
 
     const handlePaymentInput = (e, index) => {
 
-        
+
         const { name, value } = e.target;
         console.log(name, value)
         if (name == "installmentAmount") {
@@ -142,10 +142,10 @@ const [invoiceId, setInvoiceId] = useState("");
             }
         }
         let list = [...paymentReceviedArr];
-console.log(list[index],"paymentReceviedArr")
+        console.log(list[index], "paymentReceviedArr")
 
         // list[index][name] = value;
-        setPaymentReceviedArr((pr) => pr.map((el,i) => i==index?({...el,[name]:value}):el));
+        setPaymentReceviedArr((pr) => pr.map((el, i) => i == index ? ({ ...el, [name]: value }) : el));
     };
 
     const handleRemovePaymentRow = (index) => {
@@ -169,23 +169,23 @@ console.log(list[index],"paymentReceviedArr")
             return
         }
 
-        let obj  = {
+        let obj = {
             leadId,
             quotationId,
-            flightPrice:flightCharges,
-            landPrice:landCharges,
+            flightPrice: flightCharges,
+            landPrice: landCharges,
             tcs,
             total,
             paymentReceviedArr,
-            createdby:user
+            createdby: user
         }
         if (paymentId) {
             obj.paymentId = paymentId;
             dispatch(paymentUpdate(obj));
-      
-          } else {
+
+        } else {
             dispatch(paymentAdd(obj));
-          }
+        }
     }
 
 
@@ -194,73 +194,73 @@ console.log(list[index],"paymentReceviedArr")
 
     const handlePaymentEdit = (row) => {
 
-  
-        dispatch(setPaymentInvoice(row));
-      };
-    
-      const handlePaymentDelete = (id) => {
-        dispatch(deletePaymentInvoice(id));
-      };
-    
-   
-      useEffect(() => {
-        setPerfomaInvoiceArr(payMentInvoiceArr)
-     }, [payMentInvoiceArr]) ; 
 
-  
+        dispatch(setPaymentInvoice(row));
+    };
+
+    const handlePaymentDelete = (id) => {
+        dispatch(deletePaymentInvoice(id));
+    };
+
+
     useEffect(() => {
-      if (perfomaInvoiceObj) {
-        setInvoiceId(perfomaInvoiceObj._id);
-        setInvoiceAmount(perfomaInvoiceObj.invoiceAmount);
-        setInvoiceDescription(perfomaInvoiceObj.invoiceDescription);
-        setInvoiceNo(perfomaInvoiceObj.invoiceNo);
-        setInvoiceDate(moment(perfomaInvoiceObj.invoiceDate).format('YYYY-MM-DD'));
-      }
-    }, [perfomaInvoiceObj]);
-  
-    const handlePerfomaInvoiceSubmit = (e) => {
-      e.preventDefault();
-      if (invoiceNo == "") {
-          toastError("invoiceNo  is mandatory");
-          return
-          // throw "tour name is mandatory";
+        setPerfomaInvoiceArr(payMentInvoiceArr)
+    }, [payMentInvoiceArr]);
+
+
+    useEffect(() => {
+        if (perfomaInvoiceObj) {
+            setInvoiceId(perfomaInvoiceObj._id);
+            setInvoiceAmount(perfomaInvoiceObj.invoiceAmount);
+            setInvoiceDescription(perfomaInvoiceObj.invoiceDescription);
+            setInvoiceNo(perfomaInvoiceObj.invoiceNo);
+            setInvoiceDate(moment(perfomaInvoiceObj.invoiceDate).format('YYYY-MM-DD'));
         }
-        
+    }, [perfomaInvoiceObj]);
+
+    const handlePerfomaInvoiceSubmit = (e) => {
+        e.preventDefault();
+        if (invoiceNo == "") {
+            toastError("invoiceNo  is mandatory");
+            return
+            // throw "tour name is mandatory";
+        }
+
         if (invoiceDescription == "") {
             toastError("invoiceDescription  is mandatory");
             return
             // throw "tour name is mandatory";
-          }
-          
+        }
 
-          if (invoiceAmount == "") {
+
+        if (invoiceAmount == "") {
             toastError("invoiceAmount  is mandatory");
             return
             // throw "tour name is mandatory";
-          }
-        
-          
+        }
 
-          if (invoiceDate == "") {
+
+
+        if (invoiceDate == "") {
             toastError("invoiceDate  is mandatory");
             return
             // throw "tour name is mandatory";
-          }
-        
+        }
 
-          
-     
-      let obj = {leadId,quotationId,invoiceNo,invoiceDate,invoiceDescription,invoiceAmount};
-      console.log(obj)
 
-      if (invoiceId) {
-        obj.Id = invoiceId;
-        dispatch(updatePaymentInvoice(obj));
-  
-      } else {
-        obj.createdby = user;
-        dispatch(addPaymentInvoice(obj));
-      }
+
+
+        let obj = { leadId, quotationId, invoiceNo, invoiceDate, invoiceDescription, invoiceAmount };
+        console.log(obj)
+
+        if (invoiceId) {
+            obj.Id = invoiceId;
+            dispatch(updatePaymentInvoice(obj));
+
+        } else {
+            obj.createdby = user;
+            dispatch(addPaymentInvoice(obj));
+        }
     };
 
 
@@ -288,7 +288,7 @@ console.log(list[index],"paymentReceviedArr")
                 {
                     isQuotationapproved ?
                         <div className="modal-body">
-                            <div style={{ fontSize: 19 }}>Quotation Details  <Link  to={`/admin/lead/${leadId}/viewquotePayment`} className='btn btn-primary'>View Payment</Link></div>
+                            <div style={{ fontSize: 19 }}>Quotation Details  <Link to={`/admin/lead/${leadId}/viewquotePayment`} className='btn btn-primary'>View Payment</Link></div>
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="form-group">
@@ -422,12 +422,12 @@ console.log(list[index],"paymentReceviedArr")
 
                                                 <td>
                                                     {
-                                                          <div className="dropdown dropdown-action text-end">
-                                                          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
-                                                          <div className="dropdown-menu dropdown-menu-right">
-                                                            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_destination" onClick={() => handlePaymentEdit(item)}><i className="fa fa-pencil m-r-5" /> Edit</a>
-                                                            <a className="dropdown-item" onClick={() => handlePaymentDelete(item._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
-                                                          </div>
+                                                        <div className="dropdown dropdown-action text-end">
+                                                            <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+                                                            <div className="dropdown-menu dropdown-menu-right">
+                                                                <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_destination" onClick={() => handlePaymentEdit(item)}><i className="fa fa-pencil m-r-5" /> Edit</a>
+                                                                <a className="dropdown-item" onClick={() => handlePaymentDelete(item._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
+                                                            </div>
                                                         </div>
                                                     }
                                                 </td>
@@ -438,7 +438,7 @@ console.log(list[index],"paymentReceviedArr")
                                         </tbody>
                                     </table>
                                     <div className="col-md-12">
-                                    <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_destination"><i className="fa fa-plus" /> Add Invoice</button>
+                                        <button className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_destination"><i className="fa fa-plus" /> Add Invoice</button>
                                     </div>
                                 </div>
                             </div>
@@ -477,18 +477,18 @@ console.log(list[index],"paymentReceviedArr")
                                                             type="date"
                                                             className="form-control"
                                                             value={invoiceDate}
-                                                            
+
                                                             onChange={(e) => setInvoiceDate(e.target.value)}
                                                         />
                                                     </div>
                                                 </div>
                                                 <div className="form-group row">
                                                     <label className="col-form-label col-md-2">
-                                                        Invoice Description 
+                                                        Invoice Description
                                                     </label>
                                                     <div className="col-md-10">
-                                                        <textarea className='form-control' value={invoiceDescription}  onChange={(e) => setInvoiceDescription(e.target.value)}>{invoiceDescription}</textarea>
-                                                      
+                                                        <textarea className='form-control' value={invoiceDescription} onChange={(e) => setInvoiceDescription(e.target.value)}>{invoiceDescription}</textarea>
+
                                                     </div>
                                                 </div>
 
