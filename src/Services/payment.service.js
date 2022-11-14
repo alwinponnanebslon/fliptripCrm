@@ -9,6 +9,7 @@ export const AddPaymentApi = (obj) => {
 export const getPaymentsApi = (query) => {
   return axios.get(`${serverUrl}/?${query}`)
 };
+
 export const paymentDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
 };

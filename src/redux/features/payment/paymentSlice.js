@@ -35,6 +35,7 @@ export const paymentGetByQuotation = createAsyncThunk(
   async (payload) => {
     try {
       let { data: response } = await getPaymentByQuotationApi(payload);
+      console.log(response, "23response");
       return response;
     } catch (error) {
       toastError(error);
@@ -47,7 +48,7 @@ export const paymentAdd = createAsyncThunk(
   "auth/paymentAdd",
   async (payload, thunkApi) => {
     try {
-console.log(payload,"tempObj");
+      console.log(payload, "tempObj");
       let { data: response } = await AddPaymentApi(payload);
       // thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`))
       toastSuccess(response.message);
@@ -64,7 +65,7 @@ export const setPaymentObj = createAsyncThunk(
   "auth/setPaymentObj",
   async (payload) => {
     try {
-      return payload
+      return payload;
     } catch (error) {
       toastError(error);
       throw error;
@@ -72,14 +73,15 @@ export const setPaymentObj = createAsyncThunk(
   }
 );
 
-
 export const paymentUpdate = createAsyncThunk(
   "auth/paymentUpdate",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
-
       let { obj, paymentId } = payload;
-      let { data: response } = await updatePaymentApi(payload, payload.paymentId);
+      let { data: response } = await updatePaymentApi(
+        payload,
+        payload.paymentId
+      );
       toastSuccess(response.message);
       thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`));
       // thunkApi.dispatch(getPaymentByQuotationApi(payload?.quotationId));
@@ -97,10 +99,13 @@ export const paymentUpdateStatus = createAsyncThunk(
   async (payload, thunkApi) => {
     try {
       // console.log(payload, obj, "payloadpayload21");
-      let { data: response } = await updatepaymentStatus({ status: payload.status }, payload.Id);
+      let { data: response } = await updatepaymentStatus(
+        { status: payload.status },
+        payload.Id
+      );
       console.log(response, "responsess2");
       toastSuccess(response.message);
-      thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`))
+      thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`));
       return response;
     } catch (error) {
       toastError(error);
@@ -135,7 +140,7 @@ export const paymentDelete = createAsyncThunk(
       // console.log(payload,"payloadpayload21")
       let { data: response } = await deletepayment(payload.id);
       toastSuccess(response.message);
-      thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`))
+      thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`));
       return response;
     } catch (error) {
       toastError(error);
@@ -203,8 +208,7 @@ const paymentSlice = createSlice({
       state.loading = true;
       state.error = false;
     },
-    [paymentAdd.fulfilled]: (state, { payload }) => {
-    },
+    [paymentAdd.fulfilled]: (state, { payload }) => {},
     [paymentAdd.rejected]: (state, action) => {
       state.loading = false;
       state.error = true;

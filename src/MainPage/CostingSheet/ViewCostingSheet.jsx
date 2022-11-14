@@ -17,35 +17,32 @@ import {
 const ViewCostingSheet = () => {
   const params = useParams();
   const leadId = params.leadId;
-  console.log(params.leadId, "lead Id 34");
-  console.log("po9")
+  // console.log(params.leadId, "lead Id 34");
+  // console.log("po9")
   const dispatch = useDispatch();
 
   const costingSheetArr = useSelector(
     (state) => state.costingSheet.costingSheets
   );
-  // console.log(costingSheetArr, "costingSheetArr23");
   const [costingSheetMainArr, setCostingSheetMainArr] = useState([]);
-  const [name, setName] = useState("");
-  // const [description, setDescription] = useState("");
-  const [tourId, setCostingSheetId] = useState("");
   const [isUpdateCostingSheet, setIsUpdateCostingSheet] = useState(false);
 
   useEffect(() => {
-    handleInit();
+    handleInit(leadId);
   }, []);
 
-  const handleInit = () => {
-    dispatch(costingSheetGet());
+  const handleInit = (leadId) => {
+    dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
+    // console.log(costingSheetArr, "costingSheetArr23");
     setCostingSheetMainArr(costingSheetArr);
   }, [costingSheetArr]);
 
   const handleEdit = (row) => {
-    console.log(row, "row update"); //whole object
-    setIsUpdateCostingSheet(true);
+    // console.log(row, "row update"); //whole object
+    // setIsUpdateCostingSheet(true);
 
     dispatch(setCostingSheet(row));
   };
@@ -54,22 +51,6 @@ const ViewCostingSheet = () => {
     dispatch(deleteCostingSheet(id));
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // if (name == "") {
-  //   //   toastError("Tour Name is mandatory");
-  //   //   // throw "tour name is mandatory";
-  //   // }
-
-  //   let obj = { name, description };
-  //   if (isUpdateCostingSheet) {
-  //     obj.Id = tourId;
-  //     setIsUpdateCostingSheet(false);
-  //     // dispatch(updateTour(obj));
-  //   } else {
-  //     dispatch(addTour(obj));
-  //   }
-  // };
   const tour_columns = [
     {
       title: "Lead Name",
@@ -83,45 +64,7 @@ const ViewCostingSheet = () => {
       sorter: (a, b) => a.locationName.length - b.locationName.length,
       width: "15%",
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   render: (row, record) => (
-    //     <div className="dropdown">
-    //       <a
-    //         href="#"
-    //         className="btn btn-white btn-sm btn-rounded dropdown-toggle"
-    //         data-bs-toggle="dropdown"
-    //         aria-expanded="false"
-    //       >
-    //         <i
-    //           className={
-    //             record.status === true
-    //               ? "fa fa-dot-circle-o text-success"
-    //               : "fa fa-dot-circle-o text-danger"
-    //           }
-    //         />
-    //         {record.status ? "Active" : "Inactive"}
-    //       </a>
-    //       <div className="dropdown-menu">
-    //         <a
-    //           className="dropdown-item"
-    //           href="#"
-    //           onClick={() => handleSatus(record, true)}
-    //         >
-    //           <i className="fa fa-dot-circle-o text-success" /> Active
-    //         </a>
-    //         <a
-    //           className="dropdown-item"
-    //           href="#"
-    //           onClick={() => handleSatus(record, false)}
-    //         >
-    //           <i className="fa fa-dot-circle-o text-danger" /> Inactive
-    //         </a>
-    //       </div>
-    //     </div>
-    //   ),
-    // },
+
     {
       title: "Total Cost",
       dataIndex: "totalCost",
@@ -150,7 +93,7 @@ const ViewCostingSheet = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <Link
               className="dropdown-item"
-              to="/admin/costingSheet/Add"
+              to={`/admin/lead/${leadId}/costingSheetAdd`}
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
@@ -189,7 +132,10 @@ const ViewCostingSheet = () => {
             </div>
             <div className="col-auto float-end ml-auto">
               {/* <Link className="btn add-btn" to="/admin/costingSheet/Add"> */}
-              <Link className="btn add-btn" to={`/admin/lead/${leadId}/costingSheetAdd`}>
+              <Link
+                className="btn add-btn"
+                to={`/admin/lead/${leadId}/costingSheetAdd`}
+              >
                 <i className="fa fa-plus" /> Add Costing Sheet
               </Link>
             </div>
@@ -217,7 +163,7 @@ const ViewCostingSheet = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 

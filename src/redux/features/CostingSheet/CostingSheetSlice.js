@@ -18,7 +18,9 @@ export const costingSheetGet = createAsyncThunk(
   "costingSheet/costingSheetGet",
   async (query) => {
     try {
+      // console.log(query, "query23");
       let { data: response } = await get(query);
+      // console.log(response, "response231");
       if (response) {
         toastSuccess(response.message);
         const costingSheets = response.data;
