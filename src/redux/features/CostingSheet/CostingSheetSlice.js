@@ -54,7 +54,7 @@ export const update = createAsyncThunk(
   "costingSheet/update",
   async (formData, thunkApi) => {
     try {
-      let { data: response } = await updateApi(formData, formData.Id);
+      let { data: response } = await updateApi(formData, formData.id);
       if (response) {
         toastSuccess(response.message);
         thunkApi.dispatch(costingSheetGet());

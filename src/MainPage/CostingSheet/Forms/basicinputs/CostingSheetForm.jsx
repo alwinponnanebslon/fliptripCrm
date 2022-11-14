@@ -45,6 +45,7 @@ const ViewCostingSheetForm = () => {
   const [isReadOnlyHotel, setisReadOnlyHotel] = useState(false);
   const [isReadOnlyFlight, setIsReadOnlyFlight] = useState(false);
   const [isUpdatePrevDoc, setIsUpdatePrevDoc] = useState(false);
+  const [prevDocId, setPrevDocId] = useState("");
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
@@ -68,6 +69,7 @@ const ViewCostingSheetForm = () => {
       setinputList([...costingSheetResultObj.hotelDetails]);
       setFlightList([...costingSheetResultObj.flightDetails]);
       setTotalCost(costingSheetResultObj.totalCost);
+      setPrevDocId(costingSheetResultObj._id);
       setIsUpdatePrevDoc(true);
     }
   }, [costingSheetResultObj]);
@@ -202,7 +204,7 @@ const ViewCostingSheetForm = () => {
     setFlightList(list);
   };
 
-  useEffect(() => {}, [flightList]);
+  // useEffect(() => {}, [flightList]);
 
   const handleaddclickFlightDetails = () => {
     setFlightList([...flightList, { cost: "", flightName: "" }]);
@@ -213,15 +215,6 @@ const ViewCostingSheetForm = () => {
       return { ...el, value: el?.leadId, label: el?.leadId };
     });
     setAb([...temp]);
-  };
-
-  const handleEdit = (row) => {
-    // console.log(row, "row update"); //whole object
-    dispatch(setTour(row));
-  };
-
-  const handleTourDelete = (id) => {
-    dispatch(deleteTour(id));
   };
 
   const handleSubmit = (e) => {
@@ -249,10 +242,16 @@ const ViewCostingSheetForm = () => {
       profit,
       landCost,
       flightCost,
+      id: prevDocId,
       // isBooked,
     };
     console.log(obj, "obj");
-    dispatch(addCosting(obj));
+    console.log(prevDocId, "prevDocId3");
+    if (isUpdatePrevDoc) {
+      dispatch(update(obj, obj.id));
+    } else {
+      dispatch(addCosting(obj));
+    }
   };
 
   const [ab, setAb] = useState();
