@@ -29,24 +29,22 @@ import {
   createLead,
   getLeadsByRole,
   updateLeadStatus,
-  updatelead,
+  updatelead
 } from "../../Services/lead.service";
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
-import { tourGet } from "../../redux/features/tour/tourSlice";
+import { tourGet } from '../../redux/features/tour/tourSlice';
 import { clientGet, setObj } from "../../redux/features/client/clientSlice";
-import LeadView from "./LeadView";
-import LeadDetails from "./LeadDetails";
-
 const Leads = () => {
+  console.log("helloe owlr");
   const dispatch = useDispatch();
   const agents = useSelector(getAllAgents);
   const teamLeads = useSelector(getAllTeamLeadsEmployees);
   const destinations = useSelector((state) => state.tour.tours);
   // const clients = useSelector((state) => state.client.clientArr);
   // const [clientObj, setClientObj] = useState({ id: "", name: "" })
-  const [clientId, setClientId] = useState("");
-  const [leadObj, setLeadObj] = useState({});
-  const [leadUpdateId, setLeadUpdateId] = useState("");
+  const [clientId, setClientId] = useState("")
+  const [leadObj, setLeadObj] = useState({})
+  const [leadUpdateId, setLeadUpdateId] = useState('')
 
   const [agentsArr, setAgentsArr] = useState([]);
   const [clientsArr, setClientsArr] = useState([]);
@@ -69,11 +67,11 @@ const Leads = () => {
   const [selectedLeadId, setSelectedLeadId] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [priorityQuery, setPriorityQuery] = useState("");
-  console.log(displayLeadsArr, "displayLeadsArr12");
+
   const agentSelect = useRef();
   const teamLeadSelect = useRef();
   const destinationSelect = useRef();
-  // console.log(role, "role23");
+
   const [data, setData] = useState([
     {
       id: 1,
@@ -87,6 +85,7 @@ const Leads = () => {
       status: "New",
     },
   ]);
+
 
   // useEffect(() => {
 
@@ -105,8 +104,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-        ? "rgba(255,155,68,0.5)"
-        : "white",
+          ? "rgba(255,155,68,0.5)"
+          : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -140,7 +139,7 @@ const Leads = () => {
       if (res.success) {
         setDisplayLeadsArr(res.data);
         setLeadsArr(res.data);
-        console.log(res.data, "leads");
+        console.log(res.data, "leads")
         // dispatch(returnAllEmployees(res.data))
       }
     } catch (error) {
@@ -154,17 +153,19 @@ const Leads = () => {
     // dispatch(clientGet());
   }, []);
 
-  const handleEdit = (lead) => {
-    console.log(lead, "lead324");
 
+  const handleEdit = (lead) => {
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
     } else {
       setLeadObj({});
       setLeadUpdateId("");
+
     }
-  };
+  }
+
+
 
   const handleDelete = (lead) => {
     if (lead) {
@@ -172,9 +173,13 @@ const Leads = () => {
     } else {
       setLeadObj({});
     }
-  };
+  }
+
+
+
 
   useEffect(() => {
+
     if (leadUpdateId) {
       setSubject(leadObj.subject);
       // setClientId(leadObj?.clientObj?._id);
@@ -188,17 +193,18 @@ const Leads = () => {
       setSpokeId(leadObj.spokeId);
       setDescription(leadObj.description);
     } else {
-      setSubject("");
-      setClientId("");
-      setPhone("");
-      setName("");
-      setEmail("");
-      setPriority("");
-      setAgentId("");
-      setSpokeId("");
-      setDescription("");
+      setSubject('');
+      setClientId('');
+      setPhone('');
+      setName('');
+      setEmail('');
+      setPriority('');
+      setAgentId('');
+      setSpokeId('');
+      setDescription('');
     }
-  }, [leadUpdateId]);
+  }, [leadUpdateId])
+
 
   // useEffect(() => {
 
@@ -207,11 +213,13 @@ const Leads = () => {
   //   }
   // }, [clients])
 
+
+
+
+
   useEffect(() => {
-    console.log(
-      clientsArr,
-      "clientasdsadas---------------------------------------------+++++++++++++++++++++"
-    );
+
+    console.log(clientsArr, "clientasdsadas---------------------------------------------+++++++++++++++++++++")
     if (agents && agents.length > 0) {
       let tempArr = agents.map((el) => {
         let obj = {
@@ -224,6 +232,7 @@ const Leads = () => {
       setAgentsArr([...tempArr]);
     }
   }, [agents]);
+
 
   useEffect(() => {
     if (teamLeads && teamLeads.length > 0) {
@@ -301,7 +310,7 @@ const Leads = () => {
         return;
       } else {
         clientObj.phone = phone;
-      }
+        }
       if (`${phone}`.length != 10) {
         toastError("Phone must be 10 digits long");
         return;
@@ -309,8 +318,8 @@ const Leads = () => {
       if (`${email}` == "") {
         toastError("Email cannot be empty");
         return;
-      } else {
-        clientObj.email = email;
+      }  else {
+          clientObj.email = email;
       }
 
       if (`${name}` == "") {
@@ -318,7 +327,9 @@ const Leads = () => {
         return;
       } else {
         clientObj.name = name;
+
       }
+
 
       // if (`${agentId}` == "") {
       //   toastError("Agent cannot be empty");
@@ -329,6 +340,7 @@ const Leads = () => {
         return;
       }
 
+    
       let obj = {
         subject,
         phone,
@@ -336,30 +348,34 @@ const Leads = () => {
         fileUrl,
         priority,
         creteadBy: userObj,
-        clientObj,
+        clientObj
       };
 
+
       if (agentId != "" && leadId == "") {
-        obj.agentId = agentId;
+        obj.agentId = agentId
       }
       if (leadId != "" && agentId == "") {
-        obj.leadId = leadId;
+        obj.leadId = leadId
       }
       if (leadId != "" && agentId != "") {
-        obj.leadId = leadId;
-      } else if (role == rolesObj.TEAMLEAD) {
-        obj.leadId = userObj?._id;
+        obj.leadId = leadId
+      }
+      else if (role == rolesObj.TEAMLEAD) {
+        obj.leadId = userObj?._id
       }
 
-      console.log(obj);
+      console.log(obj)
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
         if (res.success) {
+
           toastSuccess(res.message);
           handleGetAllLeads();
         }
       } else {
+
         let { data: res } = await updatelead(obj, leadUpdateId);
         if (res.success) {
           toastSuccess(res.message);
@@ -368,6 +384,7 @@ const Leads = () => {
           handleGetAllLeads();
         }
       }
+
     } catch (err) {
       toastError(err);
       console.error(err);
@@ -418,9 +435,9 @@ const Leads = () => {
   };
 
   const handleAgentChange = (e) => {
-    setLeadId("");
-    setAgentId(e);
-  };
+    setLeadId("")
+    setAgentId(e)
+  }
 
   const handleDestinationChange = (e) => {
     setAgentId(e.value);
@@ -429,9 +446,10 @@ const Leads = () => {
   };
 
   const handleTeamLeadChange = (e) => {
-    setLeadId(e);
-    setAgentId("");
-  };
+    setLeadId(e)
+    setAgentId("")
+
+  }
 
   const options = [
     {
@@ -452,48 +470,33 @@ const Leads = () => {
     },
   ];
 
-  const handleView = (lead) => {
-    // console.log(lead, "lead32");
-    if (lead) {
-      setLeadObj(lead);
-      setLeadUpdateId(lead._id);
-    } else {
-      setLeadObj({});
-      setLeadUpdateId("");
-    }
-
-    // console.log(row, "row update"); //whole object
-    // dispatch(setfollowUp(row));
-  };
-
   const handleReturndropDown = (record) => {
-    // console.log(role, "role");
-    // console.log(record?.status, "role");
+    console.log(role, "role");
+    console.log(record?.status, "role");
     // console.log(role == "ADMIN" || role == rolesObj.SPOKE && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOKE && record?.status != leadStatus.closed")
-    // if (role == "ADMIN") {
-    //   return (
-    //     <>
-    //       <div>
-    //         {record?.status == leadStatus.on_Hold ||
-    //         record?.status == leadStatus.cancelled ? (
-    //           <i className="fa fa-dot-circle-o text-danger" />
-    //         ) : record?.status == leadStatus.open ||
-    //           record?.status == leadStatus.reopened ? (
-    //           <i className="fa fa-dot-circle-o text-info" />
-    //         ) : (
-    //           <i className="fa fa-dot-circle-o text-success" />
-    //         )}
-    //         {record?.status}
-    //       </div>
-    //     </>
-    //   );
-    // } else
-    if (role == rolesObj.SPOKE && record?.status == leadStatus.closed) {
+    if (role == "ADMIN") {
       return (
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
+              <i className="fa fa-dot-circle-o text-danger" />
+            ) : record?.status == leadStatus.open ||
+              record?.status == leadStatus.reopened ? (
+              <i className="fa fa-dot-circle-o text-info" />
+            ) : (
+              <i className="fa fa-dot-circle-o text-success" />
+            )}
+            {record?.status}
+          </div>
+        </>
+      );
+    } else if (role == rolesObj.SPOKE && record?.status == leadStatus.closed) {
+      return (
+        <>
+          <div>
+            {record?.status == leadStatus.on_Hold ||
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -515,7 +518,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -539,7 +542,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -643,11 +646,11 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link
+                to={`/admin/employee-profile/${record?.agentObj?._id}`}
+              >{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -671,26 +674,14 @@ const Leads = () => {
               {/* update_agent */}
             </>
           )}
-
-          {/* {role == rolesObj.ACCOUNT && (
-            <div>
-              {record?.agentObj?.firstName
-                ? `${record?.agentObj?.firstName}`
-                : " N / A " + record?.agentObj?.lastName
-                ? record?.agentObj?.lastName
-                : " 21"}
-            </div>
-          )} */}
         </h2>
       ),
     },
-
     {
       title: "Assigned Team Lead",
       render: (text, record) => (
-        // role != rolesObj.ACCOUNT && (
         <h2 className="table-avatar">
-          {record.leadObj ? (
+          {record.leadObj ?
             <>
               <Link
                 to={`/admin/employee-profile/${record?.leadObj?._id}`}
@@ -702,7 +693,7 @@ const Leads = () => {
                 to={`/admin/employee-profile/${record?.leadObj?._id}`}
               >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
             </>
-          ) : (
+            :
             <>
               <div
                 onClick={() => setSelectedLeadId(record._id)}
@@ -723,20 +714,10 @@ const Leads = () => {
               </div>
               {/* update_agent */}
             </>
-          )}
-          {/* {role == rolesObj.ACCOUNT && (
-            <div>
-              {record?.leadObj?.firstName
-                ? `${record?.leadObj?.firstName}`
-                : " N / A " + record?.leadObj?.lastName
-                ? record?.leadObj?.lastName
-                : " "}
-            </div>
-          )} */}
+          }
         </h2>
       ),
     },
-
     {
       title: "Created Date",
       render: (text, record) => (
@@ -760,14 +741,8 @@ const Leads = () => {
       title: "Status",
       dataIndex: "status",
       render: (text, record) => (
-        <div>
-          {role != rolesObj.ACCOUNT ? (
-            <div className="dropdown action-label text-center">
-              {handleReturndropDown(record)}
-            </div>
-          ) : (
-            <div>{record?.status} </div>
-          )}
+        <div className="dropdown action-label text-center">
+          {handleReturndropDown(record)}
         </div>
       ),
     },
@@ -783,28 +758,20 @@ const Leads = () => {
           >
             <i className="material-icons">more_vert</i>
           </a>
-
           <div className="dropdown-menu dropdown-menu-right">
-            {role != rolesObj.ACCOUNT ? (
-              <div>
-                <Link
-                  className="dropdown-item"
-                  to={`/admin/lead/${record._id}`}
-                >
-                  <i className="fa fa-pencil m-r-5" /> View
-                </Link>
+            <Link className="dropdown-item" to={`/admin/lead/${record._id}`} > <i className="fa fa-pencil m-r-5" /> View</Link>
 
-                <a
-                  className="dropdown-item"
-                  href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_Lead"
-                  onClick={() => handleEdit(record)}
-                >
-                  <i className="fa fa-pencil m-r-5" /> Edit
-                </a>
+            <a
+              className="dropdown-item"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#add_Lead"
 
-                {/* <a
+              onClick={() => handleEdit(record)}
+            >
+              <i className="fa fa-pencil m-r-5" /> Edit
+            </a>
+            {/* <a
               className="dropdown-item"
               href="#"
               data-bs-toggle="modal"
@@ -813,31 +780,6 @@ const Leads = () => {
             >
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a> */}
-              </div>
-            ) : (
-              <div>
-                <Link
-                  className="dropdown-item"
-                  to={`/admin/lead/${record._id}/ViewDetails`}
-                  onClick={() => handleEdit(record._id)}
-                >
-                  <i className="fa fa-pencil m-r-5" /> View
-                </Link>
-
-                {/* <a
-                  // className="dropdown-item"
-                  // data-bs-toggle="modal"
-                  href="/admin/lead/views23"
-            
-                  // data-bs-target="#add_Lead"
-                  // component={LeadDetails}
-                  onClick={() => LeadDetails}
-                >
-                  {/* <i className=" m-r-5" /> 
-                  View2
-                </a> */}
-              </div>
-            )}
           </div>
         </div>
       ),
@@ -864,8 +806,7 @@ const Leads = () => {
                 <li className="breadcrumb-item active">Leads</li>
               </ul>
             </div>
-            {/* {console.log(role, "role43")} */}
-            {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
+            {role != rolesObj.SPOKE && (
               <div className="col-auto float-end ml-auto">
                 <a
                   href="#"
@@ -880,131 +821,107 @@ const Leads = () => {
           </div>
         </div>
         {/* /Page Header */}
-        {/* {console.log(leadsArr, "leadsArr23")} */}
-        {role != rolesObj.ACCOUNT && (
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card-group m-b-30">
-                {/* <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">New Leads</span>
-                      </div>
-                      <div>
-                        <span className="text-success">+10%</span>
-                      </div>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="card-group m-b-30">
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between mb-3">
+                    <div>
+                      <span className="d-block">New Leads</span>
                     </div>
-                    <h3 className="mb-3">{leadsArr.length}</h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
+                    <div>
+                      <span className="text-success">+10%</span>
                     </div>
                   </div>
-                </div> */}
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Solved Leads</span>
-                      </div>
-                      {/* <div>
-                        <span className="text-success">+12.5%</span>
-                      </div> */}
-                    </div>
-                    {/* <h3 className="mb-3">{leadsArr.length}</h3> */}
-                    <h3 className="mb-3">
-                      {
-                        leadsArr.filter((x) => {
-                          return x.status == "CLOSED";
-                        }).length
-                      }
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
+                  <h3 className="mb-3">{leadsArr.length}</h3>
+                  <div className="progress mb-2" style={{ height: "5px" }}>
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: "70%" }}
+                      aria-valuenow={40}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
                   </div>
                 </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Open Leads</span>
-                      </div>
-                      {/* <div>
-                        <span className="text-danger">-2.8%</span>
-                      </div> */}
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between mb-3">
+                    <div>
+                      <span className="d-block">Solved Leads</span>
                     </div>
-                    <h3 className="mb-3">
-                      {
-                        leadsArr.filter((x) => {
-                          return x.status == "OPEN";
-                        }).length
-                      }
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
+                    <div>
+                      <span className="text-success">+12.5%</span>
                     </div>
                   </div>
+                  <h3 className="mb-3">{leadsArr.length}</h3>
+                  <div className="progress mb-2" style={{ height: "5px" }}>
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: "70%" }}
+                      aria-valuenow={40}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
+                  </div>
                 </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Pending Leads</span>
-                      </div>
-                      {/* <div>
-                        <span className="text-danger">-75%</span>
-                      </div> */}
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between mb-3">
+                    <div>
+                      <span className="d-block">Open Leads</span>
                     </div>
-                    <h3 className="mb-3">
-                      {
-                        leadsArr.filter((x) => {
-                          return (
-                            x.status == "ON_HOLD" || x.status == "IN_PROGRESS"
-                          );
-                        }).length
-                      }
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
+                    <div>
+                      <span className="text-danger">-2.8%</span>
                     </div>
+                  </div>
+                  <h3 className="mb-3">{leadsArr.length}</h3>
+                  <div className="progress mb-2" style={{ height: "5px" }}>
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: "70%" }}
+                      aria-valuenow={40}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between mb-3">
+                    <div>
+                      <span className="d-block">Pending Leads</span>
+                    </div>
+                    <div>
+                      <span className="text-danger">-75%</span>
+                    </div>
+                  </div>
+                  <h3 className="mb-3">{leadsArr.length}</h3>
+                  <div className="progress mb-2" style={{ height: "5px" }}>
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: "70%" }}
+                      aria-valuenow={40}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+        </div>
         {/* Search Filter */}
-        <div div className="row filter-row">
-          {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
+        <div className="row filter-row">
+          {role != rolesObj.SPOKE && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
                 <input
@@ -1032,6 +949,7 @@ const Leads = () => {
           </div> */}
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
+
               {/* <select className="select form-control" >
                 <option value="">Select Priority</option>
                 <option value="High">High</option>
@@ -1078,7 +996,6 @@ const Leads = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
-              {/* {console.log(displayLeadsArr, "displayLeadsArr23||")} */}
               <Table
                 className="table-striped"
                 pagination={{
@@ -1103,26 +1020,13 @@ const Leads = () => {
       {/* /Page Content */}
       {/* Add Lead Modal */}
       <div id="add_Lead" className="modal custom-modal" role="dialog">
-        <div className="col-auto float-end ml-auto">
-          <a
-            href="#"
-            className="btn add-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#view_Lead1"
-          >
-            <i className="fa fa-plus" />
-          </a>
-        </div>
         <div
           className="modal-dialog modal-dialog-centered modal-lg"
           role="document"
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">
-                {" "}
-                {leadUpdateId ? "Update" : "Add"} Lead
-              </h5>
+              <h5 className="modal-title">  {leadUpdateId ? 'Update' : 'Add'} Lead</h5>
               <button
                 type="button"
                 className="close"
@@ -1134,6 +1038,7 @@ const Leads = () => {
             </div>
             <div className="modal-body">
               <form className="row">
+
                 <div className="col-md-12">
                   <div className="form-group">
                     <label>Lead Subject</label>
@@ -1170,7 +1075,7 @@ const Leads = () => {
                     />
                   </div>
                 </div>
-
+                
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Phone</label>
@@ -1196,18 +1101,17 @@ const Leads = () => {
                   </div>
                 </div>
 
+
+
                 <div className="col-md-6">
                   <div className="form-group">
                     <label>Priority</label>
-                    <select
-                      value={priority}
-                      className="form-control"
-                      onChange={(e) => setPriority(e.target.value)}
-                    >
-                      <option value="">Select Priority</option>
+                    <select value={priority} className="form-control" onChange={(e) => setPriority(e.target.value)}>
+                    <option value="">Select Priority</option>
                       <option value="High">High</option>
                       <option value="Medium"> Medium</option>
-                      <option value="Low">Low</option>
+                      <option value="Low" >Low</option>
+
                     </select>
                     {/* <Select
                         onChange={handlePriorityChange}
@@ -1216,69 +1120,54 @@ const Leads = () => {
                   </div>
                 </div>
 
-                {role != rolesObj.TEAMLEAD &&
-                  role != rolesObj.SPOKE &&
-                  role != rolesObj.ACCOUNT && (
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>Assign to Team Lead ({agentsArr.length})</label>
-                        {/* setLeadId(e.target.value); */}
-                        <select
-                          className="select form-control"
-                          value={leadId}
-                          onChange={(e) => {
-                            handleTeamLeadChange(e.target.value);
-                          }}
-                        >
-                          <option value=""> --- Select Team Lead</option>
-                          {teamLeadsArr &&
-                            teamLeadsArr.map((agent, i) => {
-                              return (
-                                <option key={i} value={agent.value}>
-                                  {agent.label}
-                                </option>
-                              );
-                            })}
-                        </select>
-                        {/* <Select
+
+
+                {role != rolesObj.TEAMLEAD &&  role != rolesObj.SPOKE  && (
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label>
+                        Assign to Team Lead ({agentsArr.length})
+                      </label>
+                      {/* setLeadId(e.target.value); */}
+                      <select className="select form-control" value={leadId} onChange={(e) => { handleTeamLeadChange(e.target.value) }}>
+                        <option value="" > --- Select Team Lead</option>
+                        {teamLeadsArr && teamLeadsArr.map((agent, i) => {
+                          return (
+                            <option key={i} value={agent.value} >{agent.label}</option>
+                          )
+                        })}
+                      </select>
+                      {/* <Select
                             ref={teamLeadSelect}
                             // defaultInputValue={{ value: leadId }}
                             onChange={handleTeamLeadChange}
                             options={teamLeadsArr}
                           /> */}
-                      </div>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label>Assign to Spoke ({agentsArr.length})</label>
 
-                      <select
-                        className="select form-control"
-                        value={agentId}
-                        onChange={(e) => {
-                          handleAgentChange(e.target.value);
-                        }}
-                      >
-                        <option value=""> --- Select Spoke</option>
-                        {agentsArr &&
-                          agentsArr.map((spoke, i) => {
-                            return (
-                              <option key={i} value={spoke.value}>
-                                {spoke.label}
-                              </option>
-                            );
-                          })}
-                      </select>
-                      {/* <Select
+                {role != rolesObj.SPOKE && (            
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>Assign to Spoke ({agentsArr.length})</label>
+
+                    <select className="select form-control" value={agentId} onChange={(e) => { handleAgentChange(e.target.value) }}>
+                      <option value="" > --- Select Spoke</option>
+                      {agentsArr && agentsArr.map((spoke, i) => {
+                        return (
+                          <option key={i} value={spoke.value} >{spoke.label}</option>
+                        )
+                      })}
+                    </select>
+                    {/* <Select
                           ref={agentSelect}
                           onChange={handleAgentChange}
                           options={agentsArr}
                         /> */}
-                    </div>
                   </div>
+                </div>
                 )}
                 <div className="form-group">
                   <label>Description</label>
@@ -1297,13 +1186,14 @@ const Leads = () => {
                   />
                 </div>
 
+
                 <div className="submit-section">
                   <button
                     data-bs-toggle="modal"
                     onClick={(e) => handleSubmitLead(e)}
                     className="btn btn-primary submit-btn"
                   >
-                    {leadUpdateId ? "Update" : "Add"}
+                    {leadUpdateId ? 'Update' : 'Add'}
                   </button>
                 </div>
               </form>
@@ -1327,10 +1217,7 @@ const Leads = () => {
               <div className="modal-btn delete-action">
                 <div className="row">
                   <div className="col-6">
-                    <div
-                      onClick={() => handleDelete()}
-                      className="btn btn-primary continue-btn"
-                    >
+                    <div onClick={() => handleDelete()} className="btn btn-primary continue-btn">
                       Delete
                     </div>
                   </div>
@@ -1397,7 +1284,6 @@ const Leads = () => {
           </div>
         </div>
       </div>
-      <LeadView />
       {/* Update Agent Modal */}
     </div>
   );

@@ -1,44 +1,41 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState } from 'react';
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
-import {
-  Avatar_11,
-  Avatar_08,
-  Avatar_09,
-  Avatar_02,
-  Avatar_10,
-  Avatar_05,
-  PlaceHolder,
-  User,
-  Attachment,
-} from "../../Entryfile/imagepath";
-import EditLead from "../../_components/modelbox/EditLead";
-import { leadGetById } from "../../redux/features/lead/leadSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { generateFilePath } from "../../utils/FileURL";
+import { Link, useParams } from 'react-router-dom';
+import { Avatar_11, Avatar_08, Avatar_09, Avatar_02, Avatar_10, Avatar_05, PlaceHolder, User, Attachment } from "../../Entryfile/imagepath"
+import EditLead from "../../_components/modelbox/EditLead"
+import { leadGetById } from '../../redux/features/lead/leadSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { generateFilePath } from '../../utils/FileURL';
 const LeadView = () => {
+
   const dispatch = useDispatch();
   const { leadId } = useParams();
   const currentLead = useSelector((state) => state.lead.lead);
-  const [leadObj, setLeadObj] = useState(null);
+  const [leadObj, setLeadObj] = useState(null)
 
   useEffect(() => {
     setLeadObj(currentLead);
-  }, [currentLead]);
+  }, [currentLead])
+
 
   useEffect(() => {
     dispatch(leadGetById(leadId));
-  }, []);
+  }, [])
 
-  useEffect(() => {}, [currentLead]);
 
   useEffect(() => {
-    let firstload = localStorage.getItem("minheight");
+
+  }, [currentLead])
+
+
+  useEffect(() => {
+    let firstload = localStorage.getItem("minheight")
     if (firstload === "true") {
       setTimeout(function () {
-        window.location.reload(1);
-        localStorage.removeItem("minheight");
-      }, 1000);
+        window.location.reload(1)
+        localStorage.removeItem("minheight")
+      }, 1000)
     }
   });
   return (
@@ -47,8 +44,7 @@ const LeadView = () => {
         <title>Leads - CRM created by Fliptrip Holidays</title>
         <meta name="description" content="Login page" />
       </Helmet>
-      {/* <div id='view_Lead1' className="chat-main-row"> */}
-      <div id="view_Lead1" className="modal custom-modal fade" role="dialog">
+      <div className="chat-main-row">
         <div className="chat-main-wrapper">
           <div className="col-lg-8 message-view task-view">
             <div className="chat-window">
@@ -56,35 +52,15 @@ const LeadView = () => {
                 <div className="navbar">
                   <div className="float-start Lead-view-details">
                     <div className="Lead-header">
-                      <span>Status: </span>{" "}
-                      <span className="badge badge-warning">
-                        {leadObj?.status}
-                      </span>{" "}
-                      <span className="m-l-15 text-muted">Client: </span>
+                      <span>Status: </span> <span className="badge badge-warning">{leadObj?.status}</span> <span className="m-l-15 text-muted">Client: </span>
                       <a href="#">{leadObj?.clientObj?.name}</a>
                       <span className="m-l-15 text-muted">Created: </span>
-                      <span>
-                        {new Date(leadObj?.createdAt).toDateString()}{" "}
-                      </span>
+                      <span>{new Date(leadObj?.createdAt).toDateString()} </span>
                       <span className="m-l-15 text-muted">Created by:</span>
-                      <span>
-                        <Link to="/app/profile/employee-profile">
-                          {leadObj?.createdBy?.firstName}{" "}
-                          {leadObj?.createdBy?.lastName}{" "}
-                          {!leadObj?.createdBy?.lastName &&
-                            !leadObj?.createdBy?.firstName &&
-                            "ADMIN"}
-                        </Link>
-                      </span>
+                      <span><Link to="/app/profile/employee-profile">{leadObj?.createdBy?.firstName} {leadObj?.createdBy?.lastName} {!leadObj?.createdBy?.lastName && !leadObj?.createdBy?.firstName && "ADMIN"}</Link></span>
                     </div>
                   </div>
-                  <a
-                    className="task-chat profile-rightbar float-end"
-                    id="task_chat"
-                    href="#task_window"
-                  >
-                    <i className="fa fa fa-comment" />
-                  </a>
+                  <a className="task-chat profile-rightbar float-end" id="task_chat" href="#task_window"><i className="fa fa fa-comment" /></a>
                 </div>
               </div>
               <div className="chat-contents">
@@ -96,11 +72,8 @@ const LeadView = () => {
                           <div className="card-body">
                             <div className="project-title">
                               <div className="m-b-20">
-                                <span className="h5 card-title ">
-                                  {leadObj?.subject}
-                                </span>
-                                <div className="float-end Lead-priority">
-                                  <span>Priority: {leadObj?.priority}</span>
+                                <span className="h5 card-title ">{leadObj?.subject}</span>
+                                <div className="float-end Lead-priority"><span>Priority: {leadObj?.priority}</span>
 
                                   {/* <div className="btn-group">
                                     <a href="#" className="badge badge-danger dropdown-toggle" data-bs-toggle="dropdown">Highest </a>
@@ -119,28 +92,22 @@ const LeadView = () => {
                         </div>
                         <div className="card">
                           <div className="card-body">
-                            <h5 className="card-title m-b-20">
-                              Uploaded image files
-                            </h5>
+                            <h5 className="card-title m-b-20">Uploaded image files</h5>
                             <div className="row">
                               <div className="col-md-3 col-sm-6">
                                 <div className="uploaded-box">
-                                  {leadObj?.fileUrl != "" && leadObj?.fileUrl && (
+                                  {
+                                    leadObj?.fileUrl != "" && leadObj?.fileUrl &&
                                     <div className="uploaded-img">
-                                      <img
-                                        src={generateFilePath(leadObj?.fileUrl)}
-                                        className="img-fluid"
-                                        alt=""
-                                      />
+                                      <img src={generateFilePath(leadObj?.fileUrl)} className="img-fluid" alt="" />
                                     </div>
-                                  )}
+                                  }
                                   <div className="uploaded-img-name">
-                                    {leadObj?.fileUrl != ""
-                                      ? leadObj?.fileUrl
-                                      : "NA"}
+                                    {leadObj?.fileUrl != "" ? leadObj?.fileUrl : "NA"}
                                   </div>
                                 </div>
                               </div>
+
                             </div>
                           </div>
                         </div>
@@ -208,10 +175,7 @@ const LeadView = () => {
               </div>
             </div>
           </div>
-          <div
-            className="col-lg-4 message-view task-chat-view Lead-chat-view"
-            id="task_window"
-          >
+          <div className="col-lg-4 message-view task-chat-view Lead-chat-view" id="task_window">
             <div className="chat-window">
               <div className="fixed-header">
                 <div className="navbar">
@@ -238,84 +202,79 @@ const LeadView = () => {
                   <div className="chat-wrap-inner">
                     <div className="chat-box">
                       <div className="chats">
-                        {leadObj?.spokeObj ? (
-                          <div className="chat chat-left">
-                            <div className="chat-avatar">
-                              <div className="avatar">
-                                <img src={Avatar_02} alt="" />
+                        {
+                          leadObj?.spokeObj ?
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="chat-body">
-                              <div className="chat-bubble">
-                                <div className="chat-content">
-                                  <span className="task-chat-user">
-                                    Spoke : {leadObj?.spokeObj?.firstName}{" "}
-                                    {leadObj?.spokeObj?.lastName}
-                                  </span>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Spoke : {leadObj?.spokeObj?.firstName} {leadObj?.spokeObj?.lastName}</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="chat chat-left">
-                            <div className="chat-avatar">
-                              <div className="avatar">
-                                <img src={Avatar_02} alt="" />
+                            :
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="chat-body">
-                              <div className="chat-bubble">
-                                <div className="chat-content">
-                                  <span className="task-chat-user">
-                                    Spoke : NA
-                                  </span>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Spoke : NA</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+                        }
 
-                        {leadObj?.agentObj ? (
-                          <div className="chat chat-left">
-                            <div className="chat-avatar">
-                              <div className="avatar">
-                                <img src={Avatar_02} alt="" />
+                        {
+                          leadObj?.agentObj ?
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="chat-body">
-                              <div className="chat-bubble">
-                                <div className="chat-content">
-                                  <span className="task-chat-user">
-                                    Team Lead : {leadObj?.agentObj?.firstName}{" "}
-                                    {leadObj?.agentObj?.lastName}
-                                  </span>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Team Lead : {leadObj?.agentObj?.firstName} {leadObj?.agentObj?.lastName}</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ) : (
-                          <div className="chat chat-left">
-                            <div className="chat-avatar">
-                              <div className="avatar">
-                                <img src={Avatar_02} alt="" />
+                            :
+                            <div className="chat chat-left">
+                              <div className="chat-avatar">
+                                <div className="avatar">
+                                  <img src={Avatar_02} alt="" />
+                                </div>
                               </div>
-                            </div>
-                            <div className="chat-body">
-                              <div className="chat-bubble">
-                                <div className="chat-content">
-                                  <span className="task-chat-user">
-                                    Team Lead : NA
-                                  </span>
+                              <div className="chat-body">
+                                <div className="chat-bubble">
+                                  <div className="chat-content">
+                                    <span className="task-chat-user">Team Lead : NA</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        )}
+
+                        }
+
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -335,18 +294,10 @@ const LeadView = () => {
               <div className="modal-btn delete-action">
                 <div className="row">
                   <div className="col-6">
-                    <a href="" className="btn btn-primary continue-btn">
-                      Delete
-                    </a>
+                    <a href="" className="btn btn-primary continue-btn">Delete</a>
                   </div>
                   <div className="col-6">
-                    <a
-                      href=""
-                      data-bs-dismiss="modal"
-                      className="btn btn-primary cancel-btn"
-                    >
-                      Cancel
-                    </a>
+                    <a href="" data-bs-dismiss="modal" className="btn btn-primary cancel-btn">Cancel</a>
                   </div>
                 </div>
               </div>
@@ -361,22 +312,13 @@ const LeadView = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Assign to this task</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className="modal-body">
               <div className="input-group m-b-30">
-                <input
-                  placeholder="Search to add"
-                  className="form-control search-input"
-                  type="text"
-                />
+                <input placeholder="Search to add" className="form-control search-input" type="text" />
                 <span className="input-group-append">
                   <button className="btn btn-primary">Search</button>
                 </span>
@@ -433,31 +375,18 @@ const LeadView = () => {
       </div>
       {/* /Assignee Modal */}
       {/* Task Followers Modal */}
-      <div
-        id="task_followers"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
+      <div id="task_followers" className="modal custom-modal fade" role="dialog">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Add followers to this task</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className="modal-body">
               <div className="input-group m-b-30">
-                <input
-                  placeholder="Search to add"
-                  className="form-control search-input"
-                  type="text"
-                />
+                <input placeholder="Search to add" className="form-control search-input" type="text" />
                 <span className="input-group-append">
                   <button className="btn btn-primary">Search</button>
                 </span>
@@ -506,9 +435,7 @@ const LeadView = () => {
                 </ul>
               </div>
               <div className="submit-section">
-                <button className="btn btn-primary submit-btn">
-                  Add to Follow
-                </button>
+                <button className="btn btn-primary submit-btn">Add to Follow</button>
               </div>
             </div>
           </div>
@@ -517,6 +444,6 @@ const LeadView = () => {
       {/* /Task Followers Modal */}
     </div>
   );
-};
+}
 
 export default LeadView;
