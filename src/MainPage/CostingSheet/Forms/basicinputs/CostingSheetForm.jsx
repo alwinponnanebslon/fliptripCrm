@@ -8,23 +8,23 @@ import { toastError, toastSuccess } from "../../../../utils/toastUtils";
 import "../../../antdstyle.css";
 
 import {
-  deleteCostingSheet,
-  costingSheetGet,
   addCosting,
   update,
-  setCostingSheet,
+  costingSheetGet,
 } from "../../../../redux/features/CostingSheet/CostingSheetSlice.js";
 
 import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
 
 const ViewCostingSheetForm = () => {
   const location = useLocation();
+  console.log(location.pathname, "location.pathname32");
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheetObj
   );
+  const [locationNameChanged, setLocationNameChanged] = useState("");
   const [leadName, setLeadName] = useState("");
   const [locationName, setLocationName] = useState("");
   const [profit, setProfit] = useState(0);
@@ -34,7 +34,7 @@ const ViewCostingSheetForm = () => {
   const [leadsId, setLeadsId] = useState("");
 
   const [inputList, setinputList] = useState([
-    { hotelName: "", hotelAddress: "", cost: "", isBooked: true },
+    { hotelName: "", hotelAddress: "", cost: "", isBooked: false },
   ]);
   const [flightList, setFlightList] = useState([{ cost: "", flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
@@ -42,21 +42,31 @@ const ViewCostingSheetForm = () => {
   const [quotationId, setQuotationId] = useState("");
   const [isButtonHotel, setIsButtonHotel] = useState(false);
   const [isButtonFlight, setIsButtonFlight] = useState(false);
-  const [isReadOnlyHotel, setisReadOnlyHotel] = useState(false);
-  const [isReadOnlyFlight, setIsReadOnlyFlight] = useState(false);
+  const [docObj, setDocObj] = useState([]);
   const [isUpdatePrevDoc, setIsUpdatePrevDoc] = useState(false);
   const [prevDocId, setPrevDocId] = useState("");
+  let [tempNum1, setTempNum1] = useState(0);
+  let [labels12, setLabels12] = useState(false);
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
     setQuotationObj(arr.data.data);
   };
+
+  useEffect(() => {
+    handleInit(leadId);
+  }, []);
+
+  const handleInit = (leadId) => {
+    dispatch(costingSheetGet(`leadId=${leadId}`));
+  };
+
   useEffect(() => {
     getQuotation(leadId);
+    // setLocationNameChanged(location.pathname);
   }, []);
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "costingSheetResultObj32");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj.leadName);
       setLocationName(costingSheetResultObj.locationName);
@@ -67,12 +77,36 @@ const ViewCostingSheetForm = () => {
       setflightCost(costingSheetResultObj.flightCost);
       setTotalExpense(costingSheetResultObj.totalExpense);
       setinputList([...costingSheetResultObj.hotelDetails]);
-      setFlightList([...costingSheetResultObj.flightDetails]);
+      setFlightList(costingSheetResultObj.flightDetails);
       setTotalCost(costingSheetResultObj.totalCost);
       setPrevDocId(costingSheetResultObj._id);
       setIsUpdatePrevDoc(true);
     }
   }, [costingSheetResultObj]);
+
+  // useEffect(() => {
+  //   console.log(docObj, "obj2");
+
+  //   if (docObj.leadName) {
+  //     setLeadName(docObj.leadName);
+  //     setLocationName(docObj.locationName);
+  //     setProfit(+docObj.profit);
+  //     setLeadsId(docObj.leadsId);
+  //     setLandCost(docObj.landCost);
+
+  //     setflightCost(docObj.flightCost);
+  //     setTotalExpense(docObj.totalExpense);
+  //     setinputList(docObj.hotelDetails);
+  //     setFlightList(docObj.flightDetails);
+  //     setTotalCost(docObj.totalCost);
+  //     setPrevDocId(docObj._id);
+  //     setIsUpdatePrevDoc(true);
+  //   }
+  // }, [docObj]);
+
+  // useEffect(() => {
+  //   setDocObj(JSON.parse(window.sessionStorage.getItem("obj")));
+  // }, []);
 
   useEffect(() => {
     let tempCost = 0;
@@ -82,24 +116,20 @@ const ViewCostingSheetForm = () => {
     }
     if (tempCost > +landCost) {
       setIsButtonHotel(true);
-      setisReadOnlyHotel(true);
-      toastError("hotel price cannot be greater than Hotels price");
+      toastError("Hotel price cannot be greater than total hotels cost");
       return;
     } else {
       setIsButtonHotel(false);
-      setisReadOnlyHotel(false);
     }
     for (let ele of flightList) {
       tempCostOf = tempCostOf + Number.parseInt(ele.cost);
     }
     if (tempCostOf > +flightCost) {
       setIsButtonFlight(true);
-      setIsReadOnlyFlight(true);
-      toastError("flight price cannot be greater than total flight price");
+      toastError("Flight price cannot be greater than total flight cost");
       return;
     } else {
       setIsButtonFlight(false);
-      setIsReadOnlyFlight(false);
     }
   }, [inputList, flightList, landCost, flightCost]);
 
@@ -125,7 +155,6 @@ const ViewCostingSheetForm = () => {
       return;
     } else {
       let list = [...inputList];
-
       if (name == "isBooked") {
         list[index][name] = !list[index][name];
       } else {
@@ -152,27 +181,26 @@ const ViewCostingSheetForm = () => {
     }
     setTotalExpense(temp);
     setProfit(totalCost - (+landCost + +flightCost));
-  }, [
-    // inputList,
-    flightList,
-    totalCost,
-    flightCost,
-    landCost,
-    totalExpense,
-    profit,
-  ]);
-  useEffect(() => {
-    setLeadName("");
-    setLocationName("");
-    setProfit(0);
-    setLeadsId("");
-    setLandCost("");
-    setflightCost("");
-    setTotalExpense("");
-    setinputList([{ hotelName: "", location: "", cost: "", isBooked: true }]);
-    setFlightList([{ cost: "", flightName: "" }]);
-    setTotalCost(0);
-  }, [location]);
+  }, [flightList, totalCost, flightCost, landCost, totalExpense, profit]);
+
+  // useEffect(() => {
+  //   // console.log(locationNameChanged, "21location");
+  //   if (tempNum1 >= 2) {
+  //     setLeadName("");
+  //     setLocationName("");
+  //     setProfit(0);
+  //     setLeadsId("");
+  //     setLandCost("");
+  //     setflightCost("");
+  //     setTotalExpense("");
+  //     setinputList([
+  //       { hotelName: "", location: "", cost: "", isBooked: false },
+  //     ]);
+  //     setFlightList([{ cost: "", flightName: "" }]);
+  //     setTotalCost(0);
+  //     window.sessionStorage.setItem("obj", JSON.stringify(""));
+  //   }
+  // }, []);
 
   const handleremove = (index) => {
     const list = [...inputList];
@@ -181,21 +209,44 @@ const ViewCostingSheetForm = () => {
   };
 
   const handleaddclick = () => {
-    setinputList([...inputList, { hotelName: "", location: "" }]);
+    setinputList([
+      ...inputList,
+      { hotelName: "", hotelAddress: "", cost: "", isBooked: false },
+    ]);
   };
 
   const handleinputchangeFlight = (e, index) => {
+    // console.log(e.target.value, e.target.name, flightList, index);
     let { name, value } = e.target;
 
-    if (value > +flightCost) {
-      value = 0;
-      toastError("flight price can't be greater than total flight cost");
-      return;
-    } else {
-      let list = [...flightList];
-      list[index][name] = value;
-      setFlightList(list);
+    // if (Number.isInteger(parseInt(value))) {
+    //   if (value > +flightCost) {
+    //     value = 0;
+    //     toastError("flight price can't be greater than total flight cost33");
+    //     return;
+    //   }
+    // } else {
+    ("use strict");
+
+    let tempList = [...flightList];
+    let currentObj = Object.freeze(tempList[index]);
+    currentObj = {
+      flightName: tempList[index].flightName,
+      cost: tempList[index].cost,
+    };
+    if (name == "cost") {
+      if (Number.isInteger(parseInt(value))) {
+        if (value > +flightCost) {
+          value = 0;
+          toastError("flight price can't be greater than total flight cost");
+          return;
+        }
+      }
     }
+    currentObj[name] = value;
+    tempList[index] = currentObj;
+    setFlightList([...tempList]);
+    // }
   };
 
   const handleremoveFlightDetails = (index) => {
@@ -203,8 +254,6 @@ const ViewCostingSheetForm = () => {
     list.splice(index, 1);
     setFlightList(list);
   };
-
-  // useEffect(() => {}, [flightList]);
 
   const handleaddclickFlightDetails = () => {
     setFlightList([...flightList, { cost: "", flightName: "" }]);
@@ -246,7 +295,7 @@ const ViewCostingSheetForm = () => {
       // isBooked,
     };
     console.log(obj, "obj");
-    console.log(prevDocId, "prevDocId3");
+    // console.log(prevDocId, "prevDocId3");
     if (isUpdatePrevDoc) {
       dispatch(update(obj, obj.id));
     } else {
@@ -257,7 +306,7 @@ const ViewCostingSheetForm = () => {
   const [ab, setAb] = useState();
 
   useEffect(() => {
-    // console.log(ab, "ab23");
+    console.log(ab, "ab23");
   }, [quotationObtions, ab]);
 
   return (
@@ -350,7 +399,6 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost</label>
                           <input
-                            // readOnly={isReadOnlyHotel}
                             type="number"
                             name="cost"
                             value={x.cost}
@@ -424,7 +472,6 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost </label>
                           <input
-                            // readOnly={isReadOnlyFlight}
                             type="number"
                             name="cost"
                             value={x.cost}

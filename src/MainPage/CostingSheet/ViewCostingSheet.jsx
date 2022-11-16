@@ -31,7 +31,7 @@ const ViewCostingSheet = () => {
     handleInit(leadId);
   }, []);
 
-  const handleInit = (leadId) => {
+  const handleInit = (leadId) => {  
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
@@ -41,9 +41,7 @@ const ViewCostingSheet = () => {
   }, [costingSheetArr]);
 
   const handleEdit = (row) => {
-    // console.log(row, "row update"); //whole object
-    // setIsUpdateCostingSheet(true);
-
+    window.sessionStorage.setItem("obj", JSON.stringify(row));
     dispatch(setCostingSheet(row));
   };
 
