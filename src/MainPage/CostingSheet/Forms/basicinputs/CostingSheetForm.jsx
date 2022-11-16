@@ -17,7 +17,8 @@ import { getApprovedQuotation } from "../../../../Services/quotation.service.js"
 
 const ViewCostingSheetForm = () => {
   const location = useLocation();
-  console.log(location.pathname, "location.pathname32");
+  const tempLocation = location;
+  // console.log(location.pathname, "location.pathname32");
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
@@ -56,6 +57,9 @@ const ViewCostingSheetForm = () => {
   useEffect(() => {
     handleInit(leadId);
   }, []);
+  useEffect(() => {
+    console.log(tempLocation, "tempLocation)");
+  }, [tempLocation]);
 
   const handleInit = (leadId) => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
@@ -306,7 +310,7 @@ const ViewCostingSheetForm = () => {
   const [ab, setAb] = useState();
 
   useEffect(() => {
-    console.log(ab, "ab23");
+    // console.log(ab, "ab23");
   }, [quotationObtions, ab]);
 
   return (

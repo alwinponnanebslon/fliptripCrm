@@ -180,7 +180,9 @@ const ViewCostingSheetForm = () => {
                           <td>{x.hotelAddress}</td>
                           <td>{x.cost}</td>
                           <td>
-                            {x.isBooked == true ? "it is booked" : "not booked"}
+                            {x.isBooked == true
+                              ? "Booked Succssfully"
+                              : " Booking pending"}
                           </td>
                         </tr>
                       </tbody>

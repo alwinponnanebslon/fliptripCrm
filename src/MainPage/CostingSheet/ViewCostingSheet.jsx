@@ -31,13 +31,13 @@ const ViewCostingSheet = () => {
     handleInit(leadId);
   }, []);
 
-  const handleInit = (leadId) => {  
+  const handleInit = (leadId) => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
     // console.log(costingSheetArr, "costingSheetArr23");
-    setCostingSheetMainArr(costingSheetArr);
+    setCostingSheetMainArr([costingSheetArr]);
   }, [costingSheetArr]);
 
   const handleEdit = (row) => {
