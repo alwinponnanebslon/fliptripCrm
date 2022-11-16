@@ -75,69 +75,70 @@ const LeadSidebar = (props) => {
         universal={false}
         hideTracksWhenNotNeeded={true}
       >
-        <div className="sidebar-inner slimscroll">
-          <div id="sidebar-menu" className="sidebar-menu">
-            <ul>
-              <li className="menu-title">
-                <Link to="/admin/leads" className="active">
-                  <i className="fa fa-back-arrow"></i> Back
-                </Link>
-              </li>
-              <li className={pathname?.includes("lead") ? "active" : ""}>
-                <Link to={`/admin/lead/${leadId}`}>
-                  <i className="la la-file" />
-                  <div className="textblock2">
-                    {" "}
-                    <span>Traveller Details</span>{" "}
-                  </div>
-                </Link>
-              </li>
-              <li className={pathname?.includes("quotes") ? "active" : ""}>
-                <Link to={`/admin/lead/${leadId}/quotes`}>
-                  <i className="la la-file" />{" "}
-                  <div className="textblock2">
-                    {" "}
-                    <span>Create Quote</span>{" "}
-                    <span className="textsmall">PENDING TASKS</span>
-                  </div>
-                </Link>
-              </li>
-              <li
-                className={
-                  pathname?.includes("quotation-follow-up") ? "active" : ""
-                }
-              >
-                <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
-                  <i className="la la-file-text-o" />{" "}
-                  <div className="textblock2">
-                    <span>Quotation Followup</span>{" "}
-                    <span className="textsmall">PENDING TASKS</span>{" "}
-                  </div>
-                </Link>
-              </li>
-              <li
-                className={pathname?.includes("quotePayment") ? "active" : ""}
-              >
-                <Link to={`/admin/lead/${leadId}/quotePayment`}>
-                  <i className="la la-file-text-o" />
-                  <div className="textblock2">
-                    <span>Quotation Payment</span>
-                    <span className="textsmall">CREATE AND MANAGE</span>
-                  </div>
-                </Link>
-              </li>
-              <li
-                className={pathname?.includes("costingSheet") ? "active" : ""}
-              >
-                <Link to={`/admin/lead/${leadId}/costingSheet`}>
-                  <i className="la la-file-text-o" />
-                  <div className="textblock2">
-                    <span>Costing Sheet</span>
-                    <span className="textsmall">CREATE AND MANAGE</span>
-                  </div>
-                </Link>
-              </li>
-              {/* <li
+        {role != rolesObj.ACCOUNT && (
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <Link to="/admin/leads" className="active">
+                    <i className="fa fa-back-arrow"></i> Back
+                  </Link>
+                </li>
+                <li className={pathname?.includes("lead") ? "active" : ""}>
+                  <Link to={`/admin/lead/${leadId}`}>
+                    <i className="la la-file" />
+                    <div className="textblock2">
+                      {" "}
+                      <span>Traveller Details</span>{" "}
+                    </div>
+                  </Link>
+                </li>
+                <li className={pathname?.includes("quotes") ? "active" : ""}>
+                  <Link to={`/admin/lead/${leadId}/quotes`}>
+                    <i className="la la-file" />{" "}
+                    <div className="textblock2">
+                      {" "}
+                      <span>Create Quote</span>{" "}
+                      <span className="textsmall">PENDING TASKS</span>
+                    </div>
+                  </Link>
+                </li>
+                <li
+                  className={
+                    pathname?.includes("quotation-follow-up") ? "active" : ""
+                  }
+                >
+                  <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
+                    <i className="la la-file-text-o" />{" "}
+                    <div className="textblock2">
+                      <span>Quotation Followup</span>{" "}
+                      <span className="textsmall">PENDING TASKS</span>{" "}
+                    </div>
+                  </Link>
+                </li>
+                <li
+                  className={pathname?.includes("quotePayment") ? "active" : ""}
+                >
+                  <Link to={`/admin/lead/${leadId}/quotePayment`}>
+                    <i className="la la-file-text-o" />
+                    <div className="textblock2">
+                      <span>Quotation Payment</span>
+                      <span className="textsmall">CREATE AND MANAGE</span>
+                    </div>
+                  </Link>
+                </li>
+                <li
+                  className={pathname?.includes("costingSheet") ? "active" : ""}
+                >
+                  <Link to={`/admin/lead/${leadId}/costingSheet`}>
+                    <i className="la la-file-text-o" />
+                    <div className="textblock2">
+                      <span>Costing Sheet</span>
+                      <span className="textsmall">CREATE AND MANAGE</span>
+                    </div>
+                  </Link>
+                </li>
+                {/* <li
                 className={pathname?.includes("costingSheetAdd") ? "active" : ""}
               >
                 <Link to={`/admin/lead/${leadId}/costingSheetAdd`}>
@@ -148,7 +149,7 @@ const LeadSidebar = (props) => {
                   </div>
                 </Link>
               </li> */}
-              {/* <li
+                {/* <li
                   className={
                     pathname?.includes("VoucherPayment") ? "active" : ""
                   }
@@ -162,7 +163,7 @@ const LeadSidebar = (props) => {
                     </div>
                   </Link>
                 </li> */}
-              {/* <li
+                {/* <li
                 className={pathname?.includes("DuringStay") ? "active" : ""}
               >
                 <Link to="/admin/employees/DuringStay">
@@ -174,7 +175,7 @@ const LeadSidebar = (props) => {
                   </div>
                 </Link>
               </li> */}
-              {/* <li className={pathname?.includes("PostStay") ? "active" : ""}>
+                {/* <li className={pathname?.includes("PostStay") ? "active" : ""}>
                 <Link to="/admin/employees/PostStay">
                   <i className="la la-thumbs-o-up" />{" "}
                   <div className="textblock2">
@@ -184,7 +185,7 @@ const LeadSidebar = (props) => {
                   </div>
                 </Link>
               </li> */}
-              {/* <li className="submenu">
+                {/* <li className="submenu">
                 <a
                   href="#"
                   className={isSideMenu == "userinfo" ? "subdrop" : ""}
@@ -277,7 +278,7 @@ const LeadSidebar = (props) => {
                 )}
               </li> */}
 
-              {/* <li className="submenu">
+                {/* <li className="submenu">
                 <a
                   className={isSideMenu == "leadprogress" ? "subdrop" : ""}
                   onClick={() =>
@@ -550,24 +551,24 @@ const LeadSidebar = (props) => {
                   ""
                 )}
               </li> */}
-              <li className="submenu">
-                <a
-                  href="#"
-                  className={isSideMenu == "notes" ? "subdrop" : ""}
-                  onClick={() =>
-                    toggleSidebar(isSideMenu == "notes" ? "" : "notes")
-                  }
-                >
-                  <i className="fa fa-sticky-note-o" /> <span> NOTES </span>{" "}
-                  <span className="menu-arrow" />
-                </a>
-                <Notes />
-              </li>
-              {/* z */}
-            </ul>
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "notes" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                    }
+                  >
+                    <i className="fa fa-sticky-note-o" /> <span> NOTES </span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  <Notes />
+                </li>
+                {/* z */}
+              </ul>
+            </div>
           </div>
-        </div>
-
+        )}
         {/* {role == rolesObj.SPOKE && (
           <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">

@@ -5,6 +5,8 @@ import ViewPayment from "../MainPage/Lead/Payment/ViewPayment";
 import Quotation from "../MainPage/Lead/Quotation/Quotation";
 import ViewCostingSheet from "../MainPage/CostingSheet/ViewCostingSheet";
 import AddCostingSheetForm from "../MainPage/CostingSheet/Forms/basicinputs/CostingSheetForm";
+import ViewLeadDetails from "../MainPage/Lead/LeadDetails";
+
 export default [
   {
     path: "/admin/lead/:leadId",
@@ -52,6 +54,11 @@ export default [
   {
     path: "/admin/lead/:leadId/viewquotePayment",
     component: ViewPayment,
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
+  },
+  {
+    path: "/admin/lead/:leadId/ViewDetails",
+    component: ViewLeadDetails,
     roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
   },
 

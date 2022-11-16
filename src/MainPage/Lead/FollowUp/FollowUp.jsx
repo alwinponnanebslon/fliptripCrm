@@ -4,9 +4,20 @@ import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
-import { tourGet, updateTour, deleteTour, setTour, addTour } from "../../../redux/features/tour/tourSlice";
+import {
+  tourGet,
+  updateTour,
+  deleteTour,
+  setTour,
+  addTour,
+} from "../../../redux/features/tour/tourSlice";
 import AddFolowUp from "./AddFolowUp";
-import { followUpGet,setfollowUp,deletefollowUp ,updatefollowUp} from "../../../redux/features/followup/followUpSlice";
+import {
+  followUpGet,
+  setfollowUp,
+  deletefollowUp,
+  updatefollowUp,
+} from "../../../redux/features/followup/followUpSlice";
 import { Table } from "antd";
 
 export const QuotationFollowup = () => {
@@ -17,7 +28,7 @@ export const QuotationFollowup = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
-const {leadId} = useParams();
+  const { leadId } = useParams();
   useEffect(() => {
     handleInit();
   }, []);
@@ -36,20 +47,18 @@ const {leadId} = useParams();
   };
 
   const handleFollowupDelete = (id) => {
-    dispatch(deletefollowUp({id,leadId}));
+    dispatch(deletefollowUp({ id, leadId }));
   };
 
   const handleSatus = (row, status) => {
     let obj = {
       Id: row._id,
-      leadId:leadId,
+      leadId: leadId,
       status: status,
     };
 
     dispatch(updatefollowUp(obj));
   };
-
-
 
   const tour_columns = [
     {
@@ -64,15 +73,40 @@ const {leadId} = useParams();
       sorter: (a, b) => a.description.length - b.description.length,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: "Status",
+      dataIndex: "status",
       render: (row, record) => (
         <div className="dropdown">
-          <a href="#" className="btn btn-white btn-sm btn-rounded dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <i className={record.status ===true ? "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {record.status==true ?'Active':'Inactive'} </a>
+          <a
+            href="#"
+            className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i
+              className={
+                record.status === true
+                  ? "fa fa-dot-circle-o text-success"
+                  : "fa fa-dot-circle-o text-danger"
+              }
+            />{" "}
+            {record.status == true ? "Active" : "Inactive"}{" "}
+          </a>
           <div className="dropdown-menu">
-            <a className="dropdown-item" href="#" onClick={() => handleSatus(record,true)} ><i className="fa fa-dot-circle-o text-success" /> Active</a>
-            <a className="dropdown-item" href="#" onClick={() => handleSatus(record,false)}><i className="fa fa-dot-circle-o text-danger" /> Inactive</a>
+            <a
+              className="dropdown-item"
+              href="#"
+              onClick={() => handleSatus(record, true)}
+            >
+              <i className="fa fa-dot-circle-o text-success" /> Active
+            </a>
+            <a
+              className="dropdown-item"
+              href="#"
+              onClick={() => handleSatus(record, false)}
+            >
+              <i className="fa fa-dot-circle-o text-danger" /> Inactive
+            </a>
           </div>
         </div>
       ),
@@ -82,14 +116,27 @@ const {leadId} = useParams();
       title: "Action",
       render: (row, record) => (
         <div className="dropdown dropdown-action text-end">
-          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_followup" onClick={() => handleEdit(row)}>
+            <a
+              className="dropdown-item"
+              data-bs-toggle="modal"
+              data-bs-target="#add_followup"
+              onClick={() => handleEdit(row)}
+            >
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
-            <a className="dropdown-item" onClick={() => handleFollowupDelete(row._id)}>
+            <a
+              className="dropdown-item"
+              onClick={() => handleFollowupDelete(row._id)}
+            >
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a>
           </div>
@@ -119,8 +166,14 @@ const {leadId} = useParams();
     { value: "December", label: "December" },
   ];
   const options2 = [
-    { value: "Still dreaming not sure Im going to take this trip", label: "Still dreaming  not sure Im going to take this trip" },
-    { value: "Im definitely goingI know which place let go!", label: "Im definitely goingI know which place let go!" },
+    {
+      value: "Still dreaming not sure Im going to take this trip",
+      label: "Still dreaming  not sure Im going to take this trip",
+    },
+    {
+      value: "Im definitely goingI know which place let go!",
+      label: "Im definitely goingI know which place let go!",
+    },
     { value: "In Progress", label: "In Progress" },
   ];
   const options3 = [
@@ -169,13 +222,17 @@ const {leadId} = useParams();
                 <li className="breadcrumb-item active">Quotation Followup</li>
               </ul>
             </div>
-           
-              <div className="col-auto float-end ml-auto">
-                <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_followup">
-                  <i className="fa fa-plus" /> Add Followup
-                </a>
-              </div>
-            
+
+            <div className="col-auto float-end ml-auto">
+              <a
+                href="#"
+                className="btn add-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#add_followup"
+              >
+                <i className="fa fa-plus" /> Add Followup
+              </a>
+            </div>
           </div>
           <div className="list_group_qoute pt-5">
             <div className="row">
@@ -234,7 +291,10 @@ const {leadId} = useParams();
                 <Select options={options6} placeholder="Special Leads" />
               </div>
               <div className="col-lg-2">
-                <Select options={options6} placeholder="Follow-up eligibility" />
+                <Select
+                  options={options6}
+                  placeholder="Follow-up eligibility"
+                />
               </div>
             </div>
           </div>
@@ -246,7 +306,8 @@ const {leadId} = useParams();
                 className="table-striped"
                 pagination={{
                   total: tourMainArr.length,
-                  showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                  showTotal: (total, range) =>
+                    `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                   // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
                 }}
                 style={{ overflowX: "auto" }}

@@ -14,7 +14,11 @@ import { useDispatch } from "react-redux";
 import { loginUser } from "../redux/features/auth/authSlice.js";
 
 const schema = yup.object({
-  email: yup.string().matches(emailrgx, "Email is required").required("Email is required").trim(),
+  email: yup
+    .string()
+    .matches(emailrgx, "Email is required")
+    .required("Email is required")
+    .trim(),
   password: yup.string().required("Password is required").trim(),
 });
 
@@ -87,7 +91,17 @@ const Loginpage = (props) => {
                     <Controller
                       name="email"
                       control={control}
-                      render={({ field: { value, onChange } }) => <input className={`form-control  ${errors?.email ? "error-input" : ""}`} type="text" value={value} onChange={onChange} autoComplete="false" />}
+                      render={({ field: { value, onChange } }) => (
+                        <input
+                          className={`form-control  ${
+                            errors?.email ? "error-input" : ""
+                          }`}
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                          autoComplete="false"
+                        />
+                      )}
                     />
                     <small>{errors?.email?.message}</small>
                   </div>
@@ -107,22 +121,39 @@ const Loginpage = (props) => {
                       control={control}
                       render={({ field: { value, onChange } }) => (
                         <div className="pass-group">
-                          <input type={eye ? "password" : "text"} className={`form-control  ${errors?.password ? "error-input" : ""}`} value={value} onChange={onChange} autoComplete="false" />
-                          <span onClick={onEyeClick} className={`fa toggle-password" ${eye ? "fa-eye-slash" : "fa-eye"}`} />
+                          <input
+                            type={eye ? "password" : "text"}
+                            className={`form-control  ${
+                              errors?.password ? "error-input" : ""
+                            }`}
+                            value={value}
+                            onChange={onChange}
+                            autoComplete="false"
+                          />
+                          <span
+                            onClick={onEyeClick}
+                            className={`fa toggle-password" ${
+                              eye ? "fa-eye-slash" : "fa-eye"
+                            }`}
+                          />
                         </div>
                       )}
                     />
                     <small>{errors?.password?.message}</small>
                   </div>
                   <div className="form-group text-center">
-                    <button className="btn btn-primary account-btn" type="submit">
+                    <button
+                      className="btn btn-primary account-btn"
+                      type="submit"
+                    >
                       Login
                     </button>
                   </div>
                 </form>
                 <div className="account-footer">
                   <p>
-                    Don't have an account yet? <Link to="/register">Register</Link>
+                    Don't have an account yet?{" "}
+                    <Link to="/register">Register</Link>
                   </p>
                 </div>
               </div>
