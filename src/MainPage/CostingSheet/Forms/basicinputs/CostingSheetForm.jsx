@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import Select from "react-select";
 import "antd/dist/antd.css";
 import CustomButton from "../../../../_components/Utility/Button";
 import { toastError, toastSuccess } from "../../../../utils/toastUtils";
@@ -11,6 +10,7 @@ import {
   addCosting,
   update,
   costingSheetGet,
+  setCostingSheet,
 } from "../../../../redux/features/CostingSheet/CostingSheetSlice.js";
 
 import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
@@ -22,10 +22,10 @@ const ViewCostingSheetForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
+
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheetObj
   );
-  const [locationNameChanged, setLocationNameChanged] = useState("");
   const [leadName, setLeadName] = useState("");
   const [locationName, setLocationName] = useState("");
   const [profit, setProfit] = useState(0);
@@ -39,15 +39,13 @@ const ViewCostingSheetForm = () => {
   ]);
   const [flightList, setFlightList] = useState([{ cost: "", flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
-  const [quotationObj, setQuotationObj] = useState([]);
+  const [quotationObj, setQuotationObj] = useState({});
   const [quotationId, setQuotationId] = useState("");
   const [isButtonHotel, setIsButtonHotel] = useState(false);
   const [isButtonFlight, setIsButtonFlight] = useState(false);
-  const [docObj, setDocObj] = useState([]);
   const [isUpdatePrevDoc, setIsUpdatePrevDoc] = useState(false);
   const [prevDocId, setPrevDocId] = useState("");
-  let [tempNum1, setTempNum1] = useState(0);
-  let [labels12, setLabels12] = useState(false);
+  const [isLocation, setIsLocation] = useState(false);
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
@@ -55,62 +53,19 @@ const ViewCostingSheetForm = () => {
   };
 
   useEffect(() => {
-    handleInit(leadId);
-  }, []);
-  useEffect(() => {
-    console.log(tempLocation, "tempLocation)");
+    // console.log(location.pathname, "location.pathname32");
+    setIsLocation(true);
   }, [tempLocation]);
 
   const handleInit = (leadId) => {
+    // console.log(leadId, "leadId23");
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
     getQuotation(leadId);
-    // setLocationNameChanged(location.pathname);
+    handleInit();
   }, []);
-
-  useEffect(() => {
-    if (costingSheetResultObj && costingSheetResultObj._id) {
-      setLeadName(costingSheetResultObj.leadName);
-      setLocationName(costingSheetResultObj.locationName);
-      setProfit(+costingSheetResultObj.profit);
-      setLeadsId(costingSheetResultObj.leadsId);
-      setLandCost(costingSheetResultObj.landCost);
-
-      setflightCost(costingSheetResultObj.flightCost);
-      setTotalExpense(costingSheetResultObj.totalExpense);
-      setinputList([...costingSheetResultObj.hotelDetails]);
-      setFlightList(costingSheetResultObj.flightDetails);
-      setTotalCost(costingSheetResultObj.totalCost);
-      setPrevDocId(costingSheetResultObj._id);
-      setIsUpdatePrevDoc(true);
-    }
-  }, [costingSheetResultObj]);
-
-  // useEffect(() => {
-  //   console.log(docObj, "obj2");
-
-  //   if (docObj.leadName) {
-  //     setLeadName(docObj.leadName);
-  //     setLocationName(docObj.locationName);
-  //     setProfit(+docObj.profit);
-  //     setLeadsId(docObj.leadsId);
-  //     setLandCost(docObj.landCost);
-
-  //     setflightCost(docObj.flightCost);
-  //     setTotalExpense(docObj.totalExpense);
-  //     setinputList(docObj.hotelDetails);
-  //     setFlightList(docObj.flightDetails);
-  //     setTotalCost(docObj.totalCost);
-  //     setPrevDocId(docObj._id);
-  //     setIsUpdatePrevDoc(true);
-  //   }
-  // }, [docObj]);
-
-  // useEffect(() => {
-  //   setDocObj(JSON.parse(window.sessionStorage.getItem("obj")));
-  // }, []);
 
   useEffect(() => {
     let tempCost = 0;
@@ -138,7 +93,8 @@ const ViewCostingSheetForm = () => {
   }, [inputList, flightList, landCost, flightCost]);
 
   useEffect(() => {
-    if (quotationObj && quotationObj.leadId) {
+    // console.log(quotationObj, "1quotationObj23");
+    if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
       setTotalCost(quotationObj?.paymentObj?.total);
       setLandCost(quotationObj?.paymentObj?.landPrice);
       setflightCost(quotationObj?.paymentObj?.flightPrice);
@@ -150,23 +106,99 @@ const ViewCostingSheetForm = () => {
     }
   }, [quotationObj]);
 
+  useEffect(() => {
+    // console.log(costingSheetResultObj, "costingSheetResultObj23");
+    if (costingSheetResultObj && costingSheetResultObj._id) {
+      setLeadName(costingSheetResultObj.leadName);
+      setLocationName(costingSheetResultObj.locationName);
+      setProfit(+costingSheetResultObj.profit);
+      setLeadsId(costingSheetResultObj.leadsId);
+      setLandCost(costingSheetResultObj.landCost);
+      setLeadsId(leadId);
+      setflightCost(costingSheetResultObj.flightCost);
+      setTotalExpense(costingSheetResultObj.totalExpense);
+      setinputList([...costingSheetResultObj.hotelDetails]);
+      setFlightList(costingSheetResultObj.flightDetails);
+      setTotalCost(costingSheetResultObj.totalCost);
+      setPrevDocId(costingSheetResultObj._id);
+      setIsUpdatePrevDoc(true);
+    }
+  }, [costingSheetResultObj]);
+
+  // useEffect(() => {
+  //   // console.log(costingSheetResultObj, "costingSheetResultObj23");
+  //   if (isLocation == false) {
+  //     // setTotalCost(quotationObj?.paymentObj?.total);
+  //     // setLandCost(quotationObj?.paymentObj?.landPrice);
+  //     // setflightCost(quotationObj?.paymentObj?.flightPrice);
+  //     // setLocationName(quotationObj?.destinationName);
+  //     // setLeadName(quotationObj?.leadObj?.clientObj?.name);
+  //     // setLeadsId(leadId);
+  //     // setinputList([...quotationObj?.hotelDetail]);
+  //     // setQuotationId(quotationObj._id);
+  //     console.log("po0");
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   // console.log(tempLocation, "21location");
+  //   // if (tempNum1 >= 2) {
+  //   // setLeadName("");
+  //   // setLocationName("");
+  //   // setProfit(0);
+  //   // setLeadsId("");
+  //   // setLandCost("");
+  //   // setflightCost("");
+  //   // setTotalExpense("");
+  //   // setinputList([{ hotelName: "", location: "", cost: "", isBooked: false }]);
+  //   // setFlightList([{ cost: "", flightName: "" }]);
+  //   // setTotalCost(0);
+  //   if (quotationObj && quotationObj._id) {
+  //     setTotalCost(quotationObj?.paymentObj?.total);
+  //     setLandCost(quotationObj?.paymentObj?.landPrice);
+  //     setflightCost(quotationObj?.paymentObj?.flightPrice);
+  //     setLocationName(quotationObj?.destinationName);
+  //     setLeadName(quotationObj?.leadObj?.clientObj?.name);
+  //     setLeadsId(leadId);
+  //     setinputList([...quotationObj?.hotelDetail]);
+  //     setQuotationId(quotationObj._id);
+  //     setCostingSheet(null);
+  //   setIsUpdatePrevDoc(false);
+  //   }
+  //   // window.location.reload();
+  //   // window.sessionStorage.setItem("obj", JSON.stringify(""));
+  //   // }
+  // }, [location.pathname]);
+
   const handleinputchange = (e, index) => {
     //hotel
-    let { name, value } = e.target;
-    if (value > +landCost) {
-      value = 0;
-      toastError("Hotel price cannot be greater than land price");
-      return;
-    } else {
-      let list = [...inputList];
-      if (name == "isBooked") {
-        list[index][name] = !list[index][name];
-      } else {
-        list[index][name] = value;
+    let { name, value, checked } = e.target;
+    //hotel
+    ("use strict");
+    let tempList = [...inputList];
+    let currentObj = Object.freeze(tempList[index]);
+    currentObj = {
+      hotelName: tempList[index].hotelName,
+      hotelAddress: tempList[index].hotelAddress,
+      cost: tempList[index].cost,
+      isBooked: tempList[index].isBooked,
+    };
+    if (name == "cost") {
+      if (Number.isInteger(parseInt(value))) {
+        if (value > +landCost) {
+          value = 0;
+          toastError("Hotel price cannot be greater than land price");
+          return;
+        }
       }
-
-      setinputList(list);
     }
+    if (name == "isBooked") {
+      currentObj[name] = checked;
+    } else {
+      currentObj[name] = value;
+    }
+    tempList[index] = currentObj;
+    setinputList([...tempList]);
   };
 
   useEffect(() => {
@@ -187,25 +219,6 @@ const ViewCostingSheetForm = () => {
     setProfit(totalCost - (+landCost + +flightCost));
   }, [flightList, totalCost, flightCost, landCost, totalExpense, profit]);
 
-  // useEffect(() => {
-  //   // console.log(locationNameChanged, "21location");
-  //   if (tempNum1 >= 2) {
-  //     setLeadName("");
-  //     setLocationName("");
-  //     setProfit(0);
-  //     setLeadsId("");
-  //     setLandCost("");
-  //     setflightCost("");
-  //     setTotalExpense("");
-  //     setinputList([
-  //       { hotelName: "", location: "", cost: "", isBooked: false },
-  //     ]);
-  //     setFlightList([{ cost: "", flightName: "" }]);
-  //     setTotalCost(0);
-  //     window.sessionStorage.setItem("obj", JSON.stringify(""));
-  //   }
-  // }, []);
-
   const handleremove = (index) => {
     const list = [...inputList];
     list.splice(index, 1);
@@ -220,18 +233,8 @@ const ViewCostingSheetForm = () => {
   };
 
   const handleinputchangeFlight = (e, index) => {
-    // console.log(e.target.value, e.target.name, flightList, index);
     let { name, value } = e.target;
-
-    // if (Number.isInteger(parseInt(value))) {
-    //   if (value > +flightCost) {
-    //     value = 0;
-    //     toastError("flight price can't be greater than total flight cost33");
-    //     return;
-    //   }
-    // } else {
     ("use strict");
-
     let tempList = [...flightList];
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
@@ -298,20 +301,13 @@ const ViewCostingSheetForm = () => {
       id: prevDocId,
       // isBooked,
     };
-    console.log(obj, "obj");
-    // console.log(prevDocId, "prevDocId3");
+    console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
       dispatch(update(obj, obj.id));
     } else {
       dispatch(addCosting(obj));
     }
   };
-
-  const [ab, setAb] = useState();
-
-  useEffect(() => {
-    // console.log(ab, "ab23");
-  }, [quotationObtions, ab]);
 
   return (
     <div className="page-wrapper">
@@ -337,6 +333,7 @@ const ViewCostingSheetForm = () => {
                 Lead Id<span className="text-danger">*</span>
               </label>
               <input
+                readOnly
                 type="text"
                 className="form-control"
                 value={leadsId}
@@ -347,22 +344,7 @@ const ViewCostingSheetForm = () => {
               <label className="blue-1 fs-12">
                 Location Name<span className="text-danger">*</span>
               </label>
-              {/* <Select
-                options={destinationArr.map((el) => {
-                  return {
-                    ...el,
-                    value: el.destinationName,
-                    label: el.destinationName,
-                  };
-                })}
-                placeholder="Select from options"
-                // defaultInputValue={stateId}
-                // value={stateObj}
-                onChange={(e) => {
-                  console.log(e, "asd");
-                  setDestinationValue(e.destinationName);
-                }}
-              /> */}
+
               <input
                 type="text"
                 className="form-control"
@@ -410,6 +392,7 @@ const ViewCostingSheetForm = () => {
                             onChange={(e) => handleinputchange(e, i)}
                           />
                         </div>
+                        {/*  */}
                         <div className="col-12 mb-3">
                           <input
                             className="form-check-input"
@@ -420,13 +403,11 @@ const ViewCostingSheetForm = () => {
                             id="publish-checkbox"
                             onChange={(e) => handleinputchange(e, i)}
                           />
-                          <label
-                            className="form-check-label fs-14"
-                            htmlFor="publish-checkbox"
-                          >
+                          <label className="form-check-label fs-14">
                             isBooked
                           </label>
                         </div>
+                        {/*  */}
                         <div class="form-group col-md-2 mt-4">
                           {inputList.length !== 1 && (
                             <button

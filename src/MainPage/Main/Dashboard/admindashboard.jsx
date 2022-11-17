@@ -2,7 +2,7 @@
  * Signin Firebase
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useSelector } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useParams } from "react-router-dom";
 import { withRouter } from "react-router-dom";
@@ -53,7 +53,7 @@ const linechartdata = [
 ];
 const AdminDashboard = () => {
   const [menu, setMenu] = useState(false);
-
+  // const role = useSelector((state) => state.auth.role);
   const toggleMobileMenu = () => {
     setMenu(!menu);
   };
@@ -86,7 +86,7 @@ const AdminDashboard = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3 className="page-title">Welcome Admin!</h3>
+                <h3 className="page-title">Welcome Admin </h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item active">Dashboard</li>
                 </ul>

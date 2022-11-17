@@ -52,6 +52,8 @@ const Leads = () => {
   const [clientsArr, setClientsArr] = useState([]);
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
   const role = useSelector((state) => state.auth.role);
+  const userAuthorise = useSelector((state) => state.auth);
+  console.log(userAuthorise, "role223");
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
   const [leadsArr, setLeadsArr] = useState([]);
@@ -69,7 +71,10 @@ const Leads = () => {
   const [selectedLeadId, setSelectedLeadId] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [priorityQuery, setPriorityQuery] = useState("");
-  console.log(displayLeadsArr, "displayLeadsArr12");
+  const [roleQuery, setRoleQuery] = useState("");
+  const [displayRoleArr, setDisplayRoleArr] = useState([]);
+
+  // console.log(displayLeadsArr, "displayLeadsArr12");
   const agentSelect = useRef();
   const teamLeadSelect = useRef();
   const destinationSelect = useRef();
@@ -125,7 +130,7 @@ const Leads = () => {
     try {
       let { data: res } = await getEmployess(userObj?._id, role);
       if (res.success) {
-        console.log(res, "res");
+        // console.log(res, "res");
         dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
@@ -138,13 +143,39 @@ const Leads = () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
       if (res.success) {
-        setDisplayLeadsArr(res.data);
-        setLeadsArr(res.data);
-        console.log(res.data, "leads");
+        // setDisplayLeadsArr(res.data);
+        console.log(res.data, "12res.data32");
+        console.log(userAuthorise?.user?._id, "12u2serAuthorise?");
+        let tempArr = res.data;
+
+        if (userAuthorise.role == "SPOKE") {
+          let temp = tempArr.filter(
+            (el) => `${el.agentId}` == `${userAuthorise?.user?._id}`
+          );
+          // console.log(temp, "1temp23");
+          setDisplayLeadsArr(temp);
+          setLeadsArr(temp);
+        } else if (userAuthorise.role == "TEAMLEAD") {
+          let temp = tempArr.filter(
+            (el) =>
+              el.agentId == userAuthorise?.user?._id ||
+              el.leadId == userAuthorise?.user?._id
+          );
+          console.log(temp, "123temp23");
+          setDisplayLeadsArr(temp);
+          setLeadsArr(temp);
+        } else {
+          setDisplayLeadsArr(res.data);
+          setLeadsArr(res.data);
+        }
+        // let temp = tempArr.filter((el) => {
+        //   el?.agent;
+        // });
+        // setLeadsArr(res.data);
         // dispatch(returnAllEmployees(res.data))
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toastError(error);
     }
   };
@@ -155,8 +186,6 @@ const Leads = () => {
   }, []);
 
   const handleEdit = (lead) => {
-    console.log(lead, "lead324");
-
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
@@ -208,10 +237,10 @@ const Leads = () => {
   // }, [clients])
 
   useEffect(() => {
-    console.log(
-      clientsArr,
-      "clientasdsadas---------------------------------------------+++++++++++++++++++++"
-    );
+    // console.log(
+    //   clientsArr,
+    //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
+    // );
     if (agents && agents.length > 0) {
       let tempArr = agents.map((el) => {
         let obj = {
@@ -255,13 +284,14 @@ const Leads = () => {
   const handleFileSelection = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
-        console.log(result, "result");
+        // console.log(result, "result");
         setFileUrl(result);
       });
     }
   };
 
   const handleFilterWithAgentName = (query) => {
+    // console.log(query, "query3");
     setEmployeeNameQuery(query);
     let tempArr = leadsArr.filter(
       (el) =>
@@ -282,6 +312,15 @@ const Leads = () => {
         (el) =>
           `${el?.priority}`.toLowerCase() == `${query.value}`.toLowerCase()
       );
+      setDisplayLeadsArr([...tempArr]);
+    } else {
+      setDisplayLeadsArr([...leadsArr]);
+    }
+  };
+  const handleFilterByROLE = (query) => {
+    setRoleQuery(query.value);
+    if (query.value != "") {
+      let tempArr = leadsArr.filter((el) => el?.agentObj?.role == query.value);
       setDisplayLeadsArr([...tempArr]);
     } else {
       setDisplayLeadsArr([...leadsArr]);
@@ -335,8 +374,9 @@ const Leads = () => {
         description,
         fileUrl,
         priority,
-        creteadBy: userObj,
+        createdBy: userObj,
         clientObj,
+        agentId,
       };
 
       if (agentId != "" && leadId == "") {
@@ -351,7 +391,7 @@ const Leads = () => {
         obj.leadId = userObj?._id;
       }
 
-      console.log(obj);
+      console.log(obj, "ovvjb23");
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
@@ -450,6 +490,24 @@ const Leads = () => {
       label: "Low",
       value: "Low",
     },
+  ];
+  const options_For_Role = [
+    {
+      label: "Select Priority",
+      value: "",
+    },
+    {
+      label: "TEAM LEADER",
+      value: "TEAMLEAD",
+    },
+    {
+      label: "SPOKE",
+      value: "SPOKE",
+    },
+    // {
+    //   label: "Low",
+    //   value: "Low",
+    // },
   ];
 
   const handleView = (lead) => {
@@ -692,6 +750,7 @@ const Leads = () => {
         <h2 className="table-avatar">
           {record.leadObj ? (
             <>
+              {/* {console.log(record, "record2")} */}
               <Link
                 to={`/admin/employee-profile/${record?.leadObj?._id}`}
                 className="avatar"
@@ -843,6 +902,346 @@ const Leads = () => {
       ),
     },
   ];
+  const columns_TeamLeader = [
+    { title: "Lead Subject", dataIndex: "subject" },
+    // {
+    //   title: 'Lead Id',
+    //   dataIndex: 'Leadid',
+    //   render: (text, record) => (
+    //     <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/employees/Lead-view">#TKT-0001</Link>
+    //   ),
+    //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
+    // },
+    {
+      title: "Assigned Spoke",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          {record.agentObj ? (
+            <>
+              <Link
+                to={`/admin/employee-profile/${record?.agentObj?._id}`}
+                className="avatar"
+              >
+                <img alt="" src={record?.image} />
+              </Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
+            </>
+          ) : (
+            <>
+              <div
+                onClick={() => setSelectedLeadId(record._id)}
+                className="avatar"
+              >
+                <img
+                  alt=""
+                  onClick={() => setSelectedLeadId(record._id)}
+                  src={record?.image}
+                />
+              </div>
+              <div
+                data-bs-toggle="modal"
+                onClick={() => setSelectedLeadId(record._id)}
+                data-bs-target="#update_agent"
+              >
+                NA
+              </div>
+              {/* update_agent */}
+            </>
+          )}
+
+          {/* {role == rolesObj.ACCOUNT && (
+            <div>
+              {record?.agentObj?.firstName
+                ? `${record?.agentObj?.firstName}`
+                : " N / A " + record?.agentObj?.lastName
+                ? record?.agentObj?.lastName
+                : " 21"}
+            </div>
+          )} */}
+        </h2>
+      ),
+    },
+
+    // {
+    //   title: "Assigned Team Lead",
+    //   render: (text, record) => (
+    //     // role != rolesObj.ACCOUNT && (
+    //     <h2 className="table-avatar">
+    //       {record.leadObj ? (
+    //         <>
+    //           {/* {console.log(record, "record2")} */}
+    //           <Link
+    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
+    //             className="avatar"
+    //           >
+    //             <img alt="" src={record?.image} />
+    //           </Link>
+    //           <Link
+    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
+    //           >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
+    //         </>
+    //       ) : (
+    //         <>
+    //           <div
+    //             onClick={() => setSelectedLeadId(record._id)}
+    //             className="avatar"
+    //           >
+    //             <img
+    //               alt=""
+    //               onClick={() => setSelectedLeadId(record._id)}
+    //               src={record?.image}
+    //             />
+    //           </div>
+    //           <div
+    //             data-bs-toggle="modal"
+    //             onClick={() => setSelectedLeadId(record._id)}
+    //             data-bs-target="#update_agent"
+    //           >
+    //             NA
+    //           </div>
+    //           {/* update_agent */}
+    //         </>
+    //       )}
+    //       {/* {role == rolesObj.ACCOUNT && (
+    //         <div>
+    //           {record?.leadObj?.firstName
+    //             ? `${record?.leadObj?.firstName}`
+    //             : " N / A " + record?.leadObj?.lastName
+    //             ? record?.leadObj?.lastName
+    //             : " "}
+    //         </div>
+    //       )} */}
+    //     </h2>
+    //   ),
+    // },
+
+    {
+      title: "Created Date",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          {new Date(record?.createdAt).toDateString()}
+        </h2>
+      ),
+    },
+    // {
+    //   title: 'Last Reply',
+    //   dataIndex: 'lastreply',
+    //   sorter: (a, b) => a.lastreply.length - b.lastreply.length,
+    // },
+    {
+      title: "Priority",
+      render: (text, record) => (
+        <div className="dropdown action-label">{record?.priority}</div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {handleReturndropDown(record)}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      render: (text, record) => (
+        <div className="dropdown dropdown-action text-end">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="material-icons">more_vert</i>
+          </a>
+
+          <div className="dropdown-menu dropdown-menu-right">
+            {role != rolesObj.ACCOUNT ? (
+              <div>
+                <Link
+                  className="dropdown-item"
+                  to={`/admin/lead/${record._id}`}
+                >
+                  <i className="fa fa-pencil m-r-5" /> View
+                </Link>
+
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_Lead"
+                  onClick={() => handleEdit(record)}
+                >
+                  <i className="fa fa-pencil m-r-5" /> Edit
+                </a>
+
+                {/* <a
+              className="dropdown-item"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#delete_Lead"
+              onClick={() => handleEdit(record)}
+            >
+              <i className="fa fa-trash-o m-r-5" /> Delete
+            </a> */}
+              </div>
+            ) : (
+              <div>
+                <Link
+                  className="dropdown-item"
+                  to={`/admin/lead/${record._id}/ViewDetails`}
+                  onClick={() => handleEdit(record._id)}
+                >
+                  <i className="fa fa-pencil m-r-5" /> View
+                </Link>
+
+                {/* <a
+                  // className="dropdown-item"
+                  // data-bs-toggle="modal"
+                  href="/admin/lead/views23"
+            
+                  // data-bs-target="#add_Lead"
+                  // component={LeadDetails}
+                  onClick={() => LeadDetails}
+                >
+                  {/* <i className=" m-r-5" /> 
+                  View2
+                </a> */}
+              </div>
+            )}
+          </div>
+        </div>
+      ),
+    },
+  ];
+  const columns_SPOKE = [
+    { title: "Lead Subject", dataIndex: "subject" },
+    // {
+    //   title: 'Lead Id',
+    //   dataIndex: 'Leadid',
+    //   render: (text, record) => (
+    //     <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/employees/Lead-view">#TKT-0001</Link>
+    //   ),
+    //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
+    // },
+
+    {
+      title: "Created Date",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          {new Date(record?.createdAt).toDateString()}
+        </h2>
+      ),
+    },
+    // {
+    //   title: 'Last Reply',
+    //   dataIndex: 'lastreply',
+    //   sorter: (a, b) => a.lastreply.length - b.lastreply.length,
+    // },
+    {
+      title: "Priority",
+      render: (text, record) => (
+        <div className="dropdown action-label">{record?.priority}</div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {handleReturndropDown(record)}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Action",
+      render: (text, record) => (
+        <div className="dropdown dropdown-action text-end">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="material-icons">more_vert</i>
+          </a>
+
+          <div className="dropdown-menu dropdown-menu-right">
+            {role != rolesObj.ACCOUNT ? (
+              <div>
+                <Link
+                  className="dropdown-item"
+                  to={`/admin/lead/${record._id}`}
+                >
+                  <i className="fa fa-pencil m-r-5" /> View
+                </Link>
+
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#add_Lead"
+                  onClick={() => handleEdit(record)}
+                >
+                  <i className="fa fa-pencil m-r-5" /> Edit
+                </a>
+
+                {/* <a
+              className="dropdown-item"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#delete_Lead"
+              onClick={() => handleEdit(record)}
+            >
+              <i className="fa fa-trash-o m-r-5" /> Delete
+            </a> */}
+              </div>
+            ) : (
+              <div>
+                <Link
+                  className="dropdown-item"
+                  to={`/admin/lead/${record._id}/ViewDetails`}
+                  onClick={() => handleEdit(record._id)}
+                >
+                  <i className="fa fa-pencil m-r-5" /> View
+                </Link>
+
+                {/* <a
+                  // className="dropdown-item"
+                  // data-bs-toggle="modal"
+                  href="/admin/lead/views23"
+            
+                  // data-bs-target="#add_Lead"
+                  // component={LeadDetails}
+                  onClick={() => LeadDetails}
+                >
+                  {/* <i className=" m-r-5" /> 
+                  View2
+                </a> */}
+              </div>
+            )}
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="page-wrapper">
@@ -864,8 +1263,9 @@ const Leads = () => {
                 <li className="breadcrumb-item active">Leads</li>
               </ul>
             </div>
-            {/* {console.log(role, "role43")} */}
-            {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
+
+            {/* {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && ( */}
+            {role != rolesObj.ACCOUNT && (
               <div className="col-auto float-end ml-auto">
                 <a
                   href="#"
@@ -922,7 +1322,10 @@ const Leads = () => {
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
-                          return x.status == "CLOSED";
+                          return x.status == "CLOSED" ||
+                            x.status == "CLOSED_BY_SPOKE"
+                            ? "CLOSED"
+                            : "";
                         }).length
                       }
                     </h3>
@@ -951,7 +1354,7 @@ const Leads = () => {
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
-                          return x.status == "OPEN";
+                          return x.status == "OPEN" || x.status == "REOPENED";
                         }).length
                       }
                     </h3>
@@ -998,12 +1401,71 @@ const Leads = () => {
                     </div>
                   </div>
                 </div>
+                <div className="card">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between mb-3">
+                      <div>
+                        <span className="d-block">Cancel Leads</span>
+                      </div>
+                      {/* <div>
+                        <span className="text-danger">-75%</span>
+                      </div> */}
+                    </div>
+                    <h3 className="mb-3">
+                      {
+                        leadsArr.filter((x) => {
+                          return x.status == "CANCELLED";
+                        }).length
+                      }
+                    </h3>
+                    <div className="progress mb-2" style={{ height: "5px" }}>
+                      <div
+                        className="progress-bar bg-primary"
+                        role="progressbar"
+                        style={{ width: "70%" }}
+                        aria-valuenow={40}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         )}
         {/* Search Filter */}
+
+        {/*  */}
         <div div className="row filter-row">
+          {role != rolesObj.SPOKE &&
+            role != rolesObj.ACCOUNT &&
+            role != rolesObj.TEAMLEAD && (
+              <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div className="form-group form-focus select-focus">
+                  {/* <select className="select form-control" >
+                <option value="">Select Priority</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select> */}
+                  <Select
+                    onChange={handleFilterByROLE}
+                    menuPortalTarget={document.body}
+                    styles={customStyles}
+                    options={options_For_Role}
+                  />
+                  {/* handleFilterByPriority */}
+                  {/* <select className="select floating">
+                <option> -- Select -- </option>
+                <option> High </option>
+                <option> Low </option>
+                <option> Medium </option>
+              </select> */}
+                  <label className="focus-label">Filter By Role</label>
+                </div>
+              </div>
+            )}
           {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
@@ -1054,6 +1516,7 @@ const Leads = () => {
               <label className="focus-label">Priority</label>
             </div>
           </div>
+
           {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
               <div>
@@ -1075,6 +1538,7 @@ const Leads = () => {
           </div> */}
         </div>
         {/* /Search Filter */}
+        {/* {console.log("temam,", role)} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
@@ -1090,7 +1554,15 @@ const Leads = () => {
                   itemRender: itemRender,
                 }}
                 style={{ overflowX: "auto" }}
-                columns={columns}
+                columns={
+                  role == "ADMIN"
+                    ? columns
+                    : role == "TEAMLEAD"
+                    ? columns_TeamLeader
+                    : role == "SPOKE"
+                    ? columns_SPOKE
+                    : []
+                }
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
@@ -1149,13 +1621,22 @@ const Leads = () => {
                   <div className="form-group">
                     <label>Client ({clientsArr.length})</label>
 
-                    <select className="select form-control" value={clientId} onChange={(e) => { setClientId(e.target.value); }}>
-                      <option value="" > --- Select Clients</option>
-                      {clientsArr && clientsArr.map((client, i) => {
-                        return (
-                          <option key={i} value={client._id} >{client.name}</option>
-                        )
-                      })}
+                    <select
+                      className="select form-control"
+                      value={clientId}
+                      onChange={(e) => {
+                        setClientId(e.target.value);
+                      }}
+                    >
+                      <option value=""> --- Select Clients</option>
+                      {clientsArr &&
+                        clientsArr.map((client, i) => {
+                          return (
+                            <option key={i} value={client._id}>
+                              {client.name}
+                            </option>
+                          );
+                        })}
                     </select>
                   </div>
                 </div> */}
@@ -1212,7 +1693,7 @@ const Leads = () => {
                     {/* <Select
                         onChange={handlePriorityChange}
                         options={options}
-                      /> */}
+              /> */}
                   </div>
                 </div>
 

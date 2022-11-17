@@ -8,6 +8,7 @@ export const createLead = (obj, role) => {
 
 export const getLeadsByRole = (id, role) => {
   console.log(role, "role");
+  console.log(id, "roleid");
   return axios.get(`${serverUrl}/getByRole/${id}?role=${role}`);
 };
 
@@ -38,4 +39,3 @@ export const getById = (id) => {
 export const updatelead = (formData, id) => {
   return axios.patch(`${serverUrl}/updateLead/${id}`, formData);
 };
-

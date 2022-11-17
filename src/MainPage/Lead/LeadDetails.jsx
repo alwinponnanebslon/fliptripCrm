@@ -69,19 +69,19 @@ const ViewCostingSheetForm = () => {
           <div className="row">
             <div className="col-12 col-md-8 mb-2">
               <label className="blue-1 ">
-                Agent Name : &nbsp;{obj?.leadObj?.creteadBy?.name}
+                Agent Name : &nbsp;{obj?.leadObj?.createdBy?.name}
               </label>
             </div>
 
             <div className="col-12  col-md-8 mb-2">
               <label className="blue-1 fs-12">
-                Agent Email : &nbsp;{obj?.leadObj?.creteadBy?.email}
+                Agent Email : &nbsp;{obj?.leadObj?.createdBy?.email}
               </label>
             </div>
 
             <div className="col-12  col-md-8 mb-2">
               <label className="blue-1 fs-12">
-                Phone: &nbsp;{obj?.leadObj?.creteadBy?.phone}
+                Phone: &nbsp;{obj?.leadObj?.createdBy?.phone}
               </label>
             </div>
           </div>

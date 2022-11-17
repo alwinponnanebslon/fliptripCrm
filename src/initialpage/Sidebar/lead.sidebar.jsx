@@ -88,8 +88,7 @@ const LeadSidebar = (props) => {
                   <Link to={`/admin/lead/${leadId}`}>
                     <i className="la la-file" />
                     <div className="textblock2">
-                      {" "}
-                      <span>Traveller Details</span>{" "}
+                      <span>Traveller Details</span>
                     </div>
                   </Link>
                 </li>
@@ -109,7 +108,7 @@ const LeadSidebar = (props) => {
                   }
                 >
                   <Link to={`/admin/lead/${leadId}/quotation-follow-up`}>
-                    <i className="la la-file-text-o" />{" "}
+                    <i className="la la-file-text-o" />
                     <div className="textblock2">
                       <span>Quotation Followup</span>{" "}
                       <span className="textsmall">PENDING TASKS</span>{" "}

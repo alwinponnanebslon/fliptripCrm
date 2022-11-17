@@ -35,7 +35,7 @@ export const paymentGetByQuotation = createAsyncThunk(
   async (payload) => {
     try {
       let { data: response } = await getPaymentByQuotationApi(payload);
-      console.log(response, "23response");
+      // console.log(response, "23response");
       return response;
     } catch (error) {
       toastError(error);
