@@ -1,28 +1,31 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-import { Table } from 'antd';
+import { Table } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import 'antd/dist/antd.css';
-import { itemRender, onShowSizeChange } from "../paginationfunction"
-import "../antdstyle.css"
-import { clientAdd,clientGet,setclientObj,clientUpdate,clientDelete } from '../../redux/features/client/clientSlice';
+import "antd/dist/antd.css";
+import { itemRender, onShowSizeChange } from "../paginationfunction";
+import "../antdstyle.css";
+import {
+  clientAdd,
+  clientGet,
+  setclientObj,
+  clientUpdate,
+  clientDelete,
+} from "../../redux/features/client/clientSlice";
 
-import AddClient from './AddClient';
+import AddClient from "./AddClient";
 
 const Clients = () => {
-
   useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
+    if ($(".select").length > 0) {
+      $(".select").select2({
         minimumResultsForSearch: -1,
-        width: '100%'
+        width: "100%",
       });
     }
   });
-
 
   const dispatch = useDispatch();
   const clientResultArr = useSelector((state) => state?.client.clientArr);
@@ -31,22 +34,21 @@ const Clients = () => {
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
-  
-  useEffect(() => { handleInit(); }, []);
 
+  useEffect(() => {
+    handleInit();
+  }, []);
 
   const handleInit = () => {
-      dispatch(clientGet());
-    };
+    dispatch(clientGet());
+  };
 
-    useEffect(() => {
-          setClientMainArr(clientResultArr)
-       }, [clientResultArr]) ; 
-
+  useEffect(() => {
+    setClientMainArr(clientResultArr);
+  }, [clientResultArr]);
 
   const handleEdit = (row) => {
-
-    console.log(row, "row update"); //whole object
+    // // console.log(row, "row update"); //whole object
 
     dispatch(setclientObj(row));
   };
@@ -55,34 +57,29 @@ const Clients = () => {
     dispatch(clientDelete(id));
   };
 
-  const handleSatus = (row,status) => {
-  let obj = {
-    Id:row._id,
-    status:status
-  }
- 
+  const handleSatus = (row, status) => {
+    let obj = {
+      Id: row._id,
+      status: status,
+    };
+
     dispatch(clientUpdate(obj));
-   
   };
 
-
-
-
   const tour_columns = [
-  
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: "Name",
+      dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
+      title: "Email",
+      dataIndex: "email",
       sorter: (a, b) => a.email.length - b.email.length,
     },
     {
-      title: 'Phone',
-      dataIndex: 'phone',
+      title: "Phone",
+      dataIndex: "phone",
       sorter: (a, b) => a.phone.length - b.phone.length,
     },
     // {
@@ -100,14 +97,21 @@ const Clients = () => {
     //   ),
     // },
     {
-      title: 'Action',
+      title: "Action",
       render: (row, record) => (
-
-        <div className='d-flex'>
-          <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#add_client" onClick={() => handleEdit(row)}><i className="fa fa-pencil m-r-5" /> Edit</a>
-            <a className="dropdown-item" onClick={() => handleDelete(row._id)}><i className="fa fa-trash-o m-r-5" /> Delete</a>
+        <div className="d-flex">
+          <a
+            className="dropdown-item"
+            data-bs-toggle="modal"
+            data-bs-target="#add_client"
+            onClick={() => handleEdit(row)}
+          >
+            <i className="fa fa-pencil m-r-5" /> Edit
+          </a>
+          <a className="dropdown-item" onClick={() => handleDelete(row._id)}>
+            <i className="fa fa-trash-o m-r-5" /> Delete
+          </a>
         </div>
-       
       ),
     },
   ];
@@ -126,12 +130,21 @@ const Clients = () => {
             <div className="col">
               <h3 className="page-title">Clients</h3>
               <ul className="breadcrumb">
-                <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                <li className="breadcrumb-item">
+                  <Link to="/app/main/dashboard">Dashboard</Link>
+                </li>
                 <li className="breadcrumb-item active">Clients</li>
               </ul>
             </div>
             <div className="col-auto float-end ml-auto">
-              <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_client"><i className="fa fa-plus" /> Add Client</a>
+              <a
+                href="#"
+                className="btn add-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#add_client"
+              >
+                <i className="fa fa-plus" /> Add Client
+              </a>
               {/* <div className="view-icons">
                 <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
                 <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
@@ -165,26 +178,31 @@ const Clients = () => {
             </div>
           </div>
           <div className="col-sm-6 col-md-3">
-            <a href="#" className="btn btn-success btn-block w-100"> Search </a>
+            <a href="#" className="btn btn-success btn-block w-100">
+              {" "}
+              Search{" "}
+            </a>
           </div>
         </div>
         {/* Search Filter */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
-        
-              <Table className="table-striped"
+              <Table
+                className="table-striped"
                 pagination={{
                   total: clientMainArr.length,
-                  showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                  showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
+                  showTotal: (total, range) =>
+                    `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                  showSizeChanger: true,
+                  onShowSizeChange: onShowSizeChange,
+                  itemRender: itemRender,
                 }}
-                style={{ overflowX: 'auto' }}
+                style={{ overflowX: "auto" }}
                 columns={tour_columns}
                 // bordered
                 dataSource={clientMainArr}
-                rowKey={record => record.id}
-              
+                rowKey={(record) => record.id}
               />
             </div>
           </div>
@@ -194,12 +212,10 @@ const Clients = () => {
       {/* /Page Content */}
       {/* Add Client Modal */}
       <AddClient />
-    
-      {/* /Add Client Modal */}
 
-   
+      {/* /Add Client Modal */}
     </div>
   );
-}
+};
 
 export default Clients;

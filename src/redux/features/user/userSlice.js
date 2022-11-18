@@ -16,9 +16,9 @@ import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
 export const userGet = createAsyncThunk("auth/userGet", async (payload) => {
   try {
-    // console.log(payload, "payload-lead-get");//undeifuned
+    // // console.log(payload, "payload-lead-get");//undeifuned
     let { data: response } = await getAllLeadName(payload);
-    console.log(response, "User-gt");
+    // console.log(response, "User-gt");
     return response;
   } catch (error) {
     toastError(error);
@@ -35,21 +35,21 @@ const userSlice = createSlice({
 
       let { data: response } = await AddUser(payload);
       if (response) {
-        console.log(response, "resp1");
+        // console.log(response, "resp1");
         toastSuccess(response.message);
       }
     },
     userDelete: async (state, { payload }) => {
       let { data: response } = await deleteUser(payload);
-      // console.log(response, "response-dele");
+      // // console.log(response, "response-dele");
       if (response) {
         toastSuccess(response.message);
       }
     },
     setObj: (state, { payload }) => {
-      // console.log(payload, "payload3");
+      // // console.log(payload, "payload3");
       state.userObj = payload;
-      // console.log(state, "state7");
+      // // console.log(state, "state7");
     },
     userUpdateObj: async (state, { payload }) => {
       let { data: response } = await update(payload, payload.id);
@@ -65,7 +65,7 @@ const userSlice = createSlice({
       state.error = false;
     },
     [userGet.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12-lead");
+      // console.log(payload, "payload12-lead");
       state.userArr = payload.data;
     },
     [userGet.rejected]: (state, action) => {

@@ -67,7 +67,7 @@ function GeneralProduct() {
       amountWithTax,
       dayOfItinerary,
     };
-    console.log(obj, "send Obj");
+    // // console.log(obj, "send Obj");
     dispatch(QUOTATIONAdd(obj));
   };
 

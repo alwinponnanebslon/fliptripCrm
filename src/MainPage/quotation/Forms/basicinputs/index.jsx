@@ -44,7 +44,7 @@ const Basicinputs = () => {
   const [leadName, setLeadName] = useState("");
   const [leadId, setLeadId] = useState("");
 
-  console.log(selectedTourIdArr, "selectedTourIdArr");
+  // console.log(selectedTourIdArr, "selectedTourIdArr");
   const handleinputchange = (e, index) => {
     const { name, value } = e.target;
     if (name == "age") {
@@ -81,7 +81,7 @@ const Basicinputs = () => {
 
   const handleinputchangeHotel = (e, index) => {
     const { name, value } = e.target;
-    // console.log(name, "name");
+    // // console.log(name, "name");
     if (name == "rating") {
       if (value > 6 || value < 1) {
         toastError("invalid rating, kindly provide valid rating");
@@ -93,15 +93,15 @@ const Basicinputs = () => {
       }
     }
     const list = [...hotelList];
-    console.log(list, "list");
+    // console.log(list, "list");
     for (let el of list) {
-      console.log(el, "el");
+      // console.log(el, "el");
       if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
         toastError("check-Out wil be greater than checkin ");
       }
     }
-    // console.log(Date.parse(list[0].checkOut), "Date.parse(list.checkout)");
-    // console.log(Date.parse(list[0].checkIn), "Date.parse(list.checkIn)");
+    // // console.log(Date.parse(list[0].checkOut), "Date.parse(list.checkout)");
+    // // console.log(Date.parse(list[0].checkIn), "Date.parse(list.checkIn)");
     list[index][name] = value;
     setHotelList(list);
   };
@@ -133,7 +133,7 @@ const Basicinputs = () => {
   ]);
 
   const handleinputchangeItinerary = (e, index) => {
-    // console.log(e, index, "e, index");
+    // // console.log(e, index, "e, index");
     const { name, value } = e.target;
     if (name == "day") {
       if (value > 7 || value < 1) {
@@ -141,11 +141,11 @@ const Basicinputs = () => {
       }
     }
     const list = [...itineraryList];
-    console.log(list, "listitinerary");
+    // console.log(list, "listitinerary");
     list[index][name] = value;
     setItineraryList(list);
   };
-  // console.log(selectedTourIdArr, "selectedTourIdArr");
+  // // console.log(selectedTourIdArr, "selectedTourIdArr");
   const handleremoveItinerary = (index) => {
     const list = [...itineraryList];
     list.splice(index, 1);
@@ -161,7 +161,7 @@ const Basicinputs = () => {
   }, []);
 
   const leadValueArr = useSelector((state) => state.lead.leadArr);
-  console.log(leadValueArr, "leadValueArr");
+  // console.log(leadValueArr, "leadValueArr");
 
   const handleLeadValueChange = (e) => {
     setSelectedLeadIdArr(e);
@@ -176,7 +176,7 @@ const Basicinputs = () => {
   const handleTourValueChange = (e) => {
     setSelectedTourIdArr(e);
   };
-  // console.log(selectedTourIdArr, "selectedTourIdArr");
+  // // console.log(selectedTourIdArr, "selectedTourIdArr");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -226,7 +226,7 @@ const Basicinputs = () => {
       itineraryList,
     };
     dispatch(quotationAdd(obj));
-    console.log(obj, "send Obj9");
+    // console.log(obj, "send Obj9");
   };
   const options = [
     { value: "true", label: "true" },

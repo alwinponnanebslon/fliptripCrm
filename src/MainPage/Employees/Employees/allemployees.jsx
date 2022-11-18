@@ -61,7 +61,7 @@ const AllEmployees = () => {
     try {
       let { data: res } = await getEmployess(userObj._id, role);
       if (res.success) {
-        console.log(res, "res");
+        // // console.log(res, "res");
         dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
@@ -75,7 +75,7 @@ const AllEmployees = () => {
       let { data: res } = await deleteEmployees(selectedEmployee._id);
       if (res.success) {
         handleGetAllEmployees();
-        // console.log(res, "res")
+        // // console.log(res, "res")
         // dispatch(returnAllEmployees(res.data))
       }
     } catch (error) {
@@ -85,8 +85,7 @@ const AllEmployees = () => {
   };
 
   const handleEdit = (row) => {
-
-    console.log(row, "row update"); //whole object
+    // // console.log(row, "row update"); //whole object
     setIsUpdateTour(true);
 
     dispatch(setTour(row));
@@ -97,7 +96,7 @@ const AllEmployees = () => {
   }, []);
 
   useEffect(() => {
-    console.log("allemployees ");
+    // console.log("allemployees ");
   }, []);
   useEffect(() => {
     if (employees && employees.length > 0) {
@@ -225,7 +224,15 @@ const AllEmployees = () => {
                             <i className="material-icons">more_vert</i>
                           </a>
                           <div className="dropdown-menu dropdown-menu-right">
-                            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#add_employee" onClick={() => handleEdit(row)}><i className="fa fa-pencil m-r-5" /> Edit</a>
+                            <a
+                              className="dropdown-item"
+                              href="#"
+                              data-bs-toggle="modal"
+                              data-bs-target="#add_employee"
+                              onClick={() => handleEdit(row)}
+                            >
+                              <i className="fa fa-pencil m-r-5" /> Edit
+                            </a>
                             <a
                               className="dropdown-item"
                               href="#"

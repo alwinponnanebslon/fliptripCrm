@@ -15,29 +15,26 @@ let initialState = {
 
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
-export const clientGet = createAsyncThunk(
-  "auth/clientGet",
-  async (payload) => {
-    try {
-      // console.log(payload,"payloadpayload21")
-      let { data: response } = await get(payload);
-      // console.log(response, "responsess");
-      return response;
-    } catch (error) {
-      toastError(error);
-      throw error;
-    }
+export const clientGet = createAsyncThunk("auth/clientGet", async (payload) => {
+  try {
+    // // console.log(payload,"payloadpayload21")
+    let { data: response } = await get(payload);
+    // // console.log(response, "responsess");
+    return response;
+  } catch (error) {
+    toastError(error);
+    throw error;
   }
-);
+});
 export const clientAdd = createAsyncThunk(
   "auth/clientAdd",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
-      console.log(payload, "payloadpayload21");
+      // console.log(payload, "payloadpayload21");
       let { data: response } = await AddClient(payload);
-      console.log(response, "responsess2");
+      // console.log(response, "responsess2");
       toastSuccess(response.message);
-      thunkApi.dispatch(clientGet())
+      thunkApi.dispatch(clientGet());
       return response;
     } catch (error) {
       toastError(error);
@@ -50,7 +47,7 @@ export const setclientObj = createAsyncThunk(
   "auth/setclientObj",
   async (payload) => {
     try {
-      return payload
+      return payload;
     } catch (error) {
       toastError(error);
       throw error;
@@ -58,18 +55,16 @@ export const setclientObj = createAsyncThunk(
   }
 );
 
-
 export const clientUpdate = createAsyncThunk(
   "auth/clientUpdate",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
-
-      let {obj,clientId } = payload ;
-      console.log(payload, "payloadpayload21");
-      let { data: response } = await updateClient(obj,clientId);
-      console.log(response, "responsess2");
+      let { obj, clientId } = payload;
+      // console.log(payload, "payloadpayload21");
+      let { data: response } = await updateClient(obj, clientId);
+      // console.log(response, "responsess2");
       toastSuccess(response.message);
-      thunkApi.dispatch(clientGet())
+      thunkApi.dispatch(clientGet());
       return response;
     } catch (error) {
       toastError(error);
@@ -80,13 +75,13 @@ export const clientUpdate = createAsyncThunk(
 
 export const clientDelete = createAsyncThunk(
   "auth/clientDelete",
-  async (payload,thunkApi) => {
+  async (payload, thunkApi) => {
     try {
-      // console.log(payload,"payloadpayload21")
+      // // console.log(payload,"payloadpayload21")
       let { data: response } = await deleteClient(payload);
-      console.log(response, "responsess");
+      // console.log(response, "responsess");
       toastSuccess(response.message);
-      thunkApi.dispatch(clientGet())
+      thunkApi.dispatch(clientGet());
       return response;
     } catch (error) {
       toastError(error);
@@ -99,9 +94,8 @@ const clientSlice = createSlice({
   name: "client",
   initialState: initialState,
   reducers: {
-   
     setObj: (state, { payload }) => {
-      // console.log(payload, "payload3");
+      // // console.log(payload, "payload3");
       state.clientObj = payload;
     },
   },
@@ -111,7 +105,7 @@ const clientSlice = createSlice({
       state.error = false;
     },
     [clientGet.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
+      // console.log(payload, "payload12");
       state.clientArr = payload.data;
     },
     [clientGet.rejected]: (state, action) => {
@@ -125,7 +119,7 @@ const clientSlice = createSlice({
       state.error = false;
     },
     [clientAdd.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload34");
+      // console.log(payload, "payload34");
     },
     [clientAdd.rejected]: (state, action) => {
       state.loading = false;
@@ -134,15 +128,14 @@ const clientSlice = createSlice({
       // toastError(action.data.message);
     },
     [setclientObj.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
+      // console.log(payload, "payload12");
       state.clientObj = payload;
     },
 
     [clientUpdate.fulfilled]: (state, { payload }) => {
-      console.log(payload, "payload12");
+      // console.log(payload, "payload12");
       state.clientObj = {};
     },
-
   },
 });
 

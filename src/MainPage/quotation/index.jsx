@@ -5,9 +5,9 @@ import Forms from "./Forms";
 import Tables from "./Tables";
 
 const Quotationroute = ({ match }) => (
-  // console.log(match)
+  // // console.log(match)
   <Switch>
-    {console.log(match, "matchmatch2,index")}
+    {/* console.log(match, "matchmatch2,index") */}
     {/* <Redirect exact from={`${match.url}/`} to={`${match.url}/basic`} /> */}
     {/* http://localhost:8080/app/quotation/forms
     

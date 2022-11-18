@@ -2,12 +2,14 @@
  * Signin Firebase
  */
 
-import React, { useEffect, useState, useSelector } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Link, useParams } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import Quotation from "../../../_components/quotation/Quotation.jsx";
 import addQuotation from "../../../_components/quotation/addQuotation";
+
 import {
   User,
   Avatar_19,
@@ -32,6 +34,10 @@ import {
 import Header from "../../../initialpage/Sidebar/header";
 import Sidebar from "../../../initialpage/Sidebar/sidebar";
 import "../../index.css";
+import { admin, leadStatus, rolesObj } from "../../../utils/roles";
+import { toastError, toastSuccess } from "../../../utils/toastUtils";
+import { getLeadsByRole } from "../../../Services/lead.service";
+import { getAll } from "../../../Services/costingSheet.services";
 
 const barchartdata = [
   { y: "2006", "Total Income": 100, "Total Outcome": 190 },
@@ -42,6 +48,8 @@ const barchartdata = [
   { y: "2011", "Total Income": 75, "Total Outcome": 65 },
   { y: "2012", "Total Income": 100, "Total Outcome": 90 },
 ];
+const showDataInTabularForm = [];
+// leadsArr.map((x)=>{x.createdAt})
 const linechartdata = [
   { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
   { y: "2007", "Total Sales": 75, "Total Revenue": 65 },
@@ -51,16 +59,26 @@ const linechartdata = [
   { y: "2011", "Total Sales": 75, "Total Revenue": 65 },
   { y: "2012", "Total Sales": 100, "Total Revenue": 50 },
 ];
+
 const AdminDashboard = () => {
+  const [leadsArr, setLeadsArr] = useState([]);
+  const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
+
+  const [displayCostingSheetArr, setDisplayCostingSheetArr] = useState([]);
+  const [costingSheetArr, setCostingSheetArr] = useState([]);
+
+  let role = useSelector((state) => state.auth.role);
+  const userObj = useSelector((state) => state.auth.user);
+  const userAuthorise = useSelector((state) => state.auth);
+  console.log(role, "role213");
+
   const [menu, setMenu] = useState(false);
-  // const role = useSelector((state) => state.auth.role);
   const toggleMobileMenu = () => {
     setMenu(!menu);
   };
 
   let { adminId } = useParams();
 
-  console.log(adminId, "AddminId ");
   useEffect(() => {
     let firstload = localStorage.getItem("firstload");
     if (firstload === "true") {
@@ -68,6 +86,83 @@ const AdminDashboard = () => {
         window.location.reload(1);
         localStorage.removeItem("firstload");
       }, 1000);
+    }
+  });
+
+  const handleGetCostingSheet = async () => {
+    try {
+      let { data: res } = await getAll();
+      console.log(res, "getcosting4");
+      if (res.success) {
+        let tempArr = res.data;
+
+        setDisplayCostingSheetArr(res.data);
+        setCostingSheetArr(res.data);
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
+  const handleGetAllLeads = async () => {
+    try {
+      let { data: res } = await getLeadsByRole(userObj?._id, role);
+      console.log(res, "resres4");
+      if (res.success) {
+        let tempArr = res.data;
+
+        if (userAuthorise.role == "SPOKE") {
+          let temp = tempArr.filter(
+            (el) => `${el.agentId}` == `${userAuthorise?.user?._id}`
+          );
+
+          setDisplayLeadsArr(temp);
+          setLeadsArr(temp);
+        } else if (userAuthorise.role == "TEAMLEAD") {
+          let temp = tempArr.filter(
+            (el) =>
+              el.agentId == userAuthorise?.user?._id ||
+              el.leadId == userAuthorise?.user?._id
+          );
+          setDisplayLeadsArr(temp);
+          setLeadsArr(temp);
+        } else {
+          setDisplayLeadsArr(res.data);
+          setLeadsArr(res.data);
+        }
+      }
+    } catch (error) {
+      // console.error(error);
+      toastError(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllLeads();
+    handleGetCostingSheet();
+  }, []);
+
+  let closedLeadArr = [];
+
+  let inProgressArr = [];
+  let onHoldArr = [];
+  // let pendingArr = [];
+  let declinedArr = [];
+
+  let temp = [...leadsArr];
+  temp.map((x) => {
+    if (x.status == leadStatus.closed || x.status == leadStatus.closedBySpoke) {
+      closedLeadArr.push(x);
+    } else if (
+      x.status == leadStatus.open ||
+      x.status == leadStatus.in_Progress ||
+      x.status == leadStatus.reopened
+    ) {
+      inProgressArr.push(x);
+    } else if (x.status == leadStatus.on_Hold) {
+      onHoldArr.push(x);
+    } else if (x.status == leadStatus.cancelled) {
+      declinedArr.push(x);
     }
   });
 
@@ -86,7 +181,7 @@ const AdminDashboard = () => {
           <div className="page-header">
             <div className="row">
               <div className="col-sm-12">
-                <h3 className="page-title">Welcome Admin </h3>
+                <h3 className="page-title">WELCOME {role} </h3>
                 <ul className="breadcrumb">
                   <li className="breadcrumb-item active">Dashboard</li>
                 </ul>
@@ -94,114 +189,142 @@ const AdminDashboard = () => {
             </div>
           </div>
           {/* /Page Header */}
-          <div className="row">
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <span className="dash-widget-icon">
-                    <i className="fa fa-cubes" />
-                  </span>
-                  <div className="dash-widget-info">
-                    <h3>112</h3>
-                    <span>Projects</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <span className="dash-widget-icon">
-                    <i className="fa fa-usd" />
-                  </span>
-                  <div className="dash-widget-info">
-                    <h3>44</h3>
-                    <span>Clients</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <span className="dash-widget-icon">
-                    <i className="fa fa-diamond" />
-                  </span>
-                  <div className="dash-widget-info">
-                    <h3>37</h3>
-                    <span>Tasks</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6 col-sm-6 col-lg-6 col-xl-3">
-              <div className="card dash-widget">
-                <div className="card-body">
-                  <span className="dash-widget-icon">
-                    <i className="fa fa-user" />
-                    {/* <i className="fa fa-diamond" /> */}
-                  </span>
-                  <div className="dash-widget-info">
-                    <h3>218</h3>
-                    <span>Employees</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* 
-
-
-          
-          */}
-          <div className="row">
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-6 text-center">
+          {/*
+           */}
+          {role != rolesObj.ACCOUNT && (
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card-group m-b-30">
                   <div className="card">
                     <div className="card-body">
-                      <h3 className="card-title">get quotation</h3>
-                      {/* <Route
-                        path="/forgotpassword"
-                        component={ForgotPassword}
-                      /> */}
-                      {/* <button path="/getQuotation" onclick={addQuotation}>
-                        <h2>get</h2>
-                      
-                      </button> */}
-                      <h2>get</h2>
-                      {/* <Link to="/" onclick={quotation}> */}
-                      {/* <button>
-                        </button>
-                      </Link> */}
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Solved Leads</span>
+                        </div>
+                      </div>
+                      <h3 className="mb-3">
+                        {
+                          leadsArr.filter((x) => {
+                            return x.status == "CLOSED" ||
+                              x.status == "CLOSED_BY_SPOKE"
+                              ? "CLOSED"
+                              : "";
+                          }).length
+                        }
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Open Leads</span>
+                        </div>
+                      </div>
+                      <h3 className="mb-3">
+                        {
+                          leadsArr.filter((x) => {
+                            return x.status == "OPEN" || x.status == "REOPENED";
+                          }).length
+                        }
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Pending Leads</span>
+                        </div>
+                      </div>
+                      <h3 className="mb-3">
+                        {
+                          leadsArr.filter((x) => {
+                            return (
+                              x.status == "ON_HOLD" || x.status == "IN_PROGRESS"
+                            );
+                          }).length
+                        }
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Cancel Leads</span>
+                        </div>
+                      </div>
+                      <h3 className="mb-3">
+                        {
+                          leadsArr.filter((x) => {
+                            return x.status == "CANCELLED";
+                          }).length
+                        }
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-md-6 text-center">
-                  <div className="card">
-                    <div className="card-body">
-                      {/* <button onClick={quotation}></button> */}
-                      <h3>Create Quotation</h3>
-                      <Link to="/getQuotation">create</Link>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
+          )}
           {/* 
-          
+           
+           */}
 
-
-
-
-
-
-
-
-
+          {/* 
+          const barchartdata = [
+  { y: "2006", "Total Income": 100, "Total Outcome": 190 },
+  { y: "2007", "Total Income": 75, "Total Outcome": 65 },
+  { y: "2008", "Total Income": 50, "Total Outcome": 40 },
+  { y: "2009", "Total Income": 75, "Total Outcome": 65 },
+  { y: "2010", "Total Income": 50, "Total Outcome": 40 },
+  { y: "2011", "Total Income": 75, "Total Outcome": 65 },
+  { y: "2012", "Total Income": 100, "Total Outcome": 90 },
+];
 
           */}
+
           <div className="row">
             <div className="col-md-12">
               <div className="row">
@@ -213,6 +336,8 @@ const AdminDashboard = () => {
                       <ResponsiveContainer width="100%" height={300}>
                         <BarChart
                           data={barchartdata}
+                          // options={stateArr.map(el => { return { ...el, value: el._id, label: el.name } })}
+                          // data={leadsArr.map((x)=>{return { y:x.createdAt.toLocaleDateString() }})}
                           margin={{
                             top: 5,
                             right: 5,
@@ -285,7 +410,7 @@ const AdminDashboard = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="card-group m-b-30">
-                <div className="card">
+                {/* <div className="card">
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
@@ -308,7 +433,7 @@ const AdminDashboard = () => {
                     </div>
                     <p className="mb-0">Overall Employees 218</p>
                   </div>
-                </div>
+                </div> */}
                 <div className="card">
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
@@ -316,7 +441,7 @@ const AdminDashboard = () => {
                         <span className="d-block">Earnings</span>
                       </div>
                       <div>
-                        <span className="text-success">+12.5%</span>
+                        {/* <span className="text-success">+12.5%</span> */}
                       </div>
                     </div>
                     <h3 className="mb-3">$1,42,300</h3>
@@ -330,12 +455,14 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    <p className="mb-0">
+                    {/* <p className="mb-0">
                       Previous Month{" "}
                       <span className="text-muted">$1,15,852</span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
+                {/*
+                 */}
                 <div className="card">
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
@@ -343,10 +470,10 @@ const AdminDashboard = () => {
                         <span className="d-block">Expenses</span>
                       </div>
                       <div>
-                        <span className="text-danger">-2.8%</span>
+                        {/* <span className="text-danger">-2.8%</span> */}
                       </div>
                     </div>
-                    <h3 className="mb-3">$8,500</h3>
+                    {/* <h3 className="mb-3">$8,500</h3> */}
                     <div className="progress mb-2" style={{ height: "5px" }}>
                       <div
                         className="progress-bar bg-primary"
@@ -357,9 +484,9 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    <p className="mb-0">
+                    {/* <p className="mb-0">
                       Previous Month <span className="text-muted">$7,500</span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 <div className="card">
@@ -394,7 +521,7 @@ const AdminDashboard = () => {
           </div>
           {/* Statistics Widget */}
           <div className="row">
-            <div className="col-md-12 col-lg-12 col-xl-4 d-flex">
+            {/* <div className="col-md-12 col-lg-12 col-xl-6 d-flex">
               <div className="card flex-fill dash-statistics">
                 <div className="card-body">
                   <h5 className="card-title">Statistics</h5>
@@ -492,8 +619,12 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+            </div> */}
+            {/* 
+
+
+*/}
+            <div className="col-md-12 col-lg-6 col-xl-12 d-flex">
               <div className="card flex-fill">
                 <div className="card-body">
                   <h4 className="card-title">Task Statistics</h4>
@@ -501,14 +632,14 @@ const AdminDashboard = () => {
                     <div className="row">
                       <div className="col-md-6 col-6 text-center">
                         <div className="stats-box mb-4">
-                          <p>Total Tasks</p>
-                          <h3>385</h3>
+                          <p>Total Lead</p>
+                          <h3>{leadsArr.length}</h3>
                         </div>
                       </div>
                       <div className="col-md-6 col-6 text-center">
                         <div className="stats-box mb-4">
                           <p>Overdue Tasks</p>
-                          <h3>19</h3>
+                          <h3>{leadsArr.length - closedLeadArr.length}</h3>
                         </div>
                       </div>
                     </div>
@@ -522,7 +653,10 @@ const AdminDashboard = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      30%
+                      {closedLeadArr.length > 0
+                        ? (closedLeadArr.length / leadsArr.length) * 100
+                        : 0}
+                      %
                     </div>
                     <div
                       className="progress-bar bg-warning"
@@ -532,7 +666,10 @@ const AdminDashboard = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      22%
+                      {inProgressArr.length > 0
+                        ? (inProgressArr.length / leadsArr.length) * 100
+                        : 0}
+                      %
                     </div>
                     <div
                       className="progress-bar bg-success"
@@ -542,9 +679,12 @@ const AdminDashboard = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      24%
+                      {onHoldArr.length > 0
+                        ? (onHoldArr.length / leadsArr.length) * 100
+                        : 0}
+                      %
                     </div>
-                    <div
+                    {/* <div
                       className="progress-bar bg-danger"
                       role="progressbar"
                       style={{ width: "26%" }}
@@ -552,8 +692,11 @@ const AdminDashboard = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      21%
-                    </div>
+                      {pendingArr.length > 0
+                        ? (pendingArr.length / leadsArr.length) * 100
+                        : 0}
+                      %
+                    </div> */}
                     <div
                       className="progress-bar bg-info"
                       role="progressbar"
@@ -562,35 +705,42 @@ const AdminDashboard = () => {
                       aria-valuemin={0}
                       aria-valuemax={100}
                     >
-                      10%
+                      {declinedArr.length > 0
+                        ? (declinedArr.length / leadsArr.length) * 100
+                        : 0}
+                      %
                     </div>
                   </div>
                   <div>
                     <p>
                       <i className="fa fa-dot-circle-o text-purple me-2" />
-                      Completed Tasks <span className="float-end">166</span>
+                      Completed Tasks{" "}
+                      <span className="float-end">{closedLeadArr.length}</span>
                     </p>
                     <p>
                       <i className="fa fa-dot-circle-o text-warning me-2" />
-                      Inprogress Tasks <span className="float-end">115</span>
+                      Inprogress Tasks{" "}
+                      <span className="float-end">{inProgressArr.length}</span>
                     </p>
                     <p>
                       <i className="fa fa-dot-circle-o text-success me-2" />
-                      On Hold Tasks <span className="float-end">31</span>
+                      On Hold Tasks{" "}
+                      <span className="float-end">{onHoldArr.length}</span>
                     </p>
-                    <p>
+                    {/* <p>
                       <i className="fa fa-dot-circle-o text-danger me-2" />
                       Pending Tasks <span className="float-end">47</span>
-                    </p>
+                    </p> */}
                     <p className="mb-0">
                       <i className="fa fa-dot-circle-o text-info me-2" />
-                      Review Tasks <span className="float-end">5</span>
+                      Declined Tasks{" "}
+                      <span className="float-end">{declinedArr.length}</span>
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
+            {/* <div className="col-md-12 col-lg-6 col-xl-4 d-flex">
               <div className="card flex-fill">
                 <div className="card-body">
                   <h4 className="card-title">
@@ -650,10 +800,10 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           {/* /Statistics Widget */}
-          <div className="row">
+          {/* <div className="row">
             <div className="col-md-6 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
@@ -798,8 +948,8 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
+          </div> */}
+          {/* <div className="row">
             <div className="col-md-6 d-flex">
               <div className="card card-table flex-fill">
                 <div className="card-header">
@@ -1384,7 +1534,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         {/* /Page Content */}
       </div>

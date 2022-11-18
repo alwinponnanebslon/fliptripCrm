@@ -3,8 +3,8 @@ import { url } from "./url.service";
 let serverUrl = `${url}/quotation`;
 // import { TOURAdd, get } from "../../../../redux/features/tour/tourSlice";
 export const AddQuotation = (obj) => {
-  console.log(obj, "obj axios");
-  // console.log(serverUrl, "serverUrl");
+  // console.log(obj, "obj axios");
+  // // console.log(serverUrl, "serverUrl");
   return axios.post(`${serverUrl}/add`, obj);
 };
 
@@ -20,7 +20,7 @@ export const updateQuotation = (formData, id) => {
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
 export const updateQuotationStatus = (formData, id) => {
-  console.log(formData, id, "dbcall update");
+  // console.log(formData, id, "dbcall update");
   return axios.patch(`${serverUrl}/updateStatusById/${id}`, formData);
 };
 export const getApprovedQuotation = (id) => {

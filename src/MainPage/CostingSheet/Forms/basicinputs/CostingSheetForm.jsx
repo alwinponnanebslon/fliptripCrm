@@ -18,7 +18,7 @@ import { getApprovedQuotation } from "../../../../Services/quotation.service.js"
 const ViewCostingSheetForm = () => {
   const location = useLocation();
   const tempLocation = location;
-  // console.log(location.pathname, "location.pathname32");
+  // // console.log(location.pathname, "location.pathname32");
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
@@ -53,12 +53,12 @@ const ViewCostingSheetForm = () => {
   };
 
   useEffect(() => {
-    // console.log(location.pathname, "location.pathname32");
+    // // console.log(location.pathname, "location.pathname32");
     setIsLocation(true);
   }, [tempLocation]);
 
   const handleInit = (leadId) => {
-    // console.log(leadId, "leadId23");
+    // // console.log(leadId, "leadId23");
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
@@ -93,7 +93,7 @@ const ViewCostingSheetForm = () => {
   }, [inputList, flightList, landCost, flightCost]);
 
   useEffect(() => {
-    // console.log(quotationObj, "1quotationObj23");
+    // // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
       setTotalCost(quotationObj?.paymentObj?.total);
       setLandCost(quotationObj?.paymentObj?.landPrice);
@@ -107,7 +107,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    // console.log(costingSheetResultObj, "costingSheetResultObj23");
+    // // console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj.leadName);
       setLocationName(costingSheetResultObj.locationName);
@@ -126,7 +126,7 @@ const ViewCostingSheetForm = () => {
   }, [costingSheetResultObj]);
 
   // useEffect(() => {
-  //   // console.log(costingSheetResultObj, "costingSheetResultObj23");
+  //   // // console.log(costingSheetResultObj, "costingSheetResultObj23");
   //   if (isLocation == false) {
   //     // setTotalCost(quotationObj?.paymentObj?.total);
   //     // setLandCost(quotationObj?.paymentObj?.landPrice);
@@ -136,12 +136,12 @@ const ViewCostingSheetForm = () => {
   //     // setLeadsId(leadId);
   //     // setinputList([...quotationObj?.hotelDetail]);
   //     // setQuotationId(quotationObj._id);
-  //     console.log("po0");
+  //     // console.log("po0");
   //   }
   // }, []);
 
   // useEffect(() => {
-  //   // console.log(tempLocation, "21location");
+  //   // // console.log(tempLocation, "21location");
   //   // if (tempNum1 >= 2) {
   //   // setLeadName("");
   //   // setLocationName("");
@@ -301,7 +301,7 @@ const ViewCostingSheetForm = () => {
       id: prevDocId,
       // isBooked,
     };
-    console.log(obj, "obj1");
+    // console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
       dispatch(update(obj, obj.id));
     } else {
@@ -440,7 +440,7 @@ const ViewCostingSheetForm = () => {
                 <div className="col-sm-12">
                   <h3 className="mt-3 mb-4">Flight Details</h3>
                   {flightList.map((x, i) => {
-                    // console.log(x, i, "x,i123");
+                    // // console.log(x, i, "x,i123");
                     return (
                       <div className="row mb-3">
                         <div class="form-group col-md-4">

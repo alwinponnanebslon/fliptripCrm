@@ -31,7 +31,7 @@ function CustomButton({
   changeClass,
   noClass,
 }) {
-  // console.log(isLink, path, "link check");
+  // // console.log(isLink, path, "link check");
   const LinkClass = (roundedPill, small) => {
     let classes = "btn btn-1 bg-black text-white";
     if (roundedPill) {

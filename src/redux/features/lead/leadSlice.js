@@ -4,22 +4,23 @@ import {
   getAllLead,
   getById,
   deleteLead,
-  update,getAllLeadName
+  update,
+  getAllLeadName,
 } from "../../../Services/lead.service";
 
 let initialState = {
   leadArr: [],
   leadObj: {},
-  lead:null
+  lead: null,
 };
 
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
 export const leadGet = createAsyncThunk("auth/leadGet", async (payload) => {
   try {
-    console.log(payload, "payload-lead-get");
+    // console.log(payload, "payload-lead-get");
     let { data: response } = await getAllLeadName(payload);
-    console.log(response, "lead-get");
+    // console.log(response, "lead-get");
     return response;
   } catch (error) {
     toastError(error);
@@ -27,17 +28,20 @@ export const leadGet = createAsyncThunk("auth/leadGet", async (payload) => {
   }
 });
 
-export const leadGetById = createAsyncThunk("auth/leadGetById", async (payload) => {
-  try {
-    console.log(payload, "payload-lead-get");
-    let { data: response } = await getById(payload);
-    console.log(response, "lead-get");
-    return response;
-  } catch (error) {
-    toastError(error);
-    throw error;
+export const leadGetById = createAsyncThunk(
+  "auth/leadGetById",
+  async (payload) => {
+    try {
+      // console.log(payload, "payload-lead-get");
+      let { data: response } = await getById(payload);
+      // console.log(response, "lead-get");
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
   }
-});
+);
 
 const leadSlice = createSlice({
   name: "lead",
@@ -48,25 +52,25 @@ const leadSlice = createSlice({
 
       let { data: response } = await AddLead(payload);
       if (response) {
-        console.log(response, "resp1");
+        // console.log(response, "resp1");
         toastSuccess(response.message);
       }
     },
     leadDelete: async (state, { payload }) => {
       let { data: response } = await deleteLead(payload);
-      // console.log(response, "response-dele");
+      // // console.log(response, "response-dele");
       if (response) {
         toastSuccess(response.message);
       }
     },
     setObj: (state, { payload }) => {
-      // console.log(payload, "payload3");
+      // // console.log(payload, "payload3");
       state.quotationObj = payload;
-      // console.log(state, "state7");
+      // // console.log(state, "state7");
     },
     leadUpdateObj: async (state, { payload }) => {
       // state.quotationObj = payload;
-      // console.log(payload, "payload");
+      // // console.log(payload, "payload");
 
       let { data: response } = await update(payload, payload.id);
       if (response) {
@@ -81,11 +85,11 @@ const leadSlice = createSlice({
       state.error = false;
     },
     [leadGet.fulfilled]: (state, { payload }) => {
-      //   console.log(payload, "payload12-lead");
+      //   // console.log(payload, "payload12-lead");
       state.leadArr = payload.data;
     },
     [leadGetById.fulfilled]: (state, { payload }) => {
-      //   console.log(payload, "payload12-lead");
+      //   // console.log(payload, "payload12-lead");
       state.lead = payload.data;
     },
     [leadGet.rejected]: (state, action) => {

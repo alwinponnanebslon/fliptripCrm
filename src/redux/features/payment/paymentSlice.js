@@ -35,7 +35,7 @@ export const paymentGetByQuotation = createAsyncThunk(
   async (payload) => {
     try {
       let { data: response } = await getPaymentByQuotationApi(payload);
-      // console.log(response, "23response");
+      // // console.log(response, "23response");
       return response;
     } catch (error) {
       toastError(error);
@@ -48,7 +48,7 @@ export const paymentAdd = createAsyncThunk(
   "auth/paymentAdd",
   async (payload, thunkApi) => {
     try {
-      console.log(payload, "tempObj");
+      // console.log(payload, "tempObj");
       let { data: response } = await AddPaymentApi(payload);
       // thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`))
       toastSuccess(response.message);
@@ -98,12 +98,12 @@ export const paymentUpdateStatus = createAsyncThunk(
   "auth/paymentStatusUpdate",
   async (payload, thunkApi) => {
     try {
-      // console.log(payload, obj, "payloadpayload21");
+      // // console.log(payload, obj, "payloadpayload21");
       let { data: response } = await updatepaymentStatus(
         { status: payload.status },
         payload.Id
       );
-      console.log(response, "responsess2");
+      // console.log(response, "responsess2");
       toastSuccess(response.message);
       thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`));
       return response;
@@ -118,16 +118,16 @@ export const paymentUpdateStatus = createAsyncThunk(
 //   initialState: initialState,
 //   reducers: {
 //     setObj: (state, { payload }) => {
-//       console.log(payload, "payload3");
+//       // console.log(payload, "payload3");
 //       state.paymentObj = payload;
-//       console.log(state, "state7");
+//       // console.log(state, "state7");
 //     },
 //     paymentAddObj: async (state, { payload }) => {
 //       // state.paymentObj = payload;
 
 //       let { data: response } = await update(payload);
 //       if (response) {
-//         console.log(response, "respse83");
+//         // console.log(response, "respse83");
 //         toastSuccess(response.message);
 //       }
 //     },
@@ -137,7 +137,7 @@ export const paymentDelete = createAsyncThunk(
   "auth/paymentDelete",
   async (payload, thunkApi) => {
     try {
-      // console.log(payload,"payloadpayload21")
+      // // console.log(payload,"payloadpayload21")
       let { data: response } = await deletepayment(payload.id);
       toastSuccess(response.message);
       thunkApi.dispatch(paymentGet(`leadId=${payload?.leadId}`));
@@ -158,32 +158,32 @@ const paymentSlice = createSlice({
 
     //   let { data: response } = await Addpayment(payload);
     //   if (response) {
-    //     console.log(response, "respse1");
+    //     // console.log(response, "respse1");
     //     toastSuccess(response.message);
     //   }
     // },
 
     // paymentAdd: async (state, { id, payload }) => {
     //   state.paymentObj = payload;
-    //   console.log(payload, "payload23"); //whole doc com
-    //   console.log(id, "idid");
+    //   // console.log(payload, "payload23"); //whole doc com
+    //   // console.log(id, "idid");
 
     //   let { data: response } = await update(id, payload);
     //   if (response) {
-    //     // console.log(response, "response34");
+    //     // // console.log(response, "response34");
     //     toastSuccess(response.message);
     //   }
     // },
     // paymentDelete: async (state, { payload }) => {
-    //   // console.log(payload, "payload-dele");
+    //   // // console.log(payload, "payload-dele");
     //   let { data: response } = await deletepayment(payload);
-    //   // console.log(response, "response-dele");
+    //   // // console.log(response, "response-dele");
     //   if (response) {
     //     toastSuccess(response.message);
     //   }
     // },
     setObj: (state, { payload }) => {
-      // console.log(payload, "payload3");
+      // // console.log(payload, "payload3");
       state.paymentObj = payload;
     },
   },
@@ -231,7 +231,7 @@ const paymentSlice = createSlice({
     //   state.error = false;
     // },
     // [paymentDelete.fulfilled]: (state, { payload }) => {
-    //   console.log(payload, "payload12");
+    //   // console.log(payload, "payload12");
     //   state.paymentArr = payload.data;
     // },
     // [paymentDelete.rejected]: (state, action) => {

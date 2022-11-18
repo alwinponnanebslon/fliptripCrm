@@ -80,7 +80,7 @@ export const ViewPayment = () => {
   };
 
   useEffect(() => {
-    // console.log(quotationPaymentObj,"quotationPaymentObj")
+    // // console.log(quotationPaymentObj,"quotationPaymentObj")
     setPaymentObj(quotationPaymentObj);
   }, [quotationPaymentObj]);
 
@@ -113,7 +113,7 @@ export const ViewPayment = () => {
           tempObj?.perPersonLandPrice ? tempObj?.perPersonLandPrice : 0
         );
         setQuotationId(tempObj._id);
-        console.log(tempObj, "quotationId");
+        // console.log(tempObj, "quotationId");
         dispatch(paymentGetByQuotation(tempObj?._id));
         dispatch(paymentInvoiceGet(`quotationId=${tempObj?._id}`));
       } else {
@@ -138,7 +138,7 @@ export const ViewPayment = () => {
 
   const handlePaymentInput = (e, index) => {
     const { name, value } = e.target;
-    console.log(name, value);
+    // console.log(name, value);
     if (name == "installmentAmount") {
       if (value > total || value <= 0) {
         toastError(
@@ -147,7 +147,7 @@ export const ViewPayment = () => {
       }
     }
     let list = [...paymentReceviedArr];
-    console.log(list[index], "paymentReceviedArr");
+    // console.log(list[index], "paymentReceviedArr");
 
     // list[index][name] = value;
     setPaymentReceviedArr((pr) =>
@@ -258,7 +258,7 @@ export const ViewPayment = () => {
       invoiceDescription,
       invoiceAmount,
     };
-    console.log(obj);
+    // console.log(obj);
 
     if (invoiceId) {
       obj.Id = invoiceId;

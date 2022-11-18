@@ -13,12 +13,12 @@
 //   const [updatedObj, setUpdatedObj] = useState(null);
 //   useEffect(() => {
 //     if (tourObj) {
-//       console.log(tourObj, "tourObj");
+//       // console.log(tourObj, "tourObj");
 //       setUpdatedObj(tourObj);
 //     }
-//     // console.log(tourObj, "tourObj chec");
+//     // // console.log(tourObj, "tourObj chec");
 //   }, [tourObj]);
-//   // console.log(brandObj, "ppop");
+//   // // console.log(brandObj, "ppop");
 
 //   return (
 //     <main>
@@ -29,7 +29,7 @@
 //           ) : (
 //             <h5 className="blue-1 mb-4">Add New Tour</h5>
 //           )}
-//           {console.log("called ")}
+//           {// console.log("called ")}
 //           <FormData />
 //         </div>
 //       </section>
@@ -62,7 +62,7 @@ function tourDetails() {
   };
 
   const handleEdit = (row) => {
-    console.log(row, "row update"); //whole object
+    // // console.log(row, "row update"); //whole object
     // dispatch(quotationUpdate(row));
     dispatch(setObj(row));
   };
@@ -147,8 +147,8 @@ export default tourDetails;
 //   const dispatch = useDispatch();
 //   const [tourName, setTourName] = useState("");
 //   const [description, setDescription] = useState("");
-//   // console.log(description, "description");
-//   // console.log(tourName, "tournae");
+//   // // console.log(description, "description");
+//   // // console.log(tourName, "tournae");
 
 //   const handleInit = () => {
 //     dispatch(tourGet());
@@ -166,7 +166,7 @@ export default tourDetails;
 //       tourName,
 //       description,
 //     };
-//     console.log(obj, "send Obj");
+//     // console.log(obj, "send Obj");
 
 //     // dispatch(tourSlice.);
 //     dispatch(TOURAdd(obj));

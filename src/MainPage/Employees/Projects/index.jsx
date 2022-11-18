@@ -12,7 +12,7 @@ import Taskboard from "./taskboard";
 
 const ProjectRoute = ({ match }) => (
   <Switch>
-    console.log({match},"mtc222h")
+    // console.log({match},"mtc222h")
     <Redirect
       exact
       from={`${match.url}/`}

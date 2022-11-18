@@ -76,7 +76,7 @@ import { DashboardBox } from "../Utility/DashboardBox";
 //             amountWithTax,
 //             dayOfItinerary,
 //         };
-//         console.log(obj, "send Obj");
+//         // console.log(obj, "send Obj");
 //         //   dispatch(QUOTATIONAdd(obj));
 //     };
 
@@ -351,7 +351,7 @@ function Quotation() {
   const [ModalType, setModalType] = useState("");
   const [ModalName, setModalName] = useState("");
   const [IsPhysicalProduct, setIsPhysicalProduct] = useState(false);
-  console.log("quotation alled ");
+  // // console.log("quotation alled ");
   return (
     <form action="#" className="form">
       <div className="row">

@@ -16,14 +16,14 @@ import {
 function Quotation() {
   const dispatch = useDispatch();
   const quotationArr = useSelector((state) => state.quotation.quotationArr);
-  // console.log(quotationArr, "quotationArr2");
+  // // console.log(quotationArr, "quotationArr2");
   // http://localhost:8080/app/quotation/table
   const handleInit = () => {
     dispatch(quotationGet());
   };
 
   const handleEdit = (row) => {
-    console.log(row, "row update"); //whole object
+    // console.log(row, "row update"); //whole object
     // dispatch(quotationUpdate(row));
     dispatch(setObj(row));
   };

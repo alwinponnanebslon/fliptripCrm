@@ -39,8 +39,10 @@ import LeadDetails from "./LeadDetails";
 
 const Leads = () => {
   const dispatch = useDispatch();
-  const agents = useSelector(getAllAgents);
-  const teamLeads = useSelector(getAllTeamLeadsEmployees);
+  const agents = useSelector(getAllAgents); //spoke
+  const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
+  // // console.log(agents, "12agents");
+  // // console.log(teamLeads, "12ateamLeads");
   const destinations = useSelector((state) => state.tour.tours);
   // const clients = useSelector((state) => state.client.clientArr);
   // const [clientObj, setClientObj] = useState({ id: "", name: "" })
@@ -53,13 +55,14 @@ const Leads = () => {
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
   const role = useSelector((state) => state.auth.role);
   const userAuthorise = useSelector((state) => state.auth);
-  console.log(userAuthorise, "role223");
+  // console.log(userAuthorise, "role223");
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
   const [leadsArr, setLeadsArr] = useState([]);
   const [subject, setSubject] = useState("");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
+
   const [email, setEmail] = useState("");
   const [agentId, setAgentId] = useState("");
   const [leadId, setLeadId] = useState("");
@@ -68,17 +71,20 @@ const Leads = () => {
   const [description, setDescription] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [priority, setPriority] = useState("");
+
+
+
   const [selectedLeadId, setSelectedLeadId] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [priorityQuery, setPriorityQuery] = useState("");
   const [roleQuery, setRoleQuery] = useState("");
   const [displayRoleArr, setDisplayRoleArr] = useState([]);
 
-  // console.log(displayLeadsArr, "displayLeadsArr12");
+  // // console.log(displayLeadsArr, "displayLeadsArr12");
   const agentSelect = useRef();
   const teamLeadSelect = useRef();
   const destinationSelect = useRef();
-  // console.log(role, "role23");
+  // // console.log(role, "role23");
   const [data, setData] = useState([
     {
       id: 1,
@@ -143,16 +149,14 @@ const Leads = () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
       if (res.success) {
-        // setDisplayLeadsArr(res.data);
-        console.log(res.data, "12res.data32");
-        console.log(userAuthorise?.user?._id, "12u2serAuthorise?");
+     
         let tempArr = res.data;
 
         if (userAuthorise.role == "SPOKE") {
           let temp = tempArr.filter(
             (el) => `${el.agentId}` == `${userAuthorise?.user?._id}`
           );
-          // console.log(temp, "1temp23");
+         
           setDisplayLeadsArr(temp);
           setLeadsArr(temp);
         } else if (userAuthorise.role == "TEAMLEAD") {
@@ -161,7 +165,7 @@ const Leads = () => {
               el.agentId == userAuthorise?.user?._id ||
               el.leadId == userAuthorise?.user?._id
           );
-          console.log(temp, "123temp23");
+          // console.log(temp, "123temp23");
           setDisplayLeadsArr(temp);
           setLeadsArr(temp);
         } else {
@@ -237,7 +241,7 @@ const Leads = () => {
   // }, [clients])
 
   useEffect(() => {
-    // console.log(
+    // // console.log(
     //   clientsArr,
     //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
     // );
@@ -278,20 +282,20 @@ const Leads = () => {
       cb(reader.result);
     };
     reader.onerror = function (error) {
-      // console.log('Error: ', error)
+      // // console.log('Error: ', error)
     };
   };
   const handleFileSelection = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
-        // console.log(result, "result");
+        // // console.log(result, "result");
         setFileUrl(result);
       });
     }
   };
 
   const handleFilterWithAgentName = (query) => {
-    // console.log(query, "query3");
+    // // console.log(query, "query3");
     setEmployeeNameQuery(query);
     let tempArr = leadsArr.filter(
       (el) =>
@@ -317,10 +321,25 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
-  const handleFilterByROLE = (query) => {
+  const handleFilterBySpoke = (query) => {
+    // // console.log(query, "query23");
+    // // console.log(leadsArr, "leadsArr3");
     setRoleQuery(query.value);
     if (query.value != "") {
-      let tempArr = leadsArr.filter((el) => el?.agentObj?.role == query.value);
+      let tempArr = leadsArr.filter((el) => el?.agentId == query.value);
+      setDisplayLeadsArr([...tempArr]);
+    } else {
+      setDisplayLeadsArr([...leadsArr]);
+    }
+  };
+  const handleFilterByTeamLead = (query) => {
+    // console.log(query, "1query23");
+    // console.log(leadsArr, "1leadsArr3");
+    setRoleQuery(query.value);
+    if (query.value != "") {
+      let tempArr = leadsArr.filter(
+        (el) => el?.agentId == query.value || el?.leadObj?._id == query.value
+      );
       setDisplayLeadsArr([...tempArr]);
     } else {
       setDisplayLeadsArr([...leadsArr]);
@@ -391,7 +410,7 @@ const Leads = () => {
         obj.leadId = userObj?._id;
       }
 
-      console.log(obj, "ovvjb23");
+      // console.log(obj, "ovvjb23");
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
@@ -424,7 +443,7 @@ const Leads = () => {
         toastError("Lead not selected");
         return;
       }
-      console.log(leadId);
+      // console.log(leadId);
       let obj = {
         agentId: agentId,
       };
@@ -511,7 +530,7 @@ const Leads = () => {
   ];
 
   const handleView = (lead) => {
-    // console.log(lead, "lead32");
+    // // console.log(lead, "lead32");
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
@@ -520,14 +539,14 @@ const Leads = () => {
       setLeadUpdateId("");
     }
 
-    // console.log(row, "row update"); //whole object
+    // // console.log(row, "row update"); //whole object
     // dispatch(setfollowUp(row));
   };
 
   const handleReturndropDown = (record) => {
-    // console.log(role, "role");
-    // console.log(record?.status, "role");
-    // console.log(role == "ADMIN" || role == rolesObj.SPOKE && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOKE && record?.status != leadStatus.closed")
+    // // console.log(role, "role");
+    // // console.log(record?.status, "role");
+    // // console.log(role == "ADMIN" || role == rolesObj.SPOKE && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOKE && record?.status != leadStatus.closed")
     // if (role == "ADMIN") {
     //   return (
     //     <>
@@ -750,7 +769,7 @@ const Leads = () => {
         <h2 className="table-avatar">
           {record.leadObj ? (
             <>
-              {/* {console.log(record, "record2")} */}
+              {/* {// console.log(record, "record2")} */}
               <Link
                 to={`/admin/employee-profile/${record?.leadObj?._id}`}
                 className="avatar"
@@ -973,7 +992,7 @@ const Leads = () => {
     //     <h2 className="table-avatar">
     //       {record.leadObj ? (
     //         <>
-    //           {/* {console.log(record, "record2")} */}
+    //           {/* {// console.log(record, "record2")} */}
     //           <Link
     //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
     //             className="avatar"
@@ -1280,7 +1299,7 @@ const Leads = () => {
           </div>
         </div>
         {/* /Page Header */}
-        {/* {console.log(leadsArr, "leadsArr23")} */}
+
         {role != rolesObj.ACCOUNT && (
           <div className="row">
             <div className="col-md-12">
@@ -1318,7 +1337,7 @@ const Leads = () => {
                         <span className="text-success">+12.5%</span>
                       </div> */}
                     </div>
-                    {/* <h3 className="mb-3">{leadsArr.length}</h3> */}
+           
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
@@ -1450,19 +1469,42 @@ const Leads = () => {
                 <option value="Low">Low</option>
               </select> */}
                   <Select
-                    onChange={handleFilterByROLE}
+                    onChange={handleFilterByTeamLead}
                     menuPortalTarget={document.body}
                     styles={customStyles}
-                    options={options_For_Role}
+                    options={teamLeads.map((el) => {
+                      return {
+                        ...el,
+                        value: el._id,
+                        label: el.firstName + " " + el.lastName,
+                      };
+                    })}
                   />
-                  {/* handleFilterByPriority */}
-                  {/* <select className="select floating">
-                <option> -- Select -- </option>
-                <option> High </option>
-                <option> Low </option>
-                <option> Medium </option>
-              </select> */}
-                  <label className="focus-label">Filter By Role</label>
+
+                  <label className="focus-label">Filter By Team Lead </label>
+                </div>
+              </div>
+            )}
+          {role != rolesObj.SPOKE &&
+            role != rolesObj.ACCOUNT &&
+            role != rolesObj.TEAMLEAD && (
+              <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div className="form-group form-focus select-focus">
+                  {/* agents */}
+                  <Select
+                    onChange={handleFilterBySpoke}
+                    menuPortalTarget={document.body}
+                    styles={customStyles}
+                    options={agents.map((el) => {
+                      return {
+                        ...el,
+                        value: el._id,
+                        label: el.firstName + el.lastName,
+                      };
+                    })}
+                  />
+
+                  <label className="focus-label">Filter By Spoke </label>
                 </div>
               </div>
             )}
@@ -1538,11 +1580,11 @@ const Leads = () => {
           </div> */}
         </div>
         {/* /Search Filter */}
-        {/* {console.log("temam,", role)} */}
+        {/* {// console.log("temam,", role)} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
-              {/* {console.log(displayLeadsArr, "displayLeadsArr23||")} */}
+              {/* {// console.log(displayLeadsArr, "displayLeadsArr23||")} */}
               <Table
                 className="table-striped"
                 pagination={{
@@ -1575,16 +1617,16 @@ const Leads = () => {
       {/* /Page Content */}
       {/* Add Lead Modal */}
       <div id="add_Lead" className="modal custom-modal" role="dialog">
-        <div className="col-auto float-end ml-auto">
-          <a
+        {/* <div className="col-auto float-end ml-auto"> */}
+        {/* <a
             href="#"
             className="btn add-btn"
             data-bs-toggle="modal"
             data-bs-target="#view_Lead1"
           >
             <i className="fa fa-plus" />
-          </a>
-        </div>
+          </a> */}
+        {/* </div> */}
         <div
           className="modal-dialog modal-dialog-centered modal-lg"
           role="document"
@@ -1878,7 +1920,7 @@ const Leads = () => {
           </div>
         </div>
       </div>
-      <LeadView />
+
       {/* Update Agent Modal */}
     </div>
   );

@@ -8,7 +8,7 @@ import { costingSheetGet } from "../../redux/features/CostingSheet/CostingSheetS
 
 const ViewCostingSheetForm = () => {
   const location = useLocation();
-  console.log(location.pathname, "location.pathname321");
+  // console.log(location.pathname, "location.pathname321");
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
@@ -46,7 +46,7 @@ const ViewCostingSheetForm = () => {
 
   useEffect(() => {
     if (obj && obj._id) {
-      console.log(obj, "obj43");
+      // console.log(obj, "obj43");
       setLeadName(obj.leadName);
       setLocationName(obj.locationName);
       setProfit(+obj.profit);

@@ -43,7 +43,7 @@ export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE", "ACCOUNT"],
   },
   {
     path: "/admin/employee",
@@ -80,7 +80,7 @@ export default [
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE","ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE", "ACCOUNT"],
   },
   {
     path: "/quotation",

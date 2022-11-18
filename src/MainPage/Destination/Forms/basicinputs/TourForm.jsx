@@ -13,12 +13,12 @@ function AddTour() {
   const [updatedObj, setUpdatedObj] = useState(null);
   useEffect(() => {
     if (tourObj) {
-      console.log(tourObj, "tourObj");
+      // console.log(tourObj, "tourObj");
       setUpdatedObj(tourObj);
     }
-    // console.log(tourObj, "tourObj chec");
+    // // console.log(tourObj, "tourObj chec");
   }, [tourObj]);
-  // console.log(brandObj, "ppop");
+  // // console.log(brandObj, "ppop");
 
   return (
     <main>
@@ -29,7 +29,7 @@ function AddTour() {
           ) : (
             <h5 className="blue-1 mb-4">Add New Tour</h5>
           )}
-          {console.log("called ")}
+          { console.log("called ")}
           <FormData />
         </div>
       </section>
@@ -62,7 +62,7 @@ export default AddTour;
 //   };
 
 //   const handleEdit = (row) => {
-//     console.log(row, "row update"); //whole object
+//     // console.log(row, "row update"); //whole object
 //     // dispatch(quotationUpdate(row));
 //     dispatch(setObj(row));
 //   };

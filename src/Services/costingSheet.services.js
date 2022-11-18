@@ -16,3 +16,7 @@ export const costingDeleteApi = (id) => {
 export const updateApi = (formData, id) => {
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
+
+export const getAll = () => {
+  return axios.get(`${serverUrl}/getAllCostingSheet`);
+};

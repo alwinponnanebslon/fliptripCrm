@@ -19,30 +19,58 @@ import {
   updatefollowUp,
 } from "../../../redux/features/followup/followUpSlice";
 import { Table } from "antd";
+import {
+  getfollowUpApi,
+  getfollowUpCheckForNotificatin,
+} from "../../../Services/followUp";
 
 export const QuotationFollowup = () => {
   const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
-  const toursResultArr = useSelector((state) => state.followUp.followUps);
-  const [tourMainArr, setTourMainArr] = useState([]);
+  const followUpResultArr = useSelector((state) => state.followUp.followUps);
+  const [followUpMainArr, setFollowUpMainArr] = useState([]);
+
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
+  const [followUpCheck, setFollowUpCheck] = useState([]);
+
   const { leadId } = useParams();
+
   useEffect(() => {
     handleInit();
+    handleCheckFollowUpForNotification();
   }, []);
+
+  console.log(followUpCheck, "followUpCheck32");
+  const handleCheckFollowUpForNotification = async () => {
+    let getData = await getfollowUpCheckForNotificatin();
+    setFollowUpCheck(getData.data.data);
+    console.log(getData, "getData2");
+  };
+  //   const getData = async () => {
+  //     console.log("hello");
+  //     let Arr = await followUp.find().lean().exec();
+  //     console.log(Arr, "Ar43");
+  // };
+  // let time = Date.now();
+  // console.log(time, "time23");
+  // setTimeout(getData, time);
 
   const handleInit = () => {
     dispatch(followUpGet(`leadId=${leadId}`));
   };
 
+  for (let el of followUpMainArr) {
+    let temp = el;
+  }
+  console.log(followUpMainArr, "followUpMainArr32");
   useEffect(() => {
-    setTourMainArr(toursResultArr);
-  }, [toursResultArr]);
+    setFollowUpMainArr(followUpResultArr);
+  }, [followUpResultArr]);
 
   const handleEdit = (row) => {
-    console.log(row, "row update"); //whole object
+    // console.log(row, "row update"); //whole object
     dispatch(setfollowUp(row));
   };
 
@@ -212,7 +240,6 @@ export const QuotationFollowup = () => {
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">
-                {" "}
                 <i className="la la-file-text-o" /> Quotation Followup
               </h3>
               <ul className="breadcrumb">
@@ -305,7 +332,7 @@ export const QuotationFollowup = () => {
               <Table
                 className="table-striped"
                 pagination={{
-                  total: tourMainArr.length,
+                  total: followUpMainArr.length,
                   showTotal: (total, range) =>
                     `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                   // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
@@ -313,7 +340,7 @@ export const QuotationFollowup = () => {
                 style={{ overflowX: "auto" }}
                 columns={tour_columns}
                 // bordered
-                dataSource={tourMainArr}
+                dataSource={followUpMainArr}
                 rowKey={(record) => record.id}
               />
             </div>

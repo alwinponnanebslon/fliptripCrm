@@ -15,7 +15,7 @@ const Forms = ({ match }) => (
     {/* match.url == quotation/table
      */}
     {
-      console.log(match, "matchmatch") ///app/quotation/forms*/}
+      // console.log(match, "matchmatch") ///app/quotation/forms*/}
     }
     {/*  http://localhost:8080/app/quotation/table */}
     <Redirect exact from={`${match.url}/`} to={`${match.url}/quotation`} />

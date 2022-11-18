@@ -45,7 +45,7 @@ const Loginpage = (props) => {
   });
 
   const onSubmit = (data) => {
-    // console.log("data", data);
+    // // console.log("data", data);
 
     if (!data.password) {
       setError("password", {

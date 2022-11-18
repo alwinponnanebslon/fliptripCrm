@@ -143,7 +143,7 @@ const ShiftList = () => {
                   // bordered
                   dataSource={data}
                   rowKey={record => record.id}
-                  onChange={console.log("change")}
+                  // onChange={ console.log("change")}
                 />
               </div>
             </div>

@@ -3,8 +3,8 @@ import { url } from "./url.service";
 let serverUrl = `${url}/client`;
 // import { TOURAdd, get } from "../../../../redux/features/tour/tourSlice";
 export const AddClient = (obj) => {
-  console.log(obj, "obj axios");
-  // console.log(serverUrl, "serverUrl");
+  // console.log(obj, "obj axios");
+  // // console.log(serverUrl, "serverUrl");
   return axios.post(`${serverUrl}/add`, obj);
 };
 
@@ -17,6 +17,6 @@ export const deleteClient = (id) => {
 };
 
 export const updateClient = (formData, id) => {
-  console.log(formData, id,"dbcall update")
+  // console.log(formData, id,"dbcall update")
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };

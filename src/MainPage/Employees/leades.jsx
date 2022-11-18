@@ -178,7 +178,7 @@ const Leads = () => {
                 // bordered
                 dataSource={data}
                 rowKey={record => record.id}
-                onChange={console.log("change value")}
+                onChange={ console.log("change value")}
               />
             </div>
           </div>

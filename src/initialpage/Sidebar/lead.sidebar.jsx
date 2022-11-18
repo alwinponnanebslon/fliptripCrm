@@ -42,7 +42,7 @@ const LeadSidebar = (props) => {
   const [startDate1, setStartDate1] = useState(new Date());
 
   const toggleSidebar = (value) => {
-    console.log(value);
+    // // console.log(value);
     setSideMenu(value);
   };
 
@@ -61,7 +61,7 @@ const LeadSidebar = (props) => {
 
   const params = useParams();
   const leadId = params.leadId;
-  console.log(params.leadId, "lead Id ");
+  // // console.log(params.leadId, "lead Id ");
   return (
     <div className="sidebar leadsidebar" id="sidebar">
       <Scrollbars

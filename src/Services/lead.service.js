@@ -21,18 +21,18 @@ export const assignLeadToagent = (id, obj) => {
 };
 
 export const getAllLead = (query) => {
-  // console.log(query, "query");
+  // // console.log(query, "query");
   return axios.get(`${serverUrl}/get?${query}`);
 };
 
-// console.log(getAllLead, "getall ");
+// // console.log(getAllLead, "getall ");
 export const getAllLeadName = (query) => {
-  // console.log(query, "query");
+  // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadName?${query}`);
 };
 
 export const getById = (id) => {
-  // console.log(query, "query");
+  // // console.log(query, "query");
   return axios.get(`${serverUrl}/getById/${id}`);
 };
 

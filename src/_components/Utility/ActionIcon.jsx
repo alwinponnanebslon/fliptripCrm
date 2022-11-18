@@ -38,7 +38,7 @@ function ActionIcon({
   editPath = "/",
   isRedirected,
 }) {
-  // console.log(edit, editPath, onEditClick, "opopo");
+  // // console.log(edit, editPath, onEditClick, "opopo");
   return (
     <ul
       className="d-flex align-items-center gap-2 add-delete-icon"

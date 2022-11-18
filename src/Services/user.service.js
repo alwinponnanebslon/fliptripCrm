@@ -17,16 +17,16 @@ export const getEmployesById = async (id) => {
 };
 
 export const login = async (formData) => {
-  console.log(formData);
+  // console.log(formData);
   return await axios.post(`${serverUrl}/login`, formData);
 };
 
 export const getAllClient = (query) => {
-  // console.log(query, "query");
+  // // console.log(query, "query");
   return axios.get(`${serverUrl}/?${query}`);
 };
 
 export const getAllLeadName = (query) => {
-  // console.log(query, "query");
+  // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadName?${query}`);
 };

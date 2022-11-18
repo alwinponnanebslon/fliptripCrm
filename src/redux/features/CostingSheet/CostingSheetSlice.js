@@ -18,9 +18,8 @@ export const costingSheetGet = createAsyncThunk(
   "costingSheet/costingSheetGet",
   async (query) => {
     try {
-     
       let { data: response } = await get(query);
-      // console.log(response, " response 231 in");
+      // // console.log(response, " response 231 in");
       if (response) {
         toastSuccess(response.message);
         const costingSheets = response.data;
@@ -76,7 +75,7 @@ export const deleteCostingSheet = createAsyncThunk(
         toastSuccess(response.message);
         thunkApi.dispatch(costingSheetGet());
         window.location.reload();
-        // console.log("delete");
+        // // console.log("delete");
       }
     } catch (error) {
       toastError(error);

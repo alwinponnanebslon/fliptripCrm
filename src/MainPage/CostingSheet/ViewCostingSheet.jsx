@@ -17,8 +17,8 @@ import {
 const ViewCostingSheet = () => {
   const params = useParams();
   const leadId = params.leadId;
-  // console.log(params.leadId, "lead Id 34");
-  // console.log("po9")
+  // // console.log(params.leadId, "lead Id 34");
+  // // console.log("po9")
   const dispatch = useDispatch();
 
   const costingSheetObj = useSelector(
@@ -36,7 +36,7 @@ const ViewCostingSheet = () => {
   };
 
   useEffect(() => {
-    // console.log(costingSheetObj, "11costingSheetObj2113");
+    // // console.log(costingSheetObj, "11costingSheetObj2113");
     if (costingSheetObj && costingSheetObj._id) {
       setCostingSheetMainArr([costingSheetObj]);
     }
@@ -44,7 +44,7 @@ const ViewCostingSheet = () => {
   // useEffect(() => {}, [costingSheetMainArr]);
 
   const handleEdit = (row) => {
-    // console.log(row, "row23");
+    // // console.log(row, "row23");
     // window.sessionStorage.setItem("obj", JSON.stringify(row));
     dispatch(setCostingSheet(row));
   };

@@ -7,7 +7,7 @@ export const addfollowUpApi = (obj) => {
 };
 
 export const getfollowUpApi = (query) => {
-  return axios.get(`${serverUrl}/?${query}`)
+  return axios.get(`${serverUrl}/?${query}`);
 };
 export const followUpDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
@@ -15,4 +15,7 @@ export const followUpDeleteApi = (id) => {
 
 export const updatefollowUpApi = (formData, id) => {
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
+};
+export const getfollowUpCheckForNotificatin = () => {
+  return axios.get(`${serverUrl}/getfollowUpCheckForNotification`);
 };

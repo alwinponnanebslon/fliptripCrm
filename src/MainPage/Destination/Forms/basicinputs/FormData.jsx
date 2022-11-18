@@ -27,7 +27,7 @@ const FormData = () => {
   }, []);
 
   const tourObj = useSelector((state) => state.tour.tourObj);
-  console.log(tourObj, "tourobj");
+  // // console.log(tourObj, "tourobj");
 
   useEffect(() => {
     if (tourObj && tourObj.tourName) {
@@ -54,10 +54,10 @@ const FormData = () => {
       tourName,
       description,
     };
-    // console.log(obj, "send Obj");
+    // // console.log(obj, "send Obj");
     if (isUpdateTour) {
-      console.log(isUpdateTour, "isUpdateTou23r");
-      // console.log(obj, "drt");
+      // // console.log(isUpdateTour, "isUpdateTou23r");
+      // // console.log(obj, "drt");
       dispatch(tourUpdate(obj));
     } else {
       dispatch(TOURAdd(obj));

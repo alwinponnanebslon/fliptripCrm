@@ -42,7 +42,7 @@ const Sidebar = (props) => {
   const [startDate1, setStartDate1] = useState(new Date());
 
   const toggleSidebar = (value) => {
-    console.log(value);
+    // console.log(value);
     setSideMenu(value);
   };
 
@@ -58,7 +58,7 @@ const Sidebar = (props) => {
   useEffect(() => {
     setPathName(location.pathname);
   }, [location]);
-  // console.log(pathname, "athName2");///admin/leads athName2
+  // // console.log(pathname, "athName2");///admin/leads athName2
   const { leadId } = useParams();
 
   // useEffect(() => {
@@ -66,8 +66,8 @@ const Sidebar = (props) => {
   //     setLeadId(params.leadId)
   //   }
   // }, [params]);
-  console.log(leadId, "leadidadasdjddij");
-  console.log(props, "leadidadasdjddij");
+  // // console.log(leadId, "leadidadasdjddij");
+  // // console.log(props, "leadidadasdjddij");
   return (
     <div className="sidebar" id="sidebar">
       <Scrollbars
@@ -364,7 +364,7 @@ const Sidebar = (props) => {
             </div>
           </div>
         )}
-         {role == rolesObj.ACCOUNT && (
+        {role == rolesObj.ACCOUNT && (
           <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">
               <ul>
@@ -404,7 +404,6 @@ const Sidebar = (props) => {
                   )}
                 </li>
 
-           
                 <li
                   className={
                     pathname?.includes("leads")

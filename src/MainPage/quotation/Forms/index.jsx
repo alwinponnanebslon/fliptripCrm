@@ -19,7 +19,7 @@ const Forms = ({ match }) => (
   <Switch>
     {/* match.url == quotation/forms  */}
     {
-      console.log(match, "matchmatch") ///app/quotation/forms*/}
+      // console.log(match, "matchmatch") ///app/quotation/forms*/}
     }
     {/*  http://localhost:8080/app/quotation/forms/quotation
      */}
@@ -51,12 +51,12 @@ function AddBrand() {
   const [updatedObj, setUpdatedObj] = useState(null);
   useEffect(() => {
     if (brandObj) {
-      console.log(brandObj, "brandObj");
+      // console.log(brandObj, "brandObj");
       setUpdatedObj(brandObj);
     }
-    console.log(brandObj, "brand chec");
+    // console.log(brandObj, "brand chec");
   }, [brandObj]);
-  // console.log(brandObj, "ppop");
+  // // console.log(brandObj, "ppop");
 
   return (
     <main>

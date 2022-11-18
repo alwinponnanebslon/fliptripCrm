@@ -292,7 +292,7 @@ const LeadView = () => {
                                 <div className="chat-bubble">
                                   <div className="chat-content">
                                     <span className="task-chat-user">
-                                      Team Lead : {leadObj?.agentObj?.firstName}{" "}
+                                      Team Lead : {leadObj?.agentObj?.firstName}
                                       {leadObj?.agentObj?.lastName}
                                     </span>
                                   </div>
