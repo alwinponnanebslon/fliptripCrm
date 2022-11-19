@@ -126,21 +126,6 @@ const ViewCostingSheetForm = () => {
   }, [costingSheetResultObj]);
 
   // useEffect(() => {
-  //   // // console.log(costingSheetResultObj, "costingSheetResultObj23");
-  //   if (isLocation == false) {
-  //     // setTotalCost(quotationObj?.paymentObj?.total);
-  //     // setLandCost(quotationObj?.paymentObj?.landPrice);
-  //     // setflightCost(quotationObj?.paymentObj?.flightPrice);
-  //     // setLocationName(quotationObj?.destinationName);
-  //     // setLeadName(quotationObj?.leadObj?.clientObj?.name);
-  //     // setLeadsId(leadId);
-  //     // setinputList([...quotationObj?.hotelDetail]);
-  //     // setQuotationId(quotationObj._id);
-  //     // console.log("po0");
-  //   }
-  // }, []);
-
-  // useEffect(() => {
   //   // // console.log(tempLocation, "21location");
   //   // if (tempNum1 >= 2) {
   //   // setLeadName("");
@@ -231,7 +216,43 @@ const ViewCostingSheetForm = () => {
       { hotelName: "", hotelAddress: "", cost: "", isBooked: false },
     ]);
   };
+  const handleinputchangeHotel = (e, index) => {
+    const list = [...hotelList];
 
+    const { name, value } = e.target;
+    // // console.log(name, "name");
+    if (name == "rating") {
+      if (value > 6 || value < 1) {
+        toastError("invalid rating, kindly provide valid rating");
+        return;
+      }
+    }
+
+    if (name == "numberOfNight") {
+      if (value < "0" && value) {
+        toastError(`Number of nights cannot be less than 0`);
+        return;
+      }
+      let checkInDate = new Date(list[index]["checkIn"]);
+      let checkOutDate = new Date();
+      checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+      list[index]["checkOut"] = checkOutDate;
+    }
+
+    // console.log(list, "list");
+
+    list[index][name] = value;
+
+    if (
+      list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+      parseInt(durationOfTour)
+    ) {
+      toastError("Total number of nights cannot be more than duration of tour");
+      return;
+    }
+
+    setHotelList([...list]);
+  };
   const handleinputchangeFlight = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
@@ -322,6 +343,7 @@ const ViewCostingSheetForm = () => {
                 Lead Name<span className="text-danger">*</span>
               </label>
               <input
+                readOnly
                 type="text"
                 className="form-control"
                 value={leadName}
@@ -499,6 +521,7 @@ const ViewCostingSheetForm = () => {
                   Land Cost<span className="text-danger">*</span>
                 </label>
                 <input
+                  readOnly
                   type="number"
                   className="form-control"
                   value={landCost}
@@ -510,6 +533,7 @@ const ViewCostingSheetForm = () => {
                   Flight Cost<span className="text-danger">*</span>
                 </label>
                 <input
+                  readOnly
                   type="number"
                   className="form-control"
                   value={flightCost}
@@ -521,6 +545,7 @@ const ViewCostingSheetForm = () => {
                   Total Cost<span className="text-danger">*</span>
                 </label>
                 <input
+                  readOnly
                   type="number"
                   className="form-control"
                   value={totalCost}

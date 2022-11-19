@@ -30,12 +30,16 @@ import {
   getLeadsByRole,
   updateLeadStatus,
   updatelead,
+  getAllLead,
+  getLeadFilterByDate,
 } from "../../Services/lead.service";
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 import { tourGet } from "../../redux/features/tour/tourSlice";
 import { clientGet, setObj } from "../../redux/features/client/clientSlice";
 import LeadView from "./LeadView";
 import LeadDetails from "./LeadDetails";
+import { date } from "yup";
+import { shouldForwardProp } from "@mui/system";
 
 const Leads = () => {
   const dispatch = useDispatch();
@@ -65,25 +69,26 @@ const Leads = () => {
 
   const [email, setEmail] = useState("");
   const [agentId, setAgentId] = useState("");
-  const [leadId, setLeadId] = useState("");
+  let [leadId, setLeadId] = useState("");
   const [spokeId, setSpokeId] = useState("");
   const [desctinationId, setDestinationId] = useState("");
   const [description, setDescription] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [priority, setPriority] = useState("");
 
-
-
   const [selectedLeadId, setSelectedLeadId] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [priorityQuery, setPriorityQuery] = useState("");
   const [roleQuery, setRoleQuery] = useState("");
   const [displayRoleArr, setDisplayRoleArr] = useState([]);
+  ///////////////////////////////////////////
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
 
-  // // console.log(displayLeadsArr, "displayLeadsArr12");
   const agentSelect = useRef();
   const teamLeadSelect = useRef();
   const destinationSelect = useRef();
+
   // // console.log(role, "role23");
   const [data, setData] = useState([
     {
@@ -98,12 +103,6 @@ const Leads = () => {
       status: "New",
     },
   ]);
-
-  // useEffect(() => {
-
-  //   let obj = clientsArr.find(client => client._id == clientId);
-  //   setClientObj(obj)
-  // }, [clientId])
 
   const customStyles = {
     menuPortal: (base) => ({ ...base, zIndex: 9999 }),
@@ -149,14 +148,13 @@ const Leads = () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
       if (res.success) {
-     
         let tempArr = res.data;
 
         if (userAuthorise.role == "SPOKE") {
           let temp = tempArr.filter(
             (el) => `${el.agentId}` == `${userAuthorise?.user?._id}`
           );
-         
+
           setDisplayLeadsArr(temp);
           setLeadsArr(temp);
         } else if (userAuthorise.role == "TEAMLEAD") {
@@ -246,14 +244,29 @@ const Leads = () => {
     //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
     // );
     if (agents && agents.length > 0) {
-      let tempArr = agents.map((el) => {
-        let obj = {
-          label: `${el.firstName} ${el.lastName}`,
-          value: el?._id,
-          leadId: el?.leadId,
-        };
-        return obj;
-      });
+      let tempArr = [];
+      if (leadId != "") {
+        tempArr = agents.map((el) => {
+          let obj = {};
+          if (el.leadId == leadId) {
+            obj = {
+              label: `${el.firstName} ${el.lastName}`,
+              value: el?._id,
+              leadId: el?.leadId,
+            };
+          }
+          return obj;
+        });
+      } else {
+        tempArr = agents.map((el) => {
+          let obj = {
+            label: `${el.firstName} ${el.lastName}`,
+            value: el?._id,
+            leadId: el?.leadId,
+          };
+          return obj;
+        });
+      }
       setAgentsArr([...tempArr]);
     }
   }, [agents]);
@@ -344,6 +357,36 @@ const Leads = () => {
     } else {
       setDisplayLeadsArr([...leadsArr]);
     }
+  };
+
+  const handleFilterDateFrom = async (query) => {
+    setDateFrom(new Date(query).toISOString()); //
+    // query = new Date(query).toISOString();
+    // let getfilterLead = await getLeadFilterByDate(query);
+    // console.log(getfilterLead.data, "getfilterLeafromforfmo");
+    // let getData= getLeadFilter()
+  };
+  const handleFilterDateFromAndTo = async () => {
+    if (dateTo != "" && dateFrom != "") {
+      let getfilterLead = await getLeadFilterByDate(dateFrom, dateTo);
+      console.log(getfilterLead.data.data, "getfilterLeadw4");
+      setDisplayLeadsArr(getfilterLead.data.data);
+      setLeadsArr(getfilterLead.data.data);
+    }
+  };
+
+  //
+  useEffect(() => {
+    handleFilterDateFromAndTo();
+    console.log(dateFrom, "dateFrom32q");
+    console.log(dateTo, "dateFtooto");
+  }, [dateFrom, dateTo]);
+
+  const handleFilterDateTo = async (query) => {
+    setDateTo(new Date(query).toISOString());
+    // query = new Date(query).toISOString();
+    // let getfilterLead = await getLeadFilterByDate(query);
+    // console.log(getfilterLead.data, "1querytotototo");
   };
 
   const handleSubmitLead = async (e) => {
@@ -443,7 +486,6 @@ const Leads = () => {
         toastError("Lead not selected");
         return;
       }
-      // console.log(leadId);
       let obj = {
         agentId: agentId,
       };
@@ -488,6 +530,7 @@ const Leads = () => {
   };
 
   const handleTeamLeadChange = (e) => {
+    console.log(e, "Eeeeeeeee");
     setLeadId(e);
     setAgentId("");
   };
@@ -1337,7 +1380,7 @@ const Leads = () => {
                         <span className="text-success">+12.5%</span>
                       </div> */}
                     </div>
-           
+
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
@@ -1558,6 +1601,36 @@ const Leads = () => {
               <label className="focus-label">Priority</label>
             </div>
           </div>
+          {/* {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && ( */}
+          <div>
+            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+              <div className="form-group form-focus">
+                <input
+                  type="date"
+                  // value={employeeNameQuery}
+                  onChange={(e) => {
+                    handleFilterDateFrom(e.target.value);
+                  }}
+                  className="form-control floating"
+                />
+                <label className="focus-label">From </label>
+              </div>
+            </div>
+            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+              <div className="form-group form-focus">
+                <input
+                  // value={employeeNameQuery}
+                  onChange={(e) => {
+                    handleFilterDateTo(e.target.value);
+                  }}
+                  type="date"
+                  className="form-control floating"
+                />
+                <label className="focus-label">To </label>
+              </div>
+            </div>
+          </div>
+          {/* )} */}
 
           {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
@@ -1584,7 +1657,6 @@ const Leads = () => {
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
-              {/* {// console.log(displayLeadsArr, "displayLeadsArr23||")} */}
               <Table
                 className="table-striped"
                 pagination={{
@@ -1743,9 +1815,27 @@ const Leads = () => {
                   role != rolesObj.SPOKE &&
                   role != rolesObj.ACCOUNT && (
                     <div className="col-md-6">
+                      {console.log(agentsArr, "agentsArr23")}
                       <div className="form-group">
-                        <label>Assign to Team Lead ({agentsArr.length})</label>
-                        {/* setLeadId(e.target.value); */}
+                        <label>
+                          Assign to Team Lead ({teamLeadsArr.length})
+                        </label>
+                        {/* <Select
+                          options={teamLeadsArr.map((el) => {
+                            return { ...el, value: el._id, label: el.name };
+                          })}
+                          placeholder="Select from options"
+                          defaultInputValue={leadId}
+                          // value={stateObj}
+                          onChange={(e) => {
+                            console.log(e, "asd");
+                            // setStateId(e.value);
+                            // setStateObj(e);
+                          }}
+                        >
+                          {" "}
+                          <option value=""> --- Select Team Lead</option>
+                        </Select> */}
                         <select
                           className="select form-control"
                           value={leadId}
@@ -1753,6 +1843,7 @@ const Leads = () => {
                             handleTeamLeadChange(e.target.value);
                           }}
                         >
+                          {console.log(teamLeadsArr, "teamLeadsArr23")}
                           <option value=""> --- Select Team Lead</option>
                           {teamLeadsArr &&
                             teamLeadsArr.map((agent, i) => {
@@ -1763,12 +1854,6 @@ const Leads = () => {
                               );
                             })}
                         </select>
-                        {/* <Select
-                            ref={teamLeadSelect}
-                            // defaultInputValue={{ value: leadId }}
-                            onChange={handleTeamLeadChange}
-                            options={teamLeadsArr}
-                          /> */}
                       </div>
                     </div>
                   )}
@@ -1795,11 +1880,6 @@ const Leads = () => {
                             );
                           })}
                       </select>
-                      {/* <Select
-                          ref={agentSelect}
-                          onChange={handleAgentChange}
-                          options={agentsArr}
-                        /> */}
                     </div>
                   </div>
                 )}

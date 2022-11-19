@@ -20,3 +20,6 @@ export const updateApi = (formData, id) => {
 export const getAll = () => {
   return axios.get(`${serverUrl}/getAllCostingSheet`);
 };
+export const getAllCost = () => {
+  return axios.get(`${serverUrl}/getAllCost`);
+};

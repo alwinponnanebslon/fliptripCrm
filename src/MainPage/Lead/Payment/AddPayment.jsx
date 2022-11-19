@@ -43,7 +43,7 @@ export const AddPayment = () => {
 
   const [flightCharges, setFlightCharges] = useState(0);
   const [landCharges, setLandCharges] = useState(0);
-  const [tcs, setTcs] = useState(0);
+  const [tcs, setTcs] = useState(1);
   const [total, setTotal] = useState(0);
   const [paymentReceviedArr, setPaymentReceviedArr] = useState([
     {
@@ -60,7 +60,7 @@ export const AddPayment = () => {
   const [invoiceNo, setInvoiceNo] = useState("");
   const [invoiceDate, setInvoiceDate] = useState("");
   const [invoiceDescription, setInvoiceDescription] = useState("");
-  const [invoiceAmount, setInvoiceAmount] = useState(0);
+  const [invoiceAmount, setInvoiceAmount] = useState(1);
   const [invoiceId, setInvoiceId] = useState("");
 
   const [emiArr, setEmiArr] = useState([
@@ -76,12 +76,16 @@ export const AddPayment = () => {
     handleInit();
   }, []);
 
+  useEffect(() => {
+    console.log(quotationStateArr, "quotationStateArr");
+  }, [quotationStateArr]);
+
   const handleInit = () => {
     dispatch(quotationGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
-    // console.log(quotationPaymentObj, "quotationPaymentObj")
+    console.log(quotationPaymentObj, "q32uotationPaymentObj");
     setPaymentObj(quotationPaymentObj);
   }, [quotationPaymentObj]);
 
@@ -108,10 +112,14 @@ export const AddPayment = () => {
         setIsQuotationapproved(true);
         setSelectedQuotation(tempObj);
         setFlightCharges(
-          tempObj?.perPersonAirPortPrice ? tempObj?.perPersonAirPortPrice : 0
+          tempObj?.perPersonAirPortPrice
+            ? tempObj?.perPersonAirPortPrice * tempObj?.numberOfGuest
+            : 0
         );
         setLandCharges(
-          tempObj?.perPersonLandPrice ? tempObj?.perPersonLandPrice : 0
+          tempObj?.perPersonLandPrice
+            ? tempObj?.perPersonLandPrice * tempObj?.numberOfGuest
+            : 0
         );
         setQuotationId(tempObj._id);
         // console.log(tempObj, "quotationId")
@@ -213,8 +221,6 @@ export const AddPayment = () => {
   useEffect(() => {
     setPerfomaInvoiceArr(payMentInvoiceArr);
   }, [payMentInvoiceArr]);
-
-
 
   useEffect(() => {
     if (perfomaInvoiceObj) {
@@ -424,13 +430,13 @@ export const AddPayment = () => {
                             />{" "}
                           </td>
                           <td>
-                            <textarea
+                            <input
                               onChange={(e) => {
                                 handlePaymentInput(e, index);
                               }}
                               name="transferStatus"
                               value={item.transferStatus}
-                            ></textarea>
+                            ></input>
                           </td>
                           <td>
                             <input

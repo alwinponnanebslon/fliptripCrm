@@ -37,16 +37,16 @@ import "../../index.css";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
 import { getLeadsByRole } from "../../../Services/lead.service";
-import { getAll } from "../../../Services/costingSheet.services";
+import { getAll, getAllCost } from "../../../Services/costingSheet.services";
 
 const barchartdata = [
-  { y: "2006", "Total Income": 100, "Total Outcome": 190 },
-  { y: "2007", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2008", "Total Income": 50, "Total Outcome": 40 },
-  { y: "2009", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2010", "Total Income": 50, "Total Outcome": 40 },
-  { y: "2011", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2012", "Total Income": 100, "Total Outcome": 90 },
+  { y: "2006", "Total Lead": 100, "Total Convert Lead": 190 },
+  { y: "2007", "Total Lead": 75, "Total Convert Lead": 65 },
+  { y: "2008", "Total Lead": 50, "Total Convert Lead": 40 },
+  { y: "2009", "Total Lead": 75, "Total Convert Lead": 65 },
+  { y: "2010", "Total Lead": 50, "Total Convert Lead": 40 },
+  { y: "2011", "Total Lead": 75, "Total Convert Lead": 65 },
+  { y: "2012", "Total Lead": 100, "Total Convert Lead": 90 },
 ];
 const showDataInTabularForm = [];
 // leadsArr.map((x)=>{x.createdAt})
@@ -66,11 +66,13 @@ const AdminDashboard = () => {
 
   const [displayCostingSheetArr, setDisplayCostingSheetArr] = useState([]);
   const [costingSheetArr, setCostingSheetArr] = useState([]);
+  const [displayAllCostObj, setDisplayAllCostObj] = useState({});
+  const [allCostObj, setAllCostObj] = useState({});
 
   let role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const userAuthorise = useSelector((state) => state.auth);
-  console.log(role, "role213");
+  // console.log(role, "role213");
 
   const [menu, setMenu] = useState(false);
   const toggleMobileMenu = () => {
@@ -136,10 +138,23 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
+  const handleGetTotalCost = async () => {
+    try {
+      let { data: res } = await getAllCost();
+      console.log(res, "getAllcost4");
+      if (res.success) {
+        setDisplayAllCostObj(res.data);
+        setAllCostObj(res.data);
+      }
+    } catch (error) {
+      toastError(error);
+    }
+  };
 
   useEffect(() => {
     handleGetAllLeads();
     handleGetCostingSheet();
+    handleGetTotalCost();
   }, []);
 
   let closedLeadArr = [];
@@ -165,7 +180,7 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
-
+  let GettodayDay = new Date().getDate();
   return (
     <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>
       <Header onMenuClick={(value) => toggleMobileMenu()} />
@@ -350,8 +365,8 @@ const AdminDashboard = () => {
                           <YAxis />
                           <Tooltip />
                           <Legend />
-                          <Bar dataKey="Total Income" fill="#ff9b44" />
-                          <Bar dataKey="Total Outcome" fill="#fc6075" />
+                          <Bar dataKey="Total Lead" fill="#ff9b44" />
+                          <Bar dataKey="Total Convert Lead" fill="#fc6075" />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -438,13 +453,16 @@ const AdminDashboard = () => {
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
-                        <span className="d-block">Earnings</span>
+                        <span className="d-block">Total Cost</span>
                       </div>
                       <div>
                         {/* <span className="text-success">+12.5%</span> */}
                       </div>
                     </div>
-                    <h3 className="mb-3">$1,42,300</h3>
+                    <h3 className="mb-3">
+                      ₹ {allCostObj.totalCostingCurrentMonth}
+                    </h3>
+                    {/* <h3 className="mb-3">$1,42,300</h3> */}
                     <div className="progress mb-2" style={{ height: "5px" }}>
                       <div
                         className="progress-bar bg-primary"
@@ -455,10 +473,12 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    {/* <p className="mb-0">
+                    <p className="mb-0">
                       Previous Month{" "}
-                      <span className="text-muted">$1,15,852</span>
-                    </p> */}
+                      <span className="text-muted">
+                        ₹ {allCostObj.totalCostingPreviousMonth}
+                      </span>
+                    </p>
                   </div>
                 </div>
                 {/*
@@ -473,33 +493,10 @@ const AdminDashboard = () => {
                         {/* <span className="text-danger">-2.8%</span> */}
                       </div>
                     </div>
-                    {/* <h3 className="mb-3">$8,500</h3> */}
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                    {/* <p className="mb-0">
-                      Previous Month <span className="text-muted">$7,500</span>
-                    </p> */}
-                  </div>
-                </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Profit</span>
-                      </div>
-                      <div>
-                        <span className="text-danger">-75%</span>
-                      </div>
-                    </div>
-                    <h3 className="mb-3">$1,12,0009</h3>
+
+                    <h3 className="mb-3">
+                      ₹ {allCostObj.totalExpenseCurrentMonth}
+                    </h3>
                     <div className="progress mb-2" style={{ height: "5px" }}>
                       <div
                         className="progress-bar bg-primary"
@@ -512,7 +509,40 @@ const AdminDashboard = () => {
                     </div>
                     <p className="mb-0">
                       Previous Month{" "}
-                      <span className="text-muted">$1,42,000</span>
+                      <span className="text-muted">
+                        ₹ {allCostObj.totalExpensePreviousMonth}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between mb-3">
+                      <div>
+                        <span className="d-block">Profit</span>
+                      </div>
+                      {/* <div>
+                        <span className="text-danger">-75%</span>
+                      </div> */}
+                    </div>
+                    <h3 className="mb-3">
+                      ₹ {allCostObj.totalProfitCurrentMonth}
+                    </h3>
+                    <div className="progress mb-2" style={{ height: "5px" }}>
+                      <div
+                        className="progress-bar bg-primary"
+                        role="progressbar"
+                        style={{ width: "70%" }}
+                        aria-valuenow={40}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
+                    <p className="mb-0">
+                      Previous Month{" "}
+                      <span className="text-muted">
+                        ₹ {allCostObj.totalProfitPreviousMonth}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -644,11 +674,16 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="progress mb-4">
-                    <div
+                  {/* <div className="progress mb-4"> */}
+                  {/* <div
                       className="progress-bar bg-purple"
                       role="progressbar"
-                      style={{ width: "30%" }}
+                      style={{
+                        width:
+                          closedLeadArr.length > 0
+                            ? (closedLeadArr.length / leadsArr.length) * 100
+                            : 0,
+                      }}
                       aria-valuenow={30}
                       aria-valuemin={0}
                       aria-valuemax={100}
@@ -657,11 +692,16 @@ const AdminDashboard = () => {
                         ? (closedLeadArr.length / leadsArr.length) * 100
                         : 0}
                       %
-                    </div>
-                    <div
+                    </div> */}
+                  {/* <div
                       className="progress-bar bg-warning"
                       role="progressbar"
-                      style={{ width: "22%" }}
+                      style={{
+                        width:
+                          closedLeadArr.length > 0
+                            ? (closedLeadArr.length / leadsArr.length) * 100
+                            : 0 + "%",
+                      }}
                       aria-valuenow={18}
                       aria-valuemin={0}
                       aria-valuemax={100}
@@ -670,8 +710,8 @@ const AdminDashboard = () => {
                         ? (inProgressArr.length / leadsArr.length) * 100
                         : 0}
                       %
-                    </div>
-                    <div
+                    </div> */}
+                  {/* <div
                       className="progress-bar bg-success"
                       role="progressbar"
                       style={{ width: "24%" }}
@@ -683,8 +723,8 @@ const AdminDashboard = () => {
                         ? (onHoldArr.length / leadsArr.length) * 100
                         : 0}
                       %
-                    </div>
-                    {/* <div
+                    </div> */}
+                  {/* <div
                       className="progress-bar bg-danger"
                       role="progressbar"
                       style={{ width: "26%" }}
@@ -697,7 +737,7 @@ const AdminDashboard = () => {
                         : 0}
                       %
                     </div> */}
-                    <div
+                  {/* <div
                       className="progress-bar bg-info"
                       role="progressbar"
                       style={{ width: "10%" }}
@@ -709,8 +749,8 @@ const AdminDashboard = () => {
                         ? (declinedArr.length / leadsArr.length) * 100
                         : 0}
                       %
-                    </div>
-                  </div>
+                    </div> */}
+                  {/* </div> */}
                   <div>
                     <p>
                       <i className="fa fa-dot-circle-o text-purple me-2" />
