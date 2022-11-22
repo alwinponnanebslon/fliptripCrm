@@ -168,6 +168,11 @@ const Sidebar = (props) => {
                     <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
+                <li className={pathname?.includes("remainder") ? "active" : ""}>
+                  <Link to="/admin/remainder">
+                    <i className="la la-adjust" /> <span>Remainder</span>
+                  </Link>
+                </li>
                 {/* <li
                   className={
                     pathname?.includes("costing sheet") ? "active" : ""
@@ -190,6 +195,16 @@ const Sidebar = (props) => {
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
+
+                {/* <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
+                  }
+                ></li> */}
               </ul>
             </div>
           </div>
@@ -241,7 +256,7 @@ const Sidebar = (props) => {
                       toggleSidebar(isSideMenu == "employee" ? "" : "employee")
                     }
                   >
-                    <i className="la la-user" />{" "}
+                    <i className="la la-user" />
                     <span className="noti-dot"> Employees</span>{" "}
                     <span className="menu-arrow" />
                   </a>
@@ -275,7 +290,7 @@ const Sidebar = (props) => {
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >
                   <Link to="/admin/destinations">
-                    <i className="la la-globe" /> <span>Destinations22</span>
+                    <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
                 <li
@@ -289,6 +304,11 @@ const Sidebar = (props) => {
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+                <li className={pathname?.includes("remainder") ? "active" : ""}>
+                  <Link to="/admin/remainder">
+                    <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
               </ul>
@@ -344,7 +364,7 @@ const Sidebar = (props) => {
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >
                   <Link to="/admin/destinations">
-                    <i className="la la-globe" /> <span>Destinations11</span>
+                    <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
                 <li
@@ -358,6 +378,11 @@ const Sidebar = (props) => {
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+                <li className={pathname?.includes("remainder") ? "active" : ""}>
+                  <Link to="/admin/remainder">
+                    <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
               </ul>
@@ -415,6 +440,11 @@ const Sidebar = (props) => {
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+                <li className={pathname?.includes("remainder") ? "active" : ""}>
+                  <Link to="/admin/remainder">
+                    <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
               </ul>

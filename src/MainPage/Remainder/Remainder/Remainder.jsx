@@ -11,43 +11,46 @@ import {
   setTour,
   addTour,
 } from "../../../redux/features/tour/tourSlice";
-import AddFolowUp from "./AddFolowUp";
-import {
-  followUpGet,
-  setfollowUp,
-  deletefollowUp,
-  updatefollowUp,
-} from "../../../redux/features/followup/followUpSlice";
-import { Table } from "antd";
-import {
-  getfollowUpApi,
-  getfollowUpCheckForNotificatin,
-} from "../../../Services/followUp";
+import AddRemainder from "./AddRemainder";
 
-export const QuotationFollowup = () => {
+import {
+  deleteRemainder,
+  remainderGet,
+  updateRemainder,
+  setRemainder,
+} from "../../../redux/features/remainder/remainderSlice";
+
+import { Table } from "antd";
+
+// import {
+//   getfollowUpApi,
+//   getfollowUpCheckForNotificatin,
+// } from "../../../Services/followUp";
+
+export const GeneralRemainder = () => {
   const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
-  const followUpResultArr = useSelector((state) => state.followUp.followUps);
-  const [followUpMainArr, setFollowUpMainArr] = useState([]);
+  const remainderResultArr = useSelector((state) => state.remainder.remainders);
+  const [remainderArr, setRemainderArr] = useState([]);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
   const [followUpCheck, setFollowUpCheck] = useState([]);
-
+  const userLeadId = useSelector((state) => state.auth?.user?._id);
   const { leadId } = useParams();
 
   useEffect(() => {
     handleInit();
-    handleCheckFollowUpForNotification();
+    // handleCheckFollowUpForNotification();
   }, []);
 
-  // console.log(followUpCheck, "followUpCheck32");
-  const handleCheckFollowUpForNotification = async () => {
-    let getData = await getfollowUpCheckForNotificatin();
-    setFollowUpCheck(getData.data.data);
-    // console.log(getData, "getData2");
-  };
+  console.log(followUpCheck, "followUpCheck32");
+  // const handleCheckFollowUpForNotification = async () => {
+  //   let getData = await getfollowUpCheckForNotificatin();
+  //   setFollowUpCheck(getData.data.data);
+  //   console.log(getData, "getData2");
+  // };
   //   const getData = async () => {
   //     console.log("hello");
   //     let Arr = await followUp.find().lean().exec();
@@ -58,24 +61,22 @@ export const QuotationFollowup = () => {
   // setTimeout(getData, time);
 
   const handleInit = () => {
-    dispatch(followUpGet(`leadId=${leadId}`));
+    dispatch(remainderGet(`leadId=${userLeadId}`));
+    // dispatch(quotationGet(`leadId=${leadId}`));
   };
 
-  for (let el of followUpMainArr) {
-    let temp = el;
-  }
-  console.log(followUpMainArr, "followUpMainArr32");
+  console.log(remainderArr, "remainderArr32");
   useEffect(() => {
-    setFollowUpMainArr(followUpResultArr);
-  }, [followUpResultArr]);
+    setRemainderArr(remainderResultArr);
+  }, [remainderResultArr]);
 
   const handleEdit = (row) => {
     // console.log(row, "row update"); //whole object
-    dispatch(setfollowUp(row));
+    dispatch(setRemainder(row));
   };
 
-  const handleFollowupDelete = (id) => {
-    dispatch(deletefollowUp({ id, leadId }));
+  const handleRemainderDelete = (id) => {
+    dispatch(deleteRemainder({ id, leadId: userLeadId }));
   };
 
   const handleSatus = (row, status) => {
@@ -85,12 +86,17 @@ export const QuotationFollowup = () => {
       status: status,
     };
 
-    dispatch(updatefollowUp(obj));
+    dispatch(updateRemainder(obj));
   };
 
   const tour_columns = [
+    // {
+    //   title: "Assign to ",
+    //   dataIndex: "assign",
+    //   sorter: (a, b) => a.heading.length - b.heading.length,
+    // },
     {
-      title: "Heading",
+      title: "Heading ",
       dataIndex: "heading",
       sorter: (a, b) => a.heading.length - b.heading.length,
     },
@@ -101,49 +107,65 @@ export const QuotationFollowup = () => {
       sorter: (a, b) => a.description.length - b.description.length,
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      sorter: (a, b) => a.followDate.length - b.followDate.length,
+      title: "Remainder Date",
+      dataIndex: "followDate",
+      sorter: (a, b) => new Date(a.followDate + "").toLocaleDateString(),
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      render: (row, record) => (
-        <div className="dropdown">
-          <a
-            href="#"
-            className="btn btn-white btn-sm btn-rounded dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i
-              className={
-                record.status === true
-                  ? "fa fa-dot-circle-o text-success"
-                  : "fa fa-dot-circle-o text-danger"
-              }
-            />{" "}
-            {record.status == true ? "Active" : "Inactive"}{" "}
-          </a>
-          <div className="dropdown-menu">
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => handleSatus(record, true)}
-            >
-              <i className="fa fa-dot-circle-o text-success" /> Active
-            </a>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => handleSatus(record, false)}
-            >
-              <i className="fa fa-dot-circle-o text-danger" /> Inactive
-            </a>
-          </div>
-        </div>
-      ),
+      title: "remainder Time",
+      dataIndex: "followTime",
+      sorter: (a, b) => a.followTime.length,
     },
+    // {
+    //   title: "Remainder Date",
+    //   dataIndex: "followDate",
+    //   sorter: (a, b) => new Date(a.followDate + "").toDateString(),
+    //   // -        new Date(b.followDate + "").toLocaleString(),
+    //   // render: (a) =>
+    //   //   <div className="dropdown action-label">
+    //   // new Date(a.followDate + "").toLocaleString(),
+    //   //   </div>
+    //   //  - b.followDate,
+    // },
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   render: (row, record) => (
+    //     <div className="dropdown">
+    //       <a
+    //         href="#"
+    //         className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+    //         data-bs-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i
+    //           className={
+    //             record.status === true
+    //               ? "fa fa-dot-circle-o text-success"
+    //               : "fa fa-dot-circle-o text-danger"
+    //           }
+    //         />{" "}
+    //         {record.status == true ? "Active" : "Inactive"}{" "}
+    //       </a>
+    //       <div className="dropdown-menu">
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, true)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-success" /> Active
+    //         </a>
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, false)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-danger" /> Inactive
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
 
     {
       title: "Action",
@@ -161,14 +183,14 @@ export const QuotationFollowup = () => {
             <a
               className="dropdown-item"
               data-bs-toggle="modal"
-              data-bs-target="#add_followup"
+              data-bs-target="#add_Remainder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
             <a
               className="dropdown-item"
-              onClick={() => handleFollowupDelete(row._id)}
+              onClick={() => handleRemainderDelete(row._id)}
             >
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a>
@@ -179,65 +201,65 @@ export const QuotationFollowup = () => {
   ];
 
   const options = [
-    { value: "Goa", label: "Goa" },
-    { value: "Europe", label: "Europe" },
-    { value: "Bali", label: "Bali" },
-    { value: "Switzerland", label: "Switzerland" },
+    //   { value: "Goa", label: "Goa" },
+    //   { value: "Europe", label: "Europe" },
+    //   { value: "Bali", label: "Bali" },
+    //   { value: "Switzerland", label: "Switzerland" },
   ];
   const options1 = [
-    { value: "January", label: "January" },
-    { value: "February", label: "February" },
-    { value: "March", label: "March" },
-    { value: "April", label: "April" },
-    { value: "May", label: "May" },
-    { value: "June", label: "June" },
-    { value: "July", label: "July" },
-    { value: "August", label: "August" },
-    { value: "September	", label: "September	" },
-    { value: "October	", label: "October	" },
-    { value: "November", label: "November" },
-    { value: "December", label: "December" },
+    // { value: "January", label: "January" },
+    // { value: "February", label: "February" },
+    // { value: "March", label: "March" },
+    // { value: "April", label: "April" },
+    // { value: "May", label: "May" },
+    // { value: "June", label: "June" },
+    // { value: "July", label: "July" },
+    // { value: "August", label: "August" },
+    // { value: "September	", label: "September	" },
+    // { value: "October	", label: "October	" },
+    // { value: "November", label: "November" },
+    // { value: "December", label: "December" },
   ];
   const options2 = [
-    {
-      value: "Still dreaming not sure Im going to take this trip",
-      label: "Still dreaming  not sure Im going to take this trip",
-    },
-    {
-      value: "Im definitely goingI know which place let go!",
-      label: "Im definitely goingI know which place let go!",
-    },
-    { value: "In Progress", label: "In Progress" },
+    // {
+    //   value: "Still dreaming not sure Im going to take this trip",
+    //   label: "Still dreaming  not sure Im going to take this trip",
+    // },
+    // {
+    //   value: "Im definitely goingI know which place let go!",
+    //   label: "Im definitely goingI know which place let go!",
+    // },
+    // { value: "In Progress", label: "In Progress" },
   ];
   const options3 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
+    // { value: "Active", label: "Active" },
+    // { value: "Hot", label: "Me" },
+    // { value: "in progrees", label: "in progrees" },
+    // { value: "Book Know", label: "Book Know" },
   ];
   const options4 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
+    // { value: "Active", label: "Active" },
+    // { value: "Hot", label: "Me" },
+    // { value: "in progrees", label: "in progrees" },
+    // { value: "Book Know", label: "Book Know" },
   ];
   const options5 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
+    // { value: "Active", label: "Active" },
+    // { value: "Hot", label: "Me" },
+    // { value: "in progrees", label: "in progrees" },
+    // { value: "Book Know", label: "Book Know" },
   ];
   const options6 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
+    // { value: "Active", label: "Active" },
+    // { value: "Hot", label: "Me" },
+    // { value: "in progrees", label: "in progrees" },
+    // { value: "Book Know", label: "Book Know" },
   ];
 
   return (
     <div className="page-wrapper">
       <Helmet>
-        <title>Create Qoute</title>
+        <title>Create Remainder</title>
         <meta name="description" content="Login page" />
       </Helmet>
       <div className="container-fluid p-0">
@@ -245,13 +267,13 @@ export const QuotationFollowup = () => {
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">
-                <i className="la la-file-text-o" /> Quotation Followup
+                <i className="la la-file-text-o" /> General Remainder
               </h3>
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
                   <Link to="/app/main/dashboard">Dashboard</Link>
                 </li>
-                <li className="breadcrumb-item active">Quotation Followup</li>
+                <li className="breadcrumb-item active"> General Remainder</li>
               </ul>
             </div>
 
@@ -260,13 +282,13 @@ export const QuotationFollowup = () => {
                 href="#"
                 className="btn add-btn"
                 data-bs-toggle="modal"
-                data-bs-target="#add_followup"
+                data-bs-target="#add_Remainder"
               >
-                <i className="fa fa-plus" /> Add Followup
+                <i className="fa fa-plus" /> Add Remainder
               </a>
             </div>
           </div>
-          <div className="list_group_qoute pt-5">
+          {/* <div className="list_group_qoute pt-5">
             <div className="row">
               <div className="col-lg-12">
                 <div className="list_qoute">
@@ -293,9 +315,9 @@ export const QuotationFollowup = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="drp-area">
+        {/* <div className="drp-area">
           <div className="row">
             <div className="col-lg-2">
               <Select options={options} placeholder="Destinations " />
@@ -330,30 +352,30 @@ export const QuotationFollowup = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+        {console.log(remainderArr, "remainderArr12")}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
               <Table
                 className="table-striped"
                 pagination={{
-                  total: followUpMainArr.length,
+                  total: remainderArr.length,
                   showTotal: (total, range) =>
                     `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                   // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
                 }}
                 style={{ overflowX: "auto" }}
                 columns={tour_columns}
-                // bordered
-                dataSource={followUpMainArr}
+                dataSource={remainderArr}
                 rowKey={(record) => record.id}
               />
             </div>
           </div>
         </div>
-        <AddFolowUp />
+        <AddRemainder />
       </div>
     </div>
   );
 };
-export default QuotationFollowup;
+export default GeneralRemainder;

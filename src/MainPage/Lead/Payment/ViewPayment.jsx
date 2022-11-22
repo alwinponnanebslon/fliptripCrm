@@ -357,7 +357,7 @@ export const ViewPayment = () => {
             </div>
             <hr />
 
-            <div style={{ fontSize: 19 }}>Payment Received Details</div>
+            <div style={{ fontSize: 19 }}>Payment Details</div>
 
             <div className="row">
               <div className="col-md-12">
@@ -506,8 +506,7 @@ export const ViewPayment = () => {
                           className="btn add-btn"
                           onClick={handlePerfomaInvoiceSubmit}
                         >
-                          {" "}
-                          Save{" "}
+                          Save
                         </button>
                       </div>
                     </form>

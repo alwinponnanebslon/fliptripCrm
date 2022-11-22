@@ -291,7 +291,6 @@ const Quotation = () => {
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">
-                {" "}
                 <i className="la la-file" /> Create Quote
               </h3>
               <ul className="breadcrumb">

@@ -11,6 +11,7 @@ import { addEmployeeToDb, getEmployess } from "../../Services/user.service";
 import { rolesObj } from "../../utils/roles";
 import { toastError, toastSuccess } from "../../utils/toastUtils";
 import styles from "./selectStyles.module.css";
+
 const Addemployee = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -118,6 +119,7 @@ const Addemployee = () => {
       toastError(error);
     }
   };
+
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployess(userObj._id, reduxrole);
@@ -130,6 +132,7 @@ const Addemployee = () => {
       toastError(error);
     }
   };
+
   useEffect(() => {
     if (employees && employees.length > 0) {
       setTeamLeadsArr(employees.filter((el) => el.role == rolesObj.TEAMLEAD));
@@ -528,6 +531,7 @@ const Addemployee = () => {
                   <button
                     className="btn btn-primary submit-btn"
                     onClick={(e) => handleEmployeeCreate(e)}
+                    data-bs-dismiss="modal"
                   >
                     Submit
                   </button>

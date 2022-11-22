@@ -38,6 +38,9 @@ import Quotation from "../MainPage/quotation";
 import Destination from "../MainPage/Destination";
 import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
 import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
+//remainder
+
+import Remainder from "../MainPage/Remainder/Remainder/Remainder";
 
 export default [
   {
@@ -85,6 +88,11 @@ export default [
   {
     path: "/quotation",
     component: Quotation,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  },
+  {
+    path: "/admin/remainder",
+    component: Remainder,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
 

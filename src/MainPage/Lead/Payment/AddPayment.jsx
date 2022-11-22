@@ -494,7 +494,7 @@ export const AddPayment = () => {
               </button>
             </div>
 
-            <div style={{ fontSize: 19 }}>Perfoma Invoice</div>
+            <div style={{ fontSize: 19 }}>Payment Invoice</div>
 
             <div className="row">
               <div className="col-md-12">

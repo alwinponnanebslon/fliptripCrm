@@ -11,6 +11,7 @@ import noteReducer from "./features/note/noteSlice";
 import costingSheetReducer from "./features/CostingSheet/CostingSheetSlice";
 import paymentReducer from "./features/payment/paymentSlice";
 import paymentInvoiceReducer from "./features/paymentInvoice/paymentInvoiceSlice";
+import remainderReducer from "./features/remainder/remainderSlice";
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   costingSheet: costingSheetReducer,
   payment: paymentReducer,
   paymentInvoice: paymentInvoiceReducer,
+  remainder: remainderReducer,
 });
 
 export default rootReducer;

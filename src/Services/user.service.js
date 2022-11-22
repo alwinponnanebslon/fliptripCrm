@@ -30,3 +30,6 @@ export const getAllLeadName = (query) => {
   // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadName?${query}`);
 };
+export const getAllEmployess = async () => {
+  return await axios.get(`${serverUrl}/getAllEmployes`);
+};

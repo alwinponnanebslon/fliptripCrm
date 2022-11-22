@@ -36,29 +36,40 @@ import Sidebar from "../../../initialpage/Sidebar/sidebar";
 import "../../index.css";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
-import { getLeadsByRole } from "../../../Services/lead.service";
-import { getAll, getAllCost } from "../../../Services/costingSheet.services";
 
-const barchartdata = [
-  { y: "2006", "Total Lead": 100, "Total Convert Lead": 190 },
-  { y: "2007", "Total Lead": 75, "Total Convert Lead": 65 },
-  { y: "2008", "Total Lead": 50, "Total Convert Lead": 40 },
-  { y: "2009", "Total Lead": 75, "Total Convert Lead": 65 },
-  { y: "2010", "Total Lead": 50, "Total Convert Lead": 40 },
-  { y: "2011", "Total Lead": 75, "Total Convert Lead": 65 },
-  { y: "2012", "Total Lead": 100, "Total Convert Lead": 90 },
-];
-const showDataInTabularForm = [];
+import {
+  getLeadsByRole,
+  getAllLeadOfTenDays,
+  getLeadFilterByDate,
+} from "../../../Services/lead.service";
+
+import {
+  getAll,
+  getAllCost,
+  getAllSalesOfTenDays,
+} from "../../../Services/costingSheet.services";
+
+import { date } from "yup/lib/locale.js";
+
+// const barchartdata = [
+//   { y: "2006", "Total Lead": 200, "Total Convert Lead": 190 },
+//   { y: "2007", "Total Lead": 75, "Total Convert Lead": 65 },
+//   { y: "2008", "Total Lead": 50, "Total Convert Lead": 40 },
+//   { y: "2009", "Total Lead": 75, "Total Convert Lead": 65 },
+//   { y: "2010", "Total Lead": 50, "Total Convert Lead": 40 },
+//   { y: "2011", "Total Lead": 75, "Total Convert Lead": 65 },
+//   { y: "2012", "Total Lead": 100, "Total Convert Lead": 90 },
+// ];
 // leadsArr.map((x)=>{x.createdAt})
-const linechartdata = [
-  { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
-  { y: "2007", "Total Sales": 75, "Total Revenue": 65 },
-  { y: "2008", "Total Sales": 50, "Total Revenue": 40 },
-  { y: "2009", "Total Sales": 75, "Total Revenue": 65 },
-  { y: "2010", "Total Sales": 50, "Total Revenue": 40 },
-  { y: "2011", "Total Sales": 75, "Total Revenue": 65 },
-  { y: "2012", "Total Sales": 100, "Total Revenue": 50 },
-];
+// const linechartdata = [
+//   { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
+//   { y: "2007", "Total Sales": 75, "Total Revenue": 65 },
+//   { y: "2008", "Total Sales": 50, "Total Revenue": 40 },
+//   { y: "2009", "Total Sales": 75, "Total Revenue": 65 },
+//   { y: "2010", "Total Sales": 50, "Total Revenue": 40 },
+//   { y: "2011", "Total Sales": 75, "Total Revenue": 65 },
+//   { y: "2012", "Total Sales": 100, "Total Revenue": 50 },
+// ];
 
 const AdminDashboard = () => {
   const [leadsArr, setLeadsArr] = useState([]);
@@ -68,13 +79,17 @@ const AdminDashboard = () => {
   const [costingSheetArr, setCostingSheetArr] = useState([]);
   const [displayAllCostObj, setDisplayAllCostObj] = useState({});
   const [allCostObj, setAllCostObj] = useState({});
+  const [allLeadArr, setAllLeadArr] = useState([]);
+  const [allSalesArr, setAllSalesArr] = useState([]);
 
   let role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const userAuthorise = useSelector((state) => state.auth);
-  // console.log(role, "role213");
+  // console.log(userAuthorise, "1232");
 
   const [menu, setMenu] = useState(false);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const toggleMobileMenu = () => {
     setMenu(!menu);
   };
@@ -96,7 +111,7 @@ const AdminDashboard = () => {
       let { data: res } = await getAll();
       console.log(res, "getcosting4");
       if (res.success) {
-        let tempArr = res.data;
+        // let tempArr = res.data;
 
         setDisplayCostingSheetArr(res.data);
         setCostingSheetArr(res.data);
@@ -138,10 +153,13 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
+
   const handleGetTotalCost = async () => {
     try {
-      let { data: res } = await getAllCost();
-      console.log(res, "getAllcost4");
+      let { data: res } = await getAllCost(
+        `leadId=${userAuthorise?.user?._id}`
+      );
+      // console.log(res.data, "getAllcost4");
       if (res.success) {
         setDisplayAllCostObj(res.data);
         setAllCostObj(res.data);
@@ -151,17 +169,58 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleGetAllLeadOfTenDays = async () => {
+    try {
+      let { data: res } = await getAllLeadOfTenDays(userObj?._id, role);
+      console.log(res.data, "getAlLEAD34");
+
+      let allLeadArr = res.data;
+      let tempArray = [];
+      for (let el of allLeadArr) {
+        tempArray.push({
+          y: el.date + "",
+          "Total Lead": el.totalLead,
+          "Total Convert Lead": el.closedLead,
+        });
+      }
+      setAllLeadArr(tempArray);
+    } catch (error) {
+      toastError(error);
+    }
+  };
+  const handleGetAllSalesOfTenDays = async () => {
+    try {
+      let { data: res } = await getAllSalesOfTenDays(
+        `leadId=${userAuthorise.user?._id}`
+      );
+      console.log(res.data, "gew34");
+      // { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
+      let allLeadArr = res.data;
+      let tempArray = [];
+      for (let el of allLeadArr) {
+        tempArray.push({
+          y: el.date + "",
+          "Total Sales": el.totalCost,
+          "Total Revenue": el.profit,
+        });
+      }
+      setAllSalesArr(tempArray);
+    } catch (error) {
+      toastError(error);
+    }
+  };
+
   useEffect(() => {
     handleGetAllLeads();
     handleGetCostingSheet();
     handleGetTotalCost();
+    handleGetAllLeadOfTenDays();
+    handleGetAllSalesOfTenDays();
   }, []);
 
   let closedLeadArr = [];
-
   let inProgressArr = [];
   let onHoldArr = [];
-  // let pendingArr = [];
   let declinedArr = [];
 
   let temp = [...leadsArr];
@@ -180,7 +239,72 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
-  let GettodayDay = new Date().getDate();
+  const handleFilterDateFrom = async (query) => {
+    setDateFrom(new Date(query).toISOString());
+  };
+
+  const handleFilterDateFromAndTo = async () => {
+    if (dateTo != "" && dateFrom != "") {
+      // let getfilterLead = await getLeadFilterByDate(
+      let { data: res } = await getLeadFilterByDate(
+        dateFrom,
+        dateTo,
+        role,
+        userAuthorise?.user?._id
+      );
+      console.log(res.data, "g1");
+      setDisplayLeadsArr(res.data);
+      setLeadsArr(res.data); ////////////////////////
+
+      let allLeadArr = res.data;
+      let tempArray = [];
+      for (let el of allLeadArr) {
+        tempArray.push({
+          y: el.date + "",
+          "Total Lead": el.totalLead,
+          "Total Convert Lead": el.closedLead,
+        });
+      }
+      setAllLeadArr(tempArray);
+      let allLeadArray = res.data;
+      let tempArray2 = [];
+      for (let el of allLeadArray) {
+        tempArray2.push({
+          y: el.date + "",
+          "Total Sales": el.totalCost,
+          "Total Revenue": el.profit,
+        });
+      }
+      setAllSalesArr(tempArray2);
+    }
+  };
+
+  useEffect(() => {
+    handleFilterDateFromAndTo();
+    // console.log(dateFrom, "dateFrom32q");
+    // console.log(dateTo, "dateFtooto");
+  }, [dateFrom, dateTo]);
+
+  const handleFilterDateTo = async (query) => {
+    setDateTo(new Date(query).toISOString());
+    // query = new Date(query).toISOString();
+    // let getfilterLead = await getLeadFilterByDate(query);
+    // console.log(getfilterLead.data, "1querytotototo");
+  };
+  // useEffect(() => {
+  //   for (let el of allLeadArr) {
+  //     tempArray.push({
+  //       y: el.date + "",
+  //       "Total Lead": el.totalLead,
+  //       "Total Convert Lead": el.closedLead,
+  //     });
+  //   }
+  // }, [allLeadArr]);
+
+  // useEffect(() => {
+  //   console.log(tempArray, "a1");
+  // }, [tempArray]);
+
   return (
     <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>
       <Header onMenuClick={(value) => toggleMobileMenu()} />
@@ -206,6 +330,34 @@ const AdminDashboard = () => {
           {/* /Page Header */}
           {/*
            */}
+          <div className="row">
+            <div className="col-sm-6  col-lg-3 col-xl-2 ">
+              <div className="form-group form-focus">
+                <input
+                  type="date"
+                  // value={employeeNameQuery}
+                  onChange={(e) => {
+                    handleFilterDateFrom(e.target.value);
+                  }}
+                  className="form-control floating"
+                />
+                <label className="focus-label">From </label>
+              </div>
+            </div>
+            <d0iv className="col-sm-6 col-lg-3 col-xl-2 ">
+              <div className="form-group form-focus">
+                <input
+                  // value={employeeNameQuery}
+                  onChange={(e) => {
+                    handleFilterDateTo(e.target.value);
+                  }}
+                  type="date"
+                  className="form-control floating"
+                />
+                <label className="focus-label">To </label>
+              </div>
+            </d0iv>
+          </div>
           {role != rolesObj.ACCOUNT && (
             <div className="row">
               <div className="col-md-12">
@@ -337,22 +489,18 @@ const AdminDashboard = () => {
   { y: "2011", "Total Income": 75, "Total Outcome": 65 },
   { y: "2012", "Total Income": 100, "Total Outcome": 90 },
 ];
-
           */}
-
           <div className="row">
             <div className="col-md-12">
               <div className="row">
                 <div className="col-md-6 text-center">
                   <div className="card">
                     <div className="card-body">
-                      <h3 className="card-title">Total Revenue</h3>
-                      {/* <div id="bar-charts" /> */}
+                      <h3 className="card-title">Total Lead</h3>
                       <ResponsiveContainer width="100%" height={300}>
                         <BarChart
-                          data={barchartdata}
-                          // options={stateArr.map(el => { return { ...el, value: el._id, label: el.name } })}
-                          // data={leadsArr.map((x)=>{return { y:x.createdAt.toLocaleDateString() }})}
+                          data={allLeadArr}
+                          // data={barchartdata}
                           margin={{
                             top: 5,
                             right: 5,
@@ -377,13 +525,14 @@ const AdminDashboard = () => {
 
 
                  */}
+                {/* {console.log(allSalesArr, "12allSalesArr")} */}
                 <div className="col-md-6 text-center">
                   <div className="card">
                     <div className="card-body">
                       <h3 className="card-title">Sales Overview</h3>
                       <ResponsiveContainer width="100%" height={300}>
                         <LineChart
-                          data={linechartdata}
+                          data={allSalesArr}
                           margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
                         >
                           <CartesianGrid />
@@ -473,12 +622,12 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    <p className="mb-0">
-                      Previous Month{" "}
+                    {/* <p className="mb-0">
+                      Previous Month
                       <span className="text-muted">
                         ₹ {allCostObj.totalCostingPreviousMonth}
                       </span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 {/*
@@ -507,12 +656,12 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    <p className="mb-0">
+                    {/* <p className="mb-0">
                       Previous Month{" "}
                       <span className="text-muted">
                         ₹ {allCostObj.totalExpensePreviousMonth}
                       </span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 <div className="card">
@@ -538,12 +687,12 @@ const AdminDashboard = () => {
                         aria-valuemax={100}
                       />
                     </div>
-                    <p className="mb-0">
+                    {/* <p className="mb-0">
                       Previous Month{" "}
                       <span className="text-muted">
                         ₹ {allCostObj.totalProfitPreviousMonth}
                       </span>
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               </div>
@@ -654,10 +803,11 @@ const AdminDashboard = () => {
 
 
 */}
+
             <div className="col-md-12 col-lg-6 col-xl-12 d-flex">
               <div className="card flex-fill">
                 <div className="card-body">
-                  <h4 className="card-title">Task Statistics</h4>
+                  <h4 className="card-title">Lead Statistics</h4>
                   <div className="statistics">
                     <div className="row">
                       <div className="col-md-6 col-6 text-center">
@@ -668,7 +818,7 @@ const AdminDashboard = () => {
                       </div>
                       <div className="col-md-6 col-6 text-center">
                         <div className="stats-box mb-4">
-                          <p>Overdue Tasks</p>
+                          <p>Pending Lead</p>
                           <h3>{leadsArr.length - closedLeadArr.length}</h3>
                         </div>
                       </div>
@@ -754,17 +904,17 @@ const AdminDashboard = () => {
                   <div>
                     <p>
                       <i className="fa fa-dot-circle-o text-purple me-2" />
-                      Completed Tasks{" "}
+                      Completed Lead
                       <span className="float-end">{closedLeadArr.length}</span>
                     </p>
                     <p>
                       <i className="fa fa-dot-circle-o text-warning me-2" />
-                      Inprogress Tasks{" "}
+                      Inprogress Lead
                       <span className="float-end">{inProgressArr.length}</span>
                     </p>
                     <p>
                       <i className="fa fa-dot-circle-o text-success me-2" />
-                      On Hold Tasks{" "}
+                      On Hold Lead
                       <span className="float-end">{onHoldArr.length}</span>
                     </p>
                     {/* <p>
@@ -773,7 +923,7 @@ const AdminDashboard = () => {
                     </p> */}
                     <p className="mb-0">
                       <i className="fa fa-dot-circle-o text-info me-2" />
-                      Declined Tasks{" "}
+                      Declined Lead
                       <span className="float-end">{declinedArr.length}</span>
                     </p>
                   </div>

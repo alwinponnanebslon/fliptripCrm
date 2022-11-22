@@ -16,9 +16,9 @@ const AddQuotation = () => {
 
   const dispatch = useDispatch();
   const [destinationName, setDestinationName] = useState("");
-  const [durationOfTour, setDurationOfTour] = useState(0);
+  const [durationOfTour, setDurationOfTour] = useState(1);
   const [days, setDays] = useState(0);
-  const [numberOfGuest, setNumberOfGuest] = useState(0);
+  const [numberOfGuest, setNumberOfGuest] = useState(1);
   const [adultCount, setAdultCount] = useState(0);
   const tourValueArr = useSelector((state) => state.tour.tours);
   const quotationStateObj = useSelector(
@@ -603,7 +603,7 @@ const AddQuotation = () => {
                             </div>
                             <div className="col-md-4">
                               <label className="col-form-label ">
-                                Start Date{" "}
+                                Start Date
                                 <span className="text-danger">*</span>
                               </label>
                               <div className="col-sm-8">
@@ -1194,11 +1194,26 @@ const AddQuotation = () => {
                 </div>
               </div>
               <div className="col-12">
-                <button className="btn add-btn" type="submit">
+                <button
+                  className="btn add-btn"
+                  type="submit"
+                  data-bs-dismiss="modal"
+                >
                   {" "}
                   {isUpdateTour ? "Update" : "Save"}{" "}
                 </button>
               </div>
+              {/* 
+              <div className="col-12">
+                <button
+                  data-bs-dismiss="modal"
+                  className="btn add-btn"
+                  onClick={handlePerfomaInvoiceSubmit}
+                >
+                  {" "}
+                  Save{" "}
+                </button>
+              </div> */}
             </form>
           </div>
         </div>

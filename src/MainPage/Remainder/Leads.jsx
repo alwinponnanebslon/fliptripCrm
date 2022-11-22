@@ -249,7 +249,6 @@ const Leads = () => {
     //   clientsArr,
     //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
     // );
-    console.log(agents, "agetn2");
     if (agents && agents.length > 0) {
       let tempArr = [];
       if (leadId != "") {
@@ -274,7 +273,6 @@ const Leads = () => {
           return obj;
         });
       }
-      console.log(tempArr, "12tempArr12");
       setAgentsArr([...tempArr]);
     }
   }, [agents]);
@@ -373,12 +371,7 @@ const Leads = () => {
 
   const handleFilterDateFromAndTo = async () => {
     if (dateTo != "" && dateFrom != "") {
-      let getfilterLead = await getLeadFilterByDate(
-        dateFrom,
-        dateTo,
-        role,
-        userAuthorise?.user?._id
-      );
+      let getfilterLead = await getLeadFilterByDate(dateFrom, dateTo);
       console.log(getfilterLead.data.data, "getfilterLeadw4");
       setDisplayLeadsArr(getfilterLead.data.data);
       setLeadsArr(getfilterLead.data.data);
@@ -1899,7 +1892,7 @@ const Leads = () => {
                   <div className="col-md-6">
                     <div className="form-group">
                       <label>Assign to Spoke ({agentsArr.length})</label>
-                      {console.log(agentsArr, "agentsArr123")}
+
                       <select
                         className="select form-control"
                         value={agentId}
@@ -1911,7 +1904,7 @@ const Leads = () => {
                         {role == rolesObj.TEAMLEAD &&
                           agentsArr &&
                           agentsArr.map((spoke, i) => {
-                            console.log(spoke, i, "2132");
+                            // console.log(spoke, i, "2132");
                             // spoke.leadId == leadId;
                             return (
                               <>
