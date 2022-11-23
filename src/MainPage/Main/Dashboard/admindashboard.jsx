@@ -133,6 +133,7 @@ const AdminDashboard = () => {
     }
   };
 
+
   const handleGetTotalCost = async () => {
     try {
       let { data: res } = await getAllCost(userAuthorise?.user?._id, role);
@@ -192,8 +193,10 @@ const AdminDashboard = () => {
     handleGetCostingSheet();
     handleGetTotalCost();
     handleGetAllLeadOfTenDays();
-    handleGetAllSalesOfTenDays();
+    // handleGetAllSalesOfTenDays();
   }, []);
+
+
 
   let closedLeadArr = [];
   let inProgressArr = [];
@@ -201,6 +204,7 @@ const AdminDashboard = () => {
   let declinedArr = [];
 
   let temp = [...leadsArr];
+
   temp.map((x) => {
     if (x.status == leadStatus.closed || x.status == leadStatus.closedBySpoke) {
       closedLeadArr.push(x);
@@ -216,6 +220,9 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
+
+
+
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
   };
@@ -254,14 +261,13 @@ const AdminDashboard = () => {
       }
       setDisplayAllCostObj(res.dataOfCosting);
       setAllCostObj(res.dataOfCosting);
-      setAllSalesArr(tempArray2);
+      // setAllSalesArr(tempArray2);
     }
   };
 
   useEffect(() => {
     handleFilterDateFromAndTo();
-    // console.log(dateFrom, "dateFrom32q");
-    // console.log(dateTo, "dateFtooto");
+
   }, [dateFrom, dateTo]);
 
   const handleFilterDateTo = async (query) => {
