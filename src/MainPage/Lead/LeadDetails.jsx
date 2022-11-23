@@ -31,6 +31,7 @@ const ViewCostingSheetForm = () => {
   const [flightList, setFlightList] = useState([{ cost: "", flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
   const [obj, setObj] = useState({});
+  const [paymentList, setPaymentList] = useState({});
 
   useEffect(() => {
     handleInit(leadId);
@@ -41,8 +42,13 @@ const ViewCostingSheetForm = () => {
   };
 
   useEffect(() => {
+    console.log(costingSheetResultObj, "costingSheetResultObj234");
     setObj(costingSheetResultObj);
   }, [costingSheetResultObj]);
+
+  useEffect(() => {
+    console.log(obj, "09");
+  }, [obj]);
 
   useEffect(() => {
     if (obj && obj._id) {
@@ -57,6 +63,7 @@ const ViewCostingSheetForm = () => {
       setTotalExpense(obj.totalExpense);
       setinputList([...obj.hotelDetails]);
       setFlightList(obj.flightDetails);
+      setPaymentList(obj.paymentObj?.paymentReceviedArr);
       setTotalCost(obj.totalCost);
     }
   }, [obj]);
@@ -217,18 +224,52 @@ const ViewCostingSheetForm = () => {
               </div>
             </div>
           )}
+
+          {paymentList.length > 0 && (
+            <div className="row">
+              <div className="col-sm-12">
+                <h3 className="mt-3 mb-4">Payment Details</h3>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Received Date</th>
+                      <th>Istallment Amount</th>
+                      <th>Transfer Status </th>
+                      <th>Transfer Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  {paymentList.map((x, i) => {
+                    return (
+                      <tbody>
+                        <tr>
+                          <td>{x?.receviedDate}</td>
+                          <td>{x.installmentAmount}</td>
+                          <td>{x.transferStatus}</td>
+                          <td>{x.transferAmount}</td>
+                          <td>{x.status}</td>
+                        </tr>
+                      </tbody>
+                    );
+                  })}
+                </Table>
+              </div>
+            </div>
+          )}
+
           <div className="content">
-            <div className="col-12 col-md-4 mb-3">
+            <div className="col-12 col-md-4 mb-3 text-danger">
               <label className="blue-1 fs-12">
                 Land Cost: &nbsp;{landCost}
               </label>
             </div>
-            <div className="col-12 col-md-4 mb-3">
+            <div className="col-12 col-md-4 mb-3 text-danger">
               <label className="blue-1 fs-12">
                 Flight Cost: &nbsp;{flightCost}
               </label>
             </div>
-            <div className="col-12 col-md-4 mb-3">
+
+            <div className="col-12 col-md-4 mb-3 text-danger">
               <label className="blue-1 fs-12">
                 Total Cost: &nbsp;{totalCost}
               </label>

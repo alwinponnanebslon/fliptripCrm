@@ -35,7 +35,14 @@ const ViewCostingSheetForm = () => {
   const [leadsId, setLeadsId] = useState("");
 
   const [inputList, setinputList] = useState([
-    { hotelName: "", hotelAddress: "", cost: "", isBooked: false },
+    {
+      hotelName: "",
+      bookingSource: "",
+      cost: "",
+      hold: false,
+      reConfirmed: false,
+      pending: false,
+    },
   ]);
   const [flightList, setFlightList] = useState([{ cost: "", flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
@@ -71,11 +78,14 @@ const ViewCostingSheetForm = () => {
     let tempCost = 0;
     let tempCostOf = 0;
     for (let ele of inputList) {
+      console.log(ele, "oiinno");
       tempCost = tempCost + Number.parseInt(ele.cost);
     }
-    if (tempCost > +landCost) {
+    if (tempCost > parseInt(landCost)) {
+      tempCost = 0;
+      // console.log(tempCost, "11tempCost12");
       setIsButtonHotel(true);
-      toastError("Hotel price cannot be greater than total hotels cost");
+      toastError("Hotel price cannot be greater than Total Land costsss");
       return;
     } else {
       setIsButtonHotel(false);
@@ -160,29 +170,100 @@ const ViewCostingSheetForm = () => {
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
+    console.log(name, value, checked, "name, value, checked23");
+    console.log(inputList, "inputList2134");
     let tempList = [...inputList];
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
       hotelName: tempList[index].hotelName,
-      hotelAddress: tempList[index].hotelAddress,
+      bookingSource: tempList[index].bookingSource,
       cost: tempList[index].cost,
-      isBooked: tempList[index].isBooked,
+      hold: tempList[index].hold,
+      reConfirmed: tempList[index].reConfirmed,
+      pending: tempList[index].pending,
     };
+
     if (name == "cost") {
-      if (Number.isInteger(parseInt(value))) {
-        if (value > +landCost) {
-          value = 0;
-          toastError("Hotel price cannot be greater than land price");
-          return;
+      console.log(tempList, "tempList/*/");
+      // console.log(
+      //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0),
+      //   landCost,
+      //   "098"
+      // );
+      let temp = 0;
+      // if(tempList)
+      for (let el of inputList) {
+        console.log(el, "eeeeewr");
+        if (el.cost) {
+          temp = temp + el.cost;
         }
       }
+      console.log(temp, "Temp23");
+      // if (temp > parseInt(landCost)) {
+      //   toastError("H2342342otel price cannot be greater than land price2");
+      //   return;
+      // }
+      // if (
+      //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+      //   parseInt(landCost)
+      // ) {
+      //   toastError("Hotel price cannot be greater than land price2");
+      //   return;
+      // }
+      // if (
+      //   list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+      //   parseInt(durationOfTour)
+      // ) {
+      //   toastError(
+      //     "Total number of nights cannot be more than duration of tour"
+      //   );
+      //   return;
+      // }
+
+      // if (isNaN(value)) {
+      //   value = 0;
+      //   toastError("Cost should be number");
+      //   return;
+      // } else if (Number.parseInt(value)) {
+      //   // for (let ele of tempList) {
+      //   //   console.log(ele, "3ost");
+      //   //   console.log(ele.cost, "1222cost");
+      //   //   tempCost1 = tempCost1 + parseInt(ele.cost);
+      //   // }
+      //   // if (
+      //   //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+      //   //   parseInt(landCost)
+      //   // ) {
+      //   //   console.log(tempList, "1tempList12");
+      //   //   toastError("Hotel price cannot be greater than land pricess");
+      //   //   return;
+      //   // }
+      //   // console.log(tempCost1, "1tempCost213412");
+      if (value > parseInt(landCost)) {
+        value = 0;
+        toastError("Hotel price cannot be greater than land price2");
+        return;
+      }
+      // }
     }
-    if (name == "isBooked") {
+    if (name == "hold") {
       currentObj[name] = checked;
+      currentObj["reConfirmed"] = false;
+      currentObj["pending"] = false;
+    } else if (name == "reConfirmed") {
+      currentObj[name] = checked;
+      currentObj["hold"] = false;
+      currentObj["pending"] = false;
+    } else if (name == "pending") {
+      currentObj[name] = checked;
+      currentObj["hold"] = false;
+      currentObj["reConfirmed"] = false;
     } else {
       currentObj[name] = value;
     }
+
     tempList[index] = currentObj;
+    console.log(tempList, "tempList23");
     setinputList([...tempList]);
   };
 
@@ -213,7 +294,14 @@ const ViewCostingSheetForm = () => {
   const handleaddclick = () => {
     setinputList([
       ...inputList,
-      { hotelName: "", hotelAddress: "", cost: "", isBooked: false },
+      {
+        hotelName: "",
+        bookingSource: "",
+        cost: "",
+        hold: false,
+        reConfirmed: false,
+        pending: false,
+      },
     ]);
   };
   const handleinputchangeHotel = (e, index) => {
@@ -243,14 +331,6 @@ const ViewCostingSheetForm = () => {
 
     list[index][name] = value;
 
-    if (
-      list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-      parseInt(durationOfTour)
-    ) {
-      toastError("Total number of nights cannot be more than duration of tour");
-      return;
-    }
-
     setHotelList([...list]);
   };
   const handleinputchangeFlight = (e, index) => {
@@ -262,8 +342,14 @@ const ViewCostingSheetForm = () => {
       flightName: tempList[index].flightName,
       cost: tempList[index].cost,
     };
+
     if (name == "cost") {
-      if (Number.isInteger(parseInt(value))) {
+      console.log(isNaN(value), "1233");
+      if (isNaN(value)) {
+        value = 0;
+        toastError("Cost should be number");
+        return;
+      } else if (Number.isInteger(parseInt(value))) {
         if (value > +flightCost) {
           value = 0;
           toastError("flight price can't be greater than total flight cost");
@@ -302,13 +388,14 @@ const ViewCostingSheetForm = () => {
     } else if (locationName == "") {
       toastError("Location Name is mandatory");
       return;
-    } else if (inputList && inputList[0].hotelName == "") {
-      toastError(" Hotel details are mandatory");
-      return;
-    } else if (totalCost == "") {
-      toastError("Total cost is mandatory");
-      return;
     }
+    //  else if (inputList && inputList[0].hotelName == "") {
+    //   toastError(" Hotel details are mandatory");
+    //   return;
+    // } else if (totalCost == "") {
+    //   toastError("Total cost is mandatory");
+    //   return;
+    // }
     let obj = {
       leadName,
       leadsId,
@@ -322,7 +409,7 @@ const ViewCostingSheetForm = () => {
       id: prevDocId,
       // isBooked,
     };
-    // console.log(obj, "obj1");
+    console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
       dispatch(update(obj, obj.id));
     } else {
@@ -395,11 +482,11 @@ const ViewCostingSheetForm = () => {
                           />
                         </div>
                         <div class="form-group col-md-4">
-                          <label>Hotel Address</label>
+                          <label>Booking Source</label>
                           <input
                             type="text"
-                            name="hotelAddress"
-                            value={x.hotelAddress}
+                            name="bookingSource"
+                            value={x.bookingSource}
                             class="form-control"
                             onChange={(e) => handleinputchange(e, i)}
                           />
@@ -419,14 +506,40 @@ const ViewCostingSheetForm = () => {
                           <input
                             className="form-check-input"
                             type="checkbox"
-                            name="isBooked"
-                            value={x.isBooked}
-                            checked={x.isBooked == true ? true : false}
+                            name="hold"
+                            value={x.hold}
+                            checked={x.hold == true ? true : false}
+                            id="publish-checkbox"
+                            onChange={(e) => handleinputchange(e, i)}
+                          />
+                          <label className="form-check-label fs-14">Hold</label>
+                        </div>
+                        <div className="col-12 mb-3">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name="reConfirmed"
+                            value={x.reConfirmed}
+                            checked={x.reConfirmed == true ? true : false}
                             id="publish-checkbox"
                             onChange={(e) => handleinputchange(e, i)}
                           />
                           <label className="form-check-label fs-14">
-                            isBooked
+                            Re-confirmed
+                          </label>
+                        </div>
+                        <div className="col-12 mb-3">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            name="pending"
+                            value={x.pending}
+                            checked={x.pending == true ? true : false}
+                            id="publish-checkbox"
+                            onChange={(e) => handleinputchange(e, i)}
+                          />
+                          <label className="form-check-label fs-14">
+                            pending
                           </label>
                         </div>
                         {/*  */}

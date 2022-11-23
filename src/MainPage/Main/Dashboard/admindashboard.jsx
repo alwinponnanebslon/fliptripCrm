@@ -51,26 +51,6 @@ import {
 
 import { date } from "yup/lib/locale.js";
 
-// const barchartdata = [
-//   { y: "2006", "Total Lead": 200, "Total Convert Lead": 190 },
-//   { y: "2007", "Total Lead": 75, "Total Convert Lead": 65 },
-//   { y: "2008", "Total Lead": 50, "Total Convert Lead": 40 },
-//   { y: "2009", "Total Lead": 75, "Total Convert Lead": 65 },
-//   { y: "2010", "Total Lead": 50, "Total Convert Lead": 40 },
-//   { y: "2011", "Total Lead": 75, "Total Convert Lead": 65 },
-//   { y: "2012", "Total Lead": 100, "Total Convert Lead": 90 },
-// ];
-// leadsArr.map((x)=>{x.createdAt})
-// const linechartdata = [
-//   { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
-//   { y: "2007", "Total Sales": 75, "Total Revenue": 65 },
-//   { y: "2008", "Total Sales": 50, "Total Revenue": 40 },
-//   { y: "2009", "Total Sales": 75, "Total Revenue": 65 },
-//   { y: "2010", "Total Sales": 50, "Total Revenue": 40 },
-//   { y: "2011", "Total Sales": 75, "Total Revenue": 65 },
-//   { y: "2012", "Total Sales": 100, "Total Revenue": 50 },
-// ];
-
 const AdminDashboard = () => {
   const [leadsArr, setLeadsArr] = useState([]);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
@@ -82,7 +62,7 @@ const AdminDashboard = () => {
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
 
-  let role = useSelector((state) => state.auth.role);
+  const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const userAuthorise = useSelector((state) => state.auth);
   // console.log(userAuthorise, "1232");
@@ -90,6 +70,7 @@ const AdminDashboard = () => {
   const [menu, setMenu] = useState(false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+
   const toggleMobileMenu = () => {
     setMenu(!menu);
   };
@@ -108,11 +89,9 @@ const AdminDashboard = () => {
 
   const handleGetCostingSheet = async () => {
     try {
-      let { data: res } = await getAll();
+      let { data: res } = await getAll(userObj?._id, role);
       console.log(res, "getcosting4");
       if (res.success) {
-        // let tempArr = res.data;
-
         setDisplayCostingSheetArr(res.data);
         setCostingSheetArr(res.data);
       }
@@ -156,9 +135,7 @@ const AdminDashboard = () => {
 
   const handleGetTotalCost = async () => {
     try {
-      let { data: res } = await getAllCost(
-        `leadId=${userAuthorise?.user?._id}`
-      );
+      let { data: res } = await getAllCost(userAuthorise?.user?._id, role);
       // console.log(res.data, "getAllcost4");
       if (res.success) {
         setDisplayAllCostObj(res.data);
@@ -275,6 +252,8 @@ const AdminDashboard = () => {
           "Total Revenue": el.profit,
         });
       }
+      setDisplayAllCostObj(res.dataOfCosting);
+      setAllCostObj(res.dataOfCosting);
       setAllSalesArr(tempArray2);
     }
   };
@@ -330,34 +309,36 @@ const AdminDashboard = () => {
           {/* /Page Header */}
           {/*
            */}
-          <div className="row">
-            <div className="col-sm-6  col-lg-3 col-xl-2 ">
-              <div className="form-group form-focus">
-                <input
-                  type="date"
-                  // value={employeeNameQuery}
-                  onChange={(e) => {
-                    handleFilterDateFrom(e.target.value);
-                  }}
-                  className="form-control floating"
-                />
-                <label className="focus-label">From </label>
+          {role != rolesObj.ACCOUNT && (
+            <div className="row">
+              <div className="col-sm-6  col-lg-3 col-xl-2 ">
+                <div className="form-group form-focus">
+                  <input
+                    type="date"
+                    // value={employeeNameQuery}
+                    onChange={(e) => {
+                      handleFilterDateFrom(e.target.value);
+                    }}
+                    className="form-control floating"
+                  />
+                  <label className="focus-label">From </label>
+                </div>
+              </div>
+              <div className="col-sm-6 col-lg-3 col-xl-2 ">
+                <div className="form-group form-focus">
+                  <input
+                    // value={employeeNameQuery}
+                    onChange={(e) => {
+                      handleFilterDateTo(e.target.value);
+                    }}
+                    type="date"
+                    className="form-control floating"
+                  />
+                  <label className="focus-label">To </label>
+                </div>
               </div>
             </div>
-            <d0iv className="col-sm-6 col-lg-3 col-xl-2 ">
-              <div className="form-group form-focus">
-                <input
-                  // value={employeeNameQuery}
-                  onChange={(e) => {
-                    handleFilterDateTo(e.target.value);
-                  }}
-                  type="date"
-                  className="form-control floating"
-                />
-                <label className="focus-label">To </label>
-              </div>
-            </d0iv>
-          </div>
+          )}
           {role != rolesObj.ACCOUNT && (
             <div className="row">
               <div className="col-md-12">
@@ -475,106 +456,93 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-          {/* 
-           
-           */}
 
-          {/* 
-          const barchartdata = [
-  { y: "2006", "Total Income": 100, "Total Outcome": 190 },
-  { y: "2007", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2008", "Total Income": 50, "Total Outcome": 40 },
-  { y: "2009", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2010", "Total Income": 50, "Total Outcome": 40 },
-  { y: "2011", "Total Income": 75, "Total Outcome": 65 },
-  { y: "2012", "Total Income": 100, "Total Outcome": 90 },
-];
-          */}
-          <div className="row">
-            <div className="col-md-12">
-              <div className="row">
-                <div className="col-md-6 text-center">
-                  <div className="card">
-                    <div className="card-body">
-                      <h3 className="card-title">Total Lead</h3>
-                      <ResponsiveContainer width="100%" height={300}>
-                        <BarChart
-                          data={allLeadArr}
-                          // data={barchartdata}
-                          margin={{
-                            top: 5,
-                            right: 5,
-                            left: 5,
-                            bottom: 5,
-                          }}
-                        >
-                          <CartesianGrid />
-                          <XAxis dataKey="y" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <Bar dataKey="Total Lead" fill="#ff9b44" />
-                          <Bar dataKey="Total Convert Lead" fill="#fc6075" />
-                        </BarChart>
-                      </ResponsiveContainer>
+          {role != rolesObj.ACCOUNT && (
+            <div className="row">
+              <div className="col-md-12">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="card">
+                      <div className="card-body">
+                        <h3 className="card-title">Total Lead</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                          <BarChart
+                            data={allLeadArr}
+                            margin={{
+                              top: 5,
+                              right: 5,
+                              left: 5,
+                              bottom: 5,
+                            }}
+                          >
+                            <CartesianGrid />
+                            <XAxis dataKey="y" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Bar dataKey="Total Lead" fill="#ff9b44" />
+                            <Bar dataKey="Total Convert Lead" fill="#fc6075" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/*
+                  {/*
 
 
 
                  */}
-                {/* {console.log(allSalesArr, "12allSalesArr")} */}
-                <div className="col-md-6 text-center">
-                  <div className="card">
-                    <div className="card-body">
-                      <h3 className="card-title">Sales Overview</h3>
-                      <ResponsiveContainer width="100%" height={300}>
-                        <LineChart
-                          data={allSalesArr}
-                          margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-                        >
-                          <CartesianGrid />
-                          <XAxis dataKey="y" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <Line
-                            type="monotone"
-                            dataKey="Total Sales"
-                            stroke="#ff9b44"
-                            fill="#ff9b44"
-                            strokeWidth={3}
-                            dot={{ r: 3 }}
-                            activeDot={{ r: 7 }}
-                          />
-                          <Line
-                            type="monotone"
-                            dataKey="Total Revenue"
-                            stroke="#fc6075"
-                            fill="#fc6075"
-                            strokeWidth={3}
-                            dot={{ r: 3 }}
-                            activeDot={{ r: 7 }}
-                          />
-                        </LineChart>
-                      </ResponsiveContainer>
+                  {/* {console.log(allSalesArr, "12allSalesArr")} */}
+                  {/* <div className="col-md-6 text-center">
+                    <div className="card">
+                      <div className="card-body">
+                        <h3 className="card-title">Sales Overview</h3>
+                        <ResponsiveContainer width="100%" height={300}>
+                          <LineChart
+                            data={allSalesArr}
+                            margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                          >
+                            <CartesianGrid />
+                            <XAxis dataKey="y" />
+                            <YAxis />
+                            <Tooltip />
+                            <Legend />
+                            <Line
+                              type="monotone"
+                              dataKey="Total Sales"
+                              stroke="#ff9b44"
+                              fill="#ff9b44"
+                              strokeWidth={3}
+                              dot={{ r: 3 }}
+                              activeDot={{ r: 7 }}
+                            />
+                            <Line
+                              type="monotone"
+                              dataKey="Total Revenue"
+                              stroke="#fc6075"
+                              fill="#fc6075"
+                              strokeWidth={3}
+                              dot={{ r: 3 }}
+                              activeDot={{ r: 7 }}
+                            />
+                          </LineChart>
+                        </ResponsiveContainer>
 
-                      {/* <div id="line-charts" /> */}
+                      </div>
                     </div>
-                  </div>
-                </div>
-                {/* 
+                  </div> */}
+                  {/* 
                 
                 */}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card-group m-b-30">
-                {/* <div className="card">
+          )}
+          {role != rolesObj.ACCOUNT && (
+            <div className="row">
+              <div className="col-md-12">
+                <div className="card-group m-b-30">
+                  {/* <div className="card">
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
@@ -598,106 +566,107 @@ const AdminDashboard = () => {
                     <p className="mb-0">Overall Employees 218</p>
                   </div>
                 </div> */}
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Total Cost</span>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Total Cost</span>
+                        </div>
+                        <div>
+                          {/* <span className="text-success">+12.5%</span> */}
+                        </div>
                       </div>
-                      <div>
-                        {/* <span className="text-success">+12.5%</span> */}
+                      <h3 className="mb-3">
+                        ₹ {allCostObj.totalCostingCurrentMonth}
+                      </h3>
+                      {/* <h3 className="mb-3">$1,42,300</h3> */}
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
                       </div>
-                    </div>
-                    <h3 className="mb-3">
-                      ₹ {allCostObj.totalCostingCurrentMonth}
-                    </h3>
-                    {/* <h3 className="mb-3">$1,42,300</h3> */}
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                    {/* <p className="mb-0">
+                      {/* <p className="mb-0">
                       Previous Month
                       <span className="text-muted">
                         ₹ {allCostObj.totalCostingPreviousMonth}
                       </span>
                     </p> */}
+                    </div>
                   </div>
-                </div>
-                {/*
-                 */}
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Expenses</span>
+                  {/*
+                   */}
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Expenses</span>
+                        </div>
+                        <div>
+                          {/* <span className="text-danger">-2.8%</span> */}
+                        </div>
                       </div>
-                      <div>
-                        {/* <span className="text-danger">-2.8%</span> */}
-                      </div>
-                    </div>
 
-                    <h3 className="mb-3">
-                      ₹ {allCostObj.totalExpenseCurrentMonth}
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                    {/* <p className="mb-0">
+                      <h3 className="mb-3">
+                        ₹ {allCostObj.totalExpenseCurrentMonth}
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
+                      {/* <p className="mb-0">
                       Previous Month{" "}
                       <span className="text-muted">
                         ₹ {allCostObj.totalExpensePreviousMonth}
                       </span>
                     </p> */}
+                    </div>
                   </div>
-                </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Profit</span>
-                      </div>
-                      {/* <div>
+                  <div className="card">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between mb-3">
+                        <div>
+                          <span className="d-block">Profit</span>
+                        </div>
+                        {/* <div>
                         <span className="text-danger">-75%</span>
                       </div> */}
-                    </div>
-                    <h3 className="mb-3">
-                      ₹ {allCostObj.totalProfitCurrentMonth}
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                    {/* <p className="mb-0">
+                      </div>
+                      <h3 className="mb-3">
+                        ₹ {allCostObj.totalProfitCurrentMonth}
+                      </h3>
+                      <div className="progress mb-2" style={{ height: "5px" }}>
+                        <div
+                          className="progress-bar bg-primary"
+                          role="progressbar"
+                          style={{ width: "70%" }}
+                          aria-valuenow={40}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                        />
+                      </div>
+                      {/* <p className="mb-0">
                       Previous Month{" "}
                       <span className="text-muted">
                         ₹ {allCostObj.totalProfitPreviousMonth}
                       </span>
                     </p> */}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
           {/* Statistics Widget */}
           <div className="row">
             {/* <div className="col-md-12 col-lg-12 col-xl-6 d-flex">

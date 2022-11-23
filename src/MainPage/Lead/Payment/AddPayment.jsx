@@ -385,7 +385,7 @@ export const AddPayment = () => {
             </div>
             <hr />
 
-            <div style={{ fontSize: 19 }}>Payment Received Details</div>
+            <div style={{ fontSize: 19 }}>Payment Details</div>
 
             <div className="row">
               <div className="col-md-12">
@@ -396,7 +396,7 @@ export const AddPayment = () => {
                       <th scope="col">Receiving Date</th>
                       <th scope="col">Installment Amount</th>
                       <th scope="col">Amount Transfer/ Status</th>
-                      <th scope="col">Transferable to You</th>
+                      {/* <th scope="col">Transferable to You</th> */}
                       <th scope="col">Mark Payment</th>
                       <th scope="col">Action</th>
                     </tr>
@@ -438,7 +438,7 @@ export const AddPayment = () => {
                               value={item.transferStatus}
                             ></input>
                           </td>
-                          <td>
+                          {/* <td>
                             <input
                               type="text"
                               name="transferAmount"
@@ -447,7 +447,7 @@ export const AddPayment = () => {
                                 handlePaymentInput(e, index);
                               }}
                             />{" "}
-                          </td>
+                          </td> */}
 
                           <td>
                             <select

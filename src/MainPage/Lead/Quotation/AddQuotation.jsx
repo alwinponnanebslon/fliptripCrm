@@ -240,7 +240,7 @@ const AddQuotation = () => {
       checkIn: "",
       checkOut: "",
       rating: "",
-      hotelAddress: "",
+      bookingSource: "", // hotelAddress: "",
     },
   ]);
 
@@ -328,7 +328,7 @@ const AddQuotation = () => {
         checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
         rating: "",
-        hotelAddress: "",
+        bookingSource: "", //  hotelAddress: "",
       },
     ]);
   };
@@ -932,13 +932,23 @@ const AddQuotation = () => {
                           />
                         </div>
 
-                        <div className="form-group col-md-4">
+                        {/* <div className="form-group col-md-4">
                           <label>Hotel Address</label>
                           <input
                             type="text"
                             name="hotelAddress"
                             className="form-control"
                             value={hotel.hotelAddress}
+                            onChange={(e) => handleinputchangeHotel(e, i)}
+                          />
+                        </div> */}
+                        <div className="form-group col-md-4">
+                          <label>Booking Source</label>
+                          <input
+                            type="text"
+                            name="bookingSource"
+                            className="form-control"
+                            value={hotel.bookingSource}
                             onChange={(e) => handleinputchangeHotel(e, i)}
                           />
                         </div>

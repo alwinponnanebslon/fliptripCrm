@@ -55,7 +55,6 @@ const Leads = () => {
   const [leadUpdateId, setLeadUpdateId] = useState("");
 
   const [agentsArr, setAgentsArr] = useState([]);
-  const [clientsArr, setClientsArr] = useState([]);
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
   const role = useSelector((state) => state.auth.role);
   const userAuthorise = useSelector((state) => state.auth);
@@ -71,7 +70,6 @@ const Leads = () => {
   const [agentId, setAgentId] = useState("");
   let [leadId, setLeadId] = useState("");
   const [spokeId, setSpokeId] = useState("");
-  const [desctinationId, setDestinationId] = useState("");
   const [description, setDescription] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [priority, setPriority] = useState("");
@@ -80,14 +78,11 @@ const Leads = () => {
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [priorityQuery, setPriorityQuery] = useState("");
   const [roleQuery, setRoleQuery] = useState("");
-  const [displayRoleArr, setDisplayRoleArr] = useState([]);
   ///////////////////////////////////////////
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
 
   const agentSelect = useRef();
-  const teamLeadSelect = useRef();
-  const destinationSelect = useRef();
 
   // // console.log(role, "role23");
   const [data, setData] = useState([
@@ -147,7 +142,7 @@ const Leads = () => {
   const handleGetAllLeads = async () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
-
+      console.log(res, "Res12");
       if (res.success) {
         let tempArr = res.data;
         console.log(userAuthorise, "1te");
@@ -185,9 +180,7 @@ const Leads = () => {
       toastError(error);
     }
   };
-  useEffect(() => {
-    // console.log(leadsArr, "098u");
-  }, [leadsArr]);
+
   useEffect(() => {
     handleGetAllLeads();
     // dispatch(clientGet());
@@ -236,13 +229,6 @@ const Leads = () => {
       setDescription("");
     }
   }, [leadUpdateId]);
-
-  // useEffect(() => {
-
-  //   if (clients) {
-  //     setClientsArr(clients);
-  //   }
-  // }, [clients])
 
   useEffect(() => {
     // // console.log(
@@ -387,8 +373,6 @@ const Leads = () => {
 
   useEffect(() => {
     handleFilterDateFromAndTo();
-    // console.log(dateFrom, "dateFrom32q");
-    // console.log(dateTo, "dateFtooto");
   }, [dateFrom, dateTo]);
 
   useEffect(() => {
@@ -1524,32 +1508,34 @@ const Leads = () => {
 
         {/*  */}
         <div div className="row filter-row">
-          {role != rolesObj.SPOKE && role != rolesObj.TEAMLEAD && (
-            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-              <div className="form-group form-focus select-focus">
-                {/* <select className="select form-control" >
+          {role != rolesObj.SPOKE &&
+            role != rolesObj.TEAMLEAD &&
+            role != rolesObj.ACCOUNT && (
+              <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div className="form-group form-focus select-focus">
+                  {/* <select className="select form-control" >
                 <option value="">Select Priority</option>
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
               </select> */}
-                <Select
-                  onChange={handleFilterByTeamLead}
-                  menuPortalTarget={document.body}
-                  styles={customStyles}
-                  options={teamLeads.map((el) => {
-                    return {
-                      ...el,
-                      value: el._id,
-                      label: el.firstName + " " + el.lastName,
-                    };
-                  })}
-                />
+                  <Select
+                    onChange={handleFilterByTeamLead}
+                    menuPortalTarget={document.body}
+                    styles={customStyles}
+                    options={teamLeads.map((el) => {
+                      return {
+                        ...el,
+                        value: el._id,
+                        label: el.firstName + " " + el.lastName,
+                      };
+                    })}
+                  />
 
-                <label className="focus-label">Filter By Team Lead </label>
+                  <label className="focus-label">Filter By Team Lead </label>
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {role != rolesObj.SPOKE &&
             role != rolesObj.ACCOUNT &&
             role != rolesObj.TEAMLEAD && (
