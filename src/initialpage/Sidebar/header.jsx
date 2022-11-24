@@ -3,7 +3,15 @@
  */
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { Avatar_02, Avatar_03, Avatar_06, Avatar_13, Avatar_17, Avatar_21, headerlogo } from "../../Entryfile/imagepath";
+import {
+  Avatar_02,
+  Avatar_03,
+  Avatar_06,
+  Avatar_13,
+  Avatar_17,
+  Avatar_21,
+  headerlogo,
+} from "../../Entryfile/imagepath";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/auth/authSlice";
 import { useSelector } from "react-redux";
@@ -33,7 +41,18 @@ const Header = (props) => {
         </Link>
       </div>
       {/* /Logo */}
-      <a id="toggle_btn" href="#" style={{ display: pathname.includes("tasks") ? "none" : pathname.includes("compose") ? "none" : "" }} onClick={handlesidebar}>
+      <a
+        id="toggle_btn"
+        href="#"
+        style={{
+          display: pathname.includes("tasks")
+            ? "none"
+            : pathname.includes("compose")
+            ? "none"
+            : "",
+        }}
+        onClick={handlesidebar}
+      >
         <span className="bar-icon">
           <span />
           <span />
@@ -45,7 +64,12 @@ const Header = (props) => {
         <h3>Fliptrip Holidays</h3>
       </div>
       {/* /Header Title */}
-      <a id="mobile_btn" className="mobile_btn" href="#" onClick={() => onMenuClik()}>
+      <a
+        id="mobile_btn"
+        className="mobile_btn"
+        href="#"
+        onClick={() => onMenuClik()}
+      >
         <i className="fa fa-bars" />
       </a>
       {/* Header Menu */}
@@ -57,7 +81,11 @@ const Header = (props) => {
               <i className="fa fa-search" />
             </a>
             <form>
-              <input className="form-control" type="text" placeholder="Search here" />
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Search here"
+              />
               <button className="btn" type="submit">
                 <i className="fa fa-search" />
               </button>
@@ -66,28 +94,39 @@ const Header = (props) => {
         </li>
 
         <li className="nav-item dropdown">
-          <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <i className="fa fa-bell-o" /> <span className="badge badge-pill">3</span>
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-bs-toggle="dropdown"
+          >
+            <i className="fa fa-bell-o" />{" "}
+            <span className="badge badge-pill">3</span>
           </a>
           <div className="dropdown-menu notifications">
             <div className="topnav-dropdown-header">
               <span className="notification-title">Notifications</span>
               <a href="" className="clear-noti">
-                {" "}
-                Clear All{" "}
+                Clear All
               </a>
             </div>
             <div className="noti-content">
               <ul className="notification-list">
                 <li className="notification-message">
-                  <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
                     <div className="media">
                       <span className="avatar">
                         <img alt="" src={Avatar_02} />
                       </span>
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">John Doe</span> added new task <span className="noti-title">Patient appointment booking</span>
+                          <span className="noti-title">John Doe</span> added new
+                          task{" "}
+                          <span className="noti-title">
+                            Patient appointment booking
+                          </span>
                         </p>
                         <p className="noti-time">
                           <span className="notification-time">4 mins ago</span>
@@ -97,14 +136,21 @@ const Header = (props) => {
                   </Link>
                 </li>
                 <li className="notification-message">
-                  <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
                     <div className="media">
                       <span className="avatar">
                         <img alt="" src={Avatar_03} />
                       </span>
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">Tarah Shropshire</span> changed the task name <span className="noti-title">Appointment booking with payment gateway</span>
+                          <span className="noti-title">Tarah Shropshire</span>{" "}
+                          changed the task name{" "}
+                          <span className="noti-title">
+                            Appointment booking with payment gateway
+                          </span>
                         </p>
                         <p className="noti-time">
                           <span className="notification-time">6 mins ago</span>
@@ -114,15 +160,23 @@ const Header = (props) => {
                   </Link>
                 </li>
                 <li className="notification-message">
-                  <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
                     <div className="media">
                       <span className="avatar">
                         <img alt="" src={Avatar_06} />
                       </span>
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">Misty Tison</span> added <span className="noti-title">Domenic Houston</span> and <span className="noti-title">Claire Mapes</span> to project{" "}
-                          <span className="noti-title">Doctor available module</span>
+                          <span className="noti-title">Misty Tison</span> added{" "}
+                          <span className="noti-title">Domenic Houston</span>{" "}
+                          and <span className="noti-title">Claire Mapes</span>{" "}
+                          to project{" "}
+                          <span className="noti-title">
+                            Doctor available module
+                          </span>
                         </p>
                         <p className="noti-time">
                           <span className="notification-time">8 mins ago</span>
@@ -132,14 +186,21 @@ const Header = (props) => {
                   </Link>
                 </li>
                 <li className="notification-message">
-                  <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
                     <div className="media">
                       <span className="avatar">
                         <img alt="" src={Avatar_17} />
                       </span>
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">Rolland Webber</span> completed task <span className="noti-title">Patient and Doctor video conferencing</span>
+                          <span className="noti-title">Rolland Webber</span>{" "}
+                          completed task{" "}
+                          <span className="noti-title">
+                            Patient and Doctor video conferencing
+                          </span>
                         </p>
                         <p className="noti-time">
                           <span className="notification-time">12 mins ago</span>
@@ -149,14 +210,21 @@ const Header = (props) => {
                   </Link>
                 </li>
                 <li className="notification-message">
-                  <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
                     <div className="media">
                       <span className="avatar">
                         <img alt="" src={Avatar_13} />
                       </span>
                       <div className="media-body">
                         <p className="noti-details">
-                          <span className="noti-title">Bernardo Galaviz</span> added new task <span className="noti-title">Private chat module</span>
+                          <span className="noti-title">Bernardo Galaviz</span>{" "}
+                          added new task{" "}
+                          <span className="noti-title">
+                            Private chat module
+                          </span>
                         </p>
                         <p className="noti-time">
                           <span className="notification-time">2 days ago</span>
@@ -168,7 +236,10 @@ const Header = (props) => {
               </ul>
             </div>
             <div className="topnav-dropdown-footer">
-              <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/administrator/activities">
+              <Link
+                onClick={() => localStorage.setItem("minheight", "true")}
+                to="/app/administrator/activities"
+              >
                 View all Notifications
               </Link>
             </div>
@@ -179,7 +250,11 @@ const Header = (props) => {
 
         {/* /Message Notifications */}
         <li className="nav-item dropdown has-arrow main-drop">
-          <a href="#" className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+          <a
+            href="#"
+            className="dropdown-toggle nav-link"
+            data-bs-toggle="dropdown"
+          >
             <span className="user-img me-1">
               <img src={Avatar_21} alt="" />
               <span className="status online" />
@@ -187,7 +262,10 @@ const Header = (props) => {
             <span>{role}</span>
           </a>
           <div className="dropdown-menu">
-            <Link className="dropdown-item" to={`/admin/employee-profile/${user?._id}`}>
+            <Link
+              className="dropdown-item"
+              to={`/admin/employee-profile/${user?._id}`}
+            >
               My Profile
             </Link>
             <Link className="dropdown-item" to="/settings/companysetting">
@@ -202,7 +280,12 @@ const Header = (props) => {
       {/* /Header Menu */}
       {/* Mobile Menu */}
       <div className="dropdown mobile-user-menu">
-        <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <a
+          href="#"
+          className="nav-link dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
           <i className="fa fa-ellipsis-v" />
         </a>
         <div className="dropdown-menu dropdown-menu-right">

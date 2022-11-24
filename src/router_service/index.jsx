@@ -41,6 +41,7 @@ import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
 //remainder
 
 import Remainder from "../MainPage/Remainder/Remainder/Remainder";
+import Notification from "../MainPage/Notification/ViewNotification";
 
 export default [
   {
@@ -93,6 +94,11 @@ export default [
   {
     path: "/admin/remainder",
     component: Remainder,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  },
+  {
+    path: "/admin/notification",
+    component: Notification,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
   },
 

@@ -6,8 +6,9 @@ export const addRemainderApi = (obj) => {
   return axios.post(`${serverUrl}/add`, obj);
 };
 
-export const getRemainderApi = (query) => {
-  return axios.get(`${serverUrl}/?${query}`);
+export const getRemainderApi = (id) => {
+  // console.log(id, "0po90p");
+  return axios.get(`${serverUrl}/${id}`);
 };
 export const remainderDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
@@ -18,4 +19,8 @@ export const updateRemainderApi = (formData, id) => {
 };
 export const getRemainderCheckForNotificatin = () => {
   return axios.get(`${serverUrl}/getRemainderCheckForNotification`);
+};
+export const getRemainderForOneApi = (id, role) => {
+  // console.log(id, role, "id, role32");
+  return axios.get(`${serverUrl}/getAllRemainderForOneDay/${id}?role=${role}`);
 };

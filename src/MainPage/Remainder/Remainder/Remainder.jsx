@@ -29,6 +29,7 @@ import { Table } from "antd";
 
 export const GeneralRemainder = () => {
   const role = useSelector((state) => state.auth.role);
+  const userId = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
   const remainderResultArr = useSelector((state) => state.remainder.remainders);
   const [remainderArr, setRemainderArr] = useState([]);
@@ -61,7 +62,7 @@ export const GeneralRemainder = () => {
   // setTimeout(getData, time);
 
   const handleInit = () => {
-    dispatch(remainderGet(`leadId=${userLeadId}`));
+    dispatch(remainderGet(userLeadId));
     // dispatch(quotationGet(`leadId=${leadId}`));
   };
 

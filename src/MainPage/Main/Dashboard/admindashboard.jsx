@@ -48,10 +48,27 @@ import {
   getAllCost,
   getAllSalesOfTenDays,
 } from "../../../Services/costingSheet.services";
+import {
+  // getAll,
+  // getAllCost,
+  // getAllSalesOfTenDays,
+  getRemainderApi,
+} from "../../../Services/remainder.service";
+
+import {
+  remainderGet,
+  remainderGetForOneDay,
+} from "../../../redux/features/remainder/remainderSlice";
+
+import {
+  notificationGet,
+  addNotification,
+} from "../../../redux/features/notification/notificationSlice";
 
 import { date } from "yup/lib/locale.js";
 
 const AdminDashboard = () => {
+  const dispatch = useDispatch();
   const [leadsArr, setLeadsArr] = useState([]);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
 
@@ -61,15 +78,39 @@ const AdminDashboard = () => {
   const [allCostObj, setAllCostObj] = useState({});
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
+  const [isNotificationOccurs, setIsNotificationOccurs] = useState(true);
+
+  const [remainderArr, setRemainderArr] = useState([]);
 
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const userAuthorise = useSelector((state) => state.auth);
-  // console.log(userAuthorise, "1232");
 
   const [menu, setMenu] = useState(false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+
+  const userId = useSelector((state) => state.auth?.user?._id);
+  const RemainderArray = useSelector((state) => state.remainder.remainders);
+
+  const handleInit = async () => {
+    console.log("1234");
+    let obj = { userId, role };
+    console.log(obj, "obj12");
+    dispatch(remainderGetForOneDay(obj));
+    // const arr = await getRemainderApi(role, userId);
+    // console.log(arr, "arr32");
+    // dispatch(quotationGet(`leadId=${leadId}`));
+  };
+
+  useEffect(() => {
+    handleInit();
+  }, []);
+
+  useEffect(() => {
+    console.log(RemainderArray, "123 RemainderArray");
+    setRemainderArr(RemainderArray);
+  }, [RemainderArray]);
 
   const toggleMobileMenu = () => {
     setMenu(!menu);
@@ -99,6 +140,81 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
+
+  let array2 = [];
+
+  function myCallback() {
+    for (let el of remainderArr) {
+      // console.log(el, "el213");
+      let date = new Date();
+      date.setTime(
+        new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
+      );
+      let GetHours = date.getUTCHours();
+
+      let currentTime = el.followTime.split(":");
+
+      let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
+
+      date = new Date();
+      date.setTime(
+        new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
+      );
+      let getMinute = date.getUTCMinutes();
+
+      let getHoursDB = parseInt(el.followTime[0] + el.followTime[1]);
+
+      if (getHoursDB == GetHours) {
+        // console.log(el, "el234");
+        let getMinutesDB = parseInt(el.followTime[3] + el.followTime[4]);
+        if (getMinute == getMinutesDB) {
+          console.log(getMinutesDB, "getMinutesDB123");
+          array2.push(el);
+        }
+      }
+
+      // let date = Date.parse(new Date());
+      // var currentDate = new Date(new Date().getTime()); //-30 * 100)
+      // var difference = currentDate.getMinutes() - 1; //a minute ago
+      // currentDate.setMinutes(difference);
+      // currentDate = Date.parse(currentDate);
+      // if (
+      //   Date.parse(el.createdAt) <= date &&
+      //   Date.parse(el.createdAt) >= currentDate
+      // ) {
+      //   arr.push(el);
+      // }
+    }
+  }
+
+  setInterval(myCallback(), 100000);
+
+  useEffect(() => {
+    // if (array2.length > 0) {
+
+    //   setIsNotificationOccurs(true);
+    //   console.log(array2, "array23");
+    //   dispatch(addNotification(array2));
+
+    //   array2 = [];
+    // }
+    // array2 = [];
+
+    let dateStart = new Date();
+    console.log(dateStart, "date");
+    dateStart.setHours(0, 0, 0, 0);
+    let dateEnd = new Date();
+    dateEnd.setHours(23, 59, 59, 59);
+
+    let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
+    let time2 = `${new Date().getHours()}:${new Date().getMinutes()}`;
+    console.log(time2 == time, "asd");
+    //  var wetime=ISODate(time)
+    //  var et=dateStart.toTimeString()
+    //  var et=Date.UTC(date.getFullYear())
+
+    console.log(new Date().getHours(), "23");
+  }, [array2]);
 
   const handleGetAllLeads = async () => {
     try {
@@ -132,7 +248,6 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
-
 
   const handleGetTotalCost = async () => {
     try {
@@ -196,8 +311,6 @@ const AdminDashboard = () => {
     // handleGetAllSalesOfTenDays();
   }, []);
 
-
-
   let closedLeadArr = [];
   let inProgressArr = [];
   let onHoldArr = [];
@@ -206,7 +319,10 @@ const AdminDashboard = () => {
   let temp = [...leadsArr];
 
   temp.map((x) => {
-    if (x.status == leadStatus.closed || x.status == leadStatus.closedBySpoke) {
+    if (
+      x.status == leadStatus?.closed ||
+      x.status == leadStatus?.closedBySpoke
+    ) {
       closedLeadArr.push(x);
     } else if (
       x.status == leadStatus.open ||
@@ -220,8 +336,6 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
-
-
 
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
@@ -267,7 +381,6 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     handleFilterDateFromAndTo();
-
   }, [dateFrom, dateTo]);
 
   const handleFilterDateTo = async (query) => {
@@ -967,6 +1080,62 @@ const AdminDashboard = () => {
               </div>
             </div> */}
           </div>
+
+          {isNotificationOccurs && (
+            // <div id="add_Lead" className="modal custom-modal" role="dialog">
+            <div
+              className={`modal custom-modal col-md-6 text-danger${
+                isNotificationOccurs ? " show " : ""
+              } `}
+              role="dialog"
+              style={{ display: `${isNotificationOccurs ? "block" : "none"}` }}
+            >
+              <div className="modal-dialog  ">
+                <div className="modal-content  ">
+                  <div className="modal-header">
+                    {/* <h5 className="modal-title">
+                    {/* {leadUpdateId ? "Update" : "Add"}  */}
+                    {/* {isNotificationOccurs ? "yes" : "noo"} */}
+                    {/* </h5> */}
+                    <button
+                      type="button"
+                      className="close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                      onClick={() => setIsNotificationOccurs(false)}
+                    >
+                      <span aria-hidden="true">×</span>
+                    </button>
+                    {/* {arr.map((el) => { */}
+                    <form className="row">
+                      <div className="col-md-6 mb-2">
+                        <label>Heading</label>
+                      </div>
+
+                      <div className="col-md-6 mb-2">
+                        {/* <label>{el?.heading} </label> */}
+                        <label>el.heading </label>
+                      </div>
+
+                      <div className="col-md-6 mb-2">
+                        <label>Description </label>
+                      </div>
+                      <div className="col-md-6 mb-2">
+                        {/* <label>{el?.description}</label> */}
+                        <label>123description</label>
+                      </div>
+
+                      {/* <div className="form-group">
+                        <label>Description2</label>
+                      </div> */}
+                    </form>
+                    ;{/* })} */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* /Statistics Widget */}
           {/* <div className="row">
             <div className="col-md-6 d-flex">

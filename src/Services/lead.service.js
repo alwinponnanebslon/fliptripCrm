@@ -40,7 +40,7 @@ export const updatelead = (formData, id) => {
   return axios.patch(`${serverUrl}/updateLead/${id}`, formData);
 };
 export const getLeadFilterByDate = (from, to, role, id) => {
-  console.log(from, to, role, id, "12query");
+  // console.log(from, to, role, id, "12query");
   return axios.get(
     `${serverUrl}/getLeadFilterByDates/${id}?from=${from}&to=${to}&role=${role}`
   );

@@ -216,6 +216,7 @@ const AddRemainder = () => {
                     //   )
                     // }
                   />
+                  {console.log(followTime, "follow23")}
                   <input
                     type="time"
                     className="form-control"

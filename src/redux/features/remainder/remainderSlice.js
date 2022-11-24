@@ -5,7 +5,8 @@ import {
   getRemainderApi,
   remainderDeleteApi,
   updateRemainderApi,
-} from "../../../Services/remainder";
+  getRemainderForOneApi,
+} from "../../../Services/remainder.service";
 
 let initialState = {
   remainders: [],
@@ -16,9 +17,11 @@ import { toastSuccess, toastError } from "../../../utils/toastUtils";
 // const userLeadId = useSelector((state) => state.auth?.user?._id);
 export const remainderGet = createAsyncThunk(
   "remainder/remainderGet",
-  async (query) => {
+  async (id) => {
     try {
-      let { data: response } = await getRemainderApi(query);
+      // console.log(id, "od324");
+      let { data: response } = await getRemainderApi(id);
+      // console.log(response, "respo12");
       if (response) {
         toastSuccess(response.message);
         const remainders = response.data;
@@ -38,7 +41,8 @@ export const addRemainder = createAsyncThunk(
       let { data: response } = await addRemainderApi(payload);
       if (response) {
         toastSuccess(response.message);
-        thunkApi.dispatch(remainderGet(`leadId=${payload?.leadId}`));
+        // thunkApi.dispatch(remainderGet(`leadId=${payload?.leadId}`));
+        thunkApi.dispatch(remainderGet(payload?.leadId));
       }
     } catch (error) {
       toastError(error);
@@ -57,7 +61,8 @@ export const updateRemainder = createAsyncThunk(
         toastSuccess(response.message);
 
         thunkApi.dispatch(setRemainder(null));
-        thunkApi.dispatch(remainderGet(`leadId=${formData?.leadId}`));
+        // thunkApi.dispatch(remainderGet(`leadId=${formData?.leadId}`));
+        thunkApi.dispatch(remainderGet(formData?.leadId));
       }
     } catch (error) {
       toastError(error);
@@ -75,6 +80,7 @@ export const deleteRemainder = createAsyncThunk(
       if (response) {
         toastSuccess(response.message);
         thunkApi.dispatch(remainderGet(`leadId=${payload?.leadId}`));
+        thunkApi.dispatch(remainderGet(payload?.leadId));
       }
     } catch (error) {
       toastError(error);
@@ -89,6 +95,27 @@ export const setRemainder = createAsyncThunk(
     if (row) {
       const remainderObj = row;
       return remainderObj;
+    }
+  }
+);
+
+export const remainderGetForOneDay = createAsyncThunk(
+  "remainder/remainderGet",
+  async (payload, thunkApi) => {
+    try {
+      console.log(payload, "12respo12");
+      let { data: response } = await getRemainderForOneApi(
+        payload.userId,
+        payload.role
+      );
+      if (response) {
+        toastSuccess(response.message);
+        const remainders = response.data;
+        return remainders;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
     }
   }
 );
