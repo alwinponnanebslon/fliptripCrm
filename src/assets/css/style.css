@@ -9494,8 +9494,7 @@ span.quote-cfee-label {
   left: -21px;
 }
 
-
-
+/* 
 .notificationArr {
     display: flex;
     align-items: flex-end;
@@ -9503,4 +9502,29 @@ span.quote-cfee-label {
 
 .notificationArr .modal-dialog {
     margin: 0 0 0 auto;
+} */
+
+.notification-container {
+  position: fixed;
+  bottom: 0;
+  right: 1pc;
+}
+
+.notification-container .notification-box {
+  padding: 2pc 1pc;
+  background: #fff;
+  box-shadow: 0 0 20px #00000020;
+  margin-bottom: 1pc;
+  position: relative;
+}
+
+.notification-container .notification-box p {
+  margin: 0;
+}
+
+.notification-container .notification-box button.btn-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: 1px solid;
 }

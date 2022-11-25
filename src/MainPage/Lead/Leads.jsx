@@ -598,25 +598,24 @@ const Leads = () => {
     // // console.log(role, "role");
     // // console.log(record?.status, "role");
     // // console.log(role == "ADMIN" || role == rolesObj.SPOKE && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOKE && record?.status != leadStatus.closed")
-    // if (role == "ADMIN") {
-    //   return (
-    //     <>
-    //       <div>
-    //         {record?.status == leadStatus.on_Hold ||
-    //         record?.status == leadStatus.cancelled ? (
-    //           <i className="fa fa-dot-circle-o text-danger" />
-    //         ) : record?.status == leadStatus.open ||
-    //           record?.status == leadStatus.reopened ? (
-    //           <i className="fa fa-dot-circle-o text-info" />
-    //         ) : (
-    //           <i className="fa fa-dot-circle-o text-success" />
-    //         )}
-    //         {record?.status}
-    //       </div>
-    //     </>
-    //   );
-    // } else
-    if (role == rolesObj.SPOKE && record?.status == leadStatus.closed) {
+    if (role == "ADMIN") {
+      return (
+        <>
+          <div>
+            {record?.status == leadStatus.on_Hold ||
+            record?.status == leadStatus.cancelled ? (
+              <i className="fa fa-dot-circle-o text-danger" />
+            ) : record?.status == leadStatus.open ||
+              record?.status == leadStatus.reopened ? (
+              <i className="fa fa-dot-circle-o text-info" />
+            ) : (
+              <i className="fa fa-dot-circle-o text-success" />
+            )}
+            {record?.status}
+          </div>
+        </>
+      );
+    } else if (role == rolesObj.SPOKE && record?.status == leadStatus.closed) {
       return (
         <>
           <div>
@@ -896,7 +895,7 @@ const Leads = () => {
             </div>
           ) : (
             <div>
-              {record?.status == "CLOSED" ? "CONFIRMED" : "NOT CONFIRMED"}{" "}
+              {record?.status == "CLOSED" ? "CONFIRMED" : "NOT CONFIRMED"}
             </div>
           )}
         </div>
@@ -1227,21 +1226,21 @@ const Leads = () => {
         <div className="dropdown action-label">{record?.priority}</div>
       ),
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   render: (text, record) => (
-    //     <div>
-    //       {role != rolesObj.ACCOUNT ? (
-    //         <div className="dropdown action-label text-center">
-    //           {handleReturndropDown(record)}
-    //         </div>
-    //       ) : (
-    //         <div>{record?.status} </div>
-    //       )}
-    //     </div>
-    //   ),
-    // },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {handleReturndropDown(record)}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
     {
       title: "Action",
       render: (text, record) => (

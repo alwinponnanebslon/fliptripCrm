@@ -75,7 +75,7 @@ const AdminDashboard = () => {
   const [allCostObj, setAllCostObj] = useState({});
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
-  const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
+  const [isNotificationOccurs, setIsNotificationOccurs] = useState(true);
 
   const [remainderArr, setRemainderArr] = useState([]);
 
@@ -87,6 +87,7 @@ const AdminDashboard = () => {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [notificationArray, setNotificationArray] = useState([]);
+  const [data2, setData2] = useState([]);
 
   const userId = useSelector((state) => state.auth?.user?._id);
   const RemainderArray = useSelector((state) => state.remainder.remainders);
@@ -94,7 +95,7 @@ const AdminDashboard = () => {
   const handleInit = async () => {
     console.log("1234");
     let obj = { userId, role };
-    console.log(obj, "obj12");
+    // console.log(obj, "obj12");
     dispatch(remainderGetForOneDay(obj));
     // const arr = await getRemainderApi(role, userId);
     // console.log(arr, "arr32");
@@ -117,6 +118,7 @@ const AdminDashboard = () => {
   let { adminId } = useParams();
 
   useEffect(() => {
+    //========================================================================
     let firstload = localStorage.getItem("firstload");
     if (firstload === "true") {
       setTimeout(function () {
@@ -141,13 +143,16 @@ const AdminDashboard = () => {
   let array2 = [];
 
   function myCallback() {
-    array2 = [];
+    // array2 = [];
     let date = new Date();
     let time = `${date.getHours()}:${date.getMinutes()}`;
     let temp = [];
+    console.log("inside setinerteval ");
+    console.log(RemainderArray, "inside setinerteval ");
+    console.log(remainderArr, "remainderArral ");
     for (let el of remainderArr) {
-      // console.log(el.followTime, "el23");
-      console.log(time, "current time");
+      console.log(el, "el12");
+      // console.log("3223233232342");
       console.log(time == el.followTime, "3time34");
       // if (el.followTime.includes("0")) {
       //   time = time + "";
@@ -157,6 +162,7 @@ const AdminDashboard = () => {
       //   }
       // } else
       if (el.followTime == time) {
+        console.log(el.followTime, time, "time");
         temp.push(el);
       }
 
@@ -199,6 +205,7 @@ const AdminDashboard = () => {
       array2.push(...temp);
     }
   }
+
   let checkNotificationArray = async () => {
     if (array2.length > 0) {
       setIsNotificationOccurs(true);
@@ -216,12 +223,19 @@ const AdminDashboard = () => {
     if (array2.length > 0) {
       setIsNotificationOccurs(true);
       dispatch(addNotification(array2));
+      setData2(array2);
       array2 = [];
     }
     // checkNotificationArray();
   }, [array2]);
 
-  setInterval(myCallback(), 100000);
+  useEffect(() => {
+    let timer = setInterval(myCallback, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   // setInterval(checkNotificationArray(), 200000);
 
   // useEffect(() => {
@@ -338,6 +352,9 @@ const AdminDashboard = () => {
     // handleGetAllSalesOfTenDays();
   }, []);
 
+  const handleDeleteNotification = () => {
+    // array;
+  };
   let closedLeadArr = [];
   let inProgressArr = [];
   let onHoldArr = [];
@@ -1120,7 +1137,43 @@ const AdminDashboard = () => {
             </div> */}
           </div>
           {/* notificationArray */}
-          {isNotificationOccurs &&
+          {isNotificationOccurs && (
+            <div className="notification-container">
+              {data2.map((el, index) => {
+                return (
+                  <div className="notification-box">
+                    <button
+                      className="btn-close"
+                      onClick={() => {
+                        handleDeleteNotification;
+                      }}
+                    ></button>
+                    <p>Heading: {el.heading}</p>
+                    <p>Description: {el.description}</p>
+                    <p>Follow time: {el.followTime}</p>
+                  </div>
+                );
+              })}
+
+              {/* <div className="notification-box">
+                <button className="btn-close"></button>
+                <p>heading: asdf</p>
+                <p>
+                  description: Lorem ipsum dolor sit amet consectetur
+                  adipisicing elit.
+                </p>
+              </div> */}
+              {/* <div className="notification-box">
+                <button className="btn-close"></button>
+                <p>heading: asdf</p>
+                <p>
+                  description: Lorem ipsum dolor sit amet consectetur
+                  adipisicing elit.
+                </p>
+              </div> */}
+            </div>
+          )}
+          {/* {isNotificationOccurs &&
             array2.map((el, i) => {
               // array2.map((x, i) => {
               //   return (
@@ -1174,8 +1227,8 @@ const AdminDashboard = () => {
                         >
                           <span aria-hidden="true">×</span>
                         </button>
-                        {/* {array2.map((el) => { */}
-                        {/* return ( */}
+                        {/* {array2.map((el) => { 
+                        {/* return ( 
                         <div className="row">
                           <div className="col-12 mb-2">
                             <label>Heading: {el?.heading}</label>
@@ -1184,14 +1237,14 @@ const AdminDashboard = () => {
                             <label>Description: {el?.description}</label>
                           </div>
                         </div>
-                        {/* ); */}
-                        {/* })} */}
+                         ); 
+                        })} 
                       </div>
                     </div>
                   </div>
                 </div>
               );
-            })}
+            })} */}
 
           {/* /Statistics Widget */}
           {/* <div className="row">

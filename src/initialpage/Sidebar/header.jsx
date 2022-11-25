@@ -26,6 +26,7 @@ const Header = (props) => {
   const role = useSelector((state) => state.auth.role);
   const user = useSelector((state) => state.auth.user);
   const userId = useSelector((state) => state.auth.user?._id);
+
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
@@ -36,6 +37,7 @@ const Header = (props) => {
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
+
   const onMenuClik = () => {
     props.onMenuClick();
   };
@@ -56,7 +58,7 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(notificationResultArr, "notificationResultArr23");
+    // console.log(notificationResultArr, "notificationResultArr23");
     setDataArr(notificationResultArr);
   }, [notificationResultArr]);
 
