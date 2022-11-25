@@ -1,6 +1,6 @@
 import axios from "axios";
 import { url } from "./url.service";
-let serverUrl = `${url}/notification`;
+let serverUrl = `${url}/notifications`;
 
 export const addNotificationApi = (obj) => {
   console.log(obj, "obj231");
@@ -20,4 +20,7 @@ export const getNotificationApi = (query) => {
 
 export const getRemainderCheckForNotificatin = () => {
   return axios.get(`${serverUrl}/getRemainderCheckForNotification`);
+};
+export const getNotificationForSpecificUserApi = (id) => {
+  return axios.get(`${serverUrl}/getSpecificUserNotification/${id}`);
 };

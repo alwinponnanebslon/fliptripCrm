@@ -5,8 +5,8 @@ import {
   getNotificationApi,
   notificationDeleteApi,
   updateNotificationApi,
+  getNotificationForSpecificUserApi,
 } from "../../../Services/notification.service";
-
 
 let initialState = {
   notifications: [],
@@ -14,16 +14,31 @@ let initialState = {
   error: null,
 };
 
-
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
 // const userLeadId = useSelector((state) => state.auth?.user?._id);
-
 
 export const notificationGet = createAsyncThunk(
   "notification/notificationGet",
   async (query) => {
     try {
       let { data: response } = await getNotificationApi(query);
+      if (response) {
+        toastSuccess(response.message);
+        const notifications = response.data;
+        return notifications;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const notificationGetForSpecificUser = createAsyncThunk(
+  "notification/notificationGetForSpecificUser",
+  async (query) => {
+    try {
+      let { data: response } = await getNotificationForSpecificUserApi(query);
+      // console.log(response, "121");
       if (response) {
         toastSuccess(response.message);
         const notifications = response.data;
@@ -104,6 +119,10 @@ const notificationSlice = createSlice({
   reducers: {},
   extraReducers: {
     [notificationGet.fulfilled]: (state, action) => {
+      state.notifications = action.payload;
+      return action.payload.notifications;
+    },
+    [notificationGetForSpecificUser.fulfilled]: (state, action) => {
       state.notifications = action.payload;
       return action.payload.notifications;
     },

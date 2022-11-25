@@ -31,6 +31,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
+
 import Header from "../../../initialpage/Sidebar/header";
 import Sidebar from "../../../initialpage/Sidebar/sidebar";
 import "../../index.css";
@@ -48,12 +49,7 @@ import {
   getAllCost,
   getAllSalesOfTenDays,
 } from "../../../Services/costingSheet.services";
-import {
-  // getAll,
-  // getAllCost,
-  // getAllSalesOfTenDays,
-  getRemainderApi,
-} from "../../../Services/remainder.service";
+import { getRemainderApi } from "../../../Services/remainder.service";
 
 import {
   remainderGet,
@@ -63,6 +59,7 @@ import {
 import {
   notificationGet,
   addNotification,
+  setNotification,
 } from "../../../redux/features/notification/notificationSlice";
 
 import { date } from "yup/lib/locale.js";
@@ -78,7 +75,7 @@ const AdminDashboard = () => {
   const [allCostObj, setAllCostObj] = useState({});
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
-  const [isNotificationOccurs, setIsNotificationOccurs] = useState(true);
+  const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
 
   const [remainderArr, setRemainderArr] = useState([]);
 
@@ -89,6 +86,7 @@ const AdminDashboard = () => {
   const [menu, setMenu] = useState(false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [notificationArray, setNotificationArray] = useState([]);
 
   const userId = useSelector((state) => state.auth?.user?._id);
   const RemainderArray = useSelector((state) => state.remainder.remainders);
@@ -131,7 +129,7 @@ const AdminDashboard = () => {
   const handleGetCostingSheet = async () => {
     try {
       let { data: res } = await getAll(userObj?._id, role);
-      console.log(res, "getcosting4");
+      // console.log(res, "getcosting4");
       if (res.success) {
         setDisplayCostingSheetArr(res.data);
         setCostingSheetArr(res.data);
@@ -140,39 +138,51 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
-
   let array2 = [];
 
   function myCallback() {
+    array2 = [];
+    let date = new Date();
+    let time = `${date.getHours()}:${date.getMinutes()}`;
+    let temp = [];
     for (let el of remainderArr) {
-      // console.log(el, "el213");
-      let date = new Date();
-      date.setTime(
-        new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
-      );
-      let GetHours = date.getUTCHours();
-
-      let currentTime = el.followTime.split(":");
-
-      let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
-
-      date = new Date();
-      date.setTime(
-        new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
-      );
-      let getMinute = date.getUTCMinutes();
-
-      let getHoursDB = parseInt(el.followTime[0] + el.followTime[1]);
-
-      if (getHoursDB == GetHours) {
-        // console.log(el, "el234");
-        let getMinutesDB = parseInt(el.followTime[3] + el.followTime[4]);
-        if (getMinute == getMinutesDB) {
-          console.log(getMinutesDB, "getMinutesDB123");
-          array2.push(el);
-        }
+      // console.log(el.followTime, "el23");
+      console.log(time, "current time");
+      console.log(time == el.followTime, "3time34");
+      // if (el.followTime.includes("0")) {
+      //   time = time + "";
+      //   time = 0 + time;
+      //   if (el.followTime == time) {
+      //     array2.push(el);
+      //   }
+      // } else
+      if (el.followTime == time) {
+        temp.push(el);
       }
 
+      // console.log(array2, "afwe3");
+      // setNotificationArray(array2);
+      // console.log(el, "el213");
+      // date.setTime(
+      //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
+      // );
+      // let GetHours = date.getUTCHours();
+      // let currentTime = el.followTime.split(":");
+      // let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
+      // date = new Date();
+      // date.setTime(
+      //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
+      // );
+      // let getMinute = date.getUTCMinutes();
+      // let getHoursDB = parseInt(el.followTime[0] + el.followTime[1]);
+      // if (getHoursDB == GetHours) {
+      //   // console.log(el, "el234");
+      //   let getMinutesDB = parseInt(el.followTime[3] + el.followTime[4]);
+      //   if (getMinute == getMinutesDB) {
+      //     console.log(getMinutesDB, "getMinutesDB123");
+      //     array2.push(el);
+      //   }
+      // }
       // let date = Date.parse(new Date());
       // var currentDate = new Date(new Date().getTime()); //-30 * 100)
       // var difference = currentDate.getMinutes() - 1; //a minute ago
@@ -185,36 +195,53 @@ const AdminDashboard = () => {
       //   arr.push(el);
       // }
     }
+    if (array2.length == 0) {
+      array2.push(...temp);
+    }
   }
-
-  setInterval(myCallback(), 100000);
+  let checkNotificationArray = async () => {
+    if (array2.length > 0) {
+      setIsNotificationOccurs(true);
+      // dispatch()
+      // if (notificationArray.length > 0) {
+      // } else {
+      //   setNotificationArray(array2);
+      //   array2 = [];
+      // }
+      // dispatch(addNotification(array2));
+    }
+  };
 
   useEffect(() => {
-    // if (array2.length > 0) {
-
-    //   setIsNotificationOccurs(true);
-    //   console.log(array2, "array23");
-    //   dispatch(addNotification(array2));
-
-    //   array2 = [];
-    // }
-    // array2 = [];
-
-    let dateStart = new Date();
-    console.log(dateStart, "date");
-    dateStart.setHours(0, 0, 0, 0);
-    let dateEnd = new Date();
-    dateEnd.setHours(23, 59, 59, 59);
-
-    let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
-    let time2 = `${new Date().getHours()}:${new Date().getMinutes()}`;
-    console.log(time2 == time, "asd");
-    //  var wetime=ISODate(time)
-    //  var et=dateStart.toTimeString()
-    //  var et=Date.UTC(date.getFullYear())
-
-    console.log(new Date().getHours(), "23");
+    if (array2.length > 0) {
+      setIsNotificationOccurs(true);
+      dispatch(addNotification(array2));
+      array2 = [];
+    }
+    // checkNotificationArray();
   }, [array2]);
+
+  setInterval(myCallback(), 100000);
+  // setInterval(checkNotificationArray(), 200000);
+
+  // useEffect(() => {
+  //   // array2 = [];
+
+  //   let dateStart = new Date();
+  //   console.log(dateStart, "date");
+  //   dateStart.setHours(0, 0, 0, 0);
+  //   let dateEnd = new Date();
+  //   dateEnd.setHours(23, 59, 59, 59);
+
+  //   let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
+  //   let time2 = `${new Date().getHours()}:${new Date().getMinutes()}`;
+  //   console.log(time2 == time, "asd");
+  //   //  var wetime=ISODate(time)
+  //   //  var et=dateStart.toTimeString()
+  //   //  var et=Date.UTC(date.getFullYear())
+
+  //   console.log(new Date().getHours(), "23");
+  // }, [array2]);
 
   const handleGetAllLeads = async () => {
     try {
@@ -316,6 +343,7 @@ const AdminDashboard = () => {
   let onHoldArr = [];
   let declinedArr = [];
 
+  // useEffect(() => {
   let temp = [...leadsArr];
 
   temp.map((x) => {
@@ -336,6 +364,7 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
+  // }, []);
 
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
@@ -353,8 +382,18 @@ const AdminDashboard = () => {
       console.log(res.data, "g1");
       setDisplayLeadsArr(res.data);
       setLeadsArr(res.data); ////////////////////////
-
-      let allLeadArr = res.data;
+      // let allLeadArr = res.data;
+      // let tempArray = [];
+      // for (let el of allLeadArr) {
+      //   tempArray.push({
+      //     y: el.date + "",
+      //     "Total Lead": el.totalLead,
+      //     "Total Convert Lead": el.closedLead,
+      //   });
+      // }
+      // setAllLeadArr(tempArray);
+      let allLeadArr = res.arr;
+      console.log(allLeadArr, "allLeadArr213");
       let tempArray = [];
       for (let el of allLeadArr) {
         tempArray.push({
@@ -365,14 +404,14 @@ const AdminDashboard = () => {
       }
       setAllLeadArr(tempArray);
       let allLeadArray = res.data;
-      let tempArray2 = [];
-      for (let el of allLeadArray) {
-        tempArray2.push({
-          y: el.date + "",
-          "Total Sales": el.totalCost,
-          "Total Revenue": el.profit,
-        });
-      }
+      // let tempArray2 = [];
+      // for (let el of allLeadArray) {
+      //   tempArray2.push({
+      //     y: el.date + "",
+      //     "Total Sales": el.totalCost,
+      //     "Total Revenue": el.profit,
+      //   });
+      // }
       setDisplayAllCostObj(res.dataOfCosting);
       setAllCostObj(res.dataOfCosting);
       // setAllSalesArr(tempArray2);
@@ -1080,61 +1119,79 @@ const AdminDashboard = () => {
               </div>
             </div> */}
           </div>
-
-          {isNotificationOccurs && (
-            // <div id="add_Lead" className="modal custom-modal" role="dialog">
-            <div
-              className={`modal custom-modal col-md-6 text-danger${
-                isNotificationOccurs ? " show " : ""
-              } `}
-              role="dialog"
-              style={{ display: `${isNotificationOccurs ? "block" : "none"}` }}
-            >
-              <div className="modal-dialog  ">
-                <div className="modal-content  ">
-                  <div className="modal-header">
-                    {/* <h5 className="modal-title">
-                    {/* {leadUpdateId ? "Update" : "Add"}  */}
-                    {/* {isNotificationOccurs ? "yes" : "noo"} */}
-                    {/* </h5> */}
-                    <button
-                      type="button"
-                      className="close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                      onClick={() => setIsNotificationOccurs(false)}
-                    >
-                      <span aria-hidden="true">×</span>
-                    </button>
-                    {/* {arr.map((el) => { */}
-                    <form className="row">
-                      <div className="col-md-6 mb-2">
-                        <label>Heading</label>
+          {/* notificationArray */}
+          {isNotificationOccurs &&
+            array2.map((el, i) => {
+              // array2.map((x, i) => {
+              //   return (
+              //     <div className="row mb-3">
+              //       <div class="form-group col-md-4">
+              //         <label>Hotel Name</label>
+              //         <input
+              //           type="text"
+              //           name="hotelName"
+              //           value={x.heading}
+              //           class="form-control"
+              //           onChange={(e) => handleinputchange(e, i)}
+              //         />
+              //       </div>
+              //       <div class="form-group col-md-4">
+              //         <label>Cost</label>
+              //         <input
+              //           type="number"
+              //           name="cost"
+              //           value={x.description}
+              //           class="form-control"
+              //           onChange={(e) => handleinputchange(e, i)}
+              //         />
+              //       </div>
+              //     </div>
+              //   );
+              // })}
+              return (
+                <div
+                  className={`modal custom-modal notificationArr text-danger${
+                    isNotificationOccurs ? " show " : ""
+                  } `}
+                  role="dialog"
+                  style={{
+                    display: `${isNotificationOccurs ? "flex" : "none"}`,
+                  }}
+                >
+                  <div className="modal-dialog  ">
+                    <div className="modal-content  ">
+                      <div className="modal-header d-block">
+                        <button
+                          type="button"
+                          className="close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                          onClick={() => {
+                            setIsNotificationOccurs(false);
+                            // clearInterval(setinter1);
+                            // notificationArray = [];
+                          }}
+                        >
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        {/* {array2.map((el) => { */}
+                        {/* return ( */}
+                        <div className="row">
+                          <div className="col-12 mb-2">
+                            <label>Heading: {el?.heading}</label>
+                          </div>
+                          <div className="col-12 mb-2">
+                            <label>Description: {el?.description}</label>
+                          </div>
+                        </div>
+                        {/* ); */}
+                        {/* })} */}
                       </div>
-
-                      <div className="col-md-6 mb-2">
-                        {/* <label>{el?.heading} </label> */}
-                        <label>el.heading </label>
-                      </div>
-
-                      <div className="col-md-6 mb-2">
-                        <label>Description </label>
-                      </div>
-                      <div className="col-md-6 mb-2">
-                        {/* <label>{el?.description}</label> */}
-                        <label>123description</label>
-                      </div>
-
-                      {/* <div className="form-group">
-                        <label>Description2</label>
-                      </div> */}
-                    </form>
-                    ;{/* })} */}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
+              );
+            })}
 
           {/* /Statistics Widget */}
           {/* <div className="row">
