@@ -1,6 +1,6 @@
 export const rolesObj = {
   TEAMLEAD: "TEAMLEAD",
-  SPOKE: "SPOKE",
+  SPOC: "SPOC",
   ACCOUNT: "ACCOUNT",
   ADMIN: "ADMIN",
 };
@@ -10,7 +10,7 @@ export const leadStatus = {
   reopened: "REOPENED",
   on_Hold: "ON_HOLD",
   closed: "CLOSED",
-  closedBySpoke: "CLOSED_BY_SPOKE",
+  closedBySpoc: "CLOSED_BY_SPOC",
   in_Progress: "IN_PROGRESS",
   cancelled: "CANCELLED",
 };

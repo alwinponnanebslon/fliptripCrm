@@ -11,55 +11,55 @@ export default [
   {
     path: "/admin/lead/:leadId",
     component: LeadView,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
-    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT'],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC', 'ACCOUNT'],
   },
 
   {
     path: "/admin/lead/:leadId/quotes",
     component: Quotation,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
-    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC', 'ACCOUNT']
   },
   {
     path: "/admin/lead/:leadId/quotation-follow-up",
     component: QuotationFollowup,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
-    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC', 'ACCOUNT']
   },
   {
     path: "/admin/lead/:leadId/quotePayment",
     component: AddPayment,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
     path: "/admin/lead/:leadId/costingSheet/",
     component: ViewCostingSheet,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
     // /admin/lead/${leadId}/costingSheetAdd
     path: "/admin/lead/:leadId/costingSheetAdd",
     component: AddCostingSheetForm,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   // {
   //   path: "/admin/costingSheet/Add",
   //   component: AddCostingSheetForm,
-  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   // },
-  // roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE','ACCOUNT']
+  // roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC','ACCOUNT']
   // },
   //==
   {
     path: "/admin/lead/:leadId/viewquotePayment",
     component: ViewPayment,
-    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC', 'ACCOUNT']
   },
   {
     path: "/admin/lead/:leadId/ViewDetails",
     component: ViewLeadDetails,
-    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOKE', 'ACCOUNT']
+    roleArr: ['ADMIN', 'TEAMLEAD', 'SPOC', 'ACCOUNT']
   },
 
 ];

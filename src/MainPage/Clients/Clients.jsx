@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Table } from "antd";
 import { useSelector, useDispatch } from "react-redux";
+
 import "antd/dist/antd.css";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
 import "../antdstyle.css";
@@ -18,6 +19,13 @@ import {
 import AddClient from "./AddClient";
 
 const Clients = () => {
+  const role = useSelector((state) => state.auth.role);
+  const auth = useSelector((state) => state.auth.role)
+  const userId = useSelector((state) => state.auth.user._id)
+
+  console.log(auth, "auth3")
+  console.log(userId, "auth213244")
+
   useEffect(() => {
     if ($(".select").length > 0) {
       $(".select").select2({
@@ -40,9 +48,9 @@ const Clients = () => {
   }, []);
 
   const handleInit = () => {
-    dispatch(clientGet());
+    dispatch(clientGet(userId));
   };
-
+  //  dispatch(leadGetById(leadId));
   useEffect(() => {
     setClientMainArr(clientResultArr);
   }, [clientResultArr]);

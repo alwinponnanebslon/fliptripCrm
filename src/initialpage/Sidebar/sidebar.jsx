@@ -141,8 +141,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                              ? "active"
-                              : ""
+                                ? "active"
+                                : ""
                           }
                           to="/admin/employee"
                         >
@@ -187,8 +187,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -268,8 +268,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                              ? "active"
-                              : ""
+                                ? "active"
+                                : ""
                           }
                           to="/admin/employee"
                         >
@@ -298,8 +298,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -315,7 +315,7 @@ const Sidebar = (props) => {
             </div>
           </div>
         )}
-        {role == rolesObj.SPOKE && (
+        {role == rolesObj.SPOC && (
           <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">
               <ul>
@@ -372,8 +372,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -434,8 +434,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">

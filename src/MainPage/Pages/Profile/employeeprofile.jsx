@@ -102,7 +102,7 @@ const EmployeeProfile = () => {
                             {employeeObj?.firstName} {employeeObj?.lastName}
                           </h3>
                           <h6 className="text-muted">{employeeObj?.role}</h6>
-                          <small className="text-muted">Web Designer</small>
+                          {/* <small className="text-muted">Web Designer</small> */}
                           <div className="staff-id">
                             Employee ID : {employeeObj?.employeeId}
                           </div>
@@ -136,12 +136,22 @@ const EmployeeProfile = () => {
                           <li>
                             <div className="title">Address:</div>
                             <div className="text">
+                              {/* { employeeObj?.address} */}
                               1861 Bayonne Ave, Manchester Township, NJ, 08759
                             </div>
                           </li>
-
-                          {employeeObj?.role == rolesObj.SPOKE && (
+                          {console.log(employeeObj, "employeeObj32")}
+                          {employeeObj?.role == rolesObj.SPOC && (
                             <li>
+                              <div className="title">Reports to:</div>
+                              <div className="text">
+                                {employeeObj?.leadObj?.firstName}{" "}
+                                {employeeObj?.leadObj?.lastName}
+                              </div>
+                            </li>
+
+                          )}
+                          {/* <li>
                               <div className="title">Reports to:</div>
                               <div className="text">
                                 <div className="avatar-box">
@@ -156,8 +166,7 @@ const EmployeeProfile = () => {
                                   {employeeObj?.leadObj?.lastName}
                                 </Link>
                               </div>
-                            </li>
-                          )}
+                            </li> */}
                         </ul>
                       </div>
                     </div>
@@ -364,7 +373,7 @@ const EmployeeProfile = () => {
                       </label>
                       <select className="select">
                         <option>Select Designation</option>
-                        <option>Web Designer</option>
+                        {/* <option>Web Designer</option> */}
                         <option>Web Developer</option>
                         <option>Android Developer</option>
                       </select>

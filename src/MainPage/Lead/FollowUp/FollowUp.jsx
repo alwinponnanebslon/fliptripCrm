@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
+
 import {
   tourGet,
   updateTour,
@@ -11,14 +12,18 @@ import {
   setTour,
   addTour,
 } from "../../../redux/features/tour/tourSlice";
+
 import AddFolowUp from "./AddFolowUp";
+
 import {
   followUpGet,
   setfollowUp,
   deletefollowUp,
   updatefollowUp,
 } from "../../../redux/features/followup/followUpSlice";
+
 import { Table } from "antd";
+
 import {
   getfollowUpApi,
   getfollowUpCheckForNotificatin,
@@ -266,7 +271,7 @@ export const QuotationFollowup = () => {
               </a>
             </div>
           </div>
-          <div className="list_group_qoute pt-5">
+          {/* <div className="list_group_qoute pt-5">
             <div className="row">
               <div className="col-lg-12">
                 <div className="list_qoute">
@@ -293,9 +298,9 @@ export const QuotationFollowup = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
-        <div className="drp-area">
+        {/* <div className="drp-area">
           <div className="row">
             <div className="col-lg-2">
               <Select options={options} placeholder="Destinations " />
@@ -330,7 +335,8 @@ export const QuotationFollowup = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+        {console.log(followUpMainArr, "followUpMainArr123")}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">

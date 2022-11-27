@@ -43,7 +43,7 @@ import { shouldForwardProp } from "@mui/system";
 
 const Leads = () => {
   const dispatch = useDispatch();
-  const agents = useSelector(getAllAgents); //spoke
+  const agents = useSelector(getAllAgents); //spoc
   const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
   // // console.log(agents, "12agents");
   // // console.log(teamLeads, "12ateamLeads");
@@ -69,7 +69,7 @@ const Leads = () => {
   const [email, setEmail] = useState("");
   const [agentId, setAgentId] = useState("");
   let [leadId, setLeadId] = useState("");
-  const [spokeId, setSpokeId] = useState("");
+  const [spocId, setSpocId] = useState("");
   const [description, setDescription] = useState("");
   const [fileUrl, setFileUrl] = useState("");
   const [priority, setPriority] = useState("");
@@ -110,8 +110,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-        ? "rgba(255,155,68,0.5)"
-        : "white",
+          ? "rgba(255,155,68,0.5)"
+          : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -147,11 +147,11 @@ const Leads = () => {
         let tempArr = res.data;
         console.log(userAuthorise, "1te");
         // console.log(tempArr, "1tempArr2");
-        if (userAuthorise.role == "SPOKE") {
+        if (userAuthorise.role == "SPOC") {
           let temp = tempArr.filter(
             (el) =>
               `${el.agentId}` == `${userAuthorise?.user?._id}` ||
-              `${el.spokeId}` == `${userAuthorise?.user?._id}`
+              `${el.spocId}` == `${userAuthorise?.user?._id}`
           );
 
           setDisplayLeadsArr(temp);
@@ -215,7 +215,7 @@ const Leads = () => {
       setPriority(leadObj.priority);
       setAgentId(leadObj.agentId);
       setLeadId(leadObj.leadId);
-      setSpokeId(leadObj.spokeId);
+      setSpocId(leadObj.spocId);
       setDescription(leadObj.description);
     } else {
       setSubject("");
@@ -225,7 +225,7 @@ const Leads = () => {
       setEmail("");
       setPriority("");
       setAgentId("");
-      setSpokeId("");
+      setSpocId("");
       setDescription("");
     }
   }, [leadUpdateId]);
@@ -328,7 +328,7 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
-  const handleFilterBySpoke = (query) => {
+  const handleFilterBySpoc = (query) => {
     // // console.log(query, "query23");
     // // console.log(leadsArr, "leadsArr3");
     setRoleQuery(query.value);
@@ -381,9 +381,9 @@ const Leads = () => {
 
   const handleSetAgentId = async () => {
     console.log(userAuthorise, "userAuthorise21");
-    if (userAuthorise?.role == "SPOKE") {
+    if (userAuthorise?.role == "SPOC") {
       setAgentId(userAuthorise?.user?._id);
-      setSpokeId(userAuthorise?.user?._id);
+      setSpocId(userAuthorise?.user?._id);
     }
   };
 
@@ -443,8 +443,8 @@ const Leads = () => {
         priority,
         createdBy: userObj,
         clientObj,
-        agentId: spokeId,
-        spokeId,
+        agentId: spocId,
+        spocId,
       };
 
       if (agentId != "" && leadId == "") {
@@ -528,7 +528,7 @@ const Leads = () => {
     // setLeadId("");
     // console.log(e, "e23");
     setAgentId(e);
-    setSpokeId(e);
+    setSpocId(e);
   };
 
   const handleDestinationChange = (e) => {
@@ -571,8 +571,8 @@ const Leads = () => {
       value: "TEAMLEAD",
     },
     {
-      label: "SPOKE",
-      value: "SPOKE",
+      label: "SPOC",
+      value: "SPOC",
     },
     // {
     //   label: "Low",
@@ -597,35 +597,42 @@ const Leads = () => {
   const handleReturndropDown = (record) => {
     // // console.log(role, "role");
     // // console.log(record?.status, "role");
-    // // console.log(role == "ADMIN" || role == rolesObj.SPOKE && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOKE && record?.status != leadStatus.closed")
+    // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
     if (role == "ADMIN") {
       return (
         <>
           <div>
-            {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
-              <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
-              <i className="fa fa-dot-circle-o text-info" />
-            ) : (
-              <i className="fa fa-dot-circle-o text-success" />
-            )}
-            {record?.status}
+            <a
+              className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+              href="#"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              {record?.status == leadStatus.on_Hold ||
+                record?.status == leadStatus.cancelled ? (
+                <i className="fa fa-dot-circle-o text-danger" />
+              ) : record?.status == leadStatus.open ||
+                record?.status == leadStatus.reopened ? (
+                <i className="fa fa-dot-circle-o text-info" />
+              ) : (
+                <i className="fa fa-dot-circle-o text-success" />
+              )}
+              {record?.status}
+            </a>
           </div>
         </>
       );
-    } else if (role == rolesObj.SPOKE && record?.status == leadStatus.closed) {
+    } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
       return (
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoke ? (
+            ) : record?.status == leadStatus.closedBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -635,19 +642,19 @@ const Leads = () => {
         </>
       );
     } else if (
-      role == rolesObj.SPOKE &&
-      record?.status == leadStatus.closedBySpoke
+      role == rolesObj.SPOC &&
+      record?.status == leadStatus.closedBySpoc
     ) {
       return (
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoke ? (
+            ) : record?.status == leadStatus.closedBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -666,12 +673,12 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.closedBySpoke ? (
+            ) : record?.status == leadStatus.closedBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -716,11 +723,11 @@ const Leads = () => {
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoke)
+                  handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
                 }
               >
                 <i className="fa fa-dot-circle-o text-warning" /> Closed By
-                Spoke
+                Spoc
               </a>
             )}
             <a
@@ -759,7 +766,7 @@ const Leads = () => {
     //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
     // },
     {
-      title: "Assigned Spoke",
+      title: "Assigned Spoc",
       render: (text, record) => (
         <h2 className="table-avatar">
           {record.agentObj ? (
@@ -770,11 +777,9 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -984,7 +989,7 @@ const Leads = () => {
     //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
     // },
     {
-      title: "Assigned Spoke",
+      title: "Assigned Spoc",
       render: (text, record) => (
         <h2 className="table-avatar">
           {record.agentObj ? (
@@ -995,11 +1000,9 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1196,7 +1199,7 @@ const Leads = () => {
       ),
     },
   ];
-  const columns_SPOKE = [
+  const columns_SPOC = [
     { title: "Lead Subject", dataIndex: "subject" },
     // {
     //   title: 'Lead Id',
@@ -1335,7 +1338,7 @@ const Leads = () => {
               </ul>
             </div>
             {/* {console.log(role, "123role23")} */}
-            {/* {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && ( */}
+            {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
             {role != rolesObj.ACCOUNT && (
               <div className="col-auto float-end ml-auto">
                 <a
@@ -1394,7 +1397,7 @@ const Leads = () => {
                       {
                         leadsArr.filter((x) => {
                           return x.status == "CLOSED" ||
-                            x.status == "CLOSED_BY_SPOKE"
+                            x.status == "CLOSED_BY_SPOC"
                             ? "CLOSED"
                             : "";
                         }).length
@@ -1509,7 +1512,7 @@ const Leads = () => {
 
         {/*  */}
         <div div className="row filter-row">
-          {role != rolesObj.SPOKE &&
+          {role != rolesObj.SPOC &&
             role != rolesObj.TEAMLEAD &&
             role != rolesObj.ACCOUNT && (
               <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
@@ -1537,14 +1540,14 @@ const Leads = () => {
                 </div>
               </div>
             )}
-          {role != rolesObj.SPOKE &&
+          {role != rolesObj.SPOC &&
             role != rolesObj.ACCOUNT &&
             role != rolesObj.TEAMLEAD && (
               <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div className="form-group form-focus select-focus">
                   {/* agents */}
                   <Select
-                    onChange={handleFilterBySpoke}
+                    onChange={handleFilterBySpoc}
                     menuPortalTarget={document.body}
                     styles={customStyles}
                     options={agents.map((el) => {
@@ -1556,11 +1559,11 @@ const Leads = () => {
                     })}
                   />
 
-                  <label className="focus-label">Filter By Spoke </label>
+                  <label className="focus-label">Filter By Spoc </label>
                 </div>
               </div>
             )}
-          {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
+          {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
                 <input
@@ -1610,7 +1613,7 @@ const Leads = () => {
               <label className="focus-label">Priority</label>
             </div>
           </div>
-          {/* {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && ( */}
+          {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
           <div>
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
@@ -1683,10 +1686,10 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                    ? columns_TeamLeader
-                    : role == "SPOKE"
-                    ? columns_SPOKE
-                    : []
+                      ? columns_TeamLeader
+                      : role == "SPOC"
+                        ? columns_SPOC
+                        : []
                 }
                 // columns={columns}
                 // bordered
@@ -1838,7 +1841,7 @@ const Leads = () => {
                           <option value=""> --- Select Team Lead</option>
                         </Select> */}
                 {role != rolesObj.TEAMLEAD &&
-                  role != rolesObj.SPOKE &&
+                  role != rolesObj.SPOC &&
                   role != rolesObj.ACCOUNT && (
                     <div className="col-md-6">
                       <div className="form-group">
@@ -1882,10 +1885,10 @@ const Leads = () => {
                     </div>
                   )}
 
-                {role != rolesObj.SPOKE && role != rolesObj.ACCOUNT && (
+                {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Assign to Spoke ({agentsArr.length})</label>
+                      <label>Assign to Spoc ({agentsArr.length})</label>
                       {console.log(agentsArr, "agentsArr123")}
                       <select
                         className="select form-control"
@@ -1894,39 +1897,39 @@ const Leads = () => {
                           handleAgentChange(e.target.value);
                         }}
                       >
-                        <option value=""> --- Select Spoke</option>
+                        <option value=""> --- Select Spoc</option>
                         {role == rolesObj.TEAMLEAD &&
                           agentsArr &&
-                          agentsArr.map((spoke, i) => {
-                            console.log(spoke, i, "2132");
-                            // spoke.leadId == leadId;
+                          agentsArr.map((spoc, i) => {
+                            console.log(spoc, i, "2132");
+                            // spoc.leadId == leadId;
                             return (
                               <>
-                                <option key={i} value={spoke.value}>
-                                  {/* {spoke.leadId == leadId ? spoke.label : ""} */}
-                                  {spoke.label}
+                                <option key={i} value={spoc.value}>
+                                  {/* {spoc.leadId == leadId ? spoc.label : ""} */}
+                                  {spoc.label}
                                 </option>
                               </>
                             );
                           })}
                         {role == rolesObj.ADMIN &&
                           agentsArr &&
-                          agentsArr.map((spoke, i) => {
-                            // console.log(spoke, i, "2132");
-                            // spoke.leadId == leadId;
+                          agentsArr.map((spoc, i) => {
+                            // console.log(spoc , i, "2132");
+                            // spoc .leadId == leadId;
                             return (
                               <>
-                                <option key={i} value={spoke.value}>
-                                  {spoke.leadId == leadId ? spoke.label : ""}
-                                  {/* {spoke.label} */}
+                                <option key={i} value={spoc.value}>
+                                  {spoc.leadId == leadId ? spoc.label : ""}
+                                  {/* {spoc.label} */}
                                 </option>
                               </>
                             );
                           })}
 
                         {/* {agentsArr &&
-                          agentsArr.filter((spoke) => {
-                            spoke.leadId == leadId;
+                          agentsArr.filter((spoc) => {
+                            spoc.leadId == leadId;
 
                           })} */}
                       </select>
@@ -2011,11 +2014,11 @@ const Leads = () => {
             <div className="modal-body">
               <div className="form-header">
                 <h3>Update Agent</h3>
-                <p>Please Select a Spoke to assign !</p>
+                <p>Please Select a Spoc  to assign !</p>
               </div>
               <div className="col-sm-12">
                 <div className="form-group">
-                  <label>Assign to Spoke ({agentsArr.length})</label>
+                  <label>Assign to Spoc ({agentsArr.length})</label>
                   <Select
                     ref={agentSelect}
                     onChange={handleAgentChange}

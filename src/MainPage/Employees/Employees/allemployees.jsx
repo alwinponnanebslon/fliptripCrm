@@ -5,14 +5,17 @@ import { Link } from "react-router-dom";
 import { Avatar_02 } from "../../../Entryfile/imagepath";
 import Header from "../../../initialpage/Sidebar/header";
 import Sidebar from "../../../initialpage/Sidebar/sidebar";
+
 import {
   getAllEmployees,
   returnAllEmployees,
 } from "../../../redux/features/employee/employeeSlice";
+
 import { deleteEmployees, getEmployess } from "../../../Services/user.service";
 import { toastError } from "../../../utils/toastUtils";
 import Addemployee from "../../../_components/modelbox/Addemployee";
 import Editemployee from "../../../_components/modelbox/Editemployee";
+
 
 const AllEmployees = () => {
   const employees = useSelector(getAllEmployees);
@@ -22,6 +25,7 @@ const AllEmployees = () => {
   const [employeeIdQuery, setEmployeeIdQuery] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [displayEmployeeArr, setDisplayEmployeeArr] = useState([]);
+  const [isUpdateUser, setIsUpdateUser] = useState(false);
 
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
@@ -85,8 +89,8 @@ const AllEmployees = () => {
   };
 
   const handleEdit = (row) => {
-    // // console.log(row, "row update"); //whole object
-    setIsUpdateTour(true);
+    console.log(row, "row updat/e"); //whole object
+    setIsUpdateUser(true);
 
     dispatch(setTour(row));
   };
@@ -104,6 +108,9 @@ const AllEmployees = () => {
       setDisplayEmployeeArr(employeeArr);
     }
   }, [employees]);
+
+
+
   return (
     <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>
       <Header onMenuClick={(value) => toggleMobileMenu()} />
@@ -229,7 +236,8 @@ const AllEmployees = () => {
                               href="#"
                               data-bs-toggle="modal"
                               data-bs-target="#add_employee"
-                              onClick={() => handleEdit(row)}
+                              // onClick={() => handleEdit(row)}
+                              onClick={() => handleEdit()}
                             >
                               <i className="fa fa-pencil m-r-5" /> Edit
                             </a>

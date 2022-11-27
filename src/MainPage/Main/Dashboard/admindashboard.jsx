@@ -179,27 +179,8 @@ const AdminDashboard = () => {
       // date.setTime(
       //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
       // );
-      // let getMinute = date.getUTCMinutes();
-      // let getHoursDB = parseInt(el.followTime[0] + el.followTime[1]);
-      // if (getHoursDB == GetHours) {
-      //   // console.log(el, "el234");
-      //   let getMinutesDB = parseInt(el.followTime[3] + el.followTime[4]);
-      //   if (getMinute == getMinutesDB) {
-      //     console.log(getMinutesDB, "getMinutesDB123");
-      //     array2.push(el);
-      //   }
-      // }
-      // let date = Date.parse(new Date());
-      // var currentDate = new Date(new Date().getTime()); //-30 * 100)
-      // var difference = currentDate.getMinutes() - 1; //a minute ago
-      // currentDate.setMinutes(difference);
-      // currentDate = Date.parse(currentDate);
-      // if (
-      //   Date.parse(el.createdAt) <= date &&
-      //   Date.parse(el.createdAt) >= currentDate
-      // ) {
-      //   arr.push(el);
-      // }
+
+
     }
     if (array2.length == 0) {
       array2.push(...temp);
@@ -264,7 +245,7 @@ const AdminDashboard = () => {
       if (res.success) {
         let tempArr = res.data;
 
-        if (userAuthorise.role == "SPOKE") {
+        if (userAuthorise.role == "SPOC") {
           let temp = tempArr.filter(
             (el) => `${el.agentId}` == `${userAuthorise?.user?._id}`
           );
@@ -366,7 +347,7 @@ const AdminDashboard = () => {
   temp.map((x) => {
     if (
       x.status == leadStatus?.closed ||
-      x.status == leadStatus?.closedBySpoke
+      x.status == leadStatus?.closedBySpoc
     ) {
       closedLeadArr.push(x);
     } else if (
@@ -529,7 +510,7 @@ const AdminDashboard = () => {
                         {
                           leadsArr.filter((x) => {
                             return x.status == "CLOSED" ||
-                              x.status == "CLOSED_BY_SPOKE"
+                              x.status == "CLOSED_BY_SPOC"
                               ? "CLOSED"
                               : "";
                           }).length

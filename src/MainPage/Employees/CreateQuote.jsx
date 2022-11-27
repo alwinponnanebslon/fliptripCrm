@@ -255,7 +255,7 @@ const CreateQuote = () => {
                 <li className="breadcrumb-item active">Create Quote</li>
               </ul>
             </div>
-            {role != rolesObj.SPOKE && (
+            {role != rolesObj.SPOC && (
               <div className="col-auto float-end ml-auto">
                 <a
                   href="#"

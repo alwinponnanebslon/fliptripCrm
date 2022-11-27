@@ -47,7 +47,7 @@ export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE", "ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT"],
   },
   {
     path: "/admin/employee",
@@ -57,49 +57,49 @@ export default [
   {
     path: "/admin/employee-profile/:id",
     component: EmployeeProfile,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
     path: "/admin/clients",
     component: Clients,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
 
   {
     path: "/admin/destinations",
     component: ViewDestination,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
 
   // {
   //   path: "/admin/costingSheet",
   //   component: ViewCostingSheet,
-  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   // },
   // {
   //   path: "/admin/costingSheet/Add",
   //   component: AddCostingSheetForm,
-  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+  //   roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   // },
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE", "ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT"],
   },
   {
     path: "/quotation",
     component: Quotation,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
     path: "/admin/remainder",
     component: Remainder,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
     path: "/admin/notification",
     component: Notification,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOKE"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
 
   // {

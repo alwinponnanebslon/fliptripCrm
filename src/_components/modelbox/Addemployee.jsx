@@ -11,8 +11,13 @@ import { addEmployeeToDb, getEmployess } from "../../Services/user.service";
 import { rolesObj } from "../../utils/roles";
 import { toastError, toastSuccess } from "../../utils/toastUtils";
 import styles from "./selectStyles.module.css";
+// import {
+//   getAllEmployees,
+//   returnAllEmployees,
+// } from "../../../redux/features/employee/employeeSlice";
 
 const Addemployee = () => {
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,6 +40,8 @@ const Addemployee = () => {
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
+
+
 
   const handleEmployeeCreate = async (e) => {
     e.preventDefault();
@@ -87,7 +94,7 @@ const Addemployee = () => {
         toast.error("Role cannot be empty");
         return;
       }
-      if (role == rolesObj.SPOKE && leadId == "") {
+      if (role == rolesObj.SPOC && leadId == "") {
         toast.error("Team Lead cannot be empty");
         return;
       }
@@ -104,7 +111,7 @@ const Addemployee = () => {
         role,
         emergencyContact,
       };
-      if (role == rolesObj.SPOKE) {
+      if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
       let { data: res } = await addEmployeeToDb(obj);
@@ -112,6 +119,8 @@ const Addemployee = () => {
       if (res.success) {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
+        handleGetAllEmployees()
+        console.log("pppppp12321")
         // // console.log(obj)
       }
     } catch (error) {
@@ -306,7 +315,7 @@ const Addemployee = () => {
                         <option value={rolesObj.TEAMLEAD}>
                           {rolesObj.TEAMLEAD}
                         </option>
-                        <option value={rolesObj.SPOKE}>{rolesObj.SPOKE}</option>
+                        <option value={rolesObj.SPOC}>{rolesObj.SPOC}</option>
                         <option value={rolesObj.ACCOUNT}>
                           {rolesObj.ACCOUNT}
                         </option>
@@ -314,7 +323,7 @@ const Addemployee = () => {
                     </div>
                   </div>
 
-                  {role == rolesObj.SPOKE && (
+                  {role == rolesObj.SPOC && (
                     <div className="col-md-6 mt-3">
                       <div className="form-group">
                         <label>

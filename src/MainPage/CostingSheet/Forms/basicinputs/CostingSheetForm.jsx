@@ -52,6 +52,10 @@ const ViewCostingSheetForm = () => {
   const [isButtonFlight, setIsButtonFlight] = useState(false);
   const [isUpdatePrevDoc, setIsUpdatePrevDoc] = useState(false);
   const [prevDocId, setPrevDocId] = useState("");
+
+
+  const [landName, setLandName] = useState("");
+  const [landPrices, setLandPrices] = useState(0);
   const [isLocation, setIsLocation] = useState(false);
 
   const getQuotation = async () => {
@@ -105,7 +109,7 @@ const ViewCostingSheetForm = () => {
   useEffect(() => {
     // // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
-      setTotalCost(quotationObj?.paymentObj?.total);
+      setTotalCost(quotationObj?.paymentObj?.total + landPrices);
       setLandCost(quotationObj?.paymentObj?.landPrice);
       setflightCost(quotationObj?.paymentObj?.flightPrice);
       setLocationName(quotationObj?.destinationName);
@@ -407,6 +411,8 @@ const ViewCostingSheetForm = () => {
       landCost,
       flightCost,
       id: prevDocId,
+      landName,
+      landPrices
       // isBooked,
     };
     console.log(obj, "obj1");
@@ -416,6 +422,14 @@ const ViewCostingSheetForm = () => {
       dispatch(addCosting(obj));
     }
   };
+
+
+  const handleLandPricesAndTotalCost = (value) => {
+    setLandPrices(value)
+    setTotalCost(+totalCost + +value)
+  }
+  // useEffect(() => { setTotalCost(+totalCost + +landPrices) }, [landPrices])//==============
+
 
   return (
     <div className="page-wrapper">
@@ -629,6 +643,38 @@ const ViewCostingSheetForm = () => {
               </div>
             </div>
             <div className="content">
+              <div className="row">
+                {/* <div className="col-sm-12"> */}
+                {/* <div class="form-group col-md-4"> */}
+                <div className="col-12 col-md-4 mb-3">
+                  <label>Land Name </label>
+                  <input
+                    type="text"
+                    name="cost"
+                    value={landName}
+                    class="form-control"
+                    onChange={(e) => setLandName(e.target.value)}
+                  />
+                </div>
+                <div className="col-12 col-md-4 mb-3">
+                  {/* <div class="form-group col-md-4"> */}
+                  <label>Land Price</label>
+                  <input
+                    type="number"
+                    name="LandPrices"
+                    class="form-control"
+                    value={landPrices}
+                    onChange={(e) => setLandPrices(e.target.value)}
+                  />
+                </div>
+
+              </div>
+            </div>
+
+            {/* 
+          
+           */}
+            <div className="content">
               <div className="col-12 col-md-4 mb-3">
                 <label className="blue-1 fs-12">
                   Land Cost<span className="text-danger">*</span>
@@ -662,7 +708,7 @@ const ViewCostingSheetForm = () => {
                   type="number"
                   className="form-control"
                   value={totalCost}
-                  onChange={(e) => setTotalCost(e.target.value)}
+                // onChange={(e) => setTotalCost(e.target.value)}
                 />
               </div>
             </div>
@@ -675,7 +721,7 @@ const ViewCostingSheetForm = () => {
                 // type="number"
                 className="form-control"
                 value={profit}
-                onChange={(e) => setProfit(e.target.value)}
+              // onChange={(e) => setProfit(e.target.value)}
               />
             </div>
 
@@ -689,8 +735,8 @@ const ViewCostingSheetForm = () => {
             </div>
           </div>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

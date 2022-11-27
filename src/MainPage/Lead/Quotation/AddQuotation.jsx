@@ -5,7 +5,7 @@ import {
   quotationAdd,
   quotationUpdate,
 } from "../../../redux/features/quotation/quotationSlice";
-import { tourGet } from "../../../redux/features/tour/tourSlice";
+import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
 import { clientGet } from "../../../redux/features/client/clientSlice";
 import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
@@ -73,11 +73,14 @@ const AddQuotation = () => {
   const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [leadName, setLeadName] = useState("");
+  const statusOfTour = true
 
   useEffect(() => {
-    dispatch(tourGet());
+    // dispatch(tourGet({ "status"= statusOfTour }));
+    // dispatch(tourGet());
+    dispatch(activeTourGet());
     dispatch(clientGet());
-
+    // dispatch(leadGetById(leadId));
     // console.log("teave", travelList.length)
   }, []);
 
@@ -466,9 +469,9 @@ const AddQuotation = () => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -480,9 +483,9 @@ const AddQuotation = () => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -494,9 +497,9 @@ const AddQuotation = () => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -508,9 +511,9 @@ const AddQuotation = () => {
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -522,7 +525,7 @@ const AddQuotation = () => {
     }
   };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -572,6 +575,7 @@ const AddQuotation = () => {
                     <div className="col-sm-12">
                       <h3 className="mt-3 mb-4">Tour Details </h3>
                     </div>
+                    {/* {console.log(tourArr, "travel,23")} */}
                     {travelList &&
                       travelList.map((item, index) => {
                         return (
@@ -966,10 +970,10 @@ const AddQuotation = () => {
                           )}
                         </div>
                         {durationOfTour &&
-                        hotelList.reduce(
-                          (acc, el) => acc + parseInt(el.numberOfNight),
-                          0
-                        ) < durationOfTour ? (
+                          hotelList.reduce(
+                            (acc, el) => acc + parseInt(el.numberOfNight),
+                            0
+                          ) < durationOfTour ? (
                           <div className="col-md-12">
                             {/* {hotelList.length - 1 === i && ( */}
                             <button

@@ -16,6 +16,8 @@ import EditLead from "../../_components/modelbox/EditLead";
 import { leadGetById } from "../../redux/features/lead/leadSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { generateFilePath } from "../../utils/FileURL";
+
+
 const LeadView = () => {
   const dispatch = useDispatch();
   const { leadId } = useParams();
@@ -31,7 +33,7 @@ const LeadView = () => {
     dispatch(leadGetById(leadId));
   }, []);
 
-  useEffect(() => {}, [currentLead]);
+  useEffect(() => { }, [currentLead]);
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight");
@@ -70,12 +72,16 @@ const LeadView = () => {
                         {new Date(leadObj?.createdAt).toDateString()}{" "}
                       </span>
                       <span className="m-l-15 text-muted">Created by:</span>
+                      {console.log(leadObj, "leadObj234")}
                       <span>
                         <Link to="/app/profile/employee-profile">
-                          {leadObj?.createdBy?.firstName}{" "}
-                          {leadObj?.createdBy?.lastName}{" "}
-                          {!leadObj?.createdBy?.lastName &&
+                          {/* {leadObj?.createdBy?.firstName} */}
+                          {leadObj?.createdBy?.name}
+                          {/* {leadObj?.createdBy?.lastName} */}
+                          {/* {!leadObj?.createdBy?.lastName &&
                             !leadObj?.createdBy?.firstName &&
+                            "ADMIN"} */}
+                          {!leadObj?.createdBy?.name &&
                             "ADMIN"}
                         </Link>
                       </span>
@@ -241,7 +247,7 @@ const LeadView = () => {
                   <div className="chat-wrap-inner">
                     <div className="chat-box">
                       <div className="chats">
-                        {leadObj?.spokeObj ? (
+                        {leadObj?.spocObj ? (
                           <div className="chat chat-left">
                             <div className="chat-avatar">
                               <div className="avatar">
@@ -252,8 +258,8 @@ const LeadView = () => {
                               <div className="chat-bubble">
                                 <div className="chat-content">
                                   <span className="task-chat-user">
-                                    Spoke : {leadObj?.spokeObj?.firstName}{" "}
-                                    {leadObj?.spokeObj?.lastName}
+                                    Spoc : {leadObj?.spocObj?.firstName}{" "}
+                                    {leadObj?.spocObj?.lastName}
                                   </span>
                                 </div>
                               </div>
@@ -270,7 +276,7 @@ const LeadView = () => {
                               <div className="chat-bubble">
                                 <div className="chat-content">
                                   <span className="task-chat-user">
-                                    Spoke : NA
+                                    Spoc : NA
                                   </span>
                                 </div>
                               </div>

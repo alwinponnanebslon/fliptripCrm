@@ -15,7 +15,7 @@ const DashboardRoute = ({ match }) => {
     <Switch>
       <Redirect exact from={`${match.url}/`} to={`${match.url}/dashboard`} />
       {role == admin && <Route path={`${match.url}/dashboard`} component={Admindashboard} />}
-      {(role == rolesObj.TEAMLEAD || role == rolesObj.SPOKE) && <Route path={`${match.url}/employee-dashboard`} component={Employeedashboard} />}
+      {(role == rolesObj.TEAMLEAD || role == rolesObj.SPOC) && <Route path={`${match.url}/employee-dashboard`} component={Employeedashboard} />}
     </Switch>
   );
 };
