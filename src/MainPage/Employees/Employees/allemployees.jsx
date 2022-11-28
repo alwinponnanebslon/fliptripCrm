@@ -9,13 +9,13 @@ import Sidebar from "../../../initialpage/Sidebar/sidebar";
 import {
   getAllEmployees,
   returnAllEmployees,
+  serCurrentEmployee,
 } from "../../../redux/features/employee/employeeSlice";
 
 import { deleteEmployees, getEmployess } from "../../../Services/user.service";
 import { toastError } from "../../../utils/toastUtils";
 import Addemployee from "../../../_components/modelbox/Addemployee";
 import Editemployee from "../../../_components/modelbox/Editemployee";
-
 
 const AllEmployees = () => {
   const employees = useSelector(getAllEmployees);
@@ -79,20 +79,23 @@ const AllEmployees = () => {
       let { data: res } = await deleteEmployees(selectedEmployee._id);
       if (res.success) {
         handleGetAllEmployees();
+        toastSuccess(res.message);
         // // console.log(res, "res")
-        // dispatch(returnAllEmployees(res.data))
+        // dispatch(returnAllEmployees(res.data));
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
       toastError(error);
     }
   };
-
+  // Editemployee
   const handleEdit = (row) => {
-    console.log(row, "row updat/e"); //whole object
+    // console.log(row, "1row updat/e"); //whole object
     setIsUpdateUser(true);
 
-    dispatch(setTour(row));
+    // dispatch(setTour(row));
+    dispatch(serCurrentEmployee(row));
   };
 
   useEffect(() => {
@@ -100,16 +103,11 @@ const AllEmployees = () => {
   }, []);
 
   useEffect(() => {
-    // console.log("allemployees ");
-  }, []);
-  useEffect(() => {
     if (employees && employees.length > 0) {
       setEmployeeArr(employees);
       setDisplayEmployeeArr(employeeArr);
     }
   }, [employees]);
-
-
 
   return (
     <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>
@@ -237,7 +235,7 @@ const AllEmployees = () => {
                               data-bs-toggle="modal"
                               data-bs-target="#add_employee"
                               // onClick={() => handleEdit(row)}
-                              onClick={() => handleEdit()}
+                              onClick={() => handleEdit(el)}
                             >
                               <i className="fa fa-pencil m-r-5" /> Edit
                             </a>

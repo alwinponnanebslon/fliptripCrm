@@ -173,7 +173,7 @@ const ViewCostingSheetForm = () => {
                 <thead>
                   <tr>
                     <th>Hotel Name</th>
-                    <th>Hotel Address</th>
+                    <th>Booking Source</th>
                     <th>Cost</th>
                     <th>Booked</th>
                   </tr>
@@ -243,7 +243,8 @@ const ViewCostingSheetForm = () => {
                     return (
                       <tbody>
                         <tr>
-                          <td>{x?.receviedDate}</td>
+                          <td>{new Date(x?.receviedDate).toLocaleString()}</td>
+                          {/*.toLocaleString()------- 2022-11-25T13:04:06.625Z */}
                           <td>{x.installmentAmount}</td>
                           <td>{x.transferStatus}</td>
                           <td>{x.transferAmount}</td>

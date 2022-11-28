@@ -22,7 +22,7 @@ const ViewCostingSheetForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-
+  console.log(leadId, "leadId2143");
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheetObj
   );
@@ -38,7 +38,7 @@ const ViewCostingSheetForm = () => {
     {
       hotelName: "",
       bookingSource: "",
-      cost: 0,
+      cost: "",
       hold: false,
       reConfirmed: false,
       pending: false,
@@ -67,8 +67,8 @@ const ViewCostingSheetForm = () => {
     setIsLocation(true);
   }, [tempLocation]);
 
-  const handleInit = (leadId) => {
-    // // console.log(leadId, "leadId23");
+  const handleInit = () => {
+    console.log(leadId, "12leadId23");
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
@@ -77,40 +77,38 @@ const ViewCostingSheetForm = () => {
     handleInit();
   }, []);
 
-  useEffect(() => {
-    let tempCost = 0;
-    let tempCostOf = 0;
-    for (let ele of inputList) {
-      // console.log(ele, "oiinno");
-      tempCost = tempCost + Number.parseInt(ele.cost);
-    }
-    if (tempCost > parseInt(landCost)) {
-      tempCost = 0;
-      // console.log(tempCost, "11tempCost12");
-      setIsButtonHotel(true);
-      toastError("Hotel price cannot be greater than Total Land costsss");
-      return;
-    } else {
-      setIsButtonHotel(false);
-    }
-    for (let ele of flightList) {
-      tempCostOf = tempCostOf + Number.parseInt(ele.cost);
-    }
-    if (tempCostOf > +flightCost) {
-      setIsButtonFlight(true);
-      toastError("Flight price cannot be greater than total flight cost");
-      return;
-    } else {
-      setIsButtonFlight(false);
-    }
-  }, [inputList, flightList, landCost, flightCost]);
+  // useEffect(() => {
+  //   let tempCost = 0;
+  //   let tempCostOf = 0;
+  //   for (let ele of inputList) {
+  //     // console.log(ele, "oiinno");
+  //     tempCost = tempCost + Number.parseInt(ele.cost);
+  //   }
+  //   if (tempCost > parseInt(landCost)) {
+  //     tempCost = 0;
+  //     // console.log(tempCost, "11tempCost12");
+  //     setIsButtonHotel(true);
+  //     toastError("Hotel price cannot be greater than Total Land costsss");
+  //     return;
+  //   } else {
+  //     setIsButtonHotel(false);
+  //   }
+  //   for (let ele of flightList) {
+  //     tempCostOf = tempCostOf + Number.parseInt(ele.cost);
+  //   }
+  //   if (tempCostOf > +flightCost) {
+  //     setIsButtonFlight(true);
+  //     toastError("Flight price cannot be greater than total flight cost");
+  //     return;
+  //   } else {
+  //     setIsButtonFlight(false);
+  //   }
+  // }, [inputList, flightList, landCost, flightCost]);
 
   useEffect(() => {
     console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
-      setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
-      // setTotalCost(quotationObj?.paymentObj?.total);
-      // setTotalCost(quotationObj?.paymentObj?.total);
+      setTotalCost(quotationObj?.paymentObj?.total);
       setLandCost(quotationObj?.paymentObj?.landPrice);
       setflightCost(quotationObj?.paymentObj?.flightPrice);
       setLocationName(quotationObj?.destinationName);
@@ -119,11 +117,10 @@ const ViewCostingSheetForm = () => {
       setinputList([...quotationObj?.hotelDetail]);
       setQuotationId(quotationObj._id);
     }
-    // }, [quotationObj, additionalLandPrices]);
   }, [quotationObj]);
 
   useEffect(() => {
-    // console.log(costingSheetResultObj, "costingSheetResultObj23");
+    console.log(costingSheetResultObj, "123costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj.leadName);
       setLocationName(costingSheetResultObj.locationName);
@@ -143,50 +140,12 @@ const ViewCostingSheetForm = () => {
     }
   }, [costingSheetResultObj]);
 
-  // useEffect(()=>{
-  //   setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
-  // },[additionalLandPrices])
-  useEffect(() => {
-    setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
-  }, [quotationObj, additionalLandPrices]);
-
-  // useEffect(() => {
-  //   // // console.log(tempLocation, "21location");
-  //   // if (tempNum1 >= 2) {
-  //   // setLeadName("");
-  //   // setLocationName("");
-  //   // setProfit(0);
-  //   // setLeadsId("");
-  //   // setLandCost("");
-  //   // setflightCost("");
-  //   // setTotalExpense("");
-  //   // setinputList([{ hotelName: "", location: "", cost: "", isBooked: false }]);
-  //   // setFlightList([{ cost: "", flightName: "" }]);
-  //   // setTotalCost(0);
-  //   if (quotationObj && quotationObj._id) {
-  //     setTotalCost(quotationObj?.paymentObj?.total);
-  //     setLandCost(quotationObj?.paymentObj?.landPrice);
-  //     setflightCost(quotationObj?.paymentObj?.flightPrice);
-  //     setLocationName(quotationObj?.destinationName);
-  //     setLeadName(quotationObj?.leadObj?.clientObj?.name);
-  //     setLeadsId(leadId);
-  //     setinputList([...quotationObj?.hotelDetail]);
-  //     setQuotationId(quotationObj._id);
-  //     setCostingSheet(null);
-  //   setIsUpdatePrevDoc(false);
-  //   }
-  //   // window.location.reload();
-  //   // window.sessionStorage.setItem("obj", JSON.stringify(""));
-  //   // }
-  // }, [location.pathname]);
-
   const handleinputchange = (e, index) => {
     //hotel
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
-    // console.log(name, "name, ", value, " value,", checked, "name, checked23");
-    // console.log(index, "index, value2, che23");
+    // console.log(name, value, checked, "name, value, checked23");
     // console.log(inputList, "inputList2134");
     let tempList = [...inputList];
     let currentObj = Object.freeze(tempList[index]);
@@ -282,9 +241,6 @@ const ViewCostingSheetForm = () => {
     // console.log(tempList, "tempList23");
     setinputList([...tempList]);
   };
-  useEffect(() => {
-    console.log(inputList, "123234");
-  }, [inputList]);
 
   useEffect(() => {
     let temp = 0;
@@ -304,187 +260,30 @@ const ViewCostingSheetForm = () => {
     setProfit(totalCost - (+landCost + +flightCost));
   }, [flightList, totalCost, flightCost, landCost, totalExpense, profit]);
 
-  const handleremove = (index) => {
-    const list = [...inputList];
-    list.splice(index, 1);
-    setinputList(list);
-  };
-
-  const handleaddclick = () => {
-    setinputList([
-      ...inputList,
-      {
-        hotelName: "",
-        bookingSource: "",
-        cost: "",
-        hold: false,
-        reConfirmed: false,
-        pending: false,
-      },
-    ]);
-  };
-  const handleinputchangeHotel = (e, index) => {
-    const list = [...hotelList];
-
-    const { name, value } = e.target;
-    // // console.log(name, "name");
-    if (name == "rating") {
-      if (value > 6 || value < 1) {
-        toastError("invalid rating, kindly provide valid rating");
-        return;
-      }
-    }
-
-    if (name == "numberOfNight") {
-      if (value < "0" && value) {
-        toastError(`Number of nights cannot be less than 0`);
-        return;
-      }
-      let checkInDate = new Date(list[index]["checkIn"]);
-      let checkOutDate = new Date();
-      checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-      list[index]["checkOut"] = checkOutDate;
-    }
-
-    // console.log(list, "list");
-    list[index][name] = value;
-
-    setHotelList([...list]);
-  };
-  const handleinputchangeFlight = (e, index) => {
-    let { name, value } = e.target;
-    ("use strict");
-    let tempList = [...flightList];
-    let currentObj = Object.freeze(tempList[index]);
-    currentObj = {
-      flightName: tempList[index].flightName,
-      cost: tempList[index].cost,
-    };
-
-    if (name == "cost") {
-      if (isNaN(value)) {
-        value = 0;
-        toastError("Cost should be number");
-        return;
-      } else if (Number.isInteger(parseInt(value))) {
-        if (value > +flightCost) {
-          value = 0;
-          toastError("flight price can't be greater than total flight cost");
-          return;
-        }
-      }
-    }
-    currentObj[name] = value;
-    tempList[index] = currentObj;
-    setFlightList([...tempList]);
-    // }
-  };
-
-  const handleremoveFlightDetails = (index) => {
-    const list = [...flightList];
-    list.splice(index, 1);
-    setFlightList(list);
-  };
-
-  const handleaddclickFlightDetails = () => {
-    setFlightList([...flightList, { cost: "", flightName: "" }]);
-  };
-
-  // const quotationObtions = () => {
-  //   const temp = quotationObj.map((el) => {
-  //     return { ...el, value: el?.leadId, label: el?.leadId };
-  //   });
-  //   setAb([...temp]);
-  // };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (leadName == "") {
-      toastError("Lead Name is mandatory");
-      return;
-    } else if (locationName == "") {
-      toastError("Location Name is mandatory");
-      return;
-    }
-    //  else if (inputList && inputList[0].hotelName == "") {
-    //   toastError(" Hotel details are mandatory");
-    //   return;
-    // } else if (totalCost == "") {
-    //   toastError("Total cost is mandatory");
-    //   return;
-    // }
-    let obj = {
-      leadName,
-      leadsId,
-      locationName,
-      hotelDetails: inputList,
-      flightDetails: flightList,
-      totalCost,
-      profit,
-      landCost,
-      flightCost,
-      id: prevDocId,
-      additionalLandName,
-      additionalLandPrices,
-      // isBooked,
-    };
-    console.log(obj, "obj1");
-    if (isUpdatePrevDoc) {
-      dispatch(update(obj, obj.id));
-    } else {
-      dispatch(addCosting(obj));
-    }
-  };
-
-  const handleLandPricesAndTotalCost = (value) => {
-    setLandPrices(value);
-    setTotalCost(+totalCost + +value);
-  };
-  // useEffect(() => { setTotalCost(+totalCost + +landPrices) }, [landPrices])//==============
-
   return (
     <div className="page-wrapper">
       <div className="content container-fluid">
         <form action="" className="form">
-          <h3 className="blue-1 mb-4">
-            {isUpdatePrevDoc ? "Update" : "Add"} Costing Sheet
-          </h3>
+          <h3 className="blue-1 mb-4"></h3>
           <div className="row">
             <div className="col-12 col-md-8 mb-3">
               <label className="blue-1 fs-12">
                 Lead Name<span className="text-danger">*</span>
               </label>
-              <input
-                readOnly
-                type="text"
-                className="form-control"
-                value={leadName}
-                onChange={(e) => setLeadName(e.target.value)}
-              />
+              <input readOnly className="form-control" value={leadName} />
             </div>
             <div className="col-12  col-md-8 mb-3">
               <label className="blue-1 fs-12">
                 Lead Id<span className="text-danger">*</span>
               </label>
-              <input
-                readOnly
-                type="text"
-                className="form-control"
-                value={leadsId}
-                onChange={(e) => setLeadsId(e.target.value)}
-              />
+              <input readOnly className="form-control" value={leadsId} />
             </div>
             <div className="col-12  col-md-8 mb-3">
               <label className="blue-1 fs-12">
                 Location Name<span className="text-danger">*</span>
               </label>
 
-              <input
-                type="text"
-                className="form-control"
-                value={locationName}
-                onChange={(e) => setLocationName(e.target.value)}
-              />
+              <input readOnly className="form-control" value={locationName} />
             </div>
           </div>
 
@@ -499,55 +298,54 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Hotel Name</label>
                           <input
-                            type="text"
+                            readOnly
                             name="hotelName"
                             value={x.hotelName}
                             class="form-control"
-                            onChange={(e) => handleinputchange(e, i)}
                           />
                         </div>
                         <div class="form-group col-md-4">
                           <label>Booking Source</label>
                           <input
+                            readOnly
                             type="text"
                             name="bookingSource"
                             value={x.bookingSource}
                             class="form-control"
-                            onChange={(e) => handleinputchange(e, i)}
                           />
                         </div>
                         <div class="form-group col-md-4">
                           <label>Cost</label>
                           <input
-                            type="number"
+                            readOnly
                             name="cost"
                             value={x.cost}
                             class="form-control"
-                            onChange={(e) => handleinputchange(e, i)}
                           />
                         </div>
                         {/*  */}
                         <div className="col-12 mb-3">
                           <input
+                            readOnly
                             className="form-check-input"
                             type="checkbox"
                             name="hold"
                             value={x.hold}
                             checked={x.hold == true ? true : false}
                             id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
                           />
                           <label className="form-check-label fs-14">Hold</label>
                         </div>
                         <div className="col-12 mb-3">
                           <input
+                            readOnly
                             className="form-check-input"
                             type="checkbox"
                             name="reConfirmed"
                             value={x.reConfirmed}
                             checked={x.reConfirmed == true ? true : false}
                             id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
+                            // onChange={(e) => handleinputchange(e, i)}
                           />
                           <label className="form-check-label fs-14">
                             Re-confirmed
@@ -555,38 +353,18 @@ const ViewCostingSheetForm = () => {
                         </div>
                         <div className="col-12 mb-3">
                           <input
+                            readOnly
                             className="form-check-input"
                             type="checkbox"
                             name="pending"
                             value={x.pending}
                             checked={x.pending == true ? true : false}
                             id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
+                            // onChange={(e) => handleinputchange(e, i)}
                           />
                           <label className="form-check-label fs-14">
                             pending
                           </label>
-                        </div>
-                        {/*  */}
-                        <div class="form-group col-md-2 mt-4">
-                          {inputList.length !== 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-danger mx-1"
-                              onClick={() => handleremove(i)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                          {inputList.length - 1 === i && (
-                            <button
-                              disabled={isButtonHotel}
-                              className="btn btn-success"
-                              onClick={handleaddclick}
-                            >
-                              Add More
-                            </button>
-                          )}
                         </div>
                       </div>
                     );
@@ -600,52 +378,25 @@ const ViewCostingSheetForm = () => {
                 <div className="col-sm-12">
                   <h3 className="mt-3 mb-4">Flight Details</h3>
                   {flightList.map((x, i) => {
-                    // // console.log(x, i, "x,i123");
                     return (
                       <div className="row mb-3">
                         <div class="form-group col-md-4">
                           <label>Flight Name</label>
                           <input
-                            type="text"
+                            readOnly
                             name="flightName"
                             class="form-control"
                             value={x.flightName}
-                            placeholder="Enter Flight Name"
-                            onChange={(e) => handleinputchangeFlight(e, i)}
                           />
                         </div>
                         <div class="form-group col-md-4">
                           <label>Cost </label>
                           <input
-                            type="number"
+                            readOnly
                             name="cost"
                             value={x.cost}
-                            placeholder="Enter Cost"
                             class="form-control"
-                            onChange={(e) => handleinputchangeFlight(e, i)}
                           />
-                        </div>
-
-                        <div class="form-group col-md-2 mt-4">
-                          {flightList.length !== 1 && (
-                            <button
-                              type="button"
-                              className="btn btn-danger"
-                              onClick={() => handleremoveFlightDetails(i)}
-                            >
-                              Remove
-                            </button>
-                          )}
-                          {flightList.length - 1 === i && (
-                            <button
-                              disabled={isButtonFlight}
-                              type="button"
-                              className="btn btn-success"
-                              onClick={handleaddclickFlightDetails}
-                            >
-                              Add More
-                            </button>
-                          )}
                         </div>
                       </div>
                     );
@@ -656,23 +407,21 @@ const ViewCostingSheetForm = () => {
             <div className="content">
               <div className="row">
                 <div className="col-12 col-md-4 mb-3">
-                  <label> Additional Land Name </label>
+                  <label>Land Name </label>
                   <input
-                    type="text"
+                    readOnly
                     name="cost"
                     value={additionalLandName}
                     class="form-control"
-                    onChange={(e) => setAdditionalLandName(e.target.value)}
                   />
                 </div>
                 <div className="col-12 col-md-4 mb-3">
-                  <label>Additional Land Price</label>
+                  <label>Land Price</label>
                   <input
-                    type="number"
+                    readOnly
                     name="LandPrices"
                     class="form-control"
                     value={additionalLandPrices}
-                    onChange={(e) => setAdditionalLandPrices(e.target.value)}
                   />
                 </div>
               </div>
@@ -683,60 +432,21 @@ const ViewCostingSheetForm = () => {
            */}
             <div className="content">
               <div className="col-12 col-md-4 mb-3">
-                <label className="blue-1 fs-12">
-                  Land Cost<span className="text-danger">*</span>
-                </label>
-                <input
-                  readOnly
-                  type="number"
-                  className="form-control"
-                  value={landCost}
-                  onChange={(e) => setLandCost(e.target.value)}
-                />
+                <label className="blue-1 fs-12">Land Cost</label>
+                <input readOnly className="form-control" value={landCost} />
               </div>
               <div className="col-12 col-md-4 mb-3">
-                <label className="blue-1 fs-12">
-                  Flight Cost<span className="text-danger">*</span>
-                </label>
-                <input
-                  readOnly
-                  type="number"
-                  className="form-control"
-                  value={flightCost}
-                  onChange={(e) => setflightCost(e.target.value)}
-                />
+                <label className="blue-1 fs-12">Flight Cost</label>
+                <input readOnly className="form-control" value={flightCost} />
               </div>
               <div className="col-12 col-md-4 mb-3">
-                <label className="blue-1 fs-12">
-                  Total Cost<span className="text-danger">*</span>
-                </label>
-                <input
-                  readOnly
-                  type="number"
-                  className="form-control"
-                  value={totalCost}
-                />
+                <label className="blue-1 fs-12">Total Cost</label>
+                <input readOnly className="form-control" value={totalCost} />
               </div>
             </div>
             <div className="col-12 col-md-4 mb-3">
-              <label className="blue-1 fs-12">
-                Profit<span className="text-danger">*</span>
-              </label>
-              <input
-                readOnly
-                // type="number"
-                className="form-control"
-                value={profit}
-              />
-            </div>
-
-            <div className="col-12">
-              <CustomButton
-                isBtn
-                iconName=""
-                btnName="Save"
-                ClickEvent={handleSubmit}
-              />
+              <label className="blue-1 fs-12">Profit</label>
+              <input readOnly className="form-control" value={profit} />
             </div>
           </div>
         </form>

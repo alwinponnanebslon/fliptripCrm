@@ -255,31 +255,31 @@ const Quotation = () => {
   //   { value: "Bali", label: "Bali" },
   //   { value: "Switzerland", label: "Switzerland" },
   // ];
-  // const options1 = [
-  //   { value: "January", label: "January" },
-  //   { value: "February", label: "February" },
-  //   { value: "March", label: "March" },
-  //   { value: "April", label: "April" },
-  //   { value: "May", label: "May" },
-  //   { value: "June", label: "June" },
-  //   { value: "July", label: "July" },
-  //   { value: "August", label: "August" },
-  //   { value: "September	", label: "September	" },
-  //   { value: "October	", label: "October	" },
-  //   { value: "November", label: "November" },
-  //   { value: "December", label: "December" },
-  // ];
+  const options1 = [
+    { value: "January", label: "January" },
+    { value: "February", label: "February" },
+    { value: "March", label: "March" },
+    { value: "April", label: "April" },
+    { value: "May", label: "May" },
+    { value: "June", label: "June" },
+    { value: "July", label: "July" },
+    { value: "August", label: "August" },
+    { value: "September	", label: "September	" },
+    { value: "October	", label: "October	" },
+    { value: "November", label: "November" },
+    { value: "December", label: "December" },
+  ];
   // const options2 = [
   //   { value: "Active", label: "Active" },
   //   { value: "Hot", label: "Hot" },
   //   { value: "In Progress", label: "In Progress" },
   // ];
-  const options3 = [
-    { value: "Honey gupta", label: "Honey gupta" },
-    { value: "Me", label: "Me" },
-    { value: "Mohit Bawa", label: "Mohit Bawa" },
-    { value: "Deepika", label: "Deepika" },
-  ];
+  // const options3 = [
+  //   { value: "Honey gupta", label: "Honey gupta" },
+  //   { value: "Me", label: "Me" },
+  //   { value: "Mohit Bawa", label: "Mohit Bawa" },
+  //   { value: "Deepika", label: "Deepika" },
+  // ];
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -335,19 +335,19 @@ const Quotation = () => {
           <div className="row">
             {/* <div className="col-lg-2">
               <Select options={options} placeholder="Destinations " />
-            </div>
+            </div> */}
             <div className="col-lg-2">
               <Select options={options1} placeholder="Month of Travel" />
-            </div> */}
+            </div>
             {/* <div className="col-lg-2">
               <Select options={options2} placeholder="Lead Type" />
-            </div> */}
-            {/* <div className="col-lg-2">
+            </div>
+            <div className="col-lg-2">
               <Select options={options3} placeholder="Agent" />
             </div> */}
           </div>
         </div>
-
+        {/* {console.log(quotationMainArr, "quotationMainArr234")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">

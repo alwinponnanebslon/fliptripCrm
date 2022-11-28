@@ -20,11 +20,8 @@ import AddClient from "./AddClient";
 
 const Clients = () => {
   const role = useSelector((state) => state.auth.role);
-  const auth = useSelector((state) => state.auth.role)
-  const userId = useSelector((state) => state.auth.user._id)
-
-  console.log(auth, "auth3")
-  console.log(userId, "auth213244")
+  const auth = useSelector((state) => state.auth.role);
+  const userId = useSelector((state) => state.auth.user._id);
 
   useEffect(() => {
     if ($(".select").length > 0) {

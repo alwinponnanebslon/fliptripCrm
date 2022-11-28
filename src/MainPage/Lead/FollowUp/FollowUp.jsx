@@ -105,11 +105,11 @@ export const QuotationFollowup = () => {
       dataIndex: "description",
       sorter: (a, b) => a.description.length - b.description.length,
     },
-    {
-      title: "Description",
-      dataIndex: "description",
-      sorter: (a, b) => a.followDate.length - b.followDate.length,
-    },
+    // {
+    //   title: "Description",
+    //   dataIndex: "description",
+    //   sorter: (a, b) => a.followDate.length - b.followDate.length,
+    // },
     {
       title: "Status",
       dataIndex: "status",

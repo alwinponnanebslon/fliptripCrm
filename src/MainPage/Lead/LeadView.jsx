@@ -17,7 +17,6 @@ import { leadGetById } from "../../redux/features/lead/leadSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { generateFilePath } from "../../utils/FileURL";
 
-
 const LeadView = () => {
   const dispatch = useDispatch();
   const { leadId } = useParams();
@@ -26,6 +25,7 @@ const LeadView = () => {
   const role = useSelector((state) => state.auth.role);
 
   useEffect(() => {
+    console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
 
@@ -33,7 +33,7 @@ const LeadView = () => {
     dispatch(leadGetById(leadId));
   }, []);
 
-  useEffect(() => { }, [currentLead]);
+  useEffect(() => {}, [currentLead]);
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight");
@@ -68,21 +68,22 @@ const LeadView = () => {
                       <span className="m-l-15 text-muted">Client: </span>
                       <a href="#">{leadObj?.clientObj?.name}</a>
                       <span className="m-l-15 text-muted">Created: </span>
-                      <span>
-                        {new Date(leadObj?.createdAt).toDateString()}{" "}
-                      </span>
+                      <span>{new Date(leadObj?.createdAt).toDateString()}</span>
                       <span className="m-l-15 text-muted">Created by:</span>
-                      {console.log(leadObj, "leadObj234")}
+                      {/* {console.log(leadObj, "leadObj234")} */}
                       <span>
                         <Link to="/app/profile/employee-profile">
                           {/* {leadObj?.createdBy?.firstName} */}
-                          {leadObj?.createdBy?.name}
+                          {leadObj?.createdBy?.name +
+                            " [ " +
+                            leadObj?.createdBy?.role +
+                            " ]"}
+
                           {/* {leadObj?.createdBy?.lastName} */}
                           {/* {!leadObj?.createdBy?.lastName &&
                             !leadObj?.createdBy?.firstName &&
                             "ADMIN"} */}
-                          {!leadObj?.createdBy?.name &&
-                            "ADMIN"}
+                          {!leadObj?.createdBy?.name && "ADMIN"}
                         </Link>
                       </span>
                     </div>
@@ -258,7 +259,7 @@ const LeadView = () => {
                               <div className="chat-bubble">
                                 <div className="chat-content">
                                   <span className="task-chat-user">
-                                    Spoc : {leadObj?.spocObj?.firstName}{" "}
+                                    Spoc : {leadObj?.spocObj?.firstName}
                                     {leadObj?.spocObj?.lastName}
                                   </span>
                                 </div>

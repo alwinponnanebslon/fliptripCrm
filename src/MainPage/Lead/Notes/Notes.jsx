@@ -26,8 +26,8 @@ const Notes = () => {
   const { leadId } = useParams();
   const [noteId, setNoteId] = useState("");
   const [createdBy, setCreatedBy] = useState(null);
-  console.log(notesResultArr, "notesResultArr21");
-  console.log(noteResultobj, "12notesResultobj21");
+  // console.log(notesResultArr, "notesResultArr21");
+  // console.log(noteResultobj, "12notesResultobj21");
 
   useEffect(() => {
     handleInit();

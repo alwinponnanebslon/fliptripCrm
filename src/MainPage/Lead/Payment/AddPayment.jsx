@@ -77,7 +77,7 @@ export const AddPayment = () => {
   }, []);
 
   useEffect(() => {
-    console.log(quotationStateArr, "quotationStateArr");
+    // console.log(quotationStateArr, "quotationStateArr");
   }, [quotationStateArr]);
 
   const handleInit = () => {
@@ -85,7 +85,7 @@ export const AddPayment = () => {
   };
 
   useEffect(() => {
-    console.log(quotationPaymentObj, "q32uotationPaymentObj");
+    // console.log(quotationPaymentObj, "q32uotationPaymentObj");
     setPaymentObj(quotationPaymentObj);
   }, [quotationPaymentObj]);
 
@@ -408,6 +408,7 @@ export const AddPayment = () => {
                           <th scope="row">{index + 1}</th>
                           <td>
                             <input
+                              className="form-control mt-2"
                               type="date"
                               min={moment(new Date()).format("YYYY-MM-DD")}
                               onChange={(e) => {
@@ -420,8 +421,15 @@ export const AddPayment = () => {
                             />
                           </td>
                           <td>
+                            {/* <input
+                  className="form-control mt-2"
+                  value={tcs}
+                  onChange={(e) => setTcs(e.target.value)}
+                  type="number"
+                /> */}
                             <input
-                              type="text"
+                              className="form-control "
+                              type="number"
                               name="installmentAmount"
                               value={item.installmentAmount}
                               onChange={(e) => {
@@ -431,6 +439,7 @@ export const AddPayment = () => {
                           </td>
                           <td>
                             <input
+                              className="form-control "
                               onChange={(e) => {
                                 handlePaymentInput(e, index);
                               }}
@@ -451,6 +460,7 @@ export const AddPayment = () => {
 
                           <td>
                             <select
+                              className="form-control"
                               value={item.status}
                               onChange={(e) => {
                                 handlePaymentInput(e, index);

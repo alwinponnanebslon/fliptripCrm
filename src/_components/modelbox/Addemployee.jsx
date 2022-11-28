@@ -1,3 +1,4 @@
+import { CalendarDataManager } from "@fullcalendar/react";
 import moment from "moment";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -7,7 +8,12 @@ import {
   returnAllEmployees,
 } from "../../redux/features/employee/employeeSlice";
 import { getAllEmployees } from "../../redux/features/employee/employeeSlice";
-import { addEmployeeToDb, getEmployess } from "../../Services/user.service";
+import {
+  addEmployeeToDb,
+  getEmployess,
+  updateEmployeeToDb,
+  getAllEmployess,
+} from "../../Services/user.service";
 import { rolesObj } from "../../utils/roles";
 import { toastError, toastSuccess } from "../../utils/toastUtils";
 import styles from "./selectStyles.module.css";
@@ -17,7 +23,6 @@ import styles from "./selectStyles.module.css";
 // } from "../../../redux/features/employee/employeeSlice";
 
 const Addemployee = () => {
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,15 +38,114 @@ const Addemployee = () => {
   const dispatch = useDispatch();
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
   const employees = useSelector(getAllEmployees);
+  const [employeeObj, setEmployeeObj] = useState({});
+  const [prevDocUpdated, setPrevDocUpdated] = useState(false);
+  const [docId, setDocId] = useState("");
 
   const reduxrole = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
+  const userObjData = useSelector((state) => state.employee.employeeObj);
 
+  const handleGetAllEmployees = async () => {
+    try {
+      let { data: res } = await getEmployess(userObj._id, reduxrole);
+      if (res.success) {
+        dispatch(returnAllEmployees(res.data));
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
 
+  useEffect(() => {
+    if (userObjData && userObjData._id) {
+      setEmployeeObj(userObjData);
+    }
+  }, [userObjData]);
 
+  useEffect(() => {
+    if (employeeObj && employeeObj._id) {
+      setFirstName(employeeObj.firstName);
+      setLastName(employeeObj.lastName);
+      setEmail(employeeObj.email);
+      setPhone(employeeObj.phone);
+      setPassword(employeeObj.password);
+      setConfirmPassword(employeeObj.confirmPassword);
+      setEmployeeId(employeeObj.employeeId);
+      setDoj(employeeObj.doj);
+      setDob(employeeObj.dob);
+      setRole(employeeObj.role);
+      setEmergencyContact(employeeObj.emergencyContact);
+      setLeadId(employeeObj.leadId);
+      setPrevDocUpdated(true);
+      setDocId(employeeObj._id);
+      //
+      //
+      //
+      //
+    }
+  }, [employeeObj]);
+
+  const ClearData = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setConfirmPassword("");
+    setEmployeeId("");
+    setDoj("");
+    setDob("");
+    setRole("");
+    setEmergencyContact("");
+    setLeadId("");
+    setTeamLeadsArr("");
+    setDocId("");
+  };
+
+  const handleEmployeeEdit = async (e) => {
+    e.preventDefault();
+    try {
+      let obj = {
+        firstName,
+        lastName,
+        employeeId,
+        doj,
+        phone,
+        dob,
+        role,
+        emergencyContact,
+      };
+      if (role == rolesObj.SPOC) {
+        obj.leadId = leadId;
+      }
+
+      let { data: res } = await updateEmployeeToDb(docId, obj);
+
+      if (res.success) {
+        // dispatch(addEmployee(obj))
+        toastSuccess(res.message);
+        handleGetAllEmployees();
+        // getAllEmployess();
+        window.location.reload();
+        ClearData();
+        dispatch(returnAllEmployees);
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
+
+  const handleCheckIsUpdateOrCreate = async (e) => {
+    {
+      prevDocUpdated ? handleEmployeeEdit(e) : handleEmployeeCreate(e);
+    }
+  };
 
   const handleEmployeeCreate = async (e) => {
     e.preventDefault();
@@ -119,22 +223,10 @@ const Addemployee = () => {
       if (res.success) {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
-        handleGetAllEmployees()
-        console.log("pppppp12321")
+        handleGetAllEmployees();
+        window.location.reload();
+        ClearData();
         // // console.log(obj)
-      }
-    } catch (error) {
-      console.error(error);
-      toastError(error);
-    }
-  };
-
-  const handleGetAllEmployees = async () => {
-    try {
-      let { data: res } = await getEmployess(userObj._id, reduxrole);
-      if (res.success) {
-        // // console.log(res, "res")
-        dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
       console.error(error);
@@ -158,7 +250,9 @@ const Addemployee = () => {
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title">Add Employee</h5>
+              <h5 className="modal-title">
+                {prevDocUpdated ? "Update" : "Add"} Employee
+              </h5>
               <button
                 type="button"
                 className="close"
@@ -195,42 +289,49 @@ const Addemployee = () => {
                       />
                     </div>
                   </div>
-
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Email <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="form-control"
-                        type="email"
-                      />
+                  {!prevDocUpdated && (
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Email <span className="text-danger">*</span>
+                        </label>
+                        <input
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="form-control"
+                          type="email"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">Password</label>
-                      <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="form-control"
-                        type="password"
-                      />
+                  )}
+                  {!prevDocUpdated && (
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">Password</label>
+                        <input
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="form-control"
+                          type="password"
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">Confirm Password</label>
-                      <input
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="form-control"
-                        type="password"
-                      />
+                  )}
+                  {!prevDocUpdated && (
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Confirm Password
+                        </label>
+                        <input
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="form-control"
+                          type="password"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="col-sm-6">
                     <div className="form-group">
                       <label className="col-form-label">
@@ -251,6 +352,7 @@ const Addemployee = () => {
                       </label>
                       <div>
                         <input
+                          checked={employeeObj.doj ? employeeObj.doj : ""}
                           onChange={(e) => setDoj(e.target.value)}
                           className="form-control datetimepicker"
                           type="date"
@@ -539,7 +641,9 @@ const Addemployee = () => {
                 <div className="submit-section">
                   <button
                     className="btn btn-primary submit-btn"
-                    onClick={(e) => handleEmployeeCreate(e)}
+                    onClick={(e) => {
+                      handleCheckIsUpdateOrCreate(e);
+                    }}
                     data-bs-dismiss="modal"
                   >
                     Submit

@@ -33,6 +33,7 @@ import {
   getAllLead,
   getLeadFilterByDate,
 } from "../../Services/lead.service";
+
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 import { tourGet } from "../../redux/features/tour/tourSlice";
 import { clientGet, setObj } from "../../redux/features/client/clientSlice";
@@ -44,12 +45,14 @@ import { shouldForwardProp } from "@mui/system";
 const Leads = () => {
   const dispatch = useDispatch();
   const agents = useSelector(getAllAgents); //spoc
+  // console.log(agents, "agents234");
   const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
   // // console.log(agents, "12agents");
   // // console.log(teamLeads, "12ateamLeads");
   const destinations = useSelector((state) => state.tour.tours);
   // const clients = useSelector((state) => state.client.clientArr);
   // const [clientObj, setClientObj] = useState({ id: "", name: "" })
+
   const [clientId, setClientId] = useState("");
   const [leadObj, setLeadObj] = useState({});
   const [leadUpdateId, setLeadUpdateId] = useState("");
@@ -58,6 +61,7 @@ const Leads = () => {
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
   const role = useSelector((state) => state.auth.role);
   const userAuthorise = useSelector((state) => state.auth);
+
   // console.log(userAuthorise, "role223");
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
@@ -110,8 +114,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-          ? "rgba(255,155,68,0.5)"
-          : "white",
+        ? "rgba(255,155,68,0.5)"
+        : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -235,7 +239,7 @@ const Leads = () => {
     //   clientsArr,
     //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
     // );
-    console.log(agents, "agetn2");
+    // console.log(agents, "agetn2");
     if (agents && agents.length > 0) {
       let tempArr = [];
       if (leadId != "") {
@@ -260,7 +264,7 @@ const Leads = () => {
           return obj;
         });
       }
-      console.log(tempArr, "12tempArr12");
+      // console.log(tempArr, "12tempArr12");
       setAgentsArr([...tempArr]);
     }
   }, [agents]);
@@ -538,7 +542,31 @@ const Leads = () => {
   };
 
   const handleTeamLeadChange = (e) => {
-    // console.log(e, "Eeeeeeeee");
+    console.log(e, "Eeeeeeeee");
+    // console.log(agents, "3242123");
+    // let tempArr = teamLeads.map((el) => {
+    //   let obj = {
+    //     label: `${el.firstName} ${el.lastName}`,
+    //     value: el?._id,
+    //   };
+    //   return obj;
+    // });
+    // setTeamLeadsArr([...tempArr]);
+
+    let arr = [];
+    if (agents && agents.length > 0) {
+      arr = agents
+        .filter((el) => el.leadId == e)
+        .map((el) => {
+          let obj = {
+            label: `${el.firstName} ${el.lastName}`,
+            value: el?._id,
+          };
+          return obj;
+        });
+    }
+    console.log(arr, "Arr23s123");
+    setAgentsArr(arr);
     setLeadId(e);
     // setAgentId("");
   };
@@ -595,75 +623,10 @@ const Leads = () => {
   };
 
   const handleReturndropDown = (record) => {
-    // // console.log(role, "role");
-    // // console.log(record?.status, "role");
-    // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
+    // console.log(role, "role");
+    // console.log(record?.status, "role");
+    // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
     if (role == "ADMIN") {
-      return (
-        <>
-          <div>
-            <a
-              className="btn btn-white btn-sm btn-rounded dropdown-toggle"
-              href="#"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {record?.status == leadStatus.on_Hold ||
-                record?.status == leadStatus.cancelled ? (
-                <i className="fa fa-dot-circle-o text-danger" />
-              ) : record?.status == leadStatus.open ||
-                record?.status == leadStatus.reopened ? (
-                <i className="fa fa-dot-circle-o text-info" />
-              ) : (
-                <i className="fa fa-dot-circle-o text-success" />
-              )}
-              {record?.status}
-            </a>
-          </div>
-        </>
-      );
-    } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
-      return (
-        <>
-          <div>
-            {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
-              <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
-              <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
-              <i className="fa fa-dot-circle-o text-warning" />
-            ) : (
-              <i className="fa fa-dot-circle-o text-success" />
-            )}
-            {record?.status}
-          </div>
-        </>
-      );
-    } else if (
-      role == rolesObj.SPOC &&
-      record?.status == leadStatus.closedBySpoc
-    ) {
-      return (
-        <>
-          <div>
-            {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
-              <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
-              <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
-              <i className="fa fa-dot-circle-o text-warning" />
-            ) : (
-              <i className="fa fa-dot-circle-o text-success" />
-            )}
-            {record?.status}
-          </div>
-        </>
-      );
-    } else {
       return (
         <>
           <a
@@ -673,7 +636,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -710,7 +673,7 @@ const Leads = () => {
             >
               <i className="fa fa-dot-circle-o text-danger" /> On Hold
             </a>
-            {role == rolesObj.TEAMLEAD ? (
+            {role == rolesObj.ADMIN ? (
               <a
                 className="dropdown-item"
                 onClick={() =>
@@ -726,8 +689,7 @@ const Leads = () => {
                   handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
                 }
               >
-                <i className="fa fa-dot-circle-o text-warning" /> Closed By
-                Spoc
+                <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
               </a>
             )}
             <a
@@ -749,8 +711,292 @@ const Leads = () => {
           </div>
         </>
       );
+    } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
+      return (
+        <>
+          <div>
+            {record?.status == leadStatus.on_Hold ||
+            record?.status == leadStatus.cancelled ? (
+              <i className="fa fa-dot-circle-o text-danger" />
+            ) : record?.status == leadStatus.open ||
+              record?.status == leadStatus.reopened ? (
+              <i className="fa fa-dot-circle-o text-info" />
+            ) : record?.status == leadStatus.closedBySpoc ? (
+              <i className="fa fa-dot-circle-o text-warning" />
+            ) : (
+              <i className="fa fa-dot-circle-o text-success" />
+            )}
+            {record?.status}
+          </div>
+        </>
+      );
+    } else if (
+      role == rolesObj.SPOC &&
+      record?.status == leadStatus.closedBySpoc
+    ) {
+      return (
+        <>
+          <div>
+            {record?.status == leadStatus.on_Hold ||
+            record?.status == leadStatus.cancelled ? (
+              <i className="fa fa-dot-circle-o text-danger" />
+            ) : record?.status == leadStatus.open ||
+              record?.status == leadStatus.reopened ? (
+              <i className="fa fa-dot-circle-o text-info" />
+            ) : record?.status == leadStatus.closedBySpoc ? (
+              <i className="fa fa-dot-circle-o text-warning" />
+            ) : (
+              <i className="fa fa-dot-circle-o text-success" />
+            )}
+            {record?.status}
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <a
+            className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+            href="#"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {record?.status == leadStatus.open ||
+            record?.status == leadStatus.reopened ? (
+              <i className="fa fa-dot-circle-o text-info" />
+            ) : record?.status == leadStatus.on_Hold ||
+              record?.status == leadStatus.cancelled ? (
+              <i className="fa fa-dot-circle-o text-danger" />
+            ) : record?.status == leadStatus.closedBySpoc ? (
+              <i className="fa fa-dot-circle-o text-warning" />
+            ) : (
+              <i className="fa fa-dot-circle-o text-success" />
+            )}
+            {record?.status}
+          </a>
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.open)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-info" /> Open
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.reopened)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-info" /> Reopened
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-danger" /> On Hold
+            </a>
+            {/* {role == rolesObj.TEAMLEAD ? (
+              <a
+                className="dropdown-item"
+                onClick={() =>
+                  handleLeadStatusUpdate(record?._id, leadStatus.closed)
+                }
+              >
+                <i className="fa fa-dot-circle-o text-success" /> Closed
+              </a>
+            ) : ( */}
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+            </a>
+            {/* )} */}
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-success" /> In Progress
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
+              }
+            >
+              <i className="fa fa-dot-circle-o text-danger" /> Cancelled
+            </a>
+          </div>
+        </>
+      );
     }
   };
+
+  // const handleReturndropDown = (record) => {
+  //   // // console.log(role, "role");
+  //   // // console.log(record?.status, "role");
+  //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
+  //   if (role == "ADMIN") {
+  //     return (
+  //       <>
+  //         <div>
+  //           <a
+  //             className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+  //             href="#"
+  //             data-bs-toggle="dropdown"
+  //             aria-expanded="false"
+  //           >
+  //             {record?.status == leadStatus.on_Hold ||
+  //               record?.status == leadStatus.cancelled ? (
+  //               <i className="fa fa-dot-circle-o text-danger" />
+  //             ) : record?.status == leadStatus.open ||
+  //               record?.status == leadStatus.reopened ? (
+  //               <i className="fa fa-dot-circle-o text-info" />
+  //             ) : (
+  //               <i className="fa fa-dot-circle-o text-success" />
+  //             )}
+  //             {record?.status}
+  //           </a>
+  //         </div>
+  //       </>
+  //     );
+  //   } else
+  //   if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
+  //     return (
+  //       <>
+  //         <div>
+  //           {record?.status == leadStatus.on_Hold ||
+  //           record?.status == leadStatus.cancelled ? (
+  //             <i className="fa fa-dot-circle-o text-danger" />
+  //           ) : record?.status == leadStatus.open ||
+  //             record?.status == leadStatus.reopened ? (
+  //             <i className="fa fa-dot-circle-o text-info" />
+  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //             <i className="fa fa-dot-circle-o text-warning" />
+  //           ) : (
+  //             <i className="fa fa-dot-circle-o text-success" />
+  //           )}
+  //           {record?.status}
+  //         </div>
+  //       </>
+  //     );
+  //   } else if (
+  //     role == rolesObj.SPOC &&
+  //     record?.status == leadStatus.closedBySpoc
+  //   ) {
+  //     return (
+  //       <>
+  //         <div>
+  //           {record?.status == leadStatus.on_Hold ||
+  //           record?.status == leadStatus.cancelled ? (
+  //             <i className="fa fa-dot-circle-o text-danger" />
+  //           ) : record?.status == leadStatus.open ||
+  //             record?.status == leadStatus.reopened ? (
+  //             <i className="fa fa-dot-circle-o text-info" />
+  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //             <i className="fa fa-dot-circle-o text-warning" />
+  //           ) : (
+  //             <i className="fa fa-dot-circle-o text-success" />
+  //           )}
+  //           {record?.status}
+  //         </div>
+  //       </>
+  //     );
+  //   } else {
+  //     return (
+  //       <>
+  //         <a
+  //           className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+  //           href="#"
+  //           data-bs-toggle="dropdown"
+  //           aria-expanded="false"
+  //         >
+  //           {record?.status == leadStatus.open ||
+  //           record?.status == leadStatus.reopened ? (
+  //             <i className="fa fa-dot-circle-o text-info" />
+  //           ) : record?.status == leadStatus.on_Hold ||
+  //             record?.status == leadStatus.cancelled ? (
+  //             <i className="fa fa-dot-circle-o text-danger" />
+  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //             <i className="fa fa-dot-circle-o text-warning" />
+  //           ) : (
+  //             <i className="fa fa-dot-circle-o text-success" />
+  //           )}
+  //           {record?.status}
+  //         </a>
+  //         <div className="dropdown-menu dropdown-menu-right">
+  //           <a
+  //             className="dropdown-item"
+  //             onClick={() =>
+  //               handleLeadStatusUpdate(record?._id, leadStatus.open)
+  //             }
+  //           >
+  //             <i className="fa fa-dot-circle-o text-info" /> Open
+  //           </a>
+  //           <a
+  //             className="dropdown-item"
+  //             onClick={() =>
+  //               handleLeadStatusUpdate(record?._id, leadStatus.reopened)
+  //             }
+  //           >
+  //             <i className="fa fa-dot-circle-o text-info" /> Reopened
+  //           </a>
+  //           <a
+  //             className="dropdown-item"
+  //             onClick={() =>
+  //               handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
+  //             }
+  //           >
+  //             <i className="fa fa-dot-circle-o text-danger" /> On Hold
+  //           </a>
+  //           {role == rolesObj.TEAMLEAD ? (
+  //             <a
+  //               className="dropdown-item"
+  //               onClick={() =>
+  //                 handleLeadStatusUpdate(record?._id, leadStatus.closed)
+  //               }
+  //             >
+  //               <i className="fa fa-dot-circle-o text-success" /> Closed
+  //             </a>
+  //           ) : (
+  //             <a
+  //               className="dropdown-item"
+  //               onClick={() =>
+  //                 handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
+  //               }
+  //             >
+  //               <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+  //             </a>
+  //           )}
+  //           <a
+  //             className="dropdown-item"
+  //             onClick={() =>
+  //               handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
+  //             }
+  //           >
+  //             <i className="fa fa-dot-circle-o text-success" /> In Progress
+  //           </a>
+  //           <a
+  //             className="dropdown-item"
+  //             onClick={() =>
+  //               handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
+  //             }
+  //           >
+  //             <i className="fa fa-dot-circle-o text-danger" /> Cancelled
+  //           </a>
+  //         </div>
+  //       </>
+  //     );
+  //   }
+  // };
 
   const columns = [
     {
@@ -777,9 +1023,11 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -956,7 +1204,7 @@ const Leads = () => {
                   to={`/admin/lead/${record._id}/ViewDetails`}
                   onClick={() => handleEdit(record._id)}
                 >
-                  <i className="fa fa-pencil m-r-5" /> View
+                  <i className=" m-r-5" /> View
                 </Link>
 
                 {/* <a
@@ -1000,9 +1248,11 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -1540,12 +1790,11 @@ const Leads = () => {
                 </div>
               </div>
             )}
-          {role != rolesObj.SPOC &&
+          {/* {role != rolesObj.SPOC &&
             role != rolesObj.ACCOUNT &&
             role != rolesObj.TEAMLEAD && (
               <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div className="form-group form-focus select-focus">
-                  {/* agents */}
                   <Select
                     onChange={handleFilterBySpoc}
                     menuPortalTarget={document.body}
@@ -1562,7 +1811,7 @@ const Leads = () => {
                   <label className="focus-label">Filter By Spoc </label>
                 </div>
               </div>
-            )}
+            )} */}
           {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus">
@@ -1686,10 +1935,10 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                      ? columns_TeamLeader
-                      : role == "SPOC"
-                        ? columns_SPOC
-                        : []
+                    ? columns_TeamLeader
+                    : role == "SPOC"
+                    ? columns_SPOC
+                    : []
                 }
                 // columns={columns}
                 // bordered
@@ -1824,6 +2073,7 @@ const Leads = () => {
               /> */}
                   </div>
                 </div>
+                {console.log("234789047890")}
                 {/* <Select
                           options={teamLeadsArr.map((el) => {
                             return { ...el, value: el._id, label: el.name };
@@ -1888,7 +2138,13 @@ const Leads = () => {
                 {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Assign to Spoc ({agentsArr.length})</label>
+                      <label>
+                        Assign to Spoc (
+                        {agentsArr && agentsArr.length > 0
+                          ? agentsArr.length
+                          : 0}
+                        )
+                      </label>
                       {console.log(agentsArr, "agentsArr123")}
                       <select
                         className="select form-control"
@@ -1920,8 +2176,8 @@ const Leads = () => {
                             return (
                               <>
                                 <option key={i} value={spoc.value}>
-                                  {spoc.leadId == leadId ? spoc.label : ""}
-                                  {/* {spoc.label} */}
+                                  {/* {spoc.leadId == leadId ? spoc.label : ""} */}
+                                  {spoc.label}
                                 </option>
                               </>
                             );
@@ -2014,11 +2270,14 @@ const Leads = () => {
             <div className="modal-body">
               <div className="form-header">
                 <h3>Update Agent</h3>
-                <p>Please Select a Spoc  to assign !</p>
+                <p>Please Select a Spoc to assign !</p>
               </div>
               <div className="col-sm-12">
                 <div className="form-group">
-                  <label>Assign to Spoc ({agentsArr.length})</label>
+                  <label>
+                    Assign to Spoc (
+                    {agentsArr && agentsArr.length > 0 ? agentsArr.length : 0})
+                  </label>
                   <Select
                     ref={agentSelect}
                     onChange={handleAgentChange}

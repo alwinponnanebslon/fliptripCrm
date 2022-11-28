@@ -38,6 +38,10 @@ const ViewDestination = () => {
     setTourMainArr(toursResultArr);
   }, [toursResultArr]);
 
+  const ClearData = () => {
+    setName("");
+    setDescription("");
+  };
   const handleEdit = (row) => {
     // // console.log(row, "row update"); //whole object
     setIsUpdateTour(true);
@@ -78,10 +82,13 @@ const ViewDestination = () => {
       obj.Id = tourId;
       setIsUpdateTour(false);
       dispatch(updateTour(obj));
+      ClearData();
     } else {
       dispatch(addTour(obj));
+      ClearData();
     }
   };
+
   const tour_columns = [
     {
       title: "Name",

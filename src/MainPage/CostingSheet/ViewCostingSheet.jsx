@@ -49,6 +49,11 @@ const ViewCostingSheet = () => {
     // window.sessionStorage.setItem("obj", JSON.stringify(row));
     dispatch(setCostingSheet(row));
   };
+  const handleView = (row) => {
+    // // console.log(row, "row23");
+    // window.sessionStorage.setItem("obj", JSON.stringify(row));
+    dispatch(setCostingSheet(row));
+  };
 
   const handleCostingSheetDelete = (id) => {
     dispatch(deleteCostingSheet(id));
@@ -94,6 +99,13 @@ const ViewCostingSheet = () => {
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
+            <Link
+              className="dropdown-item"
+              to={`/admin/lead/${leadId}/costingSheetView`}
+              onClick={() => handleView(row)}
+            >
+              <i className="fa fa-pencil m-r-5" /> View
+            </Link>
             <Link
               className="dropdown-item"
               to={`/admin/lead/${leadId}/costingSheetAdd`}

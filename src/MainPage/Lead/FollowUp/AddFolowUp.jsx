@@ -35,7 +35,7 @@ const AddFolowUp = () => {
       followDate,
       createdBy,
     };
-    console.log(obj, "ob23");
+    // console.log(obj, "ob23");
     if (followUpResultObj?._id) {
       obj.Id = followupId;
       dispatch(updatefollowUp(obj));
@@ -44,7 +44,7 @@ const AddFolowUp = () => {
       dispatch(addfollowUp(obj));
     }
   };
-  console.log(followDate, "fooldate");
+  // console.log(followDate, "fooldate");
   const handleClose = () => {
     dispatch(setfollowUp(null));
     setIsUpdate(false);
@@ -120,7 +120,7 @@ const AddFolowUp = () => {
               <div className="form-group row">
                 <label className="col-form-label col-md-2"> Follow Date </label>
                 <div className="col-md-10">
-                DatePicker  
+                  DatePicker
                   <input
                     type="date"
                     className="form-control"

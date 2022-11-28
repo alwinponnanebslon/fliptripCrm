@@ -147,13 +147,13 @@ const AdminDashboard = () => {
     let date = new Date();
     let time = `${date.getHours()}:${date.getMinutes()}`;
     let temp = [];
-    console.log("inside setinerteval ");
-    console.log(RemainderArray, "inside setinerteval ");
-    console.log(remainderArr, "remainderArral ");
+    // console.log("inside setinerteval ");
+    // console.log(RemainderArray, "inside setinerteval ");
+    // console.log(remainderArr, "remainderArral ");
     for (let el of remainderArr) {
-      console.log(el, "el12");
+      // console.log(el, "el12");
       // console.log("3223233232342");
-      console.log(time == el.followTime, "3time34");
+      // console.log(time == el.followTime, "3time34");
       // if (el.followTime.includes("0")) {
       //   time = time + "";
       //   time = 0 + time;
@@ -162,7 +162,7 @@ const AdminDashboard = () => {
       //   }
       // } else
       if (el.followTime == time) {
-        console.log(el.followTime, time, "time");
+        // console.log(el.followTime, time, "time");
         temp.push(el);
       }
 
@@ -179,8 +179,6 @@ const AdminDashboard = () => {
       // date.setTime(
       //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
       // );
-
-
     }
     if (array2.length == 0) {
       array2.push(...temp);
@@ -241,7 +239,7 @@ const AdminDashboard = () => {
   const handleGetAllLeads = async () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
-      console.log(res, "resres4");
+      // console.log(res, "resres4");
       if (res.success) {
         let tempArr = res.data;
 
@@ -287,10 +285,11 @@ const AdminDashboard = () => {
   const handleGetAllLeadOfTenDays = async () => {
     try {
       let { data: res } = await getAllLeadOfTenDays(userObj?._id, role);
-      console.log(res.data, "getAlLEAD34");
+      // console.log(res.data, "getAlLEAD34");
 
       let allLeadArr = res.data;
       let tempArray = [];
+      // console.log(allLeadArr, "12allLeadArr213s");
       for (let el of allLeadArr) {
         tempArray.push({
           y: el.date + "",
@@ -308,7 +307,7 @@ const AdminDashboard = () => {
       let { data: res } = await getAllSalesOfTenDays(
         `leadId=${userAuthorise.user?._id}`
       );
-      console.log(res.data, "gew34");
+      // console.log(res.data, "gew34");
       // { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
       let allLeadArr = res.data;
       let tempArray = [];
@@ -377,7 +376,7 @@ const AdminDashboard = () => {
         role,
         userAuthorise?.user?._id
       );
-      console.log(res.data, "g1");
+      // console.log(res.data, "g1");
       setDisplayLeadsArr(res.data);
       setLeadsArr(res.data); ////////////////////////
       // let allLeadArr = res.data;
@@ -391,7 +390,7 @@ const AdminDashboard = () => {
       // }
       // setAllLeadArr(tempArray);
       let allLeadArr = res.arr;
-      console.log(allLeadArr, "allLeadArr213");
+      // console.log(allLeadArr, "allLeadArr213");
       let tempArray = [];
       for (let el of allLeadArr) {
         tempArray.push({
