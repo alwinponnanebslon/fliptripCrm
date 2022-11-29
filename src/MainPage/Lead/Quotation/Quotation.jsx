@@ -19,6 +19,8 @@ import {
   setQuotationObj,
   quotationDelete,
   quotationUpdateStatus,
+  quotationFilterGet,
+  quotationFilterByStatusGet,
 } from "../../../redux/features/quotation/quotationSlice";
 
 import AddQuotation from "./AddQuotation";
@@ -38,13 +40,15 @@ const Quotation = () => {
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [leadObj, setLeadObj] = useState({});
   const [isApproved, setIsApproved] = useState(false);
+  const [monthValued, setMonthValued] = useState("");
+  const [statusValued, setStatusValued] = useState("");
+
   useEffect(() => {
     handleInit();
   }, []);
 
   const handleInit = () => {
     //  handleGetAllLeads();
-    // console.log(leadId, "djklvdskljdsafdsdsfsdafkasdlfsdkf;l")
     dispatch(quotationGet(`leadId=${leadId}`));
   };
 
@@ -90,6 +94,26 @@ const Quotation = () => {
 
     dispatch(quotationUpdateStatus(obj));
   };
+
+  useEffect(() => {
+    if (monthValued != "") {
+      let data = {
+        monthValued,
+        leadId,
+      };
+      dispatch(quotationFilterGet(data));
+    }
+  }, [monthValued]);
+
+  useEffect(() => {
+    if (statusValued != "") {
+      let data = {
+        statusValued,
+        leadId,
+      };
+      dispatch(quotationFilterByStatusGet(data));
+    }
+  }, [statusValued]);
 
   // useEffect(() => {
   //   if (tourResultObj) {
@@ -256,24 +280,24 @@ const Quotation = () => {
   //   { value: "Switzerland", label: "Switzerland" },
   // ];
   const options1 = [
-    { value: "January", label: "January" },
-    { value: "February", label: "February" },
-    { value: "March", label: "March" },
-    { value: "April", label: "April" },
-    { value: "May", label: "May" },
-    { value: "June", label: "June" },
-    { value: "July", label: "July" },
-    { value: "August", label: "August" },
-    { value: "September	", label: "September	" },
-    { value: "October	", label: "October	" },
-    { value: "November", label: "November" },
-    { value: "December", label: "December" },
+    { value: "0", label: "January" },
+    { value: "1", label: "February" },
+    { value: "2", label: "March" },
+    { value: "3", label: "April" },
+    { value: "4", label: "May" },
+    { value: "5", label: "June" },
+    { value: "6", label: "July" },
+    { value: "7", label: "August" },
+    { value: "8	", label: "September	" },
+    { value: "9	", label: "October	" },
+    { value: "10", label: "November" },
+    { value: "11", label: "December" },
   ];
-  // const options2 = [
-  //   { value: "Active", label: "Active" },
-  //   { value: "Hot", label: "Hot" },
-  //   { value: "In Progress", label: "In Progress" },
-  // ];
+  const options2 = [
+    { value: "Approved", label: "Approved" },
+    { value: "pending", label: "pending" },
+    { value: "created", label: "created" },
+  ];
   // const options3 = [
   //   { value: "Honey gupta", label: "Honey gupta" },
   //   { value: "Me", label: "Me" },
@@ -314,7 +338,7 @@ const Quotation = () => {
               )}
             </div>
           </div>
-          <div className="list_group_qoute pt-5">
+          {/* <div className="list_group_qoute pt-5">
             <div className="row">
               <div className="col-lg-12">
                 <div className="list_qoute">
@@ -329,7 +353,7 @@ const Quotation = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="drp-area">
           <div className="row">
@@ -337,17 +361,36 @@ const Quotation = () => {
               <Select options={options} placeholder="Destinations " />
             </div> */}
             <div className="col-lg-2">
-              <Select options={options1} placeholder="Month of Travel" />
+              <Select
+                options={options1}
+                placeholder="Month of Travel"
+                // value={Obj}
+                onChange={(e) => {
+                  // console.log(e, "asd");
+                  setMonthValued(e.value);
+                  // setCitiesObj(e);
+                }}
+              />
             </div>
-            {/* <div className="col-lg-2">
-              <Select options={options2} placeholder="Lead Type" />
+            <div className="col-lg-2">
+              <Select
+                options={options2}
+                placeholder="Status Type"
+                onChange={(e) => {
+                  // console.log(e, "asd");
+                  setStatusValued(e.value);
+                  // setCitiesObj(e);
+                }}
+              />
             </div>
+            {/* 
             <div className="col-lg-2">
               <Select options={options3} placeholder="Agent" />
             </div> */}
           </div>
         </div>
         {/* {console.log(quotationMainArr, "quotationMainArr234")} */}
+
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">

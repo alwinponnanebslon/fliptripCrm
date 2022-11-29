@@ -84,6 +84,7 @@ const ViewCostingSheetForm = () => {
       // console.log(ele, "oiinno");
       tempCost = tempCost + Number.parseInt(ele.cost);
     }
+
     if (tempCost > parseInt(landCost)) {
       tempCost = 0;
       // console.log(tempCost, "11tempCost12");
@@ -106,11 +107,11 @@ const ViewCostingSheetForm = () => {
   }, [inputList, flightList, landCost, flightCost]);
 
   useEffect(() => {
-    console.log(quotationObj, "1quotationObj23");
+    // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
-      setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
+      // setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
       // setTotalCost(quotationObj?.paymentObj?.total);
-      // setTotalCost(quotationObj?.paymentObj?.total);
+      setTotalCost(parseInt(quotationObj?.paymentObj?.total));
       setLandCost(quotationObj?.paymentObj?.landPrice);
       setflightCost(quotationObj?.paymentObj?.flightPrice);
       setLocationName(quotationObj?.destinationName);
@@ -125,30 +126,43 @@ const ViewCostingSheetForm = () => {
   useEffect(() => {
     // console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
-      setLeadName(costingSheetResultObj.leadName);
-      setLocationName(costingSheetResultObj.locationName);
-      setProfit(+costingSheetResultObj.profit);
-      setLeadsId(costingSheetResultObj.leadsId);
-      setLandCost(costingSheetResultObj.landCost);
+      setLeadName(costingSheetResultObj?.leadName);
+      setLocationName(costingSheetResultObj?.locationName);
+      setProfit(+costingSheetResultObj?.profit);
+      setLeadsId(costingSheetResultObj?.leadsId);
+      setLandCost(costingSheetResultObj?.landCost);
       setLeadsId(leadId);
-      setflightCost(costingSheetResultObj.flightCost);
-      setTotalExpense(costingSheetResultObj.totalExpense);
-      setinputList([...costingSheetResultObj.hotelDetails]);
-      setFlightList(costingSheetResultObj.flightDetails);
-      setTotalCost(costingSheetResultObj.totalCost);
-      setPrevDocId(costingSheetResultObj._id);
+      setflightCost(costingSheetResultObj?.flightCost);
+      setTotalExpense(costingSheetResultObj?.totalExpense);
+      setinputList([...costingSheetResultObj?.hotelDetails]);
+      setFlightList(costingSheetResultObj?.flightDetails);
+      setTotalCost(+costingSheetResultObj?.totalCost);
+      setPrevDocId(costingSheetResultObj?._id);
       setIsUpdatePrevDoc(true);
       setAdditionalLandName(costingSheetResultObj.additionalLandName);
       setAdditionalLandPrices(costingSheetResultObj.additionalLandPrices);
     }
   }, [costingSheetResultObj]);
 
-  // useEffect(()=>{
-  //   setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
-  // },[additionalLandPrices])
   useEffect(() => {
-    setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
+    if (
+      costingSheetResultObj &&
+      costingSheetResultObj._id &&
+      isUpdatePrevDoc == true
+    ) {
+      setTotalCost(+costingSheetResultObj?.totalCost + +additionalLandPrices);
+    }
+  }, [costingSheetResultObj, additionalLandPrices]);
+
+  useEffect(() => {
+    if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
+      setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
+    }
   }, [quotationObj, additionalLandPrices]);
+
+  // useEffect(() => {
+  //   setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
+  // }, [quotationObj, additionalLandPrices]);
 
   // useEffect(() => {
   //   // // console.log(tempLocation, "21location");
@@ -257,7 +271,7 @@ const ViewCostingSheetForm = () => {
       //   // console.log(tempCost1, "1tempCost213412");
       if (value > parseInt(landCost)) {
         value = 0;
-        toastError("Hotel price cannot be greater than land price2");
+        toastError("Hotel price cannot be greater than land price");
         return;
       }
       // }
@@ -282,9 +296,6 @@ const ViewCostingSheetForm = () => {
     // console.log(tempList, "tempList23");
     setinputList([...tempList]);
   };
-  useEffect(() => {
-    console.log(inputList, "123234");
-  }, [inputList]);
 
   useEffect(() => {
     let temp = 0;
@@ -519,7 +530,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost</label>
                           <input
-                            type="number"
+                            type="text"
                             name="cost"
                             value={x.cost}
                             class="form-control"

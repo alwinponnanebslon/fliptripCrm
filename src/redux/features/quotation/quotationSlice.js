@@ -5,6 +5,8 @@ import {
   deleteQuotation,
   updateQuotation,
   updateQuotationStatus,
+  getFilter,
+  getFilterByStatus,
 } from "../../../Services/quotation.service";
 
 let initialState = {
@@ -21,6 +23,35 @@ export const quotationGet = createAsyncThunk(
   async (payload) => {
     try {
       let { data: response } = await get(payload);
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const quotationFilterGet = createAsyncThunk(
+  "auth/quotationFilterGet",
+  async (payload) => {
+    try {
+      let { data: response } = await getFilter(
+        `month=${payload?.monthValued}&leadId=${payload?.leadId}`
+      );
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const quotationFilterByStatusGet = createAsyncThunk(
+  "auth/quotationFilterGet",
+  async (payload) => {
+    try {
+      // console.log(payload, "payload231");
+      let { data: response } = await getFilterByStatus(
+        `status=${payload?.statusValued}&leadId=${payload?.leadId}`
+      );
       return response;
     } catch (error) {
       toastError(error);
@@ -111,6 +142,7 @@ export const quotationUpdateStatus = createAsyncThunk(
 //     },
 //   },
 // });
+
 export const quotationDelete = createAsyncThunk(
   "auth/quotationDelete",
   async (payload, thunkApi) => {
@@ -174,6 +206,19 @@ const quotationSlice = createSlice({
       state.quotationArr = payload.data;
     },
     [quotationGet.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.isAuthorized = false;
+    },
+    //
+    [quotationFilterGet.pending]: (state, action) => {
+      state.loading = true;
+      state.error = false;
+    },
+    [quotationFilterGet.fulfilled]: (state, { payload }) => {
+      state.quotationArr = payload.data;
+    },
+    [quotationFilterGet.rejected]: (state, action) => {
       state.loading = false;
       state.error = true;
       state.isAuthorized = false;

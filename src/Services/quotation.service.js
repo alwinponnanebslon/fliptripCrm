@@ -26,3 +26,9 @@ export const updateQuotationStatus = (formData, id) => {
 export const getApprovedQuotation = (id) => {
   return axios.get(`${serverUrl}/getApprovedQuotation/${id}`);
 };
+export const getFilter = (query) => {
+  return axios.get(`${serverUrl}/getFilter?${query}`);
+};
+export const getFilterByStatus = (query) => {
+  return axios.get(`${serverUrl}/getFilterByStatus?${query}`);
+};

@@ -5,6 +5,9 @@ import {
   getfollowUpApi,
   followUpDeleteApi,
   updatefollowUpApi,
+  getfollowUpByStatus,
+  getfollowUpByMonth,
+  getfollowUpByDate,
 } from "../../../Services/followUp";
 
 let initialState = {
@@ -19,6 +22,63 @@ export const followUpGet = createAsyncThunk(
   async (query) => {
     try {
       let { data: response } = await getfollowUpApi(query);
+      if (response) {
+        toastSuccess(response.message);
+        const followUps = response.data;
+        return followUps;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const followUpGetByStatus = createAsyncThunk(
+  "followUp/followUpGetByFilter",
+  async (payload) => {
+    try {
+      console.log(payload, "paylaod32s");
+      let { data: response } = await getfollowUpByStatus(
+        `status=${payload?.statusValued}&leadId=${payload?.leadId}`
+      );
+      if (response) {
+        toastSuccess(response.message);
+        const followUps = response.data;
+        return followUps;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const followUpGetByMonth = createAsyncThunk(
+  "followUp/followUpGetByFilterMonth",
+  async (payload) => {
+    try {
+      console.log(payload, "paylaod32s");
+      let { data: response } = await getfollowUpByMonth(
+        `month=${payload?.monthValued}&leadId=${payload?.leadId}`
+      );
+      if (response) {
+        toastSuccess(response.message);
+        const followUps = response.data;
+        return followUps;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+export const followUpGetFilterByDate = createAsyncThunk(
+  "followUp/followUpGetByFilterDate",
+  async (payload) => {
+    try {
+      // console.log(payload, "paylaod32s");
+      let { data: response } = await getfollowUpByDate(
+        `month=${payload?.handleDateFilter}&leadId=${payload?.leadId}`
+      );
       if (response) {
         toastSuccess(response.message);
         const followUps = response.data;
@@ -98,6 +158,18 @@ const followUpSlice = createSlice({
   reducers: {},
   extraReducers: {
     [followUpGet.fulfilled]: (state, action) => {
+      state.followUps = action.payload;
+      return action.payload.followUps;
+    },
+    [followUpGetByStatus.fulfilled]: (state, action) => {
+      state.followUps = action.payload;
+      return action.payload.followUps;
+    },
+    [followUpGetByMonth.fulfilled]: (state, action) => {
+      state.followUps = action.payload;
+      return action.payload.followUps;
+    },
+    [followUpGetFilterByDate.fulfilled]: (state, action) => {
       state.followUps = action.payload;
       return action.payload.followUps;
     },

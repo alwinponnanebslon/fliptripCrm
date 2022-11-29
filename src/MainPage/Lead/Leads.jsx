@@ -646,69 +646,73 @@ const Leads = () => {
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
             )}
+
             {record?.status}
           </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.open)
-              }
-            >
-              <i className="fa fa-dot-circle-o text-info" /> Open
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.reopened)
-              }
-            >
-              <i className="fa fa-dot-circle-o text-info" /> Reopened
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
-              }
-            >
-              <i className="fa fa-dot-circle-o text-danger" /> On Hold
-            </a>
-            {role == rolesObj.ADMIN ? (
+          {record?.status != leadStatus.closed && (
+            <div className="dropdown-menu dropdown-menu-right">
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.closed)
+                  handleLeadStatusUpdate(record?._id, leadStatus.open)
                 }
               >
-                <i className="fa fa-dot-circle-o text-success" /> Closed
+                <i className="fa fa-dot-circle-o text-info" /> Open
               </a>
-            ) : (
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
+                  handleLeadStatusUpdate(record?._id, leadStatus.reopened)
                 }
               >
-                <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+                <i className="fa fa-dot-circle-o text-info" /> Reopened
               </a>
-            )}
-            <a
-              className="dropdown-item"
-              onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
-              }
-            >
-              <i className="fa fa-dot-circle-o text-success" /> In Progress
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
-              }
-            >
-              <i className="fa fa-dot-circle-o text-danger" /> Cancelled
-            </a>
-          </div>
+              <a
+                className="dropdown-item"
+                onClick={() =>
+                  handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
+                }
+              >
+                <i className="fa fa-dot-circle-o text-danger" /> On Hold
+              </a>
+              {role == rolesObj.ADMIN ? (
+                <a
+                  className="dropdown-item"
+                  onClick={() =>
+                    handleLeadStatusUpdate(record?._id, leadStatus.closed)
+                  }
+                >
+                  <i className="fa fa-dot-circle-o text-success" /> Closed
+                </a>
+              ) : (
+                <a
+                  className="dropdown-item"
+                  onClick={() =>
+                    handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
+                  }
+                >
+                  <i className="fa fa-dot-circle-o text-warning" /> Closed By
+                  Spoc
+                </a>
+              )}
+              <a
+                className="dropdown-item"
+                onClick={() =>
+                  handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
+                }
+              >
+                <i className="fa fa-dot-circle-o text-success" /> In Progress
+              </a>
+              <a
+                className="dropdown-item"
+                onClick={() =>
+                  handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
+                }
+              >
+                <i className="fa fa-dot-circle-o text-danger" /> Cancelled
+              </a>
+            </div>
+          )}
         </>
       );
     } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {

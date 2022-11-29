@@ -19,3 +19,12 @@ export const updatefollowUpApi = (formData, id) => {
 export const getfollowUpCheckForNotificatin = () => {
   return axios.get(`${serverUrl}/getfollowUpCheckForNotification`);
 };
+export const getfollowUpByStatus = (query) => {
+  return axios.get(`${serverUrl}/getfollowUpByStatusApi?${query}`);
+};
+export const getfollowUpByMonth = (query) => {
+  return axios.get(`${serverUrl}/getfollowUpByMonthApi?${query}`);
+};
+export const getfollowUpByDate = (query) => {
+  return axios.get(`${serverUrl}/getfollowUpByDateApi?${query}`);
+};

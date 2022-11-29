@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
-
+import moment from "moment";
 import {
   tourGet,
   updateTour,
@@ -20,6 +20,9 @@ import {
   setfollowUp,
   deletefollowUp,
   updatefollowUp,
+  followUpGetByStatus,
+  followUpGetByMonth,
+  followUpGetFilterByDate,
 } from "../../../redux/features/followup/followUpSlice";
 
 import { Table } from "antd";
@@ -39,6 +42,9 @@ export const QuotationFollowup = () => {
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
   const [followUpCheck, setFollowUpCheck] = useState([]);
+  const [statusValued, setStatusValued] = useState("");
+  const [monthValued, setMonthValued] = useState("");
+  const [handleDateFilter, setHandleDateFilter] = useState("");
 
   const { leadId } = useParams();
 
@@ -47,35 +53,20 @@ export const QuotationFollowup = () => {
     handleCheckFollowUpForNotification();
   }, []);
 
-  // console.log(followUpCheck, "followUpCheck32");
   const handleCheckFollowUpForNotification = async () => {
     let getData = await getfollowUpCheckForNotificatin();
     setFollowUpCheck(getData.data.data);
-    // console.log(getData, "getData2");
   };
-  //   const getData = async () => {
-  //     console.log("hello");
-  //     let Arr = await followUp.find().lean().exec();
-  //     console.log(Arr, "Ar43");
-  // };
-  // let time = Date.now();
-  // console.log(time, "time23");
-  // setTimeout(getData, time);
 
   const handleInit = () => {
     dispatch(followUpGet(`leadId=${leadId}`));
   };
 
-  for (let el of followUpMainArr) {
-    let temp = el;
-  }
-  console.log(followUpMainArr, "followUpMainArr32");
   useEffect(() => {
     setFollowUpMainArr(followUpResultArr);
   }, [followUpResultArr]);
 
   const handleEdit = (row) => {
-    // console.log(row, "row update"); //whole object
     dispatch(setfollowUp(row));
   };
 
@@ -92,6 +83,37 @@ export const QuotationFollowup = () => {
 
     dispatch(updatefollowUp(obj));
   };
+
+  useEffect(() => {
+    if (handleDateFilter != "") {
+      let obj = {
+        handleDateFilter,
+        leadId,
+      };
+      dispatch(followUpGetFilterByDate(obj));
+    }
+  }, [handleDateFilter]);
+
+  useEffect(() => {
+    if (statusValued && statusValued.length > 1) {
+      let obj = {
+        statusValued,
+        leadId,
+      };
+      dispatch(followUpGetByStatus(obj));
+    }
+  }, [statusValued]);
+
+  useEffect(() => {
+    console.log(monthValued, "setMonthValued34");
+    if (monthValued != "") {
+      let obj = {
+        monthValued,
+        leadId,
+      };
+      dispatch(followUpGetByMonth(obj));
+    }
+  }, [monthValued]);
 
   const tour_columns = [
     {
@@ -183,61 +205,62 @@ export const QuotationFollowup = () => {
     },
   ];
 
-  const options = [
+  const options5 = [
     { value: "Goa", label: "Goa" },
     { value: "Europe", label: "Europe" },
     { value: "Bali", label: "Bali" },
     { value: "Switzerland", label: "Switzerland" },
   ];
   const options1 = [
-    { value: "January", label: "January" },
-    { value: "February", label: "February" },
-    { value: "March", label: "March" },
-    { value: "April", label: "April" },
-    { value: "May", label: "May" },
-    { value: "June", label: "June" },
-    { value: "July", label: "July" },
-    { value: "August", label: "August" },
-    { value: "September	", label: "September	" },
-    { value: "October	", label: "October	" },
-    { value: "November", label: "November" },
-    { value: "December", label: "December" },
+    { value: 0, label: "January" },
+    { value: 1, label: "February" },
+    { value: 2, label: "March" },
+    { value: 3, label: "April" },
+    { value: 4, label: "May" },
+    { value: 5, label: "June" },
+    { value: 6, label: "July" },
+    { value: 7, label: "August" },
+    { value: 8, label: "September	" },
+    { value: 9, label: "October	" },
+    { value: 10, label: "November" },
+    { value: 11, label: "December" },
   ];
-  const options2 = [
-    {
-      value: "Still dreaming not sure Im going to take this trip",
-      label: "Still dreaming  not sure Im going to take this trip",
-    },
-    {
-      value: "Im definitely goingI know which place let go!",
-      label: "Im definitely goingI know which place let go!",
-    },
-    { value: "In Progress", label: "In Progress" },
-  ];
+  // const options2 = [
+  //   {
+  //     value: "Still dreaming not sure Im going to take this trip",
+  //     label: "Still dreaming  not sure Im going to take this trip",
+  //   },
+  //   {
+  //     value: "Im definitely goingI know which place let go!",
+  //     label: "Im definitely goingI know which place let go!",
+  //   },
+  //   { value: "In Progress", label: "In Progress" },
+  // ];
+
   const options3 = [
     { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
+    // { value: "Hot", label: "Me" },
+    { value: "inActive", label: "In Active" },
+    // { value: "Book Know", label: "Book Know" },
   ];
-  const options4 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
-  ];
-  const options5 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
-  ];
-  const options6 = [
-    { value: "Active", label: "Active" },
-    { value: "Hot", label: "Me" },
-    { value: "in progrees", label: "in progrees" },
-    { value: "Book Know", label: "Book Know" },
-  ];
+  // const options4 = [
+  //   { value: "Active", label: "Active" },
+  //   { value: "Hot", label: "Me" },
+  //   { value: "in progrees", label: "in progrees" },
+  //   { value: "Book Know", label: "Book Know" },
+  // ];
+  // const options5 = [
+  //   { value: "Active", label: "Active" },
+  //   { value: "Hot", label: "Me" },
+  //   { value: "in progrees", label: "in progrees" },
+  //   { value: "Book Know", label: "Book Know" },
+  // ];
+  // const options6 = [
+  //   { value: "Active", label: "Active" },
+  //   { value: "Hot", label: "Me" },
+  //   { value: "in progrees", label: "in progrees" },
+  //   { value: "Book Know", label: "Book Know" },
+  // ];
 
   return (
     <div className="page-wrapper">
@@ -300,27 +323,50 @@ export const QuotationFollowup = () => {
             </div>
           </div> */}
         </div>
-        {/* <div className="drp-area">
+        <div className="drp-area">
           <div className="row">
-            <div className="col-lg-2">
+            {/* <div className="col-lg-2">
               <Select options={options} placeholder="Destinations " />
-            </div>
+            </div> */}
             <div className="col-lg-2">
-              <Select options={options1} placeholder="Month of Travel" />
+              <Select
+                options={options1}
+                placeholder="Month of Travel"
+                onChange={(e) => {
+                  setMonthValued(e.value);
+                }}
+              />
             </div>
-            <div className="col-lg-2">
+            {/* <div className="col-lg-2">
               <Select options={options2} placeholder="Trip Stage" />
+            </div> */}
+            <div className="col-lg-2">
+              <Select
+                options={options3}
+                placeholder="Status Type"
+                onChange={(e) => {
+                  // console.log(e, "asd");
+                  setStatusValued(e.value);
+                  // setCitiesObj(e);
+                }}
+              />
             </div>
             <div className="col-lg-2">
-              <Select options={options3} placeholder="Lead Type" />
+              <input
+                placeholder="Follow Date"
+                type="date"
+                // name="checkIn"
+                // value={`${moment(hotel.checkIn).format("YYYY-MM-DD")}`}
+                className="form-control"
+                onChange={(e) => setHandleDateFilter(e.target.value)}
+              />
+
+              {/* <Select options={options4} placeholder="Followed UP" /> */}
             </div>
-            <div className="col-lg-2">
-              <Select options={options4} placeholder="Followed UP" />
-            </div>
-            <div className="col-lg-2">
+            {/* <div className="col-lg-2">
               <Select options={options5} placeholder="agents" />
-            </div>
-            <div className="row mt-2">
+            </div> */}
+            {/* <div className="row mt-2">
               <div className="col-lg-2">
                 <Select options={options6} placeholder="No Followup" />
               </div>
@@ -333,9 +379,9 @@ export const QuotationFollowup = () => {
                   placeholder="Follow-up eligibility"
                 />
               </div>
-            </div>
+            </div> */}
           </div>
-        </div> */}
+        </div>
         {console.log(followUpMainArr, "followUpMainArr123")}
         <div className="row">
           <div className="col-md-12">
