@@ -77,7 +77,7 @@ export const followUpGetFilterByDate = createAsyncThunk(
     try {
       // console.log(payload, "paylaod32s");
       let { data: response } = await getfollowUpByDate(
-        `month=${payload?.handleDateFilter}&leadId=${payload?.leadId}`
+        `date=${payload?.handleDateFilter}&leadId=${payload?.leadId}`
       );
       if (response) {
         toastSuccess(response.message);

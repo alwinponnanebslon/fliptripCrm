@@ -21,6 +21,5 @@ export const getRemainderCheckForNotificatin = () => {
   return axios.get(`${serverUrl}/getRemainderCheckForNotification`);
 };
 export const getRemainderForOneApi = (id, role) => {
-  // console.log(id, role, "id, role32");
   return axios.get(`${serverUrl}/getAllRemainderForOneDay/${id}?role=${role}`);
 };

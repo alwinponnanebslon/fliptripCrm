@@ -2,7 +2,7 @@
  * Signin Firebase
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import { Link, useParams } from "react-router-dom";
@@ -51,16 +51,9 @@ import {
 } from "../../../Services/costingSheet.services";
 import { getRemainderApi } from "../../../Services/remainder.service";
 
-import {
-  remainderGet,
-  remainderGetForOneDay,
-} from "../../../redux/features/remainder/remainderSlice";
+import { remainderGetForOneDay } from "../../../redux/features/remainder/remainderSlice";
 
-import {
-  notificationGet,
-  addNotification,
-  setNotification,
-} from "../../../redux/features/notification/notificationSlice";
+import { addNotification } from "../../../redux/features/notification/notificationSlice";
 
 import { date } from "yup/lib/locale.js";
 
@@ -75,7 +68,7 @@ const AdminDashboard = () => {
   const [allCostObj, setAllCostObj] = useState({});
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
-  const [isNotificationOccurs, setIsNotificationOccurs] = useState(true);
+  const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
 
   const [remainderArr, setRemainderArr] = useState([]);
 
@@ -91,11 +84,13 @@ const AdminDashboard = () => {
 
   const userId = useSelector((state) => state.auth?.user?._id);
   const RemainderArray = useSelector((state) => state.remainder.remainders);
+  const counterRef = useRef([]);
+  const [currentRemainder, setCurrentRemainder] = useState([]);
+
+  const counterRemainderRef = useRef([]);
 
   const handleInit = async () => {
-    console.log("1234");
     let obj = { userId, role };
-    // console.log(obj, "obj12");
     dispatch(remainderGetForOneDay(obj));
     // const arr = await getRemainderApi(role, userId);
     // console.log(arr, "arr32");
@@ -107,7 +102,7 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log(RemainderArray, "123 RemainderArray");
+    // console.log(RemainderArray, "123 RemainderArray");
     setRemainderArr(RemainderArray);
   }, [RemainderArray]);
 
@@ -142,15 +137,23 @@ const AdminDashboard = () => {
   };
   let array2 = [];
 
+  // useEffect(() => {
+  //   // console.log(remainderArr, "remainderArr34");
+  // }, [remainderArr]);
+
+  useEffect(() => {
+    counterRef.current = RemainderArray;
+  }, [RemainderArray]);
+
   function myCallback() {
-    // array2 = [];
-    let date = new Date();
-    let time = `${date.getHours()}:${date.getMinutes()}`;
     let temp = [];
-    // console.log("inside setinerteval ");
-    // console.log(RemainderArray, "inside setinerteval ");
-    // console.log(remainderArr, "remainderArral ");
-    for (let el of remainderArr) {
+    let date = new Date();
+    // console.log(date, "date2134");
+    let time = `${date.getHours()}:${date.getMinutes()}`;
+    console.log(time, "time123");
+    let DbTemp = counterRef.current;
+
+    for (let el of DbTemp) {
       // console.log(el, "el12");
       // console.log("3223233232342");
       // console.log(time == el.followTime, "3time34");
@@ -162,27 +165,16 @@ const AdminDashboard = () => {
       //   }
       // } else
       if (el.followTime == time) {
-        // console.log(el.followTime, time, "time");
+        console.log(el.followTime, time, "time");
         temp.push(el);
+        setCurrentRemainder([currentRemainder, el]);
       }
-
-      // console.log(array2, "afwe3");
-      // setNotificationArray(array2);
-      // console.log(el, "el213");
-      // date.setTime(
-      //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
-      // );
-      // let GetHours = date.getUTCHours();
-      // let currentTime = el.followTime.split(":");
-      // let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
-      // date = new Date();
-      // date.setTime(
-      //   new Date().getTime() + (5 * 60 * 60 * 1000 + 1 * 60 * 30 * 1000)
-      // );
+      console.log(temp, "temp123");
     }
     if (array2.length == 0) {
       array2.push(...temp);
     }
+    console.log(array2, "12array123");
   }
 
   let checkNotificationArray = async () => {
@@ -199,14 +191,16 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
+    console.log(currentRemainder, "Array231");
     if (array2.length > 0) {
       setIsNotificationOccurs(true);
+      // console.log(array2, "array2234");
       dispatch(addNotification(array2));
       setData2(array2);
       array2 = [];
     }
     // checkNotificationArray();
-  }, [array2]);
+  }, [currentRemainder]);
 
   useEffect(() => {
     let timer = setInterval(myCallback, 5000);
@@ -215,31 +209,9 @@ const AdminDashboard = () => {
     };
   }, []);
 
-  // setInterval(checkNotificationArray(), 200000);
-
-  // useEffect(() => {
-  //   // array2 = [];
-
-  //   let dateStart = new Date();
-  //   console.log(dateStart, "date");
-  //   dateStart.setHours(0, 0, 0, 0);
-  //   let dateEnd = new Date();
-  //   dateEnd.setHours(23, 59, 59, 59);
-
-  //   let time = `${new Date().getHours()}:${new Date().getMinutes()}`;
-  //   let time2 = `${new Date().getHours()}:${new Date().getMinutes()}`;
-  //   console.log(time2 == time, "asd");
-  //   //  var wetime=ISODate(time)
-  //   //  var et=dateStart.toTimeString()
-  //   //  var et=Date.UTC(date.getFullYear())
-
-  //   console.log(new Date().getHours(), "23");
-  // }, [array2]);
-
   const handleGetAllLeads = async () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
-      // console.log(res, "resres4");
       if (res.success) {
         let tempArr = res.data;
 

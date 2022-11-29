@@ -37,6 +37,7 @@ export const GeneralRemainder = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
+
   const [followUpCheck, setFollowUpCheck] = useState([]);
   const userLeadId = useSelector((state) => state.auth?.user?._id);
   const { leadId } = useParams();
@@ -46,7 +47,7 @@ export const GeneralRemainder = () => {
     // handleCheckFollowUpForNotification();
   }, []);
 
-  console.log(followUpCheck, "followUpCheck32");
+  // console.log(followUpCheck, "followUpCheck32");
   // const handleCheckFollowUpForNotification = async () => {
   //   let getData = await getfollowUpCheckForNotificatin();
   //   setFollowUpCheck(getData.data.data);
@@ -66,8 +67,8 @@ export const GeneralRemainder = () => {
     // dispatch(quotationGet(`leadId=${leadId}`));
   };
 
-  console.log(remainderArr, "remainderArr32");
   useEffect(() => {
+    // console.log(remainderArr, "remainderArr32");
     setRemainderArr(remainderResultArr);
   }, [remainderResultArr]);
 
@@ -91,29 +92,26 @@ export const GeneralRemainder = () => {
   };
 
   const tour_columns = [
-    // {
-    //   title: "Assign to ",
-    //   dataIndex: "assign",
-    //   sorter: (a, b) => a.heading.length - b.heading.length,
-    // },
     {
       title: "Heading ",
       dataIndex: "heading",
       sorter: (a, b) => a.heading.length - b.heading.length,
     },
-
     {
       title: "Description",
       dataIndex: "description",
       sorter: (a, b) => a.description.length - b.description.length,
     },
+
     {
       title: "Remainder Date",
       dataIndex: "followDate",
-      sorter: (a, b) => new Date(a.followDate + "").toLocaleDateString(),
+      render: (row, record) => (
+        <div>{new Date(record.followDate).toDateString()}</div>
+      ),
     },
     {
-      title: "remainder Time",
+      title: "Remainder Time",
       dataIndex: "followTime",
       sorter: (a, b) => a.followTime.length,
     },

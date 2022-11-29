@@ -127,11 +127,17 @@ export const QuotationFollowup = () => {
       dataIndex: "description",
       sorter: (a, b) => a.description.length - b.description.length,
     },
-    // {
-    //   title: "Description",
-    //   dataIndex: "description",
-    //   sorter: (a, b) => a.followDate.length - b.followDate.length,
-    // },
+    {
+      title: "Follow Date",
+      dataIndex: "followDate",
+      render: (row, record) => (
+        <div>
+          {new Date(record.followDate).toDateString()} at (
+          {new Date(record.followDate).getHours()}:
+          {new Date(record.followDate).getMinutes()})
+        </div>
+      ),
+    },
     {
       title: "Status",
       dataIndex: "status",
@@ -382,7 +388,7 @@ export const QuotationFollowup = () => {
             </div> */}
           </div>
         </div>
-        {console.log(followUpMainArr, "followUpMainArr123")}
+        {/* {console.log(followUpMainArr, "followUpMainArr123")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
