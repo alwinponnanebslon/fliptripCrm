@@ -85,11 +85,11 @@ const ViewCostingSheetForm = () => {
       tempCost = tempCost + Number.parseInt(ele.cost);
     }
 
-    if (tempCost > parseInt(landCost)) {
+    if (tempCost + additionalLandPrices > parseInt(landCost)) {
       tempCost = 0;
       // console.log(tempCost, "11tempCost12");
       setIsButtonHotel(true);
-      toastError("Hotel price cannot be greater than Total Land costsss");
+      toastError("Hotel price cannot be greater than Total Land costss");
       return;
     } else {
       setIsButtonHotel(false);
@@ -104,7 +104,7 @@ const ViewCostingSheetForm = () => {
     } else {
       setIsButtonFlight(false);
     }
-  }, [inputList, flightList, landCost, flightCost]);
+  }, [inputList, flightList, landCost, flightCost, additionalLandPrices]);
 
   useEffect(() => {
     // console.log(quotationObj, "1quotationObj23");
@@ -144,21 +144,21 @@ const ViewCostingSheetForm = () => {
     }
   }, [costingSheetResultObj]);
 
-  useEffect(() => {
-    if (
-      costingSheetResultObj &&
-      costingSheetResultObj._id &&
-      isUpdatePrevDoc == true
-    ) {
-      setTotalCost(+costingSheetResultObj?.totalCost + +additionalLandPrices);
-    }
-  }, [costingSheetResultObj, additionalLandPrices]);
+  // useEffect(() => {
+  //   if (
+  //     costingSheetResultObj &&
+  //     costingSheetResultObj._id &&
+  //     isUpdatePrevDoc == true
+  //   ) {
+  //     setTotalCost(+costingSheetResultObj?.totalCost + +additionalLandPrices);
+  //   }
+  // }, [costingSheetResultObj, additionalLandPrices]);
 
-  useEffect(() => {
-    if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
-      setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
-    }
-  }, [quotationObj, additionalLandPrices]);
+  // useEffect(() => {
+  //   if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
+  //     setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
+  //   }
+  // }, [quotationObj, additionalLandPrices]);
 
   // useEffect(() => {
   //   setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
@@ -199,7 +199,7 @@ const ViewCostingSheetForm = () => {
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
-    // console.log(name, "name, ", value, " value,", checked, "name, checked23");
+    console.log(name, "name, ", value, " value,", checked, "name, checked23");
     // console.log(index, "index, value2, che23");
     // console.log(inputList, "inputList2134");
     let tempList = [...inputList];
@@ -249,26 +249,23 @@ const ViewCostingSheetForm = () => {
       //   );
       //   return;
       // }
-
-      // if (isNaN(value)) {
-      //   value = 0;
-      //   toastError("Cost should be number");
+      // if (
+      //   list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+      //   parseInt(durationOfTour)
+      // ) {
+      //   toastError("Total number of nights cannot be more than duration of tour");
       //   return;
-      // } else if (Number.parseInt(value)) {
-      //   // for (let ele of tempList) {
-      //   //   console.log(ele, "3ost");
-      //   //   console.log(ele.cost, "1222cost");
-      //   //   tempCost1 = tempCost1 + parseInt(ele.cost);
-      //   // }
-      //   // if (
-      //   //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-      //   //   parseInt(landCost)
-      //   // ) {
-      //   //   console.log(tempList, "1tempList12");
-      //   //   toastError("Hotel price cannot be greater than land pricess");
-      //   //   return;
-      //   // }
-      //   // console.log(tempCost1, "1tempCost213412");
+      // }
+      // console.log(inputList, "input21");
+      // if (name == "cost") {
+      //   if (
+      //     inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+      //     parseInt(landCost)
+      //   ) {
+      //     toastError("Hotel price cannot be greater than land pricess");
+      //     return;
+      //   }
+      // }
       if (value > parseInt(landCost)) {
         value = 0;
         toastError("Hotel price cannot be greater than land price");
@@ -407,7 +404,23 @@ const ViewCostingSheetForm = () => {
   //   });
   //   setAb([...temp]);
   // };
-
+  const handleChangePriceOfAdditionalCost = (value) => {
+    console.log(value, "valuwe23");
+    let tempCost = 0;
+    for (let ele of inputList) {
+      // console.log(ele, "1223");
+      tempCost = tempCost + Number.parseInt(ele.cost);
+    }
+    console.log(tempCost, landCost, "1234");
+    if (tempCost + parseInt(value) > parseInt(landCost)) {
+      tempCost = 0;
+      // console.log(tempCost, "11tempCost12");
+      toastError("Hotel price cannot be greater than Total Land costss2222");
+      return;
+    } else {
+      setAdditionalLandPrices(value);
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (leadName == "") {
@@ -683,7 +696,10 @@ const ViewCostingSheetForm = () => {
                     name="LandPrices"
                     class="form-control"
                     value={additionalLandPrices}
-                    onChange={(e) => setAdditionalLandPrices(e.target.value)}
+                    // onChange={(e) => setAdditionalLandPrices(e.target.value)}
+                    onChange={(e) =>
+                      handleChangePriceOfAdditionalCost(e.target.value)
+                    }
                   />
                 </div>
               </div>

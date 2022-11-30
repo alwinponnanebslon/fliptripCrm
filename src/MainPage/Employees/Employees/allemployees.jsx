@@ -13,7 +13,7 @@ import {
 } from "../../../redux/features/employee/employeeSlice";
 
 import { deleteEmployees, getEmployess } from "../../../Services/user.service";
-import { toastError } from "../../../utils/toastUtils";
+import { toastError, toastSuccess } from "../../../utils/toastUtils";
 import Addemployee from "../../../_components/modelbox/Addemployee";
 import Editemployee from "../../../_components/modelbox/Editemployee";
 

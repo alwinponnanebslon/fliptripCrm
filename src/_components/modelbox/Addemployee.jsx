@@ -44,6 +44,7 @@ const Addemployee = () => {
 
   const reduxrole = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
+  const userId = useSelector((state) => state.auth.user._id);
   const userObjData = useSelector((state) => state.employee.employeeObj);
 
   const handleGetAllEmployees = async () => {
@@ -59,6 +60,13 @@ const Addemployee = () => {
   };
   useEffect(() => {
     handleGetAllEmployees();
+  }, []);
+
+  useEffect(() => {
+    // console.log(reduxrole, "redux123");
+    if (reduxrole == rolesObj.TEAMLEAD) {
+      setLeadId(userId);
+    }
   }, []);
 
   useEffect(() => {
@@ -176,6 +184,13 @@ const Addemployee = () => {
       }
       if (`${emergencyContact}`.length != 10) {
         toast.error("Emergency Contact cannot be less than 10 digits");
+        return;
+      }
+      if (password.trim().length == 0) {
+        toast.error("Password can't be empty");
+        return;
+      } else if (password.trim().length < 5) {
+        toast.error("Password length should not be less than five digits");
         return;
       }
       if (password != confirmPassword) {
@@ -425,7 +440,7 @@ const Addemployee = () => {
                     </div>
                   </div>
 
-                  {role == rolesObj.SPOC && (
+                  {role == rolesObj.SPOC && reduxrole == "ADMIN" && (
                     <div className="col-md-6 mt-3">
                       <div className="form-group">
                         <label>
@@ -452,6 +467,7 @@ const Addemployee = () => {
                       </div>
                     </div>
                   )}
+                  {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
                 </div>
                 {/* <div className="table-responsive m-t-15">
                   <table className="table table-striped custom-table">

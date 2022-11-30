@@ -139,35 +139,45 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
+            {console.log(dataArr, "123213")}
             <div className="noti-content">
               <ul className="notification-list">
                 {dataArr &&
                   dataArr.map((el, index) => {
                     return (
                       <li className="notification-message">
-                        <div className="media">
-                          <span className="avatar">
-                            <img alt="" src={Avatar_02} />
-                          </span>
-                          <div className="media-body">
-                            <p className="noti-details">
-                              <span className="noti-title">
-                                {el?.createdBy?.name}
-                              </span>{" "}
-                              added new task for you &nbsp;
-                              <span className="noti-title">
+                        <Link
+                          onClick={() =>
+                            localStorage.setItem("minheight", "true")
+                          }
+                          to="/admin/notification"
+                        >
+                          <div className="media">
+                            <span className="avatar">
+                              <img alt="" src={Avatar_02} />
+                            </span>
+                            <div className="media-body">
+                              <p className="noti-details">
+                                <span className="noti-title">
+                                  {el?.createdBy?.name}
+                                </span>{" "}
+                                you receive new notification regarding &nbsp;
+                                {/* added new task for you &nbsp; */}
+                                {/* <span className="noti-title"> */}
                                 {/* Patient appointment booking */}
-                                {el?.userObj?.firstName}
-                              </span>
-                            </p>
+                                <span className="noti-title">
+                                  {el?.heading}
+                                </span>
+                                {/* </span>  */}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        {/* </Link> */}
+                        </Link>
                       </li>
                     );
                   })}
-                {/* 
-                <li className="notification-message">
+
+                {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
                     to="/app/administrator/activities"
@@ -292,12 +302,12 @@ const Header = (props) => {
               </ul>
             </div>
             <div className="topnav-dropdown-footer">
-              {/* <Link
+              <Link
                 onClick={() => localStorage.setItem("minheight", "true")}
-                to="/app/administrator/activities"
+                to="/admin/notification"
               >
                 View all Notifications
-              </Link> */}
+              </Link>
             </div>
           </div>
         </li>

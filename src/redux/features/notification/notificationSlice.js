@@ -21,6 +21,7 @@ export const notificationGet = createAsyncThunk(
   "notification/notificationGet",
   async (query) => {
     try {
+      // console.log(query, "query213");
       let { data: response } = await getNotificationApi(query);
       if (response) {
         toastSuccess(response.message);
@@ -37,7 +38,9 @@ export const notificationGetForSpecificUser = createAsyncThunk(
   "notification/notificationGetForSpecificUser",
   async (query) => {
     try {
+      // console.log(query, "query21321");
       let { data: response } = await getNotificationForSpecificUserApi(query);
+      console.log(response, "notifications34");
       // console.log(response, "121");
       if (response) {
         toastSuccess(response.message);

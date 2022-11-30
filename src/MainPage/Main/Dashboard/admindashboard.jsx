@@ -137,9 +137,9 @@ const AdminDashboard = () => {
   };
   let array2 = [];
 
-  // useEffect(() => {
-  //   // console.log(remainderArr, "remainderArr34");
-  // }, [remainderArr]);
+  useEffect(() => {
+    // console.log(remainderArr, "remainderArr34");
+  }, [remainderArr]);
 
   useEffect(() => {
     counterRef.current = RemainderArray;
@@ -149,8 +149,18 @@ const AdminDashboard = () => {
     let temp = [];
     let date = new Date();
     // console.log(date, "date2134");
-    let time = `${date.getHours()}:${date.getMinutes()}`;
-    console.log(time, "time123");
+
+    let tempHour = date.getHours();
+    if (tempHour > 10) {
+      tempHour = 0 + tempHour;
+    }
+    let tempMinute = date.getMinutes();
+    if (tempMinute > 10) {
+      tempMinute = 0 + tempMinute;
+    }
+    let time = `${tempHour}:${tempMinute}`; //13:9
+
+    console.log(time, "curenttime123");
     let DbTemp = counterRef.current;
 
     for (let el of DbTemp) {
@@ -164,18 +174,27 @@ const AdminDashboard = () => {
       //     array2.push(el);
       //   }
       // } else
+      console.log(el.followTime, "el.folow23");
       if (el.followTime == time) {
         console.log(el.followTime, time, "time");
-        temp.push(el);
-        setCurrentRemainder([currentRemainder, el]);
+        array2.push(...temp);
+        // temp.push(el);
+        setCurrentRemainder([...currentRemainder, el]);
       }
-      console.log(temp, "temp123");
+      // console.log(temp, "temp123");
     }
-    if (array2.length == 0) {
-      array2.push(...temp);
-    }
-    console.log(array2, "12array123");
+    // if (array2.length == 0) {
+    //   array2.push(...temp);
+    // }
+    // console.log(array2, "12array123");
   }
+
+  useEffect(() => {
+    let timer = setInterval(myCallback, 10000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   let checkNotificationArray = async () => {
     if (array2.length > 0) {
@@ -191,23 +210,14 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    console.log(currentRemainder, "Array231");
-    if (array2.length > 0) {
+    // console.log(currentRemainder, "Array231");
+    if (currentRemainder.length > 0) {
+      dispatch(addNotification(currentRemainder));
+      setData2(currentRemainder);
       setIsNotificationOccurs(true);
-      // console.log(array2, "array2234");
-      dispatch(addNotification(array2));
-      setData2(array2);
-      array2 = [];
+      setCurrentRemainder([]);
     }
-    // checkNotificationArray();
   }, [currentRemainder]);
-
-  useEffect(() => {
-    let timer = setInterval(myCallback, 5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
 
   const handleGetAllLeads = async () => {
     try {
@@ -261,7 +271,7 @@ const AdminDashboard = () => {
 
       let allLeadArr = res.data;
       let tempArray = [];
-      // console.log(allLeadArr, "12allLeadArr213s");
+      console.log(allLeadArr, "12allLeadArr213s");
       for (let el of allLeadArr) {
         tempArray.push({
           y: el.date + "",
@@ -304,9 +314,6 @@ const AdminDashboard = () => {
     // handleGetAllSalesOfTenDays();
   }, []);
 
-  const handleDeleteNotification = () => {
-    // array;
-  };
   let closedLeadArr = [];
   let inProgressArr = [];
   let onHoldArr = [];
@@ -360,9 +367,7 @@ const AdminDashboard = () => {
       //     "Total Convert Lead": el.closedLead,
       //   });
       // }
-      // setAllLeadArr(tempArray);
       let allLeadArr = res.arr;
-      // console.log(allLeadArr, "allLeadArr213");
       let tempArray = [];
       for (let el of allLeadArr) {
         tempArray.push({
@@ -397,6 +402,35 @@ const AdminDashboard = () => {
     // let getfilterLead = await getLeadFilterByDate(query);
     // console.log(getfilterLead.data, "1querytotototo");
   };
+  const [Data123, setData123] = useState([]);
+  var data12 = [
+    { heading: "12", description: "23", followTime: "wer" },
+    {
+      heading: "xs",
+      description: "vfbg",
+      followTime: "12343",
+    },
+    {
+      heading: "w",
+      description: "s",
+      followTime: "4",
+    },
+    {
+      heading: "2",
+      description: "t",
+      followTime: "4",
+    },
+  ];
+
+  const handleDeleteNotification = (el, index) => {
+    console.log(el, index);
+    // data12.splice(index, 1);
+    // data12[index].remove;
+    // delete data12[index];
+    data12.filter((x) => x.heading == el.heading);
+    // array;
+  };
+
   // useEffect(() => {
   //   for (let el of allLeadArr) {
   //     tempArray.push({
@@ -1089,15 +1123,17 @@ const AdminDashboard = () => {
             </div> */}
           </div>
           {/* notificationArray */}
+          {/* {console.log(isNotificationOccurs, "isNotificationOccurs3q")} */}
+          {/* {console.log(data2, "data23q")} */}
           {isNotificationOccurs && (
             <div className="notification-container">
-              {data2.map((el, index) => {
+              {data12.map((el, index) => {
                 return (
                   <div className="notification-box">
                     <button
                       className="btn-close"
                       onClick={() => {
-                        handleDeleteNotification;
+                        handleDeleteNotification(el, index);
                       }}
                     ></button>
                     <p>Heading: {el.heading}</p>
