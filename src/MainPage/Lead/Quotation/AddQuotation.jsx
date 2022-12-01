@@ -73,7 +73,7 @@ const AddQuotation = () => {
   const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [leadName, setLeadName] = useState("");
-  const statusOfTour = true
+  const statusOfTour = true;
 
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
@@ -243,7 +243,7 @@ const AddQuotation = () => {
       checkIn: "",
       checkOut: "",
       rating: "",
-      bookingSource: "", // hotelAddress: "",
+      hotelAddress: "", // hotelAddress: "",
     },
   ]);
 
@@ -331,7 +331,8 @@ const AddQuotation = () => {
         checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
         rating: "",
-        bookingSource: "", //  hotelAddress: "",
+        hotelAddress: "", //  hotelAddress: "",
+        bookingSource: "",
       },
     ]);
   };
@@ -469,9 +470,9 @@ const AddQuotation = () => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(numberOfInfants) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -483,9 +484,9 @@ const AddQuotation = () => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-        parseInt(value) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(numberOfInfants) >
+          parseInt(value) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -497,9 +498,9 @@ const AddQuotation = () => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(value) +
-        parseInt(numberOfInfants) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(value) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -511,9 +512,9 @@ const AddQuotation = () => {
     } else {
       if (
         parseInt(numberofAdults) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(value) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -525,7 +526,7 @@ const AddQuotation = () => {
     }
   };
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -947,12 +948,12 @@ const AddQuotation = () => {
                           />
                         </div> */}
                         <div className="form-group col-md-4">
-                          <label>Booking Source</label>
+                          <label>Hotel Address</label>
                           <input
                             type="text"
-                            name="bookingSource"
+                            name="hotelAddress"
                             className="form-control"
-                            value={hotel.bookingSource}
+                            value={hotel.hotelAddress}
                             onChange={(e) => handleinputchangeHotel(e, i)}
                           />
                         </div>
@@ -970,10 +971,10 @@ const AddQuotation = () => {
                           )}
                         </div>
                         {durationOfTour &&
-                          hotelList.reduce(
-                            (acc, el) => acc + parseInt(el.numberOfNight),
-                            0
-                          ) < durationOfTour ? (
+                        hotelList.reduce(
+                          (acc, el) => acc + parseInt(el.numberOfNight),
+                          0
+                        ) < durationOfTour ? (
                           <div className="col-md-12">
                             {/* {hotelList.length - 1 === i && ( */}
                             <button

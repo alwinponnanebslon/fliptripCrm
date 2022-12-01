@@ -138,45 +138,45 @@ export const QuotationFollowup = () => {
         </div>
       ),
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      render: (row, record) => (
-        <div className="dropdown">
-          <a
-            href="#"
-            className="btn btn-white btn-sm btn-rounded dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i
-              className={
-                record.status === true
-                  ? "fa fa-dot-circle-o text-success"
-                  : "fa fa-dot-circle-o text-danger"
-              }
-            />{" "}
-            {record.status == true ? "Active" : "Inactive"}{" "}
-          </a>
-          <div className="dropdown-menu">
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => handleSatus(record, true)}
-            >
-              <i className="fa fa-dot-circle-o text-success" /> Active
-            </a>
-            <a
-              className="dropdown-item"
-              href="#"
-              onClick={() => handleSatus(record, false)}
-            >
-              <i className="fa fa-dot-circle-o text-danger" /> Inactive
-            </a>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   render: (row, record) => (
+    //     <div className="dropdown">
+    //       <a
+    //         href="#"
+    //         className="btn btn-white btn-sm btn-rounded dropdown-toggle"
+    //         data-bs-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i
+    //           className={
+    //             record.status === true
+    //               ? "fa fa-dot-circle-o text-success"
+    //               : "fa fa-dot-circle-o text-danger"
+    //           }
+    //         />{" "}
+    //         {record.status == true ? "Active" : "Inactive"}{" "}
+    //       </a>
+    //       <div className="dropdown-menu">
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, true)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-success" /> Active
+    //         </a>
+    //         <a
+    //           className="dropdown-item"
+    //           href="#"
+    //           onClick={() => handleSatus(record, false)}
+    //         >
+    //           <i className="fa fa-dot-circle-o text-danger" /> Inactive
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
 
     {
       title: "Action",

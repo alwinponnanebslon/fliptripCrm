@@ -96,13 +96,12 @@ const LeadSidebar = (props) => {
                   <Link to={`/admin/lead/${leadId}/quotes`}>
                     <i className="la la-file" />{" "}
                     <div className="textblock2">
-                      {" "}
                       <span>Create Quote</span>{" "}
                       <span className="textsmall">PENDING TASKS</span>
                     </div>
                   </Link>
                 </li>
-                <li
+                {/* <li
                   className={
                     pathname?.includes("quotation-follow-up") ? "active" : ""
                   }
@@ -114,7 +113,7 @@ const LeadSidebar = (props) => {
                       <span className="textsmall">PENDING TASKS</span>{" "}
                     </div>
                   </Link>
-                </li>
+                </li> */}
                 <li
                   className={pathname?.includes("quotePayment") ? "active" : ""}
                 >

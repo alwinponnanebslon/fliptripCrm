@@ -31,7 +31,7 @@ window.Popper = require("popper.js").default;
 
 const MainApp = () => (
   <Router>
-   <App/>
+    <App />
   </Router>
 );
 

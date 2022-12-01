@@ -3,6 +3,7 @@
  */
 import React, { useEffect, useState } from "react";
 import { Link, withRouter } from "react-router-dom";
+
 import {
   Avatar_02,
   Avatar_03,
@@ -12,8 +13,10 @@ import {
   Avatar_21,
   headerlogo,
 } from "../../Entryfile/imagepath";
+
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/auth/authSlice";
+
 import { useSelector } from "react-redux";
 
 import {
@@ -21,6 +24,7 @@ import {
   addNotification,
   setNotification,
 } from "../../redux/features/notification/notificationSlice";
+import { remainderGetForOneDay } from "../../redux/features/remainder/remainderSlice";
 
 const Header = (props) => {
   const role = useSelector((state) => state.auth.role);
@@ -30,8 +34,10 @@ const Header = (props) => {
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
-
+  const remainderArray = useSelector((state) => state.remainder.remainders);
   const [dataArr, setDataArr] = useState([]);
+  const [remainderArr, setRemainderArr] = useState([]);
+  const [remainderArrData, setRemainderArrData] = useState([]);
 
   const dispatch = useDispatch();
   const handlesidebar = () => {
@@ -49,7 +55,12 @@ const Header = (props) => {
   let pathname = location.pathname;
   const handleInit = () => {
     // console.log("user123");
+    let obj = {
+      role,
+      userId,
+    };
     dispatch(notificationGetForSpecificUser(userId));
+    dispatch(remainderGetForOneDay(obj));
     // dispatch(remainderGet(userLeadId));
   };
 
@@ -61,6 +72,11 @@ const Header = (props) => {
     // console.log(notificationResultArr, "notificationResultArr23");
     setDataArr(notificationResultArr);
   }, [notificationResultArr]);
+
+  useEffect(() => {
+    console.log(remainderArray, "remainderArray324");
+    setRemainderArrData(remainderArray);
+  }, [remainderArray]);
 
   return (
     <div className="header" style={{ right: "0px" }}>
@@ -139,7 +155,7 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
-            {console.log(dataArr, "123213")}
+            {/* {console.log(dataArr, "123213")} */}
             <div className="noti-content">
               <ul className="notification-list">
                 {dataArr &&
@@ -184,30 +200,6 @@ const Header = (props) => {
                   >
                     <div className="media">
                       <span className="avatar">
-                        <img alt="" src={Avatar_02} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">John Doe</span> added new
-                          task
-                          <span className="noti-title">
-                            Patient appointment booking
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">4 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
                         <img alt="" src={Avatar_03} />
                       </span>
                       <div className="media-body">
@@ -225,32 +217,7 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_06} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Misty Tison</span> added{" "}
-                          <span className="noti-title">Domenic Houston</span>{" "}
-                          and <span className="noti-title">Claire Mapes</span>{" "}
-                          to project{" "}
-                          <span className="noti-title">
-                            Doctor available module
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">8 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
+
                 {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
@@ -299,6 +266,88 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
+              </ul>
+            </div>
+            <div className="topnav-dropdown-footer">
+              <Link
+                onClick={() => localStorage.setItem("minheight", "true")}
+                to="/admin/notification"
+              >
+                View all Notifications
+              </Link>
+            </div>
+          </div>
+        </li>
+        {/* 
+        
+        */}
+        <li className="nav-item dropdown">
+          <a
+            href=""
+            className="dropdown-toggle nav-link"
+            data-bs-toggle="dropdown"
+          >
+            {/* <i class="fa-solid fa-alarm-clock"></i> */}
+            {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
+            <i className="fa fa-clock-o" />
+            <span className="badge badge-pill">{remainderArrData.length}</span>
+          </a>
+          <div className="dropdown-menu notifications">
+            <div className="topnav-dropdown-header">
+              <span className="notification-title">Remainder</span>
+              {/* <a href="" className="clear-noti">
+                Clear All
+              </a> */}
+            </div>
+            {console.log(remainderArrData, "remainderArrData123213")}
+            <div className="noti-content">
+              <ul className="notification-list">
+                {remainderArrData &&
+                  remainderArrData.map((el, index) => {
+                    return (
+                      <li className="notification-message">
+                        <Link
+                          onClick={() =>
+                            localStorage.setItem("minheight", "true")
+                          }
+                          to="/admin/remainder"
+                        >
+                          <div className="media">
+                            <p className="noti-details d-flex">
+                              <h5> Heading : </h5> {el?.heading}&nbsp;
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5> Decription : </h5> {el?.description}&nbsp;
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
+                            </p>
+                          </div>
+
+                          {/* <div className="media">
+                            <span className="avatar">
+                              <img alt="" src={Avatar_02} />
+                            </span>
+                            <div className="media-body">
+                              <p className="noti-details">
+                                <span className="noti-title">
+                                  {el?.createdBy?.name}
+                                </span>
+                                you receive new notification regarding &nbsp; */}
+                          {/* added new task for you &nbsp; */}
+                          {/* <span className="noti-title"> */}
+                          {/* Patient appointment booking */}
+                          {/* <span className="noti-title">
+                                  {el?.heading}
+                                </span> */}
+                          {/* </span>  */}
+                          {/* </p>
+                            </div> */}
+                          {/* </div> */}
+                        </Link>
+                      </li>
+                    );
+                  })}
               </ul>
             </div>
             <div className="topnav-dropdown-footer">

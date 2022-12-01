@@ -1003,10 +1003,11 @@ const Leads = () => {
   // };
 
   const columns = [
-    {
-      title: "Lead Subject",
-      dataIndex: "subject",
-    },
+    // {
+    //   title: "Lead Subject",
+    //   dataIndex: "subject",
+    // },
+    { title: "Guest Name", dataIndex: "clientName" },
     // {
     //   title: 'Lead Id',
     //   dataIndex: 'Leadid',
@@ -1231,7 +1232,8 @@ const Leads = () => {
     },
   ];
   const columns_TeamLeader = [
-    { title: "Lead Subject", dataIndex: "subject" },
+    // { title: "Lead Subject", dataIndex: "subject" },
+    { title: "Guest Name", dataIndex: "clientName" },
     // {
     //   title: 'Lead Id',
     //   dataIndex: 'Leadid',
@@ -1454,7 +1456,8 @@ const Leads = () => {
     },
   ];
   const columns_SPOC = [
-    { title: "Lead Subject", dataIndex: "subject" },
+    // { title: "Lead Subject", dataIndex: "subject" },
+    { title: "Guest Name", dataIndex: "clientName" },
     // {
     //   title: 'Lead Id',
     //   dataIndex: 'Leadid',
@@ -1640,7 +1643,7 @@ const Leads = () => {
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
-                        <span className="d-block">Solved Leads</span>
+                        <span className="d-block">Converted Leads</span>
                       </div>
                       {/* <div>
                         <span className="text-success">+12.5%</span>
@@ -1867,34 +1870,34 @@ const Leads = () => {
             </div>
           </div>
           {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
-          <div>
-            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-              <div className="form-group form-focus">
-                <input
-                  type="date"
-                  // value={employeeNameQuery}
-                  onChange={(e) => {
-                    handleFilterDateFrom(e.target.value);
-                  }}
-                  className="form-control floating"
-                />
-                <label className="focus-label">From </label>
-              </div>
-            </div>
-            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-              <div className="form-group form-focus">
-                <input
-                  // value={employeeNameQuery}
-                  onChange={(e) => {
-                    handleFilterDateTo(e.target.value);
-                  }}
-                  type="date"
-                  className="form-control floating"
-                />
-                <label className="focus-label">To </label>
-              </div>
+          {/* <div> */}
+          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div className="form-group form-focus">
+              <input
+                type="date"
+                // value={employeeNameQuery}
+                onChange={(e) => {
+                  handleFilterDateFrom(e.target.value);
+                }}
+                className="form-control "
+              />
+              <label className="focus-label">From </label>
             </div>
           </div>
+          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div className="form-group form-focus">
+              <input
+                // value={employeeNameQuery}
+                onChange={(e) => {
+                  handleFilterDateTo(e.target.value);
+                }}
+                type="date"
+                className="form-control "
+              />
+              <label className="focus-label">To </label>
+            </div>
+          </div>
+          {/* </div> */}
           {/* )} */}
 
           {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
@@ -1919,7 +1922,7 @@ const Leads = () => {
         </div>
         {/* /Search Filter */}
         {/* {// console.log("temam,", role)} */}
-        {/* {console.log(displayLeadsArr, "role323", role, "rol2")} */}
+        {console.log(displayLeadsArr, "role323", role, "rol2")}
 
         <div className="row">
           <div className="col-md-12">

@@ -162,10 +162,7 @@ const Addemployee = () => {
         toast.error("First name cannot be empty");
         return;
       }
-      if (lastName == "") {
-        toast.error("Last name cannot be empty");
-        return;
-      }
+
       if (email == "") {
         toast.error("Email cannot be empty");
         return;

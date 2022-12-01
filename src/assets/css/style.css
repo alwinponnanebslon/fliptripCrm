@@ -3226,7 +3226,7 @@ span#close-task-panel {
   transform-origin: left top;
   transition: 240ms;
   left: 12px;
-  top: -8px;
+  top: -17px;
   z-index: 1;
   color: #888;
   margin-bottom: 0;

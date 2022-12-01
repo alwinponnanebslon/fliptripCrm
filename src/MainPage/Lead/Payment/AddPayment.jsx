@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import Select from "react-select";
 import moment from "moment/moment";
 import { useDispatch, useSelector } from "react-redux";
 import { quotationGet } from "../../../redux/features/quotation/quotationSlice";
 import { toastError } from "../../../utils/toastUtils";
+import { confirmAlert } from "react-confirm-alert";
 import {
   paymentAdd,
   paymentGetByQuotation,
@@ -20,9 +21,11 @@ import {
 } from "../../../redux/features/paymentInvoice/paymentInvoiceSlice";
 
 export const AddPayment = () => {
+  let history = useHistory();
   const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.role);
   const user = useSelector((state) => state.auth.user);
+  const userId = useSelector((state) => state.auth.user._id);
   const quotationStateArr = useSelector(
     (state) => state.quotation.quotationArr
   );
@@ -45,6 +48,8 @@ export const AddPayment = () => {
   const [landCharges, setLandCharges] = useState(0);
   const [tcs, setTcs] = useState(1);
   const [total, setTotal] = useState(0);
+  const [isStatusOf, setIsStatusOf] = useState(false);
+
   const [paymentReceviedArr, setPaymentReceviedArr] = useState([
     {
       receviedDate: new Date(),
@@ -71,6 +76,7 @@ export const AddPayment = () => {
       revivedOn: new Date(),
     },
   ]);
+  const [handleEditInputInTcs, setHandleEditInputInTcs] = useState(false);
 
   useEffect(() => {
     handleInit();
@@ -107,7 +113,7 @@ export const AddPayment = () => {
 
   useEffect(() => {
     if (quotationStateArr) {
-      let tempObj = quotationStateArr.find((el) => el.status == "Approved");
+      let tempObj = quotationStateArr.find((el) => el.status == "Convert");
       if (tempObj) {
         setIsQuotationapproved(true);
         setSelectedQuotation(tempObj);
@@ -152,7 +158,7 @@ export const AddPayment = () => {
     if (name == "installmentAmount") {
       if (value > total || value <= 0) {
         toastError(
-          "Ammount must be greate than zero ot less than total Amount"
+          "Amount must be greater than zero or less than total Amount"
         );
       }
     }
@@ -169,6 +175,33 @@ export const AddPayment = () => {
     const list = [...paymentReceviedArr];
     list.splice(index, 1);
     setPaymentReceviedArr(list);
+  };
+
+  const submitPayment = (obj) => {
+    confirmAlert({
+      title: "Are you sure to Add Payment",
+      // message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "I am sure ",
+          onClick: () => {
+            if (paymentId) {
+              obj.paymentId = paymentId;
+
+              dispatch(paymentUpdate(obj));
+              history.push(`/admin/lead/${userId}/costingSheet`);
+              // /admin/lead/6386e3aafa7c1cd7c08624f4/costingSheet
+            } else {
+              dispatch(paymentAdd(obj));
+            }
+          },
+        },
+        {
+          label: "Cancel",
+          onClick: () => setIsStatusOf(false),
+        },
+      ],
+    });
   };
 
   const handleSubmit = () => {
@@ -200,12 +233,14 @@ export const AddPayment = () => {
       paymentReceviedArr,
       createdby: user,
     };
-    if (paymentId) {
-      obj.paymentId = paymentId;
-      dispatch(paymentUpdate(obj));
-    } else {
-      dispatch(paymentAdd(obj));
-    }
+    submitPayment(obj);
+    // if (paymentId) {
+    //   obj.paymentId = paymentId;
+
+    //   dispatch(paymentUpdate(obj));
+    // } else {
+    //   dispatch(paymentAdd(obj));
+    // }
   };
 
   //  Payment Invoice Crud
@@ -361,6 +396,7 @@ export const AddPayment = () => {
                   <br />
                   <label className="col-form-label mt-4">
                     TCS <span className="text-danger">*</span>
+                    {/* <button> edit</button> */}
                   </label>
                   <br />
 
@@ -375,11 +411,21 @@ export const AddPayment = () => {
                 <p>Rs. {landCharges}</p>
 
                 <input
+                  readOnly={handleEditInputInTcs == false ? true : false}
                   className="form-control mt-2"
                   value={tcs}
                   onChange={(e) => setTcs(e.target.value)}
                   type="number"
+                  // button="edit"
                 />
+                <button
+                  className="btn btn-primary"
+                  onClick={(e) => {
+                    setHandleEditInputInTcs(!handleEditInputInTcs);
+                  }}
+                >
+                  {handleEditInputInTcs ? "FREEZE" : "EDIT"}
+                </button>
                 <p className="mt-5">Rs. {total}</p>
               </div>
             </div>
@@ -428,7 +474,7 @@ export const AddPayment = () => {
                   type="number"
                 /> */}
                             <input
-                              className="form-control "
+                              className="form-control"
                               type="number"
                               name="installmentAmount"
                               value={item.installmentAmount}
@@ -439,7 +485,7 @@ export const AddPayment = () => {
                           </td>
                           <td>
                             <input
-                              className="form-control "
+                              className="form-control"
                               onChange={(e) => {
                                 handlePaymentInput(e, index);
                               }}
@@ -504,7 +550,7 @@ export const AddPayment = () => {
               </button>
             </div>
 
-            <div style={{ fontSize: 19 }}>Payment Invoice</div>
+            {/* <div style={{ fontSize: 19 }}>Payment Invoice</div>
 
             <div className="row">
               <div className="col-md-12">
@@ -577,7 +623,7 @@ export const AddPayment = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Add Client Modal */}
             <div
@@ -678,7 +724,7 @@ export const AddPayment = () => {
           </div>
         ) : (
           <div className="modal-body">
-            <div>Please get a quotation approved to view</div>
+            <div>Please get a quotation Converted to view</div>
           </div>
         )}
       </div>

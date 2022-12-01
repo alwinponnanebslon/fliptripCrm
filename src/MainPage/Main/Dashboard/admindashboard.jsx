@@ -483,6 +483,7 @@ const AdminDashboard = () => {
                     className="form-control floating"
                   />
                   <label className="focus-label">From </label>
+                  {/* <span className="">From </span> */}
                 </div>
               </div>
               <div className="col-sm-6 col-lg-3 col-xl-2 ">
@@ -508,7 +509,7 @@ const AdminDashboard = () => {
                     <div className="card-body">
                       <div className="d-flex justify-content-between mb-3">
                         <div>
-                          <span className="d-block">Solved Leads</span>
+                          <span className="d-block">Converted Leads</span>
                         </div>
                       </div>
                       <h3 className="mb-3">
@@ -1034,7 +1035,7 @@ const AdminDashboard = () => {
                   <div>
                     <p>
                       <i className="fa fa-dot-circle-o text-purple me-2" />
-                      Completed Lead
+                      Converted Lead
                       <span className="float-end">{closedLeadArr.length}</span>
                     </p>
                     <p>

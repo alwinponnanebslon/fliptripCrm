@@ -103,7 +103,7 @@ export const remainderGetForOneDay = createAsyncThunk(
   "remainder/remainderGet",
   async (payload, thunkApi) => {
     try {
-      console.log(payload, "12respo12");
+      // console.log(payload, "12respo12");
       let { data: response } = await getRemainderForOneApi(
         payload.userId,
         payload.role
@@ -126,6 +126,10 @@ const remainderSlice = createSlice({
   reducers: {},
   extraReducers: {
     [remainderGet.fulfilled]: (state, action) => {
+      state.remainders = action.payload;
+      return action.payload.remainders;
+    },
+    [remainderGetForOneDay.fulfilled]: (state, action) => {
       state.remainders = action.payload;
       return action.payload.remainders;
     },

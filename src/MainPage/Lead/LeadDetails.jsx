@@ -233,7 +233,7 @@ const ViewCostingSheetForm = () => {
                   <thead>
                     <tr>
                       <th>Received Date</th>
-                      <th>Istallment Amount</th>
+                      <th>Installment Amount</th>
                       <th>Transfer Status </th>
                       <th>Transfer Amount</th>
                       <th>Status</th>
@@ -418,7 +418,7 @@ const ViewCostingSheetForm = () => {
               </div>
             </div>
           </div>
-          {obj?.quotationObj?.itineraryDetails.length > 0 && (
+          {/* {obj?.quotationObj?.itineraryDetails.length > 0 && (
             <div>
               <h3 className="mt-3 mb-4 ">Itinerary Details</h3>
               <Table striped bordered hover>
@@ -427,7 +427,6 @@ const ViewCostingSheetForm = () => {
                     <th>Day</th>
                     <th>Itinerary Heading</th>
                     <th>Itinerary Name</th>
-                    {/* <th>Booked</th> */}
                   </tr>
                 </thead>
 
@@ -446,8 +445,8 @@ const ViewCostingSheetForm = () => {
                 })}
               </Table>
             </div>
-          )}
-          {obj?.quotationObj?.itineraryList.length > 0 && (
+          )} */}
+          {/* {obj?.quotationObj?.itineraryList.length > 0 && (
             <div>
               <h3 className="mt-3 mb-4 ">Itinerary List</h3>
               <Table striped bordered hover>
@@ -471,7 +470,7 @@ const ViewCostingSheetForm = () => {
                 })}
               </Table>
             </div>
-          )}
+          )} */}
           {obj?.quotationObj?.tourListArr.length > 0 && (
             <div>
               <h3 className="mt-3 mb-4 ">Tour List</h3>

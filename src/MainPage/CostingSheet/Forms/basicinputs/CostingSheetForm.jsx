@@ -680,7 +680,7 @@ const ViewCostingSheetForm = () => {
             <div className="content">
               <div className="row">
                 <div className="col-12 col-md-4 mb-3">
-                  <label> Additional Land Name </label>
+                  <label> Land Package Name </label>
                   <input
                     type="text"
                     name="cost"
@@ -690,7 +690,7 @@ const ViewCostingSheetForm = () => {
                   />
                 </div>
                 <div className="col-12 col-md-4 mb-3">
-                  <label>Additional Land Price</label>
+                  <label>Land Package Price</label>
                   <input
                     type="number"
                     name="LandPrices"
@@ -711,7 +711,7 @@ const ViewCostingSheetForm = () => {
             <div className="content">
               <div className="col-12 col-md-4 mb-3">
                 <label className="blue-1 fs-12">
-                  Land Cost<span className="text-danger">*</span>
+                  Total Land Cost<span className="text-danger">*</span>
                 </label>
                 <input
                   readOnly

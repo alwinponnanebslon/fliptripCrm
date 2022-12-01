@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import Select from "react-select";
 import { Table } from "antd";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+
 import {
   tourGet,
   updateTour,
@@ -24,11 +27,15 @@ import {
 } from "../../../redux/features/quotation/quotationSlice";
 
 import AddQuotation from "./AddQuotation";
+import PopUp from "./PopUp";
 
 const Quotation = () => {
   const role = useSelector((state) => state.auth.role);
+  const userId = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
   const { leadId } = useParams();
+  let history = useHistory();
+
   const quotationStateArr = useSelector(
     (state) => state.quotation.quotationArr
   );
@@ -39,9 +46,10 @@ const Quotation = () => {
   const [tourId, setTourId] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [leadObj, setLeadObj] = useState({});
-  const [isApproved, setIsApproved] = useState(false);
+  const [isConvert, setIsConvert] = useState(false);
   const [monthValued, setMonthValued] = useState("");
   const [statusValued, setStatusValued] = useState("");
+  const [isStatusOf, setIsStatusOf] = useState(false);
 
   useEffect(() => {
     handleInit();
@@ -68,7 +76,7 @@ const Quotation = () => {
 
   useEffect(() => {
     if (quotationStateArr && quotationStateArr.length > 0) {
-      setIsApproved(quotationStateArr.some((el) => el.status == "Approved"));
+      setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     }
 
     setTourQuotationArr(quotationStateArr);
@@ -83,16 +91,6 @@ const Quotation = () => {
 
   const handleDelete = (id) => {
     dispatch(quotationDelete({ id, leadId }));
-  };
-
-  const handleSatus = (row, status) => {
-    let obj = {
-      Id: row._id,
-      status: status,
-      leadId: row.leadId,
-    };
-
-    dispatch(quotationUpdateStatus(obj));
   };
 
   useEffect(() => {
@@ -114,6 +112,70 @@ const Quotation = () => {
       dispatch(quotationFilterByStatusGet(data));
     }
   }, [statusValued]);
+
+  const submitQuotation = (row, status) => {
+    confirmAlert({
+      title: "Are you sure to Convert the Quotation",
+      // message: "Are you sure to do this.",
+      buttons: [
+        {
+          label: "I am sure ",
+          onClick: () => {
+            let obj = {
+              Id: row._id,
+              status: status,
+              leadId: row.leadId,
+            };
+            setIsStatusOf(true);
+            dispatch(quotationUpdateStatus(obj));
+            // navigate("/path/to/push");
+            history.push(`/admin/lead/${userId}/quotePayment`);
+            // history(`/admin/lead/${userId}/quotePayment`);
+          },
+        },
+        {
+          label: "Cancel",
+          onClick: () => setIsStatusOf(false),
+        },
+      ],
+    });
+  };
+
+  // const ad = () => {
+  //   return (
+  //     <div class="alert alert-primary" role="alert">
+  //       A simple primary alert—check it out!
+  //       <button
+  //         onClick={() => {
+  //           setIsStatusOf(true);
+  //         }}
+  //       >
+  //         yes
+  //       </button>
+  //     </div>
+  //   );
+  // };
+  const handleSatus = (row, status) => {
+    console.log(row, status, "3423");
+    if (
+      status == "Convert" &&
+      isStatusOf == false &&
+      row &&
+      row._id &&
+      row.airportTransfer
+    ) {
+      console.log(row, status, "1231werwers3243");
+      submitQuotation(row, status);
+    }
+    if (status == "Created" || status == "Pending") {
+      let obj = {
+        Id: row._id,
+        status: status,
+        leadId: row.leadId,
+      };
+      dispatch(quotationUpdateStatus(obj));
+    }
+  };
 
   // useEffect(() => {
   //   if (tourResultObj) {
@@ -182,15 +244,28 @@ const Quotation = () => {
       dataIndex: "status",
       render: (row, record) => (
         <div className="dropdown">
-          {isApproved ? (
+          {isConvert ? (
             <a className="btn btn-white btn-sm ">
               <i
                 className={
-                  record.status === "Approved"
+                  record.status === "Convert"
                     ? "fa fa-dot-circle-o text-success"
                     : "fa fa-dot-circle-o text-danger"
                 }
-              />{" "}
+              />
+              <i
+              // className={
+              //   // record.status === "Approved"
+              //   record.status === "Convert"
+              //     ? //window.confirm("Are you sure to convert this Quotation?")
+              //       // deleteFleet()
+              //       // confirmAlert(options)
+
+              //     : // alert('"Are you sure to convert this Quotation?"')
+              //       "fa fa-dot-circle-o text-danger"
+              // }
+              />
+
               {record.status}
             </a>
           ) : (
@@ -202,12 +277,14 @@ const Quotation = () => {
               >
                 <i
                   className={
-                    record.status === "Approved"
+                    // record.status === "Approved"
+                    record.status === "Convert"
                       ? "fa fa-dot-circle-o text-success"
                       : "fa fa-dot-circle-o text-danger"
                   }
-                />{" "}
-                {record.status}{" "}
+                />
+
+                {record.status}
               </a>
               <div className="dropdown-menu">
                 <a
@@ -224,9 +301,11 @@ const Quotation = () => {
                 </a>
                 <a
                   className="dropdown-item"
-                  onClick={() => handleSatus(record, "Approved")}
+                  onClick={() => {
+                    handleSatus(record, "Convert");
+                  }}
                 >
-                  <i className="fa fa-dot-circle-o text-success" /> Approved
+                  <i className="fa fa-dot-circle-o text-success" /> Convert
                 </a>
               </div>
             </>
@@ -238,7 +317,7 @@ const Quotation = () => {
       title: "Action",
       render: (row, record) => (
         <div className="dropdown dropdown-action text-end">
-          {isApproved ? (
+          {isConvert ? (
             <></>
           ) : (
             <>
@@ -294,7 +373,7 @@ const Quotation = () => {
     { value: "11", label: "December" },
   ];
   const options2 = [
-    { value: "Approved", label: "Approved" },
+    { value: "Convert", label: "Convert" },
     { value: "pending", label: "pending" },
     { value: "created", label: "created" },
   ];
@@ -304,6 +383,7 @@ const Quotation = () => {
   //   { value: "Mohit Bawa", label: "Mohit Bawa" },
   //   { value: "Deepika", label: "Deepika" },
   // ];
+
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -326,7 +406,7 @@ const Quotation = () => {
             </div>
 
             <div className="col-auto float-end ml-auto">
-              {isApproved == false && (
+              {isConvert == false && (
                 <a
                   href="#"
                   className="btn add-btn"
@@ -412,7 +492,6 @@ const Quotation = () => {
           </div>
         </div>
       </div>
-
       <AddQuotation />
     </div>
   );
