@@ -41,6 +41,7 @@ export const GeneralRemainder = () => {
   const [followUpCheck, setFollowUpCheck] = useState([]);
   const userLeadId = useSelector((state) => state.auth?.user?._id);
   const { leadId } = useParams();
+  const [showRemainder, setShowRemainder] = useState(false);
 
   useEffect(() => {
     handleInit();
@@ -255,6 +256,11 @@ export const GeneralRemainder = () => {
     // { value: "Book Know", label: "Book Know" },
   ];
 
+  useEffect(() => {
+    // console.log(remainderArr, "remainderArr32");
+    setShowRemainder(showRemainder);
+  }, [showRemainder]);
+
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -280,8 +286,11 @@ export const GeneralRemainder = () => {
               <a
                 href="#"
                 className="btn add-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#add_Remainder"
+                // data-bs-toggle="modal"
+                // data-bs-target="#add_Remainder"
+                onClick={() => {
+                  setShowRemainder(true);
+                }}
               >
                 <i className="fa fa-plus" /> Add Remainder
               </a>
@@ -352,7 +361,7 @@ export const GeneralRemainder = () => {
             </div>
           </div>
         </div> */}
-        {console.log(remainderArr, "remainderArr12")}
+        {/* {console.log(remainderArr, "remainderArr12")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
@@ -372,7 +381,10 @@ export const GeneralRemainder = () => {
             </div>
           </div>
         </div>
-        <AddRemainder />
+        <AddRemainder
+          showRemainder={showRemainder}
+          setShowRemainder={setShowRemainder}
+        />
       </div>
     </div>
   );

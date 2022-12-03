@@ -161,8 +161,10 @@ const Header = (props) => {
                 {dataArr &&
                   dataArr.map((el, index) => {
                     return (
+                      // <li className="notification-message" key={index}>
                       <li className="notification-message">
                         <Link
+                          key={index}
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
                           }
@@ -176,7 +178,7 @@ const Header = (props) => {
                               <p className="noti-details">
                                 <span className="noti-title">
                                   {el?.createdBy?.name}
-                                </span>{" "}
+                                </span>
                                 you receive new notification regarding &nbsp;
                                 {/* added new task for you &nbsp; */}
                                 {/* <span className="noti-title"> */}
@@ -299,13 +301,13 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
-            {console.log(remainderArrData, "remainderArrData123213")}
+            {/* {console.log(remainderArrData, "remainderArrData123213")} */}
             <div className="noti-content">
               <ul className="notification-list">
                 {remainderArrData &&
                   remainderArrData.map((el, index) => {
                     return (
-                      <li className="notification-message">
+                      <li className="notification-message" key={index}>
                         <Link
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
@@ -383,9 +385,9 @@ const Header = (props) => {
             >
               My Profile
             </Link>
-            <Link className="dropdown-item" to="/settings/companysetting">
+            {/* <Link className="dropdown-item" to="/settings/companysetting">
               Settings
-            </Link>
+            </Link> */}
             <p className="dropdown-item" onClick={() => handleLogout()}>
               Logout
             </p>
@@ -407,9 +409,9 @@ const Header = (props) => {
           <Link className="dropdown-item" to="/app/profile/employee-profile">
             My Profile
           </Link>
-          <Link className="dropdown-item" to="/settings/companysetting">
+          {/* <Link className="dropdown-item" to="/settings/companysetting">
             Settings
-          </Link>
+          </Link> */}
           <p className="dropdown-item" onClick={() => handleLogout()}>
             Logout
           </p>

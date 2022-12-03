@@ -25,7 +25,7 @@ const LeadView = () => {
   const role = useSelector((state) => state.auth.role);
 
   useEffect(() => {
-    console.log(currentLead, "123currentLead");
+    // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
 
@@ -135,15 +135,18 @@ const LeadView = () => {
                             <div className="row">
                               <div className="col-md-3 col-sm-6">
                                 <div className="uploaded-box">
-                                  {leadObj?.fileUrl != "" && leadObj?.fileUrl && (
-                                    <div className="uploaded-img">
-                                      <img
-                                        src={generateFilePath(leadObj?.fileUrl)}
-                                        className="img-fluid"
-                                        alt=""
-                                      />
-                                    </div>
-                                  )}
+                                  {leadObj?.fileUrl != "" &&
+                                    leadObj?.fileUrl && (
+                                      <div className="uploaded-img">
+                                        <img
+                                          src={generateFilePath(
+                                            leadObj?.fileUrl
+                                          )}
+                                          className="img-fluid"
+                                          alt=""
+                                        />
+                                      </div>
+                                    )}
                                   <div className="uploaded-img-name">
                                     {leadObj?.fileUrl != ""
                                       ? leadObj?.fileUrl

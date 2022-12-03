@@ -40,7 +40,7 @@ const Quotation = () => {
     (state) => state.quotation.quotationArr
   );
   const toursResultArr = useSelector((state) => state.tour.tours);
-  const [quotationMainArr, setTourQuotationArr] = useState([]);
+  const [quotationMainArr, setQuotationMainArr] = useState([]);
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
@@ -50,10 +50,17 @@ const Quotation = () => {
   const [monthValued, setMonthValued] = useState("");
   const [statusValued, setStatusValued] = useState("");
   const [isStatusOf, setIsStatusOf] = useState(false);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     handleInit();
   }, []);
+  // useEffect(() => {
+  //   if (changeStatus == false) {
+  //     setShow(false);
+  //   }
+  //   // handleInit();
+  // }, [changeStatus]);
 
   const handleInit = () => {
     //  handleGetAllLeads();
@@ -78,14 +85,13 @@ const Quotation = () => {
     if (quotationStateArr && quotationStateArr.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     }
-
-    setTourQuotationArr(quotationStateArr);
+    setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
 
   const handleEdit = (row) => {
+    setShow(true);
     // console.log(row, "row update"); //whole object
     dispatch(setQuotationObj(row));
-
     dispatch(setTour(row));
   };
 
@@ -157,14 +163,8 @@ const Quotation = () => {
   // };
   const handleSatus = (row, status) => {
     console.log(row, status, "3423");
-    if (
-      status == "Convert" &&
-      isStatusOf == false &&
-      row &&
-      row._id &&
-      row.airportTransfer
-    ) {
-      console.log(row, status, "1231werwers3243");
+    if (status == "Convert" && row && row._id) {
+      // console.log(row, status, "1231werwers3243");
       submitQuotation(row, status);
     }
     if (status == "Created" || status == "Pending") {
@@ -253,19 +253,18 @@ const Quotation = () => {
                     : "fa fa-dot-circle-o text-danger"
                 }
               />
-              <i
-              // className={
-              //   // record.status === "Approved"
-              //   record.status === "Convert"
-              //     ? //window.confirm("Are you sure to convert this Quotation?")
-              //       // deleteFleet()
-              //       // confirmAlert(options)
+              {/* <i
+              className={
+                // record.status === "Approved"
+                record.status === "Convert"
+                  ? //window.confirm("Are you sure to convert this Quotation?")
+                    // deleteFleet()
+                    // confirmAlert(options)
 
-              //     : // alert('"Are you sure to convert this Quotation?"')
-              //       "fa fa-dot-circle-o text-danger"
-              // }
-              />
-
+                  : // alert('"Are you sure to convert this Quotation?"')
+                    "fa fa-dot-circle-o text-danger"
+              } 
+              />*/}
               {record.status}
             </a>
           ) : (
@@ -332,8 +331,8 @@ const Quotation = () => {
               <div className="dropdown-menu dropdown-menu-right">
                 <a
                   className="dropdown-item"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_quote"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_quote"
                   onClick={() => handleEdit(row)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit
@@ -358,6 +357,7 @@ const Quotation = () => {
   //   { value: "Bali", label: "Bali" },
   //   { value: "Switzerland", label: "Switzerland" },
   // ];
+
   const options1 = [
     { value: "0", label: "January" },
     { value: "1", label: "February" },
@@ -383,6 +383,11 @@ const Quotation = () => {
   //   { value: "Mohit Bawa", label: "Mohit Bawa" },
   //   { value: "Deepika", label: "Deepika" },
   // ];
+  // const box=show
+
+  useEffect(() => {
+    setShow(show);
+  }, [show]);
 
   return (
     <div className="page-wrapper">
@@ -410,10 +415,19 @@ const Quotation = () => {
                 <a
                   href="#"
                   className="btn add-btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_quote"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_quote"
+                  onClick={() => {
+                    setShow(true);
+                  }}
                 >
-                  <i className="fa fa-plus" /> Add Quote
+                  <i
+                    className="fa fa-plus"
+                    // onClick={() => {
+                    //   setShow(true);
+                    // }}
+                  />
+                  Add Quote
                 </a>
               )}
             </div>
@@ -492,7 +506,7 @@ const Quotation = () => {
           </div>
         </div>
       </div>
-      <AddQuotation />
+      <AddQuotation show={show} setShow={setShow} />
     </div>
   );
 };

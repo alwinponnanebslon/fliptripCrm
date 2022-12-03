@@ -470,7 +470,7 @@ const AdminDashboard = () => {
           {/* /Page Header */}
           {/*
            */}
-          {role != rolesObj.ACCOUNT && (
+          {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
             <div className="row">
               <div className="col-sm-6  col-lg-3 col-xl-2 ">
                 <div className="form-group form-focus">
@@ -501,7 +501,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-          {role != rolesObj.ACCOUNT && (
+          {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
             <div className="row">
               <div className="col-md-12">
                 <div className="card-group m-b-30">
@@ -619,7 +619,7 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {role != rolesObj.ACCOUNT && (
+          {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
             <div className="row">
               <div className="col-md-12">
                 <div className="row">
@@ -700,7 +700,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-          {role != rolesObj.ACCOUNT && (
+          {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
             <div className="row">
               <div className="col-md-12">
                 <div className="card-group m-b-30">
@@ -1130,7 +1130,7 @@ const AdminDashboard = () => {
             <div className="notification-container">
               {data12.map((el, index) => {
                 return (
-                  <div className="notification-box">
+                  <div className="notification-box" key={index}>
                     <button
                       className="btn-close"
                       onClick={() => {

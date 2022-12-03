@@ -139,11 +139,11 @@ const App = () => {
         </PublicRoute>
       </Route>
 
-      <Route path="/settings">
+      {/* <Route path="/settings">
         <PublicRoute>
           <Settinglayout />
         </PublicRoute>
-      </Route>
+      </Route> */}
       <Route path="/tasks">
         <PublicRoute>
           <Tasklayout />

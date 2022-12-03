@@ -182,7 +182,7 @@ const ViewCostingSheetForm = () => {
                   return (
                     <>
                       <tbody>
-                        <tr>
+                        <tr key={i}>
                           <td>{x.hotelName}</td>
                           <td>{x.hotelAddress}</td>
                           <td>{x.cost}</td>
@@ -212,7 +212,7 @@ const ViewCostingSheetForm = () => {
                   </thead>
                   {flightList.map((x, i) => {
                     return (
-                      <tbody>
+                      <tbody key={i}>
                         <tr>
                           <td>{x.flightName}</td>
                           <td>{x.cost}</td>
@@ -241,8 +241,8 @@ const ViewCostingSheetForm = () => {
                   </thead>
                   {paymentList.map((x, i) => {
                     return (
-                      <tbody>
-                        <tr>
+                      <tbody >
+                        <tr key={i}>
                           <td>{new Date(x?.receviedDate).toLocaleString()}</td>
                           {/*.toLocaleString()------- 2022-11-25T13:04:06.625Z */}
                           <td>{x.installmentAmount}</td>
@@ -364,8 +364,8 @@ const ViewCostingSheetForm = () => {
                     {obj?.quotationObj?.travellersDetails.map((x, i) => {
                       return (
                         <>
-                          <tbody>
-                            <tr>
+                          <tbody >
+                            <tr key={i}>
                               <td>{x.guestName}</td>
                               <td>{x.age}</td>
                             </tr>
@@ -486,7 +486,7 @@ const ViewCostingSheetForm = () => {
                   return (
                     <>
                       <tbody>
-                        <tr>
+                        <tr  key={i}>
                           <td>{x.name}</td>
                           <td>{x.startDate}</td>
                           <td>{x.endDate}</td>

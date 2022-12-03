@@ -3,6 +3,7 @@ export const rolesObj = {
   SPOC: "SPOC",
   ACCOUNT: "ACCOUNT",
   ADMIN: "ADMIN",
+  SUPERVISOR: "SUPERVISOR",
 };
 
 export const leadStatus = {

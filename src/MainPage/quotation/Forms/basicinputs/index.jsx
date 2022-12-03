@@ -360,7 +360,7 @@ const Basicinputs = () => {
                         {/* <h3 className="blue-1 m-0">Traveller Details</h3> */}
                         {inputList.map((x, i) => {
                           return (
-                            <div className="row mb-3">
+                            <div className="row mb-3" key={i}>
                               <div class="form-group col-md-4">
                                 <label>Guest Name</label>
                                 <input
@@ -419,7 +419,7 @@ const Basicinputs = () => {
                     {/* </div> */}
                     {hotelList.map((x, i) => {
                       return (
-                        <div className="row mb-3">
+                        <div className="row mb-3" key={i}>
                           <div class="form-group col-md-4">
                             <label>Hotel Name</label>
                             <input
@@ -620,6 +620,7 @@ const Basicinputs = () => {
                       options={
                         tourValueArr && tourValueArr.length > 0
                           ? tourValueArr.map((el) => ({
+
                               ...el,
                               label: el.tourName,
                               value: el._id,
@@ -705,7 +706,7 @@ const Basicinputs = () => {
                         <h3 className="mt-3 mb-4">Itinerary Details</h3>
                         {itineraryList.map((x, i) => {
                           return (
-                            <div className="row mb-3">
+                            <div className="row mb-3" key={i}>
                               <div class="form-group col-md-4">
                                 <label>Itinerary Name</label>
                                 <input

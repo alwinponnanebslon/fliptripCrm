@@ -157,7 +157,8 @@ const Tasks = () => {
                             <ul id="task-list">
                               {fields.map((field, idx) => {
                                 return (
-                                  <li className="task" key={`${field}-${idx}`}>
+                                  // <li className="task" key={`${field}-${idx}`}>
+                                  <li className="task" key={idx}>
                                     <div className="task-container">
                                       <span className="task-action-btn task-check">
                                         <span
@@ -291,9 +292,9 @@ const Tasks = () => {
                         <a className="dropdown-item" href="">
                           Delete Task
                         </a>
-                        <a className="dropdown-item" href="">
+                        {/* <a className="dropdown-item" href="">
                           Settings
-                        </a>
+                        </a> */}
                       </div>
                     </li>
                   </ul>

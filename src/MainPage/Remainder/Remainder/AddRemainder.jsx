@@ -18,11 +18,14 @@ import {
   getEmployess,
   getAllEmployess,
 } from "../../../Services/user.service";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import moment from "moment/moment";
 import DatePicker from "react-date-picker";
+import { toastError } from "../../../utils/toastUtils";
+// import { toastError } from "../../../utils/toastUtils";
 
-const AddRemainder = () => {
+const AddRemainder = ({ showRemainder, setShowRemainder }) => {
   const dispatch = useDispatch();
   const remainderObj = useSelector((state) => state.remainder.remainderObj);
 
@@ -72,23 +75,33 @@ const AddRemainder = () => {
   }, []);
 
   const handleSubmit = () => {
-    let obj = {
-      heading,
-      description,
-      leadId: userLeadId,
-      followDate,
-      createdBy: { ...createdBy, role },
-      followTime,
-    };
-
-    console.log(obj, "ob23");
-
-    if (remainderObj?._id) {
-      obj.Id = followupId;
-      dispatch(updateRemainder(obj));
-      setIsUpdate(false);
+    // console.log(heading, "heading23");
+    if (heading == "" || heading == undefined) {
+      toastError("Remainder heading is mandatory ");
+      return;
+    } else if (followTime == "") {
+      toastError("Follow time is mandatory ");
+      return;
     } else {
-      dispatch(addRemainder(obj));
+      let obj = {
+        heading,
+        description,
+        leadId: userLeadId,
+        followDate,
+        createdBy: { ...createdBy, role },
+        followTime,
+      };
+      console.log(obj, "obj23");
+      if (remainderObj?._id) {
+        obj.Id = followupId;
+        dispatch(updateRemainder(obj));
+        setShowRemainder(false);
+        setIsUpdate(false);
+      } else {
+        dispatch(addRemainder(obj));
+        setShowRemainder(false);
+        setIsUpdate(false);
+      }
     }
   };
 
@@ -127,7 +140,7 @@ const AddRemainder = () => {
         role="document"
       >
         <div className="modal-content">
-          <div className="modal-header">
+          {/* <div className="modal-header">
             <h5 className="modal-title">
               {remainderObj?._id ? "Edit" : "Add"} Remainder
             </h5>
@@ -140,24 +153,33 @@ const AddRemainder = () => {
             >
               <span aria-hidden="true">×</span>
             </button>
-          </div>
-          <div className="modal-body">
-            <form>
-              <div className="form-group row">
-                <label className="col-form-label col-md-2">
-                  Heading <span className="text-danger">*</span>
-                </label>
-                <div className="col-md-10">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={heading}
-                    onChange={(e) => setHeading(e.target.value)}
-                  />
-                </div>
-              </div>
+          </div> */}
+          {/* <div className="modal-body"> */}
 
-              {/* <div className="form-group row">
+          {/* <Modal show={showRemainder} className="add_note"> */}
+          <Modal show={showRemainder}>
+            <Modal.Header>
+              <Modal.Title>
+                {remainderObj?._id ? "Edit" : "Add"} Remainder
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <form>
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">
+                    Heading <span className="text-danger">*</span>
+                  </label>
+                  <div className="col-md-10">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={heading}
+                      onChange={(e) => setHeading(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                {/* <div className="form-group row">
                 <label className="col-form-label col-md-2">
                   Assign to <span className="red">*</span>
                 </label>
@@ -187,64 +209,79 @@ const AddRemainder = () => {
                   />
                 </div>
               </div> */}
-              <div className="form-group row">
-                <label className="col-form-label col-md-2">Description</label>
-                <div className="col-md-10">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                  />
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">Description</label>
+                  <div className="col-md-10">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-form-label col-md-2"> Follow Date </label>
-                <div className="col-md-10">
-                  DatePicker
-                  <input
-                    type="date"
-                    className="form-control"
-                    value={followDate}
-                    onChange={(e) => {
-                      setFollowDate(e.target.value);
-                      // console.log(e.target.value, "insie");
-                    }}
-                    // onChange={(e) =>
-                    //   setFollowDate(
-                    //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
-                    //   )
-                    // }
-                  />
-                  {console.log(followTime, "follow23")}
-                  <input
-                    type="time"
-                    className="form-control"
-                    value={followTime}
-                    onChange={(e) => {
-                      setFollowTime(e.target.value);
-                      // console.log(e.target.value, "insie23");
-                    }}
-                    // onChange={(e) =>
-                    //   setFollowDate(
-                    //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
-                    //   )
-                    // }
-                  />
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">Follow Date</label>
+                  <div className="col-md-10">
+                    DatePicker
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={followDate}
+                      onChange={(e) => {
+                        setFollowDate(e.target.value);
+                        // console.log(e.target.value, "insie");
+                      }}
+                      // onChange={(e) =>
+                      //   setFollowDate(
+                      //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
+                      //   )
+                      // }
+                    />
+                    {/* {console.log(followTime, "follow23")} */}
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={followTime}
+                      onChange={(e) => {
+                        setFollowTime(e.target.value);
+                        // console.log(e.target.value, "insie23");
+                      }}
+                      // onChange={(e) =>
+                      //   setFollowDate(
+                      //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
+                      //   )
+                      // }
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="col-12">
-                <button
-                  onClick={() => handleSubmit()}
-                  type="button"
-                  data-bs-dismiss="modal"
-                  className="btn add-btn"
-                >
-                  {remainderObj?._id ? "Update" : "Save"}{" "}
-                </button>
-              </div>
-            </form>
-          </div>
+                {/* <div className="col-12">
+                  <button
+                    onClick={() => handleSubmit()}
+                    // type="submit"
+                    // data-bs-dismiss="modal"
+                    className="btn-submit"
+                  >
+                    {remainderObj?._id ? "Edit" : "Add"} Remainder
+                  </button>
+                </div> */}
+              </form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShowRemainder(false);
+                }}
+              >
+                Close
+              </Button>
+              <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+                {remainderObj?._id ? "Edit" : "Add"} Remainder
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* </div> */}
         </div>
       </div>
     </div>

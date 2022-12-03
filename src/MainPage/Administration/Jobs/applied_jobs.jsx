@@ -2,40 +2,63 @@
  * Signin Firebase
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from 'react-router-dom';
-import UserDashboardHeader from "./userdashboardheader"
-import { Table } from 'antd';
-import 'antd/dist/antd.css';
-import { itemRender, onShowSizeChange } from "../../paginationfunction"
-import "../../antdstyle.css"
+import { Link } from "react-router-dom";
+import UserDashboardHeader from "./userdashboardheader";
+import { Table } from "antd";
+import "antd/dist/antd.css";
+import { itemRender, onShowSizeChange } from "../../paginationfunction";
+import "../../antdstyle.css";
 
 const AppliedJobs = () => {
-
   const [data, setData] = useState([
-    { id: 1, jobtitle: "Web Developer", department: "Development", startdate: "1 Jan 2013", expirydate: "31 May 2019", jobtype: "Full Time", status: "Open" },
-    { id: 2, jobtitle: "Web Designer", department: "Designing", startdate: "18 Mar 2014", expirydate: "31 May 2019", jobtype: "Part Time", status: "Closed" },
-    { id: 3, jobtitle: "Android Developer", department: "Android", startdate: "1 Apr 2014", expirydate: "31 May 2019", jobtype: "Internship", status: "Cancelled" },
+    {
+      id: 1,
+      jobtitle: "Web Developer",
+      department: "Development",
+      startdate: "1 Jan 2013",
+      expirydate: "31 May 2019",
+      jobtype: "Full Time",
+      status: "Open",
+    },
+    {
+      id: 2,
+      jobtitle: "Web Designer",
+      department: "Designing",
+      startdate: "18 Mar 2014",
+      expirydate: "31 May 2019",
+      jobtype: "Part Time",
+      status: "Closed",
+    },
+    {
+      id: 3,
+      jobtitle: "Android Developer",
+      department: "Android",
+      startdate: "1 Apr 2014",
+      expirydate: "31 May 2019",
+      jobtype: "Internship",
+      status: "Cancelled",
+    },
   ]);
   useEffect(() => {
-    if ($('.select').length > 0) {
-      $('.select').select2({
+    if ($(".select").length > 0) {
+      $(".select").select2({
         minimumResultsForSearch: -1,
-        width: '100%'
+        width: "100%",
       });
     }
   });
 
   const columns = [
     {
-      title: '#',
-      dataIndex: 'id',
+      title: "#",
+      dataIndex: "id",
       sorter: (a, b) => a.id.length - b.id.length,
     },
     {
-      title: 'Job Title',
-      dataIndex: 'jobtitle',
+      title: "Job Title",
+      dataIndex: "jobtitle",
       render: (text, record) => (
         <Link to="/app/administrator/job-details">{text}</Link>
       ),
@@ -43,60 +66,101 @@ const AppliedJobs = () => {
     },
 
     {
-      title: 'Department',
-      dataIndex: 'department',
+      title: "Department",
+      dataIndex: "department",
       sorter: (a, b) => a.department.length - b.department.length,
     },
     {
-      title: 'Start Date',
-      dataIndex: 'startdate',
+      title: "Start Date",
+      dataIndex: "startdate",
       sorter: (a, b) => a.startdate.length - b.startdate.length,
     },
 
     {
-      title: 'Expiry Date',
-      dataIndex: 'expirydate',
+      title: "Expiry Date",
+      dataIndex: "expirydate",
       sorter: (a, b) => a.expirydate.length - b.expirydate.length,
     },
     {
-      title: 'Job Type',
-      dataIndex: 'jobtype',
+      title: "Job Type",
+      dataIndex: "jobtype",
       render: (text, record) => (
         <div className="action-label">
-          <a className="btn btn-white btn-sm btn-rounded" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-            <i className={text === "Full Time" ? "fa fa-dot-circle-o text-info" : text === "Part Time" ?
-              "fa fa-dot-circle-o text-success" : text === "Internship" ? "fa fa-dot-circle-o text-danger" :
-                "fa fa-dot-circle-o text-danger"} /> {text}
+          <a
+            className="btn btn-white btn-sm btn-rounded"
+            href="#"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i
+              className={
+                text === "Full Time"
+                  ? "fa fa-dot-circle-o text-info"
+                  : text === "Part Time"
+                  ? "fa fa-dot-circle-o text-success"
+                  : text === "Internship"
+                  ? "fa fa-dot-circle-o text-danger"
+                  : "fa fa-dot-circle-o text-danger"
+              }
+            />{" "}
+            {text}
           </a>
         </div>
       ),
       sorter: (a, b) => a.jobtype.length - b.jobtype.length,
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
+      title: "Status",
+      dataIndex: "status",
       render: (text, record) => (
         <div className="action-label">
-          <a className="btn btn-white btn-sm btn-rounded" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-            <i className={text === "Open" ? "fa fa-dot-circle-o text-info" : text === "Closed" ?
-              "fa fa-dot-circle-o text-success" : "fa fa-dot-circle-o text-danger"} /> {text}
+          <a
+            className="btn btn-white btn-sm btn-rounded"
+            href="#"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i
+              className={
+                text === "Open"
+                  ? "fa fa-dot-circle-o text-info"
+                  : text === "Closed"
+                  ? "fa fa-dot-circle-o text-success"
+                  : "fa fa-dot-circle-o text-danger"
+              }
+            />{" "}
+            {text}
           </a>
         </div>
       ),
       sorter: (a, b) => a.status.length - b.status.length,
     },
     {
-      title: 'Action',
+      title: "Action",
       render: (text, record) => (
         <div className="dropdown dropdown-action">
-          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i className="material-icons">more_vert</i></a>
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="material-icons">more_vert</i>
+          </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#delete_employee"><i className="fa fa-trash-o m-r-5" /> Delete</a>
+            <a
+              className="dropdown-item"
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#delete_employee"
+            >
+              <i className="fa fa-trash-o m-r-5" /> Delete
+            </a>
           </div>
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <>
@@ -114,7 +178,9 @@ const AppliedJobs = () => {
               <div className="col-sm-12">
                 <h3 className="page-title">Applied Jobs</h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item"><Link to="/app/main/dashboard">Dashboard</Link></li>
+                  <li className="breadcrumb-item">
+                    <Link to="/app/main/dashboard">Dashboard</Link>
+                  </li>
                   <li className="breadcrumb-item ">Jobs</li>
                   <li className="breadcrumb-item">User Dashboard</li>
                   <li className="breadcrumb-item active">Applied Jobs</li>
@@ -162,25 +228,32 @@ const AppliedJobs = () => {
               </div>
             </div>
             <div className="col-sm-6 col-md-3">
-              <a href="#" className="btn btn-success btn-block"> Search </a>
+              <a href="#" className="btn btn-success btn-block">
+                {" "}
+                Search{" "}
+              </a>
             </div>
           </div>
           {/* Search Filter */}
           <div className="row">
             <div className="col-md-12">
               <div className="table-responsive">
-                <Table className="table-striped"
+                <Table
+                  className="table-striped"
                   pagination={{
                     total: data.length,
-                    showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                    showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
+                    showTotal: (total, range) =>
+                      `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                    showSizeChanger: true,
+                    onShowSizeChange: onShowSizeChange,
+                    itemRender: itemRender,
                   }}
-                  style={{ overflowX: 'auto' }}
+                  style={{ overflowX: "auto" }}
                   columns={columns}
                   // bordered
                   dataSource={data}
-                  rowKey={record => record.id}
-                //  onChange={this.handleTableChange}
+                  // rowKey={record => record.id}
+                  //  onChange={this.handleTableChange}
                 />
               </div>
             </div>
@@ -192,6 +265,6 @@ const AppliedJobs = () => {
       {/* /Page Wrapper */}
     </>
   );
-}
+};
 
 export default AppliedJobs;

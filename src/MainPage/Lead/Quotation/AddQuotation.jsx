@@ -9,17 +9,18 @@ import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
 import { clientGet } from "../../../redux/features/client/clientSlice";
 import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
-const AddQuotation = () => {
-  const { leadId } = useParams();
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+// import Quotation from "./Quotation";
 
-  // console.log(leadId, "leadId")
+const AddQuotation = ({ show, setShow }) => {
+  const { leadId } = useParams();
 
   const dispatch = useDispatch();
   const [destinationName, setDestinationName] = useState("");
   const [durationOfTour, setDurationOfTour] = useState(1);
   const [days, setDays] = useState(0);
   const [numberOfGuest, setNumberOfGuest] = useState(1);
-  const [adultCount, setAdultCount] = useState(0);
   const tourValueArr = useSelector((state) => state.tour.tours);
   const quotationStateObj = useSelector(
     (state) => state.quotation.quotationObj
@@ -37,8 +38,6 @@ const AddQuotation = () => {
   const [quotationObj, setQuotationObj] = useState(null);
   const [quotationId, setQuotationId] = useState("");
   const [clientsArr, setClientsArr] = useState([]);
-  const [clientId, setClientId] = useState("");
-  const [clientObj, setclientObj] = useState(null);
 
   ////////traveler details
   const [numberofAdults, setNumberofAdults] = useState(0);
@@ -51,14 +50,14 @@ const AddQuotation = () => {
     // console.log(noOfTravellerArray, "travereere")
   }, [noOfTravellerArray]);
 
-  const [childWithoutBed, setChildWithoutBed] = useState(0);
-  const [childWithBed, setChildWithBed] = useState(0);
+  // const [childWithoutBed, setChildWithoutBed] = useState(0);
+  // const [childWithBed, setChildWithBed] = useState(0);
 
   const [visaRequired, setVisaRequired] = useState("false");
-  const [visaOnArrival, setVisaOnArrival] = useState("");
+  // const [visaOnArrival, setVisaOnArrival] = useState("");
 
-  const [startDate, setStartDate] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [expirationDate, setExpirationDate] = useState("");
   ////
   const [termAndCondition, setTermAndCondition] = useState("");
   //////product details
@@ -70,10 +69,11 @@ const AddQuotation = () => {
   const [travelList, setTravelList] = useState([
     { name: "", startDate: "", endDate: "" },
   ]);
-  const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
+  // const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
-  const [leadName, setLeadName] = useState("");
-  const statusOfTour = true;
+  const [showModal, setShowModal] = useState(false);
+  // const [leadName, setLeadName] = useState("");
+  // const statusOfTour = true;
 
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
@@ -83,6 +83,14 @@ const AddQuotation = () => {
     // dispatch(leadGetById(leadId));
     // console.log("teave", travelList.length)
   }, []);
+
+  useEffect(() => {
+    if (show == true) {
+      setShowModal(true);
+    } else {
+      setShowModal(false);
+    }
+  }, [show]);
 
   useEffect(() => {
     if (quotationStateObj) {
@@ -129,12 +137,12 @@ const AddQuotation = () => {
         quotationObj?.travelPassengerObj?.noOfChildrenWithoutBed
       );
       setNumberOfInfants(quotationObj?.travelPassengerObj?.noOfInfants);
-      console.log(
-        quotationObj?.noOfAdults,
-        quotationObj?.noOfChildrenWithBed,
-        quotationObj?.noOfChildrenWithoutBed,
-        quotationObj?.noOfInfants
-      );
+      // console.log(
+      //   quotationObj?.noOfAdults,
+      //   quotationObj?.noOfChildrenWithBed,
+      //   quotationObj?.noOfChildrenWithoutBed,
+      //   quotationObj?.noOfInfants
+      // );
       // console.log(quotationObj.travelPassengerArr, "sadfsaf")
       // set(quotationObj.destinationName);
       // setDestinationName(quotationObj.destinationName);
@@ -142,6 +150,7 @@ const AddQuotation = () => {
       // setDestinationName(quotationObj.destinationName);
     }
   }, [quotationObj]);
+
   useEffect(() => {
     // console.log(travelList, "tyuertret--------------------------------------------------------")
     if (tourValueArr && tourValueArr.length) {
@@ -417,14 +426,39 @@ const AddQuotation = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (destinationName == "") {
-    //   throw "Destination Name name is mandatory";
-    // }
-    // if (numberOfGuest == "") {
-    //   throw "Number Of Guest is mandatory";
-    // }
+    if (destinationName == "") {
+      toastError("Destination name is mandatory");
+      return;
+    }
+    if (numberOfGuest == "") {
+      toastError("Number Of Guest is mandatory");
+      return;
+    }
+    if (travelList[0]?.name == "") {
+      toastError("Tour Name is mandatory");
+      return;
+    } else if (travelList[0]?.startDate == "") {
+      toastError("Tour Start Date is mandatory");
+      return;
+    } else if (travelList[0]?.endDate == "") {
+      toastError("Tour End Date is mandatory");
+      return;
+    } else if (durationOfTour <= 0) {
+      toastError("Tour Duration is mandatory");
+      return;
+    } else if (numberOfGuest <= 0) {
+      toastError("Total Number of Guest is mandatory");
+      return;
+    } else if (numberofAdults <= 0) {
+      toastError("Number Of Adult is mandatory");
+      return;
+    } else if (hotelList[0]?.hotelName == "") {
+      toastError("Hotel Details are mandatory");
+      return;
+    }
     // if (adultCount == "") {
-    //   throw "Adult Count is mandatory";
+    //   toastError("Adult Count is mandatory");
+    //   return;
     // }
     let obj = {
       destinationName,
@@ -449,11 +483,13 @@ const AddQuotation = () => {
       itineraryList,
       termAndCondition,
     };
-    // console.log(obj)
+    // console.log(obj, "234234");
     if (!quotationId) {
       dispatch(quotationAdd(obj));
+      setShow(false);
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
+      setShow(false);
     }
     // console.log(obj, "send Obj9");
   };
@@ -542,7 +578,7 @@ const AddQuotation = () => {
       >
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">
+            {/* <h5 className="modal-title">
               {isUpdateTour ? "Edit" : "Add"} Quote
             </h5>
             <button
@@ -552,392 +588,362 @@ const AddQuotation = () => {
               aria-label="Close"
             >
               <span aria-hidden="true">×</span>
-            </button>
+            </button> */}
           </div>
-          <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              {/* <form action="#"> */}
+          {/* <div className="modal-body"> */}
+          <Modal size="lg" show={show}>
+            <Modal.Header>
+              <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {/* <form onSubmit={handleSubmit}> */}
+              <form>
+                {/* <form action="#"> */}
 
-              <div className="row">
-                <div className=" form-group col-md-12">
-                  <label className="col-form-label ">
-                    Destination Name <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={destinationName}
-                    onChange={(e) => setDestinationName(e.target.value)}
-                  />
+                <div className="row">
+                  <div className=" form-group col-md-12">
+                    <label className="col-form-label ">
+                      Destination Name <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={destinationName}
+                      onChange={(e) => setDestinationName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="content">
+                    <div className="row">
+                      <div className="col-sm-12">
+                        <h3 className="mt-3 mb-4">Tour Details </h3>
+                      </div>
+                      {/* {console.log(tourArr, "travel,23")} */}
+                      {travelList &&
+                        travelList.map((item, index) => {
+                          return (
+                            <div className="row" key={index}>
+                              <div className="col-md-4 mb-3">
+                                <label className="col-form-label ">
+                                  Tour <span className="text-danger">*</span>
+                                </label>
+
+                                <select
+                                  className="form-control"
+                                  name="name"
+                                  value={item?.name}
+                                  onChange={(e) =>
+                                    handleTourValueChange(e, index)
+                                  }
+                                >
+                                  <option value="" disabled>
+                                    --select an option--
+                                  </option>
+                                  {tourArr &&
+                                    tourArr.length > 0 &&
+                                    tourArr.map((el, inde) => (
+                                      <option key={inde} value={el.name}>
+                                        {el.name}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
+                              <div className="col-md-4">
+                                <label className="col-form-label ">
+                                  Start Date
+                                  <span className="text-danger">*</span>
+                                </label>
+                                <div className="col-sm-8">
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    name="startDate"
+                                    value={item.startDate}
+                                    onChange={(e) =>
+                                      handleTourValueChange(e, index)
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <label className="col-form-label ">
+                                  Expiration Date
+                                </label>
+                                <div className="col-sm-8">
+                                  <input
+                                    type="date"
+                                    className="form-control"
+                                    name="endDate"
+                                    value={item.endDate}
+                                    onChange={(e) =>
+                                      handleTourValueChange(e, index)
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="form-group col-md-2 mt-4">
+                                {travelList.length !== 1 && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    // className="btn btn-success"
+                                    onClick={() => handleRemoveTravel(index)}
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+                              </div>
+                              <div className="col-md-12">
+                                {travelList.length - 1 === index && (
+                                  <button
+                                    type="button"
+                                    className="btn btn-success"
+                                    onClick={handleAddClickTour}
+                                  >
+                                    Add More
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+
+                  <div className=" form-group col-md-6">
+                    <label className="col-form-label ">
+                      Duration Of Tour <span className="text-danger">*</span>{" "}
+                      (in Nights) ({`${durationOfTour}N/${days}D`})
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={durationOfTour}
+                      onChange={(e) => {
+                        handleEnterNumberOfDays(e.target.value);
+                      }}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label className="col-form-label ">
+                      Number Of Guest <span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      value={numberOfGuest}
+                      onChange={(e) => setNumberOfGuest(e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <div className="content">
                   <div className="row">
                     <div className="col-sm-12">
-                      <h3 className="mt-3 mb-4">Tour Details </h3>
-                    </div>
-                    {/* {console.log(tourArr, "travel,23")} */}
-                    {travelList &&
-                      travelList.map((item, index) => {
-                        return (
-                          <div className="row" key={index}>
-                            <div className="col-md-4 mb-3">
-                              <label className="col-form-label ">
-                                Tour <span className="text-danger">*</span>
-                              </label>
-
-                              <select
-                                className="form-control"
-                                name="name"
-                                value={item?.name}
-                                onChange={(e) =>
-                                  handleTourValueChange(e, index)
-                                }
-                              >
-                                <option value="" disabled>
-                                  --select an option--
-                                </option>
-                                {tourArr &&
-                                  tourArr.length > 0 &&
-                                  tourArr.map((el, inde) => (
-                                    <option key={inde} value={el.name}>
-                                      {el.name}
-                                    </option>
-                                  ))}
-                              </select>
-                            </div>
-                            <div className="col-md-4">
-                              <label className="col-form-label ">
-                                Start Date
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="date"
-                                  className="form-control"
-                                  name="startDate"
-                                  value={item.startDate}
-                                  onChange={(e) =>
-                                    handleTourValueChange(e, index)
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="col-md-4">
-                              <label className="col-form-label ">
-                                Expiration Date
-                              </label>
-                              <div className="col-sm-8">
-                                <input
-                                  type="date"
-                                  className="form-control"
-                                  name="endDate"
-                                  value={item.endDate}
-                                  onChange={(e) =>
-                                    handleTourValueChange(e, index)
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="form-group col-md-2 mt-4">
-                              {travelList.length !== 1 && (
-                                <button
-                                  type="button"
-                                  className="btn btn-danger"
-                                  // className="btn btn-success"
-                                  onClick={() => handleRemoveTravel(index)}
-                                >
-                                  Remove
-                                </button>
-                              )}
-                            </div>
-                            <div className="col-md-12">
-                              {travelList.length - 1 === index && (
-                                <button
-                                  type="button"
-                                  className="btn btn-success"
-                                  onClick={handleAddClickTour}
-                                >
-                                  Add More
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-
-                <div className=" form-group col-md-6">
-                  <label className="col-form-label ">
-                    Duration Of Tour <span className="text-danger">*</span> (in
-                    Nights) ({`${durationOfTour}N/${days}D`})
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={durationOfTour}
-                    onChange={(e) => {
-                      handleEnterNumberOfDays(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label className="col-form-label ">
-                    Number Of Guest <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    className="form-control"
-                    value={numberOfGuest}
-                    onChange={(e) => setNumberOfGuest(e.target.value)}
-                  />
-                </div>
-
-                {/* <div className="col-md-6">
-                        <label className="col-form-label ">
-                            Adult Count <span className="text-danger">*</span>
+                      <h3 className="mt-3 mb-4 ">Traveller Details</h3>
+                      <div className="row">
+                        <div className="col-3">
+                          <label className="col-form-label ">
+                            Adults
+                            <span className="text-danger">*</span>
                           </label>
-                            <input
-                              type="number"
-                              className="form-control"
-                              value={adultCount}
-                              onChange={(e) => setAdultCount(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="col-md-6  ">
-                        <label className="col-form-label ">
-                          Child Without Bed
-                          <span className="text-danger">*</span>
-                        </label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={childWithoutBed}
-                            onChange={(e) => setChildWithoutBed(e.target.value)}
-                          />
-                        </div>
-                        <div className="col-md-6">
-                        <label className=" ">
-                          Child With Bed <span className="text-danger">*</span>
-                        </label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={childWithBed}
-                            onChange={(e) => setChildWithBed(e.target.value)}
-                          />
-                      </div> */}
-              </div>
-
-              <div className="content">
-                <div className="row">
-                  <div className="col-sm-12">
-                    <h3 className="mt-3 mb-4 ">Traveller Details</h3>
-                    <div className="row">
-                      <div className="col-3">
-                        <label className="col-form-label ">
-                          Adults
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-control"
-                          value={parseInt(numberofAdults)}
-                          onChange={(e) => {
-                            console.log(e.target.value, "value");
-                            handletravelersSelect(
-                              e.target.value,
-                              "numberofAdults"
-                            );
-                          }}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                      </div>
-                      <div className="col-3">
-                        <label className="col-form-label ">
-                          Children with Bed
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-control"
-                          value={parseInt(numberOfChildrenWithBed)}
-                          onChange={(e) => {
-                            handletravelersSelect(
-                              e.target.value,
-                              "numberOfChildrenWithBed"
-                            );
-                          }}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                      </div>
-                      <div className="col-3">
-                        <label className="col-form-label ">
-                          Children without Bed
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-control"
-                          value={parseInt(numberOfChildrenWithoutBed)}
-                          onChange={(e) => {
-                            handletravelersSelect(
-                              e.target.value,
-                              "numberOfChildrenWithoutBed"
-                            );
-                          }}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                      </div>
-                      <div className="col-3">
-                        <label className="col-form-label ">
-                          Infants
-                          <span className="text-danger">*</span>
-                        </label>
-                        <select
-                          className="form-control"
-                          value={parseInt(numberOfInfants)}
-                          onChange={(e) => {
-                            handletravelersSelect(
-                              e.target.value,
-                              "numberOfInfants"
-                            );
-                          }}
-                        >
-                          <option value={0}>0</option>
-                          <option value={1}>1</option>
-                          <option value={2}>2</option>
-                          <option value={3}>3</option>
-                          <option value={4}>4</option>
-                          <option value={5}>5</option>
-                          <option value={6}>6</option>
-                          <option value={7}>7</option>
-                          <option value={8}>8</option>
-                          <option value={9}>9</option>
-                          <option value={10}>10</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="content">
-                <h3 className="mt-3 mb-4 ">Hotel details</h3>
-                {hotelList &&
-                  hotelList.map((hotel, i) => {
-                    return (
-                      <div className="row mb-3" key={i}>
-                        <div className="form-group col-md-4">
-                          <label>Hotel Name</label>
-                          <input
-                            type="text"
-                            name="hotelName"
-                            className="form-control"
-                            placeholder="Name"
-                            value={hotel.hotelName}
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
-                        </div>
-
-                        <div className="form-group col-md-4">
-                          <label> Room Type</label>
-                          <input
-                            type="text"
-                            name="roomType"
-                            value={hotel.roomType}
-                            className="form-control"
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
-                        </div>
-                        <div className="form-group col-md-4">
-                          <label>Rating</label>
                           <select
                             className="form-control"
-                            name="rating"
-                            value={parseInt(hotel.rating)}
-                            onChange={(e) => handleinputchangeHotel(e, i)}
+                            value={parseInt(numberofAdults)}
+                            onChange={(e) => {
+                              console.log(e.target.value, "value");
+                              handletravelersSelect(
+                                e.target.value,
+                                "numberofAdults"
+                              );
+                            }}
                           >
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
                             <option value={2}>2</option>
                             <option value={3}>3</option>
                             <option value={4}>4</option>
                             <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                            <option value={9}>9</option>
+                            <option value={10}>10</option>
                           </select>
                         </div>
-
-                        <div className="form-group col-md-4">
-                          <label> Check In </label>
-                          <input
-                            type="date"
-                            // type="text"
-                            name="checkIn"
-                            value={`${moment(hotel.checkIn).format(
-                              "YYYY-MM-DD"
-                            )}`}
+                        <div className="col-3">
+                          <label className="col-form-label ">
+                            Children with Bed
+                            {/* <span className="text-danger">*</span> */}
+                          </label>
+                          <select
                             className="form-control"
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
+                            value={parseInt(numberOfChildrenWithBed)}
+                            onChange={(e) => {
+                              handletravelersSelect(
+                                e.target.value,
+                                "numberOfChildrenWithBed"
+                              );
+                            }}
+                          >
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                            <option value={9}>9</option>
+                            <option value={10}>10</option>
+                          </select>
                         </div>
-
-                        <div className="form-group col-md-4">
-                          <label> Number Of Night</label>
-                          <input
-                            type="number"
-                            name="numberOfNight"
-                            value={`${hotel.numberOfNight}`}
+                        <div className="col-3">
+                          <label className="col-form-label ">
+                            Children without Bed
+                            {/* <span className="text-danger">*</span> */}
+                          </label>
+                          <select
                             className="form-control"
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
+                            value={parseInt(numberOfChildrenWithoutBed)}
+                            onChange={(e) => {
+                              handletravelersSelect(
+                                e.target.value,
+                                "numberOfChildrenWithoutBed"
+                              );
+                            }}
+                          >
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                            <option value={9}>9</option>
+                            <option value={10}>10</option>
+                          </select>
                         </div>
-
-                        <div className="form-group col-md-4">
-                          <label> Check Out </label>
-                          <input
-                            type="date"
-                            // type="text"
-                            name="checkOut"
-                            value={`${moment(hotel.checkOut).format(
-                              "YYYY-MM-DD"
-                            )}`}
-                            disabled
+                        <div className="col-3">
+                          <label className="col-form-label ">
+                            Infants
+                            {/* <span className="text-danger">*</span> */}
+                          </label>
+                          <select
                             className="form-control"
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
+                            value={parseInt(numberOfInfants)}
+                            onChange={(e) => {
+                              handletravelersSelect(
+                                e.target.value,
+                                "numberOfInfants"
+                              );
+                            }}
+                          >
+                            <option value={0}>0</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                            <option value={6}>6</option>
+                            <option value={7}>7</option>
+                            <option value={8}>8</option>
+                            <option value={9}>9</option>
+                            <option value={10}>10</option>
+                          </select>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                        {/* <div className="form-group col-md-4">
+                <div className="content">
+                  <h3 className="mt-3 mb-4 ">Hotel details</h3>
+                  {hotelList &&
+                    hotelList.map((hotel, i) => {
+                      return (
+                        <div className="row mb-3" key={i}>
+                          <div className="form-group col-md-4">
+                            <label>Hotel Name</label>
+                            <input
+                              type="text"
+                              name="hotelName"
+                              className="form-control"
+                              placeholder="Name"
+                              value={hotel.hotelName}
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
+
+                          <div className="form-group col-md-4">
+                            <label> Room Type</label>
+                            <input
+                              type="text"
+                              name="roomType"
+                              value={hotel.roomType}
+                              className="form-control"
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
+                          <div className="form-group col-md-4">
+                            <label>Rating</label>
+                            <select
+                              className="form-control"
+                              name="rating"
+                              value={parseInt(hotel.rating)}
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            >
+                              <option value={2}>2</option>
+                              <option value={3}>3</option>
+                              <option value={4}>4</option>
+                              <option value={5}>5</option>
+                            </select>
+                          </div>
+
+                          <div className="form-group col-md-4">
+                            <label> Check In </label>
+                            <input
+                              type="date"
+                              // type="text"
+                              name="checkIn"
+                              value={`${moment(hotel.checkIn).format(
+                                "YYYY-MM-DD"
+                              )}`}
+                              className="form-control"
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
+
+                          <div className="form-group col-md-4">
+                            <label> Number Of Night</label>
+                            <input
+                              type="number"
+                              name="numberOfNight"
+                              value={`${hotel.numberOfNight}`}
+                              className="form-control"
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
+
+                          <div className="form-group col-md-4">
+                            <label> Check Out </label>
+                            <input
+                              type="date"
+                              // type="text"
+                              name="checkOut"
+                              value={`${moment(hotel.checkOut).format(
+                                "YYYY-MM-DD"
+                              )}`}
+                              disabled
+                              className="form-control"
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
+
+                          {/* <div className="form-group col-md-4">
                           <label>Hotel Address</label>
                           <input
                             type="text"
@@ -947,278 +953,280 @@ const AddQuotation = () => {
                             onChange={(e) => handleinputchangeHotel(e, i)}
                           />
                         </div> */}
-                        <div className="form-group col-md-4">
-                          <label>Hotel Address</label>
-                          <input
-                            type="text"
-                            name="hotelAddress"
-                            className="form-control"
-                            value={hotel.hotelAddress}
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
-                        </div>
+                          <div className="form-group col-md-4">
+                            <label>Hotel Address</label>
+                            <input
+                              type="text"
+                              name="hotelAddress"
+                              className="form-control"
+                              value={hotel?.hotelAddress}
+                              onChange={(e) => handleinputchangeHotel(e, i)}
+                            />
+                          </div>
 
-                        <div className="form-group col-md-2 mt-4">
-                          {hotelList.length !== 1 && (
-                            <button
-                              type="button"
-                              // className="btn btn-success"
-                              className="btn btn-danger mx-1"
-                              onClick={() => handleremoveHotel(i)}
-                            >
-                              Remove
-                            </button>
+                          <div className="form-group col-md-2 mt-4">
+                            {hotelList.length !== 1 && (
+                              <button
+                                type="button"
+                                // className="btn btn-success"
+                                className="btn btn-danger mx-1"
+                                onClick={() => handleremoveHotel(i)}
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                          {durationOfTour &&
+                          hotelList.reduce(
+                            (acc, el) => acc + parseInt(el.numberOfNight),
+                            0
+                          ) < durationOfTour ? (
+                            <div className="col-md-12">
+                              {/* {hotelList.length - 1 === i && ( */}
+                              <button
+                                type="button"
+                                className="btn btn-success"
+                                onClick={handleaddclickHotel}
+                              >
+                                Add More
+                              </button>
+                              {/* )} */}
+                            </div>
+                          ) : (
+                            ""
                           )}
                         </div>
-                        {durationOfTour &&
-                        hotelList.reduce(
-                          (acc, el) => acc + parseInt(el.numberOfNight),
-                          0
-                        ) < durationOfTour ? (
-                          <div className="col-md-12">
-                            {/* {hotelList.length - 1 === i && ( */}
-                            <button
-                              type="button"
-                              className="btn btn-success"
-                              onClick={handleaddclickHotel}
-                            >
-                              Add More
-                            </button>
-                            {/* )} */}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    );
-                  })}
-              </div>
+                      );
+                    })}
+                </div>
 
-              <div className="row">
-                <div className="form-group col-3">
-                  <label className="col-form-label ">
-                    Visa Required
-                    <span className="text-danger">*</span>
+                <div className="row">
+                  <div className="form-group col-3">
+                    <label className="col-form-label ">
+                      Visa Required
+                      <span className="text-danger">*</span>
+                    </label>
+                  </div>
+                  <div className="col-md-9">
+                    <select
+                      className="form-control"
+                      value={visaRequired}
+                      onChange={(e) => {
+                        setVisaRequired(e.target.value);
+                      }}
+                    >
+                      <option value="Visa is required">Visa is Required</option>
+                      <option value="Visa not Required">
+                        Visa not Required
+                      </option>
+                      <option value="Visa on Arrival">Visa on Arrival</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-group row">
+                  <label className="col-form-label col-md-3">
+                    Airport Transfer
                   </label>
-                </div>
-                <div className="col-md-9">
-                  <select
-                    className="form-control"
-                    value={visaRequired}
-                    onChange={(e) => {
-                      setVisaRequired(e.target.value);
-                    }}
-                  >
-                    <option value="Visa is required">Visa is Required</option>
-                    <option value="Visa not Required">Visa not Required</option>
-                    <option value="Visa on Arrival">Visa on Arrival</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-group row">
-                <label className="col-form-label col-md-3">
-                  Airport Transfer
-                </label>
-                <div className="col-md-9">
-                  <select
-                    className="form-control"
-                    value={airportTransfer}
-                    onChange={(e) => {
-                      setAirportTransfer(e.target.value);
-                    }}
-                  >
-                    <option value="Private">Private</option>
-                    <option value="Seat in coach basis">
-                      Seat in coach basis
-                    </option>
-                    <option value="Private + Seat in coach basis">
-                      Private + Seat in coach basis
-                    </option>
-                  </select>
-                  {/* <input
+                  <div className="col-md-9">
+                    <select
+                      className="form-control"
+                      value={airportTransfer}
+                      onChange={(e) => {
+                        setAirportTransfer(e.target.value);
+                      }}
+                    >
+                      <option value="Private">Private</option>
+                      <option value="Seat in coach basis">
+                        Seat in coach basis
+                      </option>
+                      <option value="Private + Seat in coach basis">
+                        Private + Seat in coach basis
+                      </option>
+                    </select>
+                    {/* <input
                     type="text"
                     className="form-control"
                     value={airportTransfer}
                     onChange={(e) => setAirportTransfer(e.target.value)}
                   /> */}
-                </div>
-              </div>
-
-              <div className="content">
-                <div className="row">
-                  <div className="col-sm-12">
-                    <h3 className="mt-3 mb-4">Itinerary Details</h3>
-                    {itineraryList &&
-                      itineraryList.map((itinerary, i) => {
-                        return (
-                          <div className="row mb-3" key={i}>
-                            <div className="form-group col-md-1">
-                              <label>Day </label>
-                              <div style={{ paddingTop: 10 }}>
-                                {itinerary.day}
-                              </div>
-                            </div>
-                            <div className="form-group col-md-5">
-                              <label>Itinerary Heading</label>
-                              <input
-                                type="text"
-                                name="itineraryHeading"
-                                className="form-control"
-                                value={itinerary.itineraryHeading}
-                                placeholder="Enter Itinerary Heading"
-                                onChange={(e) =>
-                                  handleinputchangeItinerary(e, i)
-                                }
-                              />
-                            </div>
-                            <div className="form-group col-md-12">
-                              <label>Itinerary Description</label>
-                              <textarea
-                                type="text"
-                                name="itineraryName"
-                                className="form-control"
-                                value={itinerary.itineraryName}
-                                placeholder="Enter Itinerary Description"
-                                onChange={(e) =>
-                                  handleinputchangeItinerary(e, i)
-                                }
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
                   </div>
                 </div>
-              </div>
 
-              <div className="form-group row">
-                <label className="col-form-label col-md-2">
-                  Term And Condition
-                </label>
-                <div className="col-md-10">
+                <div className="content">
+                  <div className="row">
+                    <div className="col-sm-12">
+                      <h3 className="mt-3 mb-4">Itinerary Details</h3>
+                      {itineraryList &&
+                        itineraryList.map((itinerary, i) => {
+                          return (
+                            <div className="row mb-3" key={i}>
+                              <div className="form-group col-md-1">
+                                <label>Day </label>
+                                <div style={{ paddingTop: 10 }}>
+                                  {itinerary.day}
+                                </div>
+                              </div>
+                              <div className="form-group col-md-5">
+                                <label>Itinerary Heading</label>
+                                <input
+                                  type="text"
+                                  name="itineraryHeading"
+                                  className="form-control"
+                                  value={itinerary.itineraryHeading}
+                                  placeholder="Enter Itinerary Heading"
+                                  onChange={(e) =>
+                                    handleinputchangeItinerary(e, i)
+                                  }
+                                />
+                              </div>
+                              <div className="form-group col-md-12">
+                                <label>Itinerary Description</label>
+                                <textarea
+                                  type="text"
+                                  name="itineraryName"
+                                  className="form-control"
+                                  value={itinerary.itineraryName}
+                                  placeholder="Enter Itinerary Description"
+                                  onChange={(e) =>
+                                    handleinputchangeItinerary(e, i)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">
+                    Term And Condition
+                  </label>
+                  <div className="col-md-10">
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={termAndCondition}
+                      onChange={(e) => setTermAndCondition(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Flight
+                    <span className="text-danger">*</span>
+                  </label>
                   <input
-                    type="text"
-                    className="form-control"
-                    value={termAndCondition}
-                    onChange={(e) => setTermAndCondition(e.target.value)}
+                    type="checkbox"
+                    name="IsAirport"
+                    style={{ marginLeft: 10 }}
+                    value={isAirport}
+                    checked={isAirport}
+                    onChange={(e) => {
+                      setIsAirport(!isAirport);
+                    }}
                   />
                 </div>
-              </div>
-              <div className="form-group col-md-6">
-                <label className="col-form-label ">
-                  Flight
-                  <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="checkbox"
-                  name="IsAirport"
-                  style={{ marginLeft: 10 }}
-                  value={isAirport}
-                  checked={isAirport}
-                  onChange={(e) => {
-                    setIsAirport(!isAirport);
-                  }}
-                />
-              </div>
 
-              <div className="form-group col-md-6">
-                <label className="col-form-label ">
-                  Land Packages
-                  <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="checkbox"
-                  name="Island"
-                  style={{ marginLeft: 10 }}
-                  value={island}
-                  checked={island}
-                  onChange={(e) => {
-                    setIsLand(!island);
-                  }}
-                />
-              </div>
-
-              <div className="form-group row">
-                <label className="col-form-label col-md-2">Summary</label>
-                <div className="col-md-12">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <td>Mode</td>
-                        <td>Person</td>
-                        <td>per Person Price</td>
-                        <td>Total</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {isAirport && (
-                        <tr>
-                          <td>Flight</td>
-                          <td>{numberOfGuest}</td>
-                          <td>
-                            <input
-                              type="text"
-                              value={[perPersonAirPortPrice]}
-                              onChange={(e) => {
-                                setPerPersonAirportPrice(e.target.value);
-                                setTotalPersonAirportPrice(
-                                  numberOfGuest * e.target.value
-                                );
-                              }}
-                            />
-                          </td>
-                          <td>{totalPersonAirPortPrice}</td>
-                        </tr>
-                      )}
-
-                      {island && (
-                        <tr>
-                          <td>Land Package</td>
-                          <td>{numberOfGuest}</td>
-                          <td>
-                            <input
-                              type="text"
-                              value={[perPersonLandPrice]}
-                              onChange={(e) => {
-                                setPerPersonLandPrice(e.target.value);
-                                setTotalPersonLandPrice(
-                                  numberOfGuest * e.target.value
-                                );
-                              }}
-                            />
-                          </td>
-                          <td>{totalPersonLandPrice}</td>
-                        </tr>
-                      )}
-
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                      </tr>
-
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>Total</td>
-                        <td>{amount}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Land Packages
+                    <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="Island"
+                    style={{ marginLeft: 10 }}
+                    value={island}
+                    checked={island}
+                    onChange={(e) => {
+                      setIsLand(!island);
+                    }}
+                  />
                 </div>
-              </div>
-              <div className="col-12">
-                <button
-                  className="btn add-btn"
-                  type="submit"
-                  data-bs-dismiss="modal"
-                >
-                  {" "}
-                  {isUpdateTour ? "Update" : "Save"}{" "}
-                </button>
-              </div>
-              {/* 
+
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">Summary</label>
+                  <div className="col-md-12">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <td>Mode</td>
+                          <td>Person</td>
+                          <td>per Person Price</td>
+                          <td>Total</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {isAirport && (
+                          <tr>
+                            <td>Flight</td>
+                            <td>{numberOfGuest}</td>
+                            <td>
+                              <input
+                                type="text"
+                                value={[perPersonAirPortPrice]}
+                                onChange={(e) => {
+                                  setPerPersonAirportPrice(e.target.value);
+                                  setTotalPersonAirportPrice(
+                                    numberOfGuest * e.target.value
+                                  );
+                                }}
+                              />
+                            </td>
+                            <td>{totalPersonAirPortPrice}</td>
+                          </tr>
+                        )}
+
+                        {island && (
+                          <tr>
+                            <td>Land Package</td>
+                            <td>{numberOfGuest}</td>
+                            <td>
+                              <input
+                                type="text"
+                                value={[perPersonLandPrice]}
+                                onChange={(e) => {
+                                  setPerPersonLandPrice(e.target.value);
+                                  setTotalPersonLandPrice(
+                                    numberOfGuest * e.target.value
+                                  );
+                                }}
+                              />
+                            </td>
+                            <td>{totalPersonLandPrice}</td>
+                          </tr>
+                        )}
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td>Total</td>
+                          <td>{amount}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div className="col-12">
+                  <button
+                    className="btn add-btn"
+                    type="submit"
+                    data-bs-dismiss="modal"
+                  >
+                    {" "}
+                    {isUpdateTour ? "Update" : "Save"}{" "}
+                  </button>
+                </div>
+                {/* 
               <div className="col-12">
                 <button
                   data-bs-dismiss="modal"
@@ -1229,10 +1237,27 @@ const AddQuotation = () => {
                   Save{" "}
                 </button>
               </div> */}
-            </form>
-          </div>
+              </form>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShow(false);
+                }}
+              >
+                Close
+              </Button>
+              <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+                {isUpdateTour ? "Edit" : "Add"} Quote
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* </div> */}
         </div>
       </div>
+      {/* <Quotation changeStatus={show} /> */}
     </div>
   );
 };

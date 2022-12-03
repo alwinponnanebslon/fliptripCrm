@@ -94,9 +94,9 @@ const LeadSidebar = (props) => {
                 </li>
                 <li className={pathname?.includes("quotes") ? "active" : ""}>
                   <Link to={`/admin/lead/${leadId}/quotes`}>
-                    <i className="la la-file" />{" "}
+                    <i className="la la-file" />
                     <div className="textblock2">
-                      <span>Create Quote</span>{" "}
+                      <span>Create Quote</span>
                       <span className="textsmall">PENDING TASKS</span>
                     </div>
                   </Link>

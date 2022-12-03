@@ -12,7 +12,7 @@ import {
   costingSheetGet,
   setCostingSheet,
 } from "../../../../redux/features/CostingSheet/CostingSheetSlice.js";
-
+import AddRemainder from "../../../Remainder/Remainder/AddRemainder";
 import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
 
 const ViewCostingSheetForm = () => {
@@ -38,7 +38,8 @@ const ViewCostingSheetForm = () => {
     {
       hotelName: "",
       bookingSource: "",
-      cost: 0,
+      // cost: 0,
+      cost: "",
       hold: false,
       reConfirmed: false,
       pending: false,
@@ -56,6 +57,7 @@ const ViewCostingSheetForm = () => {
   const [additionalLandName, setAdditionalLandName] = useState("");
   const [additionalLandPrices, setAdditionalLandPrices] = useState(0);
   const [isLocation, setIsLocation] = useState(false);
+  const [showRemainder, setShowRemainder] = useState(false);
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
@@ -199,9 +201,7 @@ const ViewCostingSheetForm = () => {
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
-    console.log(name, "name, ", value, " value,", checked, "name, checked23");
-    // console.log(index, "index, value2, che23");
-    // console.log(inputList, "inputList2134");
+    // console.log(name, "name, ", value, " value,", checked, "name, checked23");
     let tempList = [...inputList];
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
@@ -212,8 +212,45 @@ const ViewCostingSheetForm = () => {
       reConfirmed: tempList[index].reConfirmed,
       pending: tempList[index].pending,
     };
-
     if (name == "cost") {
+      if (isNaN(value)) {
+        value = 0;
+        toastError("Cost should be number");
+        return;
+      } else if (Number.isInteger(parseInt(value))) {
+        if (
+          flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+          parseInt(flightCost)
+        ) {
+          toastError("flight price cannot be  greater than total flight cost");
+          return;
+        }
+        if (value > +flightCost) {
+          value = 0;
+          toastError("flight price can't be greater than total flight cost");
+          return;
+        }
+      }
+    }
+    if (name == "cost") {
+      // if (isNaN(value)) {
+      //   value = 0;
+      //   toastError("Cost should be number");
+      //   return;
+      // } else if (Number.isInteger(parseInt(value))) {
+      //   if (
+      //     flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+      //     parseInt(flightCost)
+      //   ) {
+      //     toastError("flight price cannot be  greater than total flight cost");
+      //     return;
+      //   }
+      //   if (value > +flightCost) {
+      //     value = 0;
+      //     toastError("flight price can't be greater than total flight cost");
+      //     return;
+      //   }
+      // }
       // console.log(tempList, "tempList/*/");
       // console.log(
       //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0),
@@ -228,7 +265,7 @@ const ViewCostingSheetForm = () => {
           temp = temp + el.cost;
         }
       }
-      // console.log(temp, "Temp23");
+
       // if (temp > parseInt(landCost)) {
       //   toastError("H2342342otel price cannot be greater than land price2");
       //   return;
@@ -240,22 +277,7 @@ const ViewCostingSheetForm = () => {
       //   toastError("Hotel price cannot be greater than land price2");
       //   return;
       // }
-      // if (
-      //   list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-      //   parseInt(durationOfTour)
-      // ) {
-      //   toastError(
-      //     "Total number of nights cannot be more than duration of tour"
-      //   );
-      //   return;
-      // }
-      // if (
-      //   list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-      //   parseInt(durationOfTour)
-      // ) {
-      //   toastError("Total number of nights cannot be more than duration of tour");
-      //   return;
-      // }
+
       // console.log(inputList, "input21");
       // if (name == "cost") {
       //   if (
@@ -271,12 +293,16 @@ const ViewCostingSheetForm = () => {
         toastError("Hotel price cannot be greater than land price");
         return;
       }
+
       // }
     }
     if (name == "hold") {
       currentObj[name] = checked;
       currentObj["reConfirmed"] = false;
       currentObj["pending"] = false;
+      setShowRemainder(true);
+      // setIsStatusOfLead(true);
+      // history.push(`/admin/remainder`);
     } else if (name == "reConfirmed") {
       currentObj[name] = checked;
       currentObj["hold"] = false;
@@ -285,6 +311,9 @@ const ViewCostingSheetForm = () => {
       currentObj[name] = checked;
       currentObj["hold"] = false;
       currentObj["reConfirmed"] = false;
+      setShowRemainder(true);
+      // setIsStatusOfLead(true);
+      // history.push(`/admin/remainder`);
     } else {
       currentObj[name] = value;
     }
@@ -375,6 +404,13 @@ const ViewCostingSheetForm = () => {
         toastError("Cost should be number");
         return;
       } else if (Number.isInteger(parseInt(value))) {
+        if (
+          flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+          parseInt(flightCost)
+        ) {
+          toastError("flight price cannot be  greater than total flight cost");
+          return;
+        }
         if (value > +flightCost) {
           value = 0;
           toastError("flight price can't be greater than total flight cost");
@@ -405,13 +441,13 @@ const ViewCostingSheetForm = () => {
   //   setAb([...temp]);
   // };
   const handleChangePriceOfAdditionalCost = (value) => {
-    console.log(value, "valuwe23");
+    // console.log(value, "valuwe23");
     let tempCost = 0;
     for (let ele of inputList) {
       // console.log(ele, "1223");
       tempCost = tempCost + Number.parseInt(ele.cost);
     }
-    console.log(tempCost, landCost, "1234");
+    // console.log(tempCost, landCost, "1234");
     if (tempCost + parseInt(value) > parseInt(landCost)) {
       tempCost = 0;
       // console.log(tempCost, "11tempCost12");
@@ -421,6 +457,7 @@ const ViewCostingSheetForm = () => {
       setAdditionalLandPrices(value);
     }
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (leadName == "") {
@@ -464,6 +501,7 @@ const ViewCostingSheetForm = () => {
     setLandPrices(value);
     setTotalCost(+totalCost + +value);
   };
+
   // useEffect(() => { setTotalCost(+totalCost + +landPrices) }, [landPrices])//==============
 
   return (
@@ -512,6 +550,34 @@ const ViewCostingSheetForm = () => {
             </div>
           </div>
 
+          <div className="content mb-13">
+            <div className="row">
+              <div className="col-12 col-md-4 mb-3">
+                <label> Land Package Name </label>
+                <input
+                  type="text"
+                  name="cost"
+                  value={additionalLandName}
+                  class="form-control"
+                  onChange={(e) => setAdditionalLandName(e.target.value)}
+                />
+              </div>
+              <div className="col-12 col-md-4 mb-3">
+                <label>Land Package Price</label>
+                <input
+                  type="number"
+                  name="LandPrices"
+                  class="form-control"
+                  value={additionalLandPrices}
+                  // onChange={(e) => setAdditionalLandPrices(e.target.value)}
+                  onChange={(e) =>
+                    handleChangePriceOfAdditionalCost(e.target.value)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="row">
             <div className="content">
               <div className="row">
@@ -523,6 +589,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Hotel Name</label>
                           <input
+                            key={i}
                             type="text"
                             name="hotelName"
                             value={x.hotelName}
@@ -546,6 +613,7 @@ const ViewCostingSheetForm = () => {
                             type="text"
                             name="cost"
                             value={x.cost}
+                            placeholder="Enter Cost"
                             class="form-control"
                             onChange={(e) => handleinputchange(e, i)}
                           />
@@ -630,6 +698,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Flight Name</label>
                           <input
+                            key={i}
                             type="text"
                             name="flightName"
                             class="form-control"
@@ -641,7 +710,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost </label>
                           <input
-                            type="number"
+                            type="text"
                             name="cost"
                             value={x.cost}
                             placeholder="Enter Cost"
@@ -674,33 +743,6 @@ const ViewCostingSheetForm = () => {
                       </div>
                     );
                   })}
-                </div>
-              </div>
-            </div>
-            <div className="content">
-              <div className="row">
-                <div className="col-12 col-md-4 mb-3">
-                  <label> Land Package Name </label>
-                  <input
-                    type="text"
-                    name="cost"
-                    value={additionalLandName}
-                    class="form-control"
-                    onChange={(e) => setAdditionalLandName(e.target.value)}
-                  />
-                </div>
-                <div className="col-12 col-md-4 mb-3">
-                  <label>Land Package Price</label>
-                  <input
-                    type="number"
-                    name="LandPrices"
-                    class="form-control"
-                    value={additionalLandPrices}
-                    // onChange={(e) => setAdditionalLandPrices(e.target.value)}
-                    onChange={(e) =>
-                      handleChangePriceOfAdditionalCost(e.target.value)
-                    }
-                  />
                 </div>
               </div>
             </div>
@@ -768,6 +810,10 @@ const ViewCostingSheetForm = () => {
           </div>
         </form>
       </div>
+      <AddRemainder
+        showRemainder={showRemainder}
+        setShowRemainder={setShowRemainder}
+      />
     </div>
   );
 };

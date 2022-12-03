@@ -183,15 +183,14 @@ export const AddPayment = () => {
       // message: "Are you sure to do this.",
       buttons: [
         {
-          label: "I am sure ",
+          label: "I Am Sure",
           onClick: () => {
             if (paymentId) {
               obj.paymentId = paymentId;
-
+              history.push(`/admin/lead/${leadId}/costingSheetAdd`);
               dispatch(paymentUpdate(obj));
-              history.push(`/admin/lead/${userId}/costingSheet`);
-              // /admin/lead/6386e3aafa7c1cd7c08624f4/costingSheet
             } else {
+              history.push(`/admin/lead/${leadId}/costingSheetAdd`);
               dispatch(paymentAdd(obj));
             }
           },
@@ -203,37 +202,43 @@ export const AddPayment = () => {
       ],
     });
   };
+  useEffect(() => {
+    console.log(paymentReceviedArr, "paymentReceviedArr213");
+  }, [paymentReceviedArr]);
 
   const handleSubmit = () => {
     const validation = paymentReceviedArr.every(
       (item) => item.installmentAmount
     );
+    console.log(validation, "validation4");
+    if (!validation) {
+      toastError("Please fill all installmentAmount ");
+      return;
+    }
+
     let sum = paymentReceviedArr.reduce(
       (accumulator, curValue) =>
         accumulator + parseInt(curValue.installmentAmount),
       0
     );
-    if (!validation) {
-      toastError("Please fill all  installmentAmount ");
-      return;
-    }
 
-    if (sum > total) {
+    if (sum > total || sum < total) {
       toastError("installmentAmount must be  less than or equal to total");
       return;
+    } else if (sum == total) {
+      let obj = {
+        leadId,
+        quotationId,
+        flightPrice: flightCharges,
+        landPrice: landCharges,
+        tcs,
+        total,
+        paymentReceviedArr,
+        createdby: user,
+      };
+      submitPayment(obj);
     }
 
-    let obj = {
-      leadId,
-      quotationId,
-      flightPrice: flightCharges,
-      landPrice: landCharges,
-      tcs,
-      total,
-      paymentReceviedArr,
-      createdby: user,
-    };
-    submitPayment(obj);
     // if (paymentId) {
     //   obj.paymentId = paymentId;
 

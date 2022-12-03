@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Avatar_11,
   Avatar_09,
@@ -12,18 +12,27 @@ import {
 import EditLead from "../../_components/modelbox/EditLead";
 import { Table } from "antd";
 import "antd/dist/antd.css";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
+
 import "../antdstyle.css";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   getAllAgents,
   getAllEmployees,
   getAllTeamLeadsEmployees,
   returnAllEmployees,
 } from "../../redux/features/employee/employeeSlice";
+
 import { getEmployess } from "../../Services/user.service";
+
 import Select from "react-select";
+
 import { toastError, toastSuccess } from "../../utils/toastUtils";
+import { confirmAlert } from "react-confirm-alert";
 import {
   assignLeadToagent,
   createLead,
@@ -45,10 +54,11 @@ import { shouldForwardProp } from "@mui/system";
 const Leads = () => {
   const dispatch = useDispatch();
   const agents = useSelector(getAllAgents); //spoc
+  const history = useHistory();
   // console.log(agents, "agents234");
   const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
   // // console.log(agents, "12agents");
-  // // console.log(teamLeads, "12ateamLeads");
+  // console.log(teamLeads, "12ateamLeads");
   const destinations = useSelector((state) => state.tour.tours);
   // const clients = useSelector((state) => state.client.clientArr);
   // const [clientObj, setClientObj] = useState({ id: "", name: "" })
@@ -85,10 +95,11 @@ const Leads = () => {
   ///////////////////////////////////////////
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [isStatusOfLead, setIsStatusOfLead] = useState(false);
+  const [show, setShow] = useState(false);
 
   const agentSelect = useRef();
 
-  // // console.log(role, "role23");
   const [data, setData] = useState([
     {
       id: 1,
@@ -146,10 +157,10 @@ const Leads = () => {
   const handleGetAllLeads = async () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
-      console.log(res, "Res12");
+      // console.log(res, "Res12");
       if (res.success) {
         let tempArr = res.data;
-        console.log(userAuthorise, "1te");
+        // console.log(userAuthorise, "1te");
         // console.log(tempArr, "1tempArr2");
         if (userAuthorise.role == "SPOC") {
           let temp = tempArr.filter(
@@ -191,9 +202,11 @@ const Leads = () => {
   }, []);
 
   const handleEdit = (lead) => {
+    // console.log(lead, "rlad23q");
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
+      setShow(true);
     } else {
       setLeadObj({});
       setLeadUpdateId("");
@@ -332,6 +345,7 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
+
   const handleFilterBySpoc = (query) => {
     // // console.log(query, "query23");
     // // console.log(leadsArr, "leadsArr3");
@@ -343,6 +357,7 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
+
   const handleFilterByTeamLead = (query) => {
     // console.log(query, "1query23");
     // console.log(leadsArr, "1leadsArr3");
@@ -384,7 +399,7 @@ const Leads = () => {
   }, [userAuthorise]);
 
   const handleSetAgentId = async () => {
-    console.log(userAuthorise, "userAuthorise21");
+    // console.log(userAuthorise, "userAuthorise21");
     if (userAuthorise?.role == "SPOC") {
       setAgentId(userAuthorise?.user?._id);
       setSpocId(userAuthorise?.user?._id);
@@ -470,6 +485,7 @@ const Leads = () => {
         if (res.success) {
           toastSuccess(res.message);
           handleGetAllLeads();
+          setShow(!show);
         }
       } else {
         let { data: res } = await updatelead(obj, leadUpdateId);
@@ -478,6 +494,7 @@ const Leads = () => {
           setLeadObj({});
           setLeadUpdateId("");
           handleGetAllLeads();
+          setShow(!show);
         }
       }
     } catch (err) {
@@ -509,14 +526,51 @@ const Leads = () => {
     }
   };
 
-  const handleLeadStatusUpdate = async (id, value) => {
+  const updateStatusOfLead = async (id, obj) => {
+    let { data: res } = await updateLeadStatus(id, obj);
+    if (res.success) {
+      handleGetAllLeads();
+    }
+  };
+
+  const handleLeadStatusUpdate = async (id, value, status) => {
     try {
-      let obj = {
-        status: value,
-      };
-      let { data: res } = await updateLeadStatus(id, obj);
-      if (res.success) {
-        handleGetAllLeads();
+      // console.log(id, value, status, "value123");
+      if (value == "CLOSED" || value == leadStatus.closedBySpoc) {
+        if (isStatusOfLead == false && status != "CLOSED") {
+          // console.log("aaaaaaaaaaaaaaaaa");
+          confirmAlert({
+            title: "Are you sure to Close this Lead",
+            // message: "Are you sure to do this.",
+            buttons: [
+              {
+                label: "I Am Sure",
+                onClick: () => {
+                  let obj = {
+                    status: value,
+                  };
+                  updateStatusOfLead(id, obj);
+                  // isStatusofLEAD = true;
+                  setIsStatusOfLead(true);
+                  history.push(`/admin/lead/${id}/?${true}`);
+                },
+              },
+              {
+                label: "Cancel",
+                onClick: () => setIsStatusOfLead(false),
+                isStatusofLEAD: false,
+              },
+            ],
+          });
+        }
+      } else {
+        let obj = {
+          status: value,
+        };
+        let { data: res } = await updateLeadStatus(id, obj);
+        if (res.success) {
+          handleGetAllLeads();
+        }
       }
     } catch (error) {
       console.error(error);
@@ -542,8 +596,6 @@ const Leads = () => {
   };
 
   const handleTeamLeadChange = (e) => {
-    console.log(e, "Eeeeeeeee");
-    // console.log(agents, "3242123");
     // let tempArr = teamLeads.map((el) => {
     //   let obj = {
     //     label: `${el.firstName} ${el.lastName}`,
@@ -565,7 +617,7 @@ const Leads = () => {
           return obj;
         });
     }
-    console.log(arr, "Arr23s123");
+    // console.log(arr, "Arr23s123");
     setAgentsArr(arr);
     setLeadId(e);
     // setAgentId("");
@@ -623,7 +675,6 @@ const Leads = () => {
   };
 
   const handleReturndropDown = (record) => {
-    // console.log(role, "role");
     // console.log(record?.status, "role");
     // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
     if (role == "ADMIN") {
@@ -649,70 +700,98 @@ const Leads = () => {
 
             {record?.status}
           </a>
-          {record?.status != leadStatus.closed && (
-            <div className="dropdown-menu dropdown-menu-right">
+          {/* {record?.status != leadStatus.closed && ( */}
+          <div className="dropdown-menu dropdown-menu-right">
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.open,
+                  record?.status
+                )
+              }
+            >
+              <i className="fa fa-dot-circle-o text-info" /> Open
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.reopened,
+                  record?.status
+                )
+              }
+            >
+              <i className="fa fa-dot-circle-o text-info" /> Reopened
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.on_Hold,
+                  record?.status
+                )
+              }
+            >
+              <i className="fa fa-dot-circle-o text-danger" /> On Hold
+            </a>
+            {role == rolesObj.ADMIN ? (
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.open)
+                  handleLeadStatusUpdate(
+                    record?._id,
+                    leadStatus.closed,
+
+                    record?.status
+                  )
                 }
               >
-                <i className="fa fa-dot-circle-o text-info" /> Open
+                <i className="fa fa-dot-circle-o text-success" /> Closed
               </a>
+            ) : (
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.reopened)
+                  handleLeadStatusUpdate(
+                    record?._id,
+                    leadStatus.closedBySpoc,
+                    record?._status
+                  )
                 }
               >
-                <i className="fa fa-dot-circle-o text-info" /> Reopened
+                <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
               </a>
-              <a
-                className="dropdown-item"
-                onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
-                }
-              >
-                <i className="fa fa-dot-circle-o text-danger" /> On Hold
-              </a>
-              {role == rolesObj.ADMIN ? (
-                <a
-                  className="dropdown-item"
-                  onClick={() =>
-                    handleLeadStatusUpdate(record?._id, leadStatus.closed)
-                  }
-                >
-                  <i className="fa fa-dot-circle-o text-success" /> Closed
-                </a>
-              ) : (
-                <a
-                  className="dropdown-item"
-                  onClick={() =>
-                    handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
-                  }
-                >
-                  <i className="fa fa-dot-circle-o text-warning" /> Closed By
-                  Spoc
-                </a>
-              )}
-              <a
-                className="dropdown-item"
-                onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
-                }
-              >
-                <i className="fa fa-dot-circle-o text-success" /> In Progress
-              </a>
-              <a
-                className="dropdown-item"
-                onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
-                }
-              >
-                <i className="fa fa-dot-circle-o text-danger" /> Cancelled
-              </a>
-            </div>
-          )}
+            )}
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.in_Progress,
+                  record?.status
+                )
+              }
+            >
+              <i className="fa fa-dot-circle-o text-success" /> In Progress
+            </a>
+            <a
+              className="dropdown-item"
+              onClick={() =>
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.cancelled,
+                  record?.status
+                )
+              }
+            >
+              <i className="fa fa-dot-circle-o text-danger" /> Cancelled
+            </a>
+          </div>
+          {/* )} */}
         </>
       );
     } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
@@ -782,7 +861,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.open)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.open,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-info" /> Open
@@ -790,7 +873,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.reopened)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.reopened,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-info" /> Reopened
@@ -798,7 +885,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.on_Hold)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.on_Hold,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-danger" /> On Hold
@@ -816,7 +907,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.closedBySpoc,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
@@ -825,7 +920,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.in_Progress)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.in_Progress,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-success" /> In Progress
@@ -833,7 +932,11 @@ const Leads = () => {
             <a
               className="dropdown-item"
               onClick={() =>
-                handleLeadStatusUpdate(record?._id, leadStatus.cancelled)
+                handleLeadStatusUpdate(
+                  record?._id,
+                  leadStatus.cancelled,
+                  record?.status
+                )
               }
             >
               <i className="fa fa-dot-circle-o text-danger" /> Cancelled
@@ -845,7 +948,6 @@ const Leads = () => {
   };
 
   // const handleReturndropDown = (record) => {
-  //   // // console.log(role, "role");
   //   // // console.log(record?.status, "role");
   //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
   //   if (role == "ADMIN") {
@@ -1002,20 +1104,101 @@ const Leads = () => {
   //   }
   // };
 
+  const columns_SUPERVISOR = [
+    {
+      title: "Guest Name",
+      render: (text, record) => <div>{record.clientName}</div>,
+    },
+    {
+      title: "Assigned Spoc",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.agentObj?.firstName
+              ? record?.agentObj?.firstName + " "
+              : "NA"}
+            {record?.agentObj?.lastName ? record?.agentObj?.lastName : ""}
+          </div>
+        </h2>
+      ),
+    },
+    {
+      title: "Assigned Team Lead",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.leadObj?.firstName} {record?.leadObj?.lastName}
+          </div>
+        </h2>
+      ),
+    },
+    {
+      title: "Created Date",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          {new Date(record?.createdAt).toDateString()}
+        </h2>
+      ),
+    },
+    {
+      title: "Priority",
+      render: (text, record) => (
+        <div className="dropdown action-label">{record?.priority}</div>
+      ),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => <div>{record?.status}</div>,
+    },
+    {
+      title: "Action",
+      render: (text, record) => (
+        <div className="dropdown dropdown-action text-end">
+          <a
+            href="#"
+            className="action-icon dropdown-toggle"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i className="material-icons">more_vert</i>
+          </a>
+
+          <div className="dropdown-menu dropdown-menu-right">
+            <div>
+              {/* <Link className="dropdown-item" to={`/admin/lead/${record._id}`}>
+                <i className="fa fa-pencil m-r-5" /> View
+              </Link> */}
+              <a
+                className="dropdown-item"
+                href="#"
+                // data-bs-toggle="modal"
+                // data-bs-target="#add_Lead"
+                onClick={() => handleEdit(record)}
+              >
+                <i className="fa fa-pencil m-r-5" /> Edit
+              </a>
+            </div>
+          </div>
+        </div>
+        // </div>
+      ),
+    },
+  ];
+
   const columns = [
-    // {
-    //   title: "Lead Subject",
-    //   dataIndex: "subject",
-    // },
-    { title: "Guest Name", dataIndex: "clientName" },
-    // {
-    //   title: 'Lead Id',
-    //   dataIndex: 'Leadid',
-    //   render: (text, record) => (
-    //     <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/employees/Lead-view">#TKT-0001</Link>
-    //   ),
-    //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
-    // },
+    {
+      title: "Guest Name",
+      dataIndex: "clientName",
+      render: (text, record) => (
+        <div>
+          <Link className="dropdown-item" to={`/admin/lead/${record._id}`}>
+            {record.clientName}
+          </Link>
+        </div>
+      ),
+    },
+
     {
       title: "Assigned Spoc",
       render: (text, record) => (
@@ -1077,7 +1260,6 @@ const Leads = () => {
         <h2 className="table-avatar">
           {record.leadObj ? (
             <>
-              {/* {// console.log(record, "record2")} */}
               <Link
                 to={`/admin/employee-profile/${record?.leadObj?._id}`}
                 className="avatar"
@@ -1233,7 +1415,17 @@ const Leads = () => {
   ];
   const columns_TeamLeader = [
     // { title: "Lead Subject", dataIndex: "subject" },
-    { title: "Guest Name", dataIndex: "clientName" },
+    {
+      title: "Guest Name",
+      // dataIndex: "clientName",
+      render: (text, record) => (
+        <div>
+          <Link className="dropdown-item" to={`/admin/lead/${record._id}`}>
+            {record.clientName}
+          </Link>
+        </div>
+      ),
+    },
     // {
     //   title: 'Lead Id',
     //   dataIndex: 'Leadid',
@@ -1457,16 +1649,17 @@ const Leads = () => {
   ];
   const columns_SPOC = [
     // { title: "Lead Subject", dataIndex: "subject" },
-    { title: "Guest Name", dataIndex: "clientName" },
-    // {
-    //   title: 'Lead Id',
-    //   dataIndex: 'Leadid',
-    //   render: (text, record) => (
-    //     <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/employees/Lead-view">#TKT-0001</Link>
-    //   ),
-    //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
-    // },
-
+    {
+      title: "Guest Name",
+      // dataIndex: "clientName",
+      render: (text, record) => (
+        <div>
+          <Link className="dropdown-item" to={`/admin/lead/${record._id}`}>
+            {record.clientName}
+          </Link>
+        </div>
+      ),
+    },
     {
       title: "Created Date",
       render: (text, record) => (
@@ -1553,19 +1746,6 @@ const Leads = () => {
                 >
                   <i className="fa fa-pencil m-r-5" /> View
                 </Link>
-
-                {/* <a
-                  // className="dropdown-item"
-                  // data-bs-toggle="modal"
-                  href="/admin/lead/views23"
-            
-                  // data-bs-target="#add_Lead"
-                  // component={LeadDetails}
-                  onClick={() => LeadDetails}
-                >
-                  {/* <i className=" m-r-5" /> 
-                  View2
-                </a> */}
               </div>
             )}
           </div>
@@ -1573,6 +1753,37 @@ const Leads = () => {
       ),
     },
   ];
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // if (note == "") {
+    //   toastError("note is mandatory ");
+    //   return;
+    // }
+
+    // let obj = {
+    //   note,
+    //   remainderDate,
+    //   leadId,
+    //   createdBy,
+    // };
+    // // console.log(obj, "obj a1folow");
+    // if (note != "" && note != undefined) {
+    //   if (noteResultobj?._id) {
+    //     obj.Id = noteId;
+    //     dispatch(updatenote(obj));
+    //     setShow(false);
+    //     setIsReadyOnlyNotes(false);
+    //   } else {
+    //     dispatch(addnote(obj));
+    //     setShow(false);
+    //     setIsReadyOnlyNotes(false);
+    //   }
+    // } else {
+    //   toastError("Note is mandatory ");
+    //   return;
+    // }
+  };
 
   return (
     <div className="page-wrapper">
@@ -1599,10 +1810,12 @@ const Leads = () => {
             {role != rolesObj.ACCOUNT && (
               <div className="col-auto float-end ml-auto">
                 <a
-                  href="#"
+                  // href="#"
                   className="btn add-btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_Lead"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_Lead"
+
+                  onClick={() => setShow(true)}
                 >
                   <i className="fa fa-plus" /> Add Lead
                 </a>
@@ -1784,7 +1997,7 @@ const Leads = () => {
                     onChange={handleFilterByTeamLead}
                     menuPortalTarget={document.body}
                     styles={customStyles}
-                    options={teamLeads.map((el) => {
+                    options={teamLeads.map((el, i) => {
                       return {
                         ...el,
                         value: el._id,
@@ -1922,7 +2135,7 @@ const Leads = () => {
         </div>
         {/* /Search Filter */}
         {/* {// console.log("temam,", role)} */}
-        {console.log(displayLeadsArr, "role323", role, "rol2")}
+        {/* {console.log(displayLeadsArr, "role323", role, "rol2")} */}
 
         <div className="row">
           <div className="col-md-12">
@@ -1945,13 +2158,15 @@ const Leads = () => {
                     ? columns_TeamLeader
                     : role == "SPOC"
                     ? columns_SPOC
+                    : role == "SUPERVISOR"
+                    ? columns_SUPERVISOR
                     : []
                 }
                 // columns={columns}
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-                onChange={console.log("change")}
+                // onChange={console.log("change")}
               />
             </div>
           </div>
@@ -1959,9 +2174,9 @@ const Leads = () => {
       </div>
       {/* /Page Content */}
       {/* Add Lead Modal */}
-      <div id="add_Lead" className="modal custom-modal" role="dialog">
-        {/* <div className="col-auto float-end ml-auto"> */}
-        {/* <a
+      {/* <div id="add_Lead" className="modal custom-modal" role="dialog"> */}
+      {/* <div className="col-auto float-end ml-auto"> */}
+      {/* <a
             href="#"
             className="btn add-btn"
             data-bs-toggle="modal"
@@ -1969,13 +2184,13 @@ const Leads = () => {
           >
             <i className="fa fa-plus" />
           </a> */}
-        {/* </div> */}
-        <div
+      {/* </div> */}
+      {/* <div
           className="modal-dialog modal-dialog-centered modal-lg"
           role="document"
-        >
-          <div className="modal-content">
-            <div className="modal-header">
+        > */}
+      {/* <div className="modal-content"> */}
+      {/* <div className="modal-header">
               <h5 className="modal-title">
                 {leadUpdateId ? "Update" : "Add"} Lead
               </h5>
@@ -1987,21 +2202,36 @@ const Leads = () => {
               >
                 <span aria-hidden="true">×</span>
               </button>
+            </div> */}
+      {/* <div className="modal-body"> */}
+      <Modal
+        size="lg"
+        show={show}
+        // className="add_note"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            {" "}
+            {leadObj && leadObj._id ? " Edit " : " Add "}Lead{" "}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* <form onSubmit={handleSubmit}> */}
+          <form>
+            <div className="col-md-12">
+              <div className="form-group">
+                <label>
+                  Lead Subject <span className="text-danger">*</span>{" "}
+                </label>
+                <input
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="form-control"
+                  type="text"
+                />
+              </div>
             </div>
-            <div className="modal-body">
-              <form className="row">
-                <div className="col-md-12">
-                  <div className="form-group">
-                    <label>Lead Subject</label>
-                    <input
-                      value={subject}
-                      onChange={(e) => setSubject(e.target.value)}
-                      className="form-control"
-                      type="text"
-                    />
-                  </div>
-                </div>
-                {/* <div className="col-md-6">
+            {/* <div className="col-md-6">
                   <div className="form-group">
                     <label>Client ({clientsArr.length})</label>
 
@@ -2024,64 +2254,70 @@ const Leads = () => {
                     </select>
                   </div>
                 </div> */}
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Name</label>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      type={"text"}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Name <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type={"text"}
+                  className="form-control"
+                />
+              </div>
+            </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Phone</label>
-                    <input
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      type={"tel"}
-                      maxLength={10}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Phone <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  type={"tel"}
+                  maxLength={10}
+                  className="form-control"
+                />
+              </div>
+            </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Email</label>
-                    <input
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      type={"text"}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Email <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type={"text"}
+                  className="form-control"
+                />
+              </div>
+            </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Priority</label>
-                    <select
-                      value={priority}
-                      className="form-control"
-                      onChange={(e) => setPriority(e.target.value)}
-                    >
-                      <option value="">Select Priority</option>
-                      <option value="High">High</option>
-                      <option value="Medium"> Medium</option>
-                      <option value="Low">Low</option>
-                    </select>
-                    {/* <Select
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>Priority</label>
+                <select
+                  value={priority}
+                  className="form-control"
+                  onChange={(e) => setPriority(e.target.value)}
+                >
+                  <option value="">Select Priority</option>
+                  <option value="High">High</option>
+                  <option value="Medium"> Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+                {/* <Select
                         onChange={handlePriorityChange}
                         options={options}
               /> */}
-                  </div>
-                </div>
-                {console.log("234789047890")}
-                {/* <Select
+              </div>
+            </div>
+            {/* {console.log("234789047890")} */}
+            {/* <Select
                           options={teamLeadsArr.map((el) => {
                             return { ...el, value: el._id, label: el.name };
                           })}
@@ -2097,35 +2333,37 @@ const Leads = () => {
                           {" "}
                           <option value=""> --- Select Team Lead</option>
                         </Select> */}
-                {role != rolesObj.TEAMLEAD &&
-                  role != rolesObj.SPOC &&
-                  role != rolesObj.ACCOUNT && (
-                    <div className="col-md-6">
-                      <div className="form-group">
-                        <label>
-                          Assign to Team Lead ({teamLeadsArr.length})
-                        </label>
 
-                        <select
-                          className="select form-control"
-                          value={leadId}
-                          onChange={(e) => {
-                            handleTeamLeadChange(e.target.value);
-                          }}
-                        >
-                          {/* {console.log(teamLeadsArr, "teamLeadsArr23")}
+            {role != rolesObj.TEAMLEAD &&
+              role != rolesObj.SPOC &&
+              role != rolesObj.ACCOUNT && (
+                <div className="col-md-6">
+                  <div className="form-group">
+                    <label>
+                      Assign to Team Lead ({teamLeadsArr.length}){" "}
+                      <span className="text-danger">*</span>
+                    </label>
+
+                    <select
+                      className="select form-control"
+                      value={leadId}
+                      onChange={(e) => {
+                        handleTeamLeadChange(e.target.value);
+                      }}
+                    >
+                      {/* {console.log(teamLeadsArr, "teamLeadsArr23")}
                           {console.log(leadId, "tleadId23")} */}
-                          <option value=""> --- Select Team Lead</option>
-                          {teamLeadsArr &&
-                            teamLeadsArr.map((agent, i) => {
-                              return (
-                                <option key={i} value={agent.value}>
-                                  {agent.label}
-                                </option>
-                              );
-                            })}
-                        </select>
-                        {/* <Select
+                      <option value=""> --- Select Team Lead</option>
+                      {teamLeadsArr &&
+                        teamLeadsArr.map((agent, i) => {
+                          return (
+                            <option key={i} value={agent.value}>
+                              {agent.label}
+                            </option>
+                          );
+                        })}
+                    </select>
+                    {/* <Select
             options={cityArr.map((el) => {
               return { ...el, value: el._id, label: el.name };
             })}
@@ -2138,103 +2376,126 @@ const Leads = () => {
               setCitiesObj(e);
             }}
           /> */}
-                      </div>
-                    </div>
-                  )}
+                  </div>
+                </div>
+              )}
 
-                {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label>
-                        Assign to Spoc (
-                        {agentsArr && agentsArr.length > 0
-                          ? agentsArr.length
-                          : 0}
-                        )
-                      </label>
-                      {console.log(agentsArr, "agentsArr123")}
-                      <select
-                        className="select form-control"
-                        value={agentId}
-                        onChange={(e) => {
-                          handleAgentChange(e.target.value);
-                        }}
-                      >
-                        <option value=""> --- Select Spoc</option>
-                        {role == rolesObj.TEAMLEAD &&
-                          agentsArr &&
-                          agentsArr.map((spoc, i) => {
-                            console.log(spoc, i, "2132");
-                            // spoc.leadId == leadId;
-                            return (
-                              <>
-                                <option key={i} value={spoc.value}>
-                                  {/* {spoc.leadId == leadId ? spoc.label : ""} */}
-                                  {spoc.label}
-                                </option>
-                              </>
-                            );
-                          })}
-                        {role == rolesObj.ADMIN &&
-                          agentsArr &&
-                          agentsArr.map((spoc, i) => {
-                            // console.log(spoc , i, "2132");
-                            // spoc .leadId == leadId;
-                            return (
-                              <>
-                                <option key={i} value={spoc.value}>
-                                  {/* {spoc.leadId == leadId ? spoc.label : ""} */}
-                                  {spoc.label}
-                                </option>
-                              </>
-                            );
-                          })}
+            {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
+              <div className="col-md-6">
+                <div className="form-group">
+                  <label>
+                    Assign to Spoc (
+                    {agentsArr && agentsArr.length > 0 ? agentsArr.length : 0})
+                    <span className="text-danger">*</span>
+                  </label>
+                  {/* {console.log(agentsArr, "agentsArr123")} */}
+                  <select
+                    className="select form-control"
+                    value={agentId}
+                    onChange={(e) => {
+                      handleAgentChange(e.target.value);
+                    }}
+                  >
+                    <option value=""> --- Select Spoc</option>
+                    {role == rolesObj.TEAMLEAD &&
+                      agentsArr &&
+                      agentsArr.map((spoc, i) => {
+                        // console.log(spoc, i, "2132");
+                        // spoc.leadId == leadId;
+                        return (
+                          <>
+                            <option key={i} value={spoc.value}>
+                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
+                              {spoc.label}
+                            </option>
+                          </>
+                        );
+                      })}
+                    {role == rolesObj.ADMIN &&
+                      agentsArr &&
+                      agentsArr.map((spoc, i) => {
+                        // console.log(spoc, i, "2132");
+                        // spoc .leadId == leadId;
+                        return (
+                          <>
+                            <option key={i} value={spoc.value}>
+                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
+                              {spoc.label}
+                            </option>
+                          </>
+                        );
+                      })}
+                    {role == rolesObj.SUPERVISOR &&
+                      agentsArr &&
+                      agentsArr.map((spoc, i) => {
+                        // console.log(spoc, i, "2132");
+                        // spoc .leadId == leadId;
+                        return (
+                          <>
+                            <option key={i} value={spoc.value}>
+                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
+                              {spoc.label}
+                            </option>
+                          </>
+                        );
+                      })}
 
-                        {/* {agentsArr &&
+                    {/* {agentsArr &&
                           agentsArr.filter((spoc) => {
                             spoc.leadId == leadId;
 
                           })} */}
-                      </select>
-                    </div>
-                  </div>
-                )}
-                <div className="form-group">
-                  <label>Description</label>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="form-control"
-                  />
+                  </select>
                 </div>
-                <div className="form-group">
-                  <label>Upload Files</label>
-                  <input
-                    onChange={(e) => handleFileSelection(e)}
-                    className="form-control"
-                    type="file"
-                  />
-                </div>
-
-                <div className="submit-section">
-                  <button
-                    data-bs-toggle="modal"
-                    onClick={(e) => handleSubmitLead(e)}
-                    className="btn btn-primary submit-btn"
-                  >
-                    {leadUpdateId ? "Update" : "Add"}
-                  </button>
-                </div>
-              </form>
+              </div>
+            )}
+            <div className="form-group">
+              <label>
+                Description <span className="text-danger">*</span>
+              </label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="form-control"
+              />
             </div>
-          </div>
-        </div>
-      </div>
-      {/* /Add Lead Modal */}
-      {/* Edit Lead Modal */}
+            <div className="form-group">
+              <label>Upload Files</label>
+              <input
+                onChange={(e) => handleFileSelection(e)}
+                className="form-control"
+                type="file"
+              />
+            </div>
+
+            {/* <div className="submit-section">
+              <button
+                // data-bs-toggle="modal"
+                onClick={(e) => handleSubmitLead(e)}
+                className="btn btn-primary submit-btn"
+              >
+                {leadUpdateId ? "Update" : "Add"}
+              </button>
+            </div> */}
+          </form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
+            Close
+          </Button>
+          <Button variant="primary" onClick={(e) => handleSubmitLead(e)}>
+            {leadObj && leadObj._id ? " Edit " : " Add "}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <EditLead />
-      {/* /Edit Lead Modal */}
-      {/* Delete Lead Modal */}
       <div className="modal custom-modal fade" id="delete_Lead" role="dialog">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -2268,9 +2529,6 @@ const Leads = () => {
           </div>
         </div>
       </div>
-      {/* /Delete Lead Modal */}
-
-      {/* Update Agent Modal */}
       <div className="modal custom-modal fade" id="update_agent" role="dialog">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">

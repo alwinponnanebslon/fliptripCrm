@@ -298,6 +298,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Hotel Name</label>
                           <input
+                            key={i}
                             readOnly
                             name="hotelName"
                             value={x.hotelName}
@@ -383,6 +384,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Flight Name</label>
                           <input
+                            key={i}
                             readOnly
                             name="flightName"
                             class="form-control"

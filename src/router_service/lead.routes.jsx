@@ -40,13 +40,11 @@ export default [
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
-    // /admin/lead/${leadId}/costingSheetAdd
     path: "/admin/lead/:leadId/costingSheetAdd",
     component: AddCostingSheetForm,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
-    // /admin/lead/${leadId}/costingSheetAdd
     path: "/admin/lead/:leadId/costingSheetView",
     component: viewCostingSheetForm,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],

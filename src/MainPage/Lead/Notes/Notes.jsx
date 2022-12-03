@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
   noteGet,
@@ -12,10 +12,15 @@ import {
   addnote,
 } from "../../../redux/features/note/noteSlice";
 import moment from "moment/moment";
+
+import { toastError } from "../../../utils/toastUtils";
+
 const Notes = () => {
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
-
+  const params = useLocation();
+  const history = useHistory();
+  // console.log(params, "aparams12");
   const dispatch = useDispatch();
   const noteResultobj = useSelector((state) => state.note.noteObj);
   const notesResultArr = useSelector((state) => state.note.notes);
@@ -26,12 +31,7 @@ const Notes = () => {
   const { leadId } = useParams();
   const [noteId, setNoteId] = useState("");
   const [createdBy, setCreatedBy] = useState(null);
-  // console.log(notesResultArr, "notesResultArr21");
-  // console.log(noteResultobj, "12notesResultobj21");
-
-  useEffect(() => {
-    handleInit();
-  }, []);
+  const [isReadyOnlyNotes, setIsReadyOnlyNotes] = useState(false);
 
   useEffect(() => {
     setCreatedBy(userObj);
@@ -41,6 +41,15 @@ const Notes = () => {
     dispatch(noteGet(`leadId=${leadId}`));
   };
 
+  useEffect(() => {
+    handleInit();
+    // console.log(params.search.includes("true"), "params.search.include");
+    if (params.search.includes("true")) {
+      // console.log(true, "rewe");
+      setIsReadyOnlyNotes(true);
+      setShow(true);
+    }
+  }, []);
   useEffect(() => {
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
@@ -56,6 +65,11 @@ const Notes = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (note == "") {
+      toastError("note is mandatory ");
+      return;
+    }
+
     let obj = {
       note,
       remainderDate,
@@ -63,14 +77,23 @@ const Notes = () => {
       createdBy,
     };
     // console.log(obj, "obj a1folow");
-    if (noteResultobj?._id) {
-      obj.Id = noteId;
-      dispatch(updatenote(obj));
+    if (note != "" && note != undefined) {
+      if (noteResultobj?._id) {
+        obj.Id = noteId;
+        dispatch(updatenote(obj));
+        setShow(false);
+        setIsReadyOnlyNotes(false);
+      } else {
+        dispatch(addnote(obj));
+        setShow(false);
+        setIsReadyOnlyNotes(false);
+      }
     } else {
-      dispatch(addnote(obj));
+      toastError("Note is mandatory ");
+      return;
     }
-    setShow(false);
   };
+
   useEffect(() => {
     if (noteResultobj) {
       setNoteId(noteResultobj._id);
@@ -169,18 +192,30 @@ const Notes = () => {
                 <div className="row">
                   <div className="col-lg-12 text-end">
                     <Button
+                      disabled={isReadyOnlyNotes}
+                      // readOnly={isReadyOnlyNotes}
                       type="button"
                       className="btn-cancle"
                       onClick={() => {
                         setShow(!show);
+                        setIsReadyOnlyNotes(false);
                       }}
                     >
-                      {" "}
-                      Cancel{" "}
-                    </Button>{" "}
+                      Cancel
+                    </Button>
                     &nbsp;
-                    <Button type="submit" className="btn-submit">
-                      {" "}
+                    <Button
+                      type="submit"
+                      className="btn-submit"
+                      onClick={() => {
+                        if (params.search.includes("true")) {
+                          if (note?.trim().length > 0) {
+                            console.log("12inside");
+                            history.push(`/admin/leads`);
+                          }
+                        }
+                      }}
+                    >
                       Submit
                     </Button>
                   </div>

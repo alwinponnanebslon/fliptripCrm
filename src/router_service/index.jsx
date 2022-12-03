@@ -47,7 +47,7 @@ export default [
   {
     path: "/admin/dashboard",
     component: AdminDashboard,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
   {
     path: "/admin/employee",
@@ -57,7 +57,7 @@ export default [
   {
     path: "/admin/employee-profile/:id",
     component: EmployeeProfile,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "SUPERVISOR"],
   },
   {
     path: "/admin/clients",
@@ -84,7 +84,7 @@ export default [
   {
     path: "/admin/leads",
     component: Leads,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
   {
     path: "/quotation",

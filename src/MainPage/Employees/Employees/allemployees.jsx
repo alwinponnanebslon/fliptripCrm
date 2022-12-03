@@ -214,6 +214,7 @@ const AllEmployees = () => {
                         <Link
                           to={`/admin/employee-profile/${el._id}`}
                           className="avatar"
+                          key={index}
                         >
                           <img src={Avatar_02} alt="" />
                         </Link>

@@ -430,6 +430,9 @@ const Addemployee = () => {
                           {rolesObj.TEAMLEAD}
                         </option>
                         <option value={rolesObj.SPOC}>{rolesObj.SPOC}</option>
+                        <option value={rolesObj.SUPERVISOR}>
+                          {rolesObj.SUPERVISOR}
+                        </option>
                         <option value={rolesObj.ACCOUNT}>
                           {rolesObj.ACCOUNT}
                         </option>
@@ -456,6 +459,7 @@ const Addemployee = () => {
                             teamLeadsArr.map((el, index) => {
                               return (
                                 <option
+                                  key={index}
                                   value={el._id}
                                 >{`${el.firstName} ${el.lastName}`}</option>
                               );

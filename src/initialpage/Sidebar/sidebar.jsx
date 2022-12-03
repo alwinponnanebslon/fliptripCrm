@@ -141,8 +141,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -187,8 +187,136 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/leads">
+                    <i className="la la-ticket" /> <span>Leads</span>
+                  </Link>
+                </li>
+
+                {/* <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
+                  }
+                ></li> */}
+              </ul>
+            </div>
+          </div>
+        )}
+        {role == rolesObj.SUPERVISOR && (
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <span>Main</span>
+                </li>
+                <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "dashboard" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(
+                        isSideMenu == "dashboard" ? "" : "dashboard"
+                      )
+                    }
+                  >
+                    <i className="la la-dashboard" /> <span> Dashboard</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "dashboard" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          {role} Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li>
+                {/*  */}
+                {/* <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "employee" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(isSideMenu == "employee" ? "" : "employee")
+                    }
+                  >
+                    <i className="la la-user" />{" "}
+                    <span className="noti-dot"> Employees</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "employee" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("allemployees")
+                              ? "active"
+                              : pathname?.includes("employees-list")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/employee"
+                        >
+                          All Employees
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li> */}
+                {/*  */}
+
+                {/* <li className={pathname?.includes("clients") ? "active" : ""}>
+                  <Link to="/admin/clients">
+                    <i className="la la-users" /> <span>Clients</span>
+                  </Link>
+                </li>
+                <li
+                  className={pathname?.includes("destinations") ? "active" : ""}
+                >
+                  <Link to="/admin/destinations">
+                    <i className="la la-globe" /> <span>Destinations</span>
+                  </Link>
+                </li>
+                <li className={pathname?.includes("remainder") ? "active" : ""}>
+                  <Link to="/admin/remainder">
+                    <i className="la la-adjust" /> <span>Remainder</span>
+                  </Link>
+                </li> */}
+                {/* <li
+                  className={
+                    pathname?.includes("costing sheet") ? "active" : ""
+                  }
+                >
+                  <Link to="/admin/costingSheet">
+                    <i className="la la-hotel" /> <span>CostingSheet</span>
+                  </Link>
+                </li> */}
+                <li
+                  className={
+                    pathname?.includes("leads")
+                      ? "active"
+                      : pathname?.includes("Lead-view")
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -240,7 +368,7 @@ const Sidebar = (props) => {
                           }
                           to="/admin/dashboard"
                         >
-                          Admin Dashboard
+                          {role} Dashboard
                         </Link>
                       </li>
                     </ul>
@@ -268,8 +396,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -298,8 +426,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -346,7 +474,7 @@ const Sidebar = (props) => {
                           }
                           to="/admin/dashboard"
                         >
-                          Admin Dashboard
+                          {role} Dashboard
                         </Link>
                       </li>
                     </ul>
@@ -372,8 +500,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -420,7 +548,7 @@ const Sidebar = (props) => {
                           }
                           to="/admin/dashboard"
                         >
-                          Admin Dashboard
+                          {role} Dashboard
                         </Link>
                       </li>
                     </ul>
@@ -434,8 +562,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -672,12 +800,10 @@ const Sidebar = (props) => {
                 <div className="row">
                   <div className="col-lg-12 text-end">
                     <Button className="btn-cancle" onClick={handleClose2}>
-                      {" "}
-                      Cancel{" "}
-                    </Button>{" "}
+                      Cancel
+                    </Button>
                     &nbsp;
                     <Button className="btn-submit" onClick={handleClose2}>
-                      {" "}
                       Submit
                     </Button>
                   </div>

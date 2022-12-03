@@ -133,13 +133,13 @@ const EmployeeProfile = () => {
                               {new Date(employeeObj?.dob).toDateString()}
                             </div>
                           </li>
-                          <li>
+                          {/* { employeeObj?.address} */}
+                          {/* <li>
                             <div className="title">Address:</div>
                             <div className="text">
-                              {/* { employeeObj?.address} */}
                               1861 Bayonne Ave, Manchester Township, NJ, 08759
                             </div>
-                          </li>
+                          </li> */}
                           {console.log(employeeObj, "employeeObj32")}
                           {employeeObj?.role == rolesObj.SPOC && (
                             <li>
@@ -149,7 +149,6 @@ const EmployeeProfile = () => {
                                 {employeeObj?.leadObj?.lastName}
                               </div>
                             </li>
-
                           )}
                           {/* <li>
                               <div className="title">Reports to:</div>

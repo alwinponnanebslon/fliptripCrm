@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./redux/Store";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "react-hot-toast";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function Loading() {
   return <div>loading...</div>;

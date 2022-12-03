@@ -365,7 +365,7 @@ const Basicinputs = () => {
                         {inputList &&
                           inputList.map((x, i) => {
                             return (
-                              <div className="row mb-3">
+                              <div className="row mb-3" key={i}>
                                 <div class="form-group col-md-4">
                                   <label>Guest Name</label>
                                   <input
@@ -425,7 +425,7 @@ const Basicinputs = () => {
                     {hotelList &&
                       hotelList.map((x, i) => {
                         return (
-                          <div className="row mb-3">
+                          <div className="row mb-3" key={i}>
                             <div class="form-group col-md-4">
                               <label>Hotel Name</label>
                               <input
@@ -680,7 +680,7 @@ const Basicinputs = () => {
                         {itineraryList &&
                           itineraryList.map((x, i) => {
                             return (
-                              <div className="row mb-3">
+                              <div className="row mb-3" key={i}>
                                 <div class="form-group col-md-4">
                                   <label>Itinerary Name</label>
                                   <input

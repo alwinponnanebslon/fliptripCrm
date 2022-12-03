@@ -48,9 +48,9 @@ const ApprovalSetting = () => {
                 <li className="nav-item" role="presentation">
                   <a className="nav-link" id="messages-tab" data-bs-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Offer Approval</a>
                 </li>
-                <li className="nav-item" role="presentation">
+                {/* <li className="nav-item" role="presentation">
                   <a className="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">Resignation Notice</a>
-                </li>
+                </li> */}
               </ul>
               {/* Tab panes */}
               <div className="tab-content">
