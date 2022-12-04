@@ -68,6 +68,9 @@ const Notes = () => {
     if (note == "") {
       toastError("note is mandatory ");
       return;
+    } else if (remainderDate == "") {
+      toastError("Remainder Date is mandatory")
+
     }
 
     let obj = {
@@ -210,7 +213,6 @@ const Notes = () => {
                       onClick={() => {
                         if (params.search.includes("true")) {
                           if (note?.trim().length > 0) {
-                            console.log("12inside");
                             history.push(`/admin/leads`);
                           }
                         }

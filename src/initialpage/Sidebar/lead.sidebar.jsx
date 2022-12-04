@@ -40,6 +40,7 @@ const LeadSidebar = (props) => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [startDate1, setStartDate1] = useState(new Date());
+  const [showLeadStatusModal, setShowLeadStatusModal] = useState(false);
 
   const toggleSidebar = (value) => {
     // // console.log(value);
@@ -563,6 +564,21 @@ const LeadSidebar = (props) => {
                   <Notes />
                 </li>
                 {/* z */}
+                <li className="submenu">
+                  <a
+                    // href="#"
+                    className={isSideMenu == "notes" ? "subdrop" : ""}
+                    onClick={() =>
+                      // toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                      setShowLeadStatusModal(true)
+                    }
+                  >
+                    <i className="fa fa-sticky-note-o" />
+                    <span> Lead Status </span>{" "}
+                    {/* <span className="menu-arrow" /> */}
+                  </a>
+                  <Notes />
+                </li>
               </ul>
             </div>
           </div>
@@ -624,6 +640,107 @@ const LeadSidebar = (props) => {
         )} */}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
+        <Modal show={showLeadStatusModal} onHide={handleClose} className="add_details_modal">
+          <Modal.Header>
+            <Modal.Title> Lead Status </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="container-fluid add_detail_frm">
+              <div className="row">
+                <div className="col-lg-12 text-end">
+                  <Button className="btn-cancle col-lg-8" onClick={handleClose}>
+                    Cancel{" "}
+                  </Button>{" "}
+                  &nbsp;
+                  {/* <Button className="btn-submit" onClick={handleClose}>
+                  {" "}
+                  Submit
+                </Button> */}
+                </div>
+
+                <div className="col-lg-12">
+                  {/* <p>Traveler Details</p> */}
+                </div>
+
+                {/* <div className="col-lg-3 col-sm-4">
+                  <div className="form-group">
+                    <label>
+                      age <span>*</span>{" "}
+                    </label>
+                    <input type="text" name="name" className="form-control" />
+                  </div>
+                </div> */}
+              </div>
+              {/* <div className="col-lg-12 text-end">
+                <Button className="btn-cancle" onClick={handleClose}>
+                  {" "}
+                  Cancel{" "}
+                </Button>{" "}
+                &nbsp;
+                {/* <Button className="btn-submit" onClick={handleClose}>
+                  {" "}
+                  Submit
+                </Button> 
+            </div> */}
+              <div className="row mt-3">
+
+                <div className="col-lg-6 col-sm-6 col-md-12">
+                  <div className="form-group">
+                    <label>call not picked</label>
+                    <DatePicker
+                      selected={startDate}
+                      onChange={(date) => setStartDate(date)}
+                      className="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-lg-3 col-sm-6 col-md-6">
+                  <div className="form-group">
+                    <label>Issued place</label>
+                    <input type="text" className="form-control" />
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div className="foter-modal">
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <button className="col-lg-8" >call not answer </button>
+                    {/* <button className="col-lg-8" >call picked  </button>
+                    <button className="col-lg-8" >not interested </button> */}
+                    {/* <p>
+                      Note: Please select multiple files to upload in one go.
+                    </p> */}
+                  </div>
+                  <div className="col-lg-12" >
+                    <button className="col-lg-8" >call picked  </button>
+                    <button className="col-lg-8" >not interested </button>
+                    {/* <p>
+                      Note: Please select multiple files to upload in one go.
+                    </p> */}
+                  </div>
+                  <div className="col-lg-6 text-end">
+                    <Button className="btn-cancle" onClick={handleClose}>
+                      {" "}
+                      Cancel{" "}
+                    </Button>{" "}
+                    &nbsp;
+                    <Button className="btn-submit" onClick={handleClose}>
+                      {" "}
+                      Submit
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+        {/* 
+       
+        */}
         <Modal show={show} onHide={handleClose} className="add_details_modal">
           <Modal.Header>
             <Modal.Title> Add Details </Modal.Title>
@@ -808,7 +925,7 @@ const LeadSidebar = (props) => {
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
       </Scrollbars>
-    </div>
+    </div >
   );
 };
 

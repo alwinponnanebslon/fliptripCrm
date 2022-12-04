@@ -13,8 +13,8 @@ export default [
   {
     path: "/admin/lead/:leadId",
     component: LeadView,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "SUPERVISOR"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
 
   {
