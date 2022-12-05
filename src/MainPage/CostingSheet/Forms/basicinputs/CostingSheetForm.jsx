@@ -18,13 +18,11 @@ import { getApprovedQuotation } from "../../../../Services/quotation.service.js"
 const ViewCostingSheetForm = () => {
   const location = useLocation();
   const tempLocation = location;
-  // // console.log(location.pathname, "location.pathname32");
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-
   const costingSheetResultObj = useSelector(
-    (state) => state.costingSheet.costingSheetObj
+    (state) => state.costingSheet.costingSheets
   );
   const [leadName, setLeadName] = useState("");
   const [locationName, setLocationName] = useState("");
@@ -58,19 +56,18 @@ const ViewCostingSheetForm = () => {
   const [additionalLandPrices, setAdditionalLandPrices] = useState(0);
   const [isLocation, setIsLocation] = useState(false);
   const [showRemainder, setShowRemainder] = useState(false);
+  const [isChangeCheckBox, setIsChangeCheckBox] = useState(false);
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
     setQuotationObj(arr.data.data);
   };
 
-  useEffect(() => {
-    // // console.log(location.pathname, "location.pathname32");
-    setIsLocation(true);
-  }, [tempLocation]);
+  // useEffect(() => {
+  //   setIsLocation(true);
+  // }, [tempLocation]);
 
-  const handleInit = (leadId) => {
-    // // console.log(leadId, "leadId23");
+  const handleInit = () => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 
@@ -78,35 +75,6 @@ const ViewCostingSheetForm = () => {
     getQuotation(leadId);
     handleInit();
   }, []);
-
-  useEffect(() => {
-    let tempCost = 0;
-    let tempCostOf = 0;
-    for (let ele of inputList) {
-      // console.log(ele, "oiinno");
-      tempCost = tempCost + Number.parseInt(ele.cost);
-    }
-
-    if (tempCost + additionalLandPrices > parseInt(landCost)) {
-      tempCost = 0;
-      // console.log(tempCost, "11tempCost12");
-      setIsButtonHotel(true);
-      toastError("Hotel price cannot be greater than Total Land costss");
-      return;
-    } else {
-      setIsButtonHotel(false);
-    }
-    for (let ele of flightList) {
-      tempCostOf = tempCostOf + Number.parseInt(ele.cost);
-    }
-    if (tempCostOf > +flightCost) {
-      setIsButtonFlight(true);
-      toastError("Flight price cannot be greater than total flight cost");
-      return;
-    } else {
-      setIsButtonFlight(false);
-    }
-  }, [inputList, flightList, landCost, flightCost, additionalLandPrices]);
 
   useEffect(() => {
     // console.log(quotationObj, "1quotationObj23");
@@ -126,7 +94,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    // console.log(costingSheetResultObj, "costingSheetResultObj23");
+    console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
@@ -141,30 +109,10 @@ const ViewCostingSheetForm = () => {
       setTotalCost(+costingSheetResultObj?.totalCost);
       setPrevDocId(costingSheetResultObj?._id);
       setIsUpdatePrevDoc(true);
-      setAdditionalLandName(costingSheetResultObj.additionalLandName);
-      setAdditionalLandPrices(costingSheetResultObj.additionalLandPrices);
+      setAdditionalLandName(costingSheetResultObj?.additionalLandName);
+      setAdditionalLandPrices(costingSheetResultObj?.additionalLandPrices);
     }
   }, [costingSheetResultObj]);
-
-  // useEffect(() => {
-  //   if (
-  //     costingSheetResultObj &&
-  //     costingSheetResultObj._id &&
-  //     isUpdatePrevDoc == true
-  //   ) {
-  //     setTotalCost(+costingSheetResultObj?.totalCost + +additionalLandPrices);
-  //   }
-  // }, [costingSheetResultObj, additionalLandPrices]);
-
-  // useEffect(() => {
-  //   if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
-  //     setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
-  //   }
-  // }, [quotationObj, additionalLandPrices]);
-
-  // useEffect(() => {
-  //   setTotalCost(+quotationObj?.paymentObj?.totalCost + +additionalLandPrices);
-  // }, [quotationObj, additionalLandPrices]);
 
   // useEffect(() => {
   //   // // console.log(tempLocation, "21location");
@@ -201,7 +149,7 @@ const ViewCostingSheetForm = () => {
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
-    // console.log(name, "name, ", value, " value,", checked, "name, checked23");
+    console.log(name, "name, ", value, " value,", checked, " checked23");
     let tempList = [...inputList];
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
@@ -219,99 +167,58 @@ const ViewCostingSheetForm = () => {
         return;
       } else if (Number.isInteger(parseInt(value))) {
         if (
-          flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-          parseInt(flightCost)
+          inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) +
+            additionalLandPrices >
+          parseInt(landCost)
         ) {
-          toastError("flight price cannot be  greater than total flight cost");
+          toastError("Hotel price cannot be  greater than total land cost*");
           return;
         }
-        if (value > +flightCost) {
+        if (value > +landCost) {
           value = 0;
-          toastError("flight price can't be greater than total flight cost");
+          toastError("land price can't be greater than total land cost");
           return;
         }
       }
     }
-    if (name == "cost") {
-      // if (isNaN(value)) {
-      //   value = 0;
-      //   toastError("Cost should be number");
-      //   return;
-      // } else if (Number.isInteger(parseInt(value))) {
-      //   if (
-      //     flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-      //     parseInt(flightCost)
-      //   ) {
-      //     toastError("flight price cannot be  greater than total flight cost");
-      //     return;
-      //   }
-      //   if (value > +flightCost) {
-      //     value = 0;
-      //     toastError("flight price can't be greater than total flight cost");
-      //     return;
-      //   }
-      // }
-      // console.log(tempList, "tempList/*/");
-      // console.log(
-      //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0),
-      //   landCost,
-      //   "098"
-      // );
-      let temp = 0;
-      // if(tempList)
-      for (let el of inputList) {
-        // console.log(el, "eeeeewr");
-        if (el.cost) {
-          temp = temp + el.cost;
-        }
-      }
+    // if (name == "cost") {
+    //   let temp = 0;
+    //   // if(tempList)
+    //   for (let el of inputList) {
+    //     // console.log(el, "eeeeewr");
+    //     if (el.cost) {
+    //       temp = temp + el.cost;
+    //     }
+    //   }
 
-      // if (temp > parseInt(landCost)) {
-      //   toastError("H2342342otel price cannot be greater than land price2");
-      //   return;
-      // }
-      // if (
-      //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-      //   parseInt(landCost)
-      // ) {
-      //   toastError("Hotel price cannot be greater than land price2");
-      //   return;
-      // }
-
-      // console.log(inputList, "input21");
-      // if (name == "cost") {
-      //   if (
-      //     inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-      //     parseInt(landCost)
-      //   ) {
-      //     toastError("Hotel price cannot be greater than land pricess");
-      //     return;
-      //   }
-      // }
-      if (value > parseInt(landCost)) {
-        value = 0;
-        toastError("Hotel price cannot be greater than land price");
-        return;
-      }
-
-      // }
-    }
+    //   if (value > parseInt(landCost)) {
+    //     value = 0;
+    //     toastError("Hotel price cannot be greater than land price");
+    //     return;
+    //   }
+    // }
     if (name == "hold") {
-      currentObj[name] = checked;
+      setShowRemainder(true);
+      // console.log(isChangeCheckBox, "isChangeCheckBox34");
+      if (isChangeCheckBox == true) {
+        console.log("inside 1");
+        currentObj[name] = checked;
+      }
       currentObj["reConfirmed"] = false;
       currentObj["pending"] = false;
-      setShowRemainder(true);
       // setIsStatusOfLead(true);
-      // history.push(`/admin/remainder`);
     } else if (name == "reConfirmed") {
       currentObj[name] = checked;
       currentObj["hold"] = false;
       currentObj["pending"] = false;
     } else if (name == "pending") {
-      currentObj[name] = checked;
+      setShowRemainder(true);
+      if (isChangeCheckBox) {
+        console.log("inside 12");
+        currentObj[name] = checked;
+      }
       currentObj["hold"] = false;
       currentObj["reConfirmed"] = false;
-      setShowRemainder(true);
       // setIsStatusOfLead(true);
       // history.push(`/admin/remainder`);
     } else {
@@ -341,6 +248,10 @@ const ViewCostingSheetForm = () => {
     setProfit(totalCost - (+landCost + +flightCost));
   }, [flightList, totalCost, flightCost, landCost, totalExpense, profit]);
 
+  // useEffect(() => {
+  //   handleinputchange();
+  // }, [isChangeCheckBox]);
+
   const handleremove = (index) => {
     const list = [...inputList];
     list.splice(index, 1);
@@ -360,6 +271,7 @@ const ViewCostingSheetForm = () => {
       },
     ]);
   };
+
   const handleinputchangeHotel = (e, index) => {
     const list = [...hotelList];
 
@@ -388,6 +300,7 @@ const ViewCostingSheetForm = () => {
 
     setHotelList([...list]);
   };
+
   const handleinputchangeFlight = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
@@ -413,7 +326,7 @@ const ViewCostingSheetForm = () => {
         }
         if (value > +flightCost) {
           value = 0;
-          toastError("flight price can't be greater than total flight cost");
+          toastError("flight price cannot be greater than total flight cost");
           return;
         }
       }
@@ -441,22 +354,73 @@ const ViewCostingSheetForm = () => {
   //   setAb([...temp]);
   // };
   const handleChangePriceOfAdditionalCost = (value) => {
-    // console.log(value, "valuwe23");
-    let tempCost = 0;
-    for (let ele of inputList) {
-      // console.log(ele, "1223");
-      tempCost = tempCost + Number.parseInt(ele.cost);
-    }
-    // console.log(tempCost, landCost, "1234");
-    if (tempCost + parseInt(value) > parseInt(landCost)) {
-      tempCost = 0;
-      // console.log(tempCost, "11tempCost12");
-      toastError("Hotel price cannot be greater than Total Land costss2222");
+    // console.log(value, "Value23");
+    // console.log(isNaN(value), "valuwe23");
+    // console.log(parseInt(value), "valuwe231234");
+    if (value == undefined) {
+    } else if (isNaN(value) == true) {
+      // if (parseInt(value) == "NaN") {
+      // value = 0;
+      console.log(typeof value, "vlue", value);
+      toastError("Land package price should be number*-");
       return;
     } else {
-      setAdditionalLandPrices(value);
+      let tempCost = 0;
+      for (let ele of inputList) {
+        // console.log(ele, "1223");
+        if (ele?.cost > 0) {
+          tempCost = tempCost + Number.parseInt(ele?.cost);
+        }
+      }
+      // inputList;
+      // console.log(tempCost, landCost, additionalLandPrices, "1234");
+      if (tempCost + parseInt(value) > parseInt(landCost)) {
+        // tempCost = 0;
+        // console.log(tempCost, "11tempCost12");
+        toastError("Hotel price cannot be greater than Total Land costss4");
+        return;
+      } else {
+        setAdditionalLandPrices(value);
+      }
     }
+
+    // if (value > parseInt(landCost)) {
+    //   toastError("Hotel price cannot be greater than Total Land costss12  ");
+    //   return;
+    // }
   };
+  useEffect(() => {
+    handleChangePriceOfAdditionalCost();
+  }, [additionalLandPrices]);
+
+  // useEffect(() => {
+  //   let tempCost = 0;
+  //   let tempCostOf = 0;
+  //   for (let ele of inputList) {
+  //     // console.log(ele, "oiinno");
+  //     tempCost = tempCost + Number.parseInt(ele.cost);
+  //   }
+
+  //   if (tempCost + additionalLandPrices > parseInt(landCost)) {
+  //     tempCost = 0;
+  //     // console.log(tempCost, "11tempCost12");
+  //     setIsButtonHotel(true);
+  //     toastError("Hotel price cannot be greater than Total Land costss");
+  //     return;
+  //   } else {
+  //     setIsButtonHotel(false);
+  //   }
+  //   for (let ele of flightList) {
+  //     tempCostOf = tempCostOf + Number.parseInt(ele.cost);
+  //   }
+  //   if (tempCostOf > +flightCost) {
+  //     setIsButtonFlight(true);
+  //     toastError("Flight price cannot be greater than total flight cost");
+  //     return;
+  //   } else {
+  //     setIsButtonFlight(false);
+  //   }
+  // }, [inputList, flightList, landCost, flightCost, additionalLandPrices]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -492,8 +456,10 @@ const ViewCostingSheetForm = () => {
     console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
       dispatch(update(obj, obj.id));
+      console.log("update");
     } else {
-      dispatch(addCosting(obj));
+      dispatch(addCosting(obj, obj.id));
+      console.log("create doc");
     }
   };
 
@@ -565,11 +531,10 @@ const ViewCostingSheetForm = () => {
               <div className="col-12 col-md-4 mb-3">
                 <label>Land Package Price</label>
                 <input
-                  type="number"
+                  type="text"
                   name="LandPrices"
                   class="form-control"
                   value={additionalLandPrices}
-                  // onChange={(e) => setAdditionalLandPrices(e.target.value)}
                   onChange={(e) =>
                     handleChangePriceOfAdditionalCost(e.target.value)
                   }
@@ -585,11 +550,10 @@ const ViewCostingSheetForm = () => {
                   <h3 className="mt-3 mb-4 ">Hotel Details</h3>
                   {inputList.map((x, i) => {
                     return (
-                      <div className="row mb-3">
+                      <div className="row mb-3" key={i}>
                         <div class="form-group col-md-4">
                           <label>Hotel Name</label>
                           <input
-                            key={i}
                             type="text"
                             name="hotelName"
                             value={x.hotelName}
@@ -660,6 +624,7 @@ const ViewCostingSheetForm = () => {
                           </label>
                         </div>
                         {/*  */}
+
                         <div class="form-group col-md-2 mt-4">
                           {inputList.length !== 1 && (
                             <button
@@ -694,11 +659,10 @@ const ViewCostingSheetForm = () => {
                   {flightList.map((x, i) => {
                     // // console.log(x, i, "x,i123");
                     return (
-                      <div className="row mb-3">
+                      <div className="row mb-3" key={i}>
                         <div class="form-group col-md-4">
                           <label>Flight Name</label>
                           <input
-                            key={i}
                             type="text"
                             name="flightName"
                             class="form-control"
@@ -765,7 +729,7 @@ const ViewCostingSheetForm = () => {
               </div>
               <div className="col-12 col-md-4 mb-3">
                 <label className="blue-1 fs-12">
-                  Flight Cost<span className="text-danger">*</span>
+                  Total Flight Cost<span className="text-danger">*</span>
                 </label>
                 <input
                   readOnly
@@ -813,6 +777,8 @@ const ViewCostingSheetForm = () => {
       <AddRemainder
         showRemainder={showRemainder}
         setShowRemainder={setShowRemainder}
+        // isChangeCheckBox={isChangeCheckBox}
+        setIsChangeCheckBox={setIsChangeCheckBox}
       />
     </div>
   );

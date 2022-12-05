@@ -162,9 +162,8 @@ const Header = (props) => {
                   dataArr.map((el, index) => {
                     return (
                       // <li className="notification-message" key={index}>
-                      <li className="notification-message">
+                      <li className="notification-message" key={index}>
                         <Link
-                          key={index}
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
                           }

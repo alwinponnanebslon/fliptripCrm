@@ -46,18 +46,7 @@ const AddQuotation = ({ show, setShow }) => {
     useState(0);
   const [numberOfInfants, setNumberOfInfants] = useState(0);
 
-  useEffect(() => {
-    // console.log(noOfTravellerArray, "travereere")
-  }, [noOfTravellerArray]);
-
-  // const [childWithoutBed, setChildWithoutBed] = useState(0);
-  // const [childWithBed, setChildWithBed] = useState(0);
-
-  const [visaRequired, setVisaRequired] = useState("false");
-  // const [visaOnArrival, setVisaOnArrival] = useState("");
-
-  // const [startDate, setStartDate] = useState("");
-  // const [expirationDate, setExpirationDate] = useState("");
+  const [visaRequired, setVisaRequired] = useState(false);
   ////
   const [termAndCondition, setTermAndCondition] = useState("");
   //////product details
@@ -74,7 +63,22 @@ const AddQuotation = ({ show, setShow }) => {
   const [showModal, setShowModal] = useState(false);
   // const [leadName, setLeadName] = useState("");
   // const statusOfTour = true;
+  //hotels details
+  const [itineraryList, setItineraryList] = useState([
+    { day: "", itineraryName: "" },
+  ]);
 
+  const [hotelList, setHotelList] = useState([
+    {
+      hotelName: "",
+      roomType: "",
+      numberOfNight: 0,
+      checkIn: "",
+      checkOut: "",
+      rating: "",
+      hotelAddress: "", // hotelAddress: "",
+    },
+  ]);
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
     // dispatch(tourGet());
@@ -106,7 +110,7 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationObj) {
-      // console.log(quotationObj, "qoationboj----------");
+      console.log(quotationObj, "qoationboj----------");
       setQuotationId(quotationObj?._id);
       setDestinationName(quotationObj?.destinationName);
       setDurationOfTour(quotationObj?.durationOfTour);
@@ -137,6 +141,7 @@ const AddQuotation = ({ show, setShow }) => {
         quotationObj?.travelPassengerObj?.noOfChildrenWithoutBed
       );
       setNumberOfInfants(quotationObj?.travelPassengerObj?.noOfInfants);
+      setTourArr(quotationObj?.tourListArr);
       // console.log(
       //   quotationObj?.noOfAdults,
       //   quotationObj?.noOfChildrenWithBed,
@@ -145,8 +150,6 @@ const AddQuotation = ({ show, setShow }) => {
       // );
       // console.log(quotationObj.travelPassengerArr, "sadfsaf")
       // set(quotationObj.destinationName);
-      // setDestinationName(quotationObj.destinationName);
-      // setDestinationName(quotationObj.destinationName);
       // setDestinationName(quotationObj.destinationName);
     }
   }, [quotationObj]);
@@ -242,19 +245,6 @@ const AddQuotation = ({ show, setShow }) => {
     list.splice(index, 1);
     setTravelList(list);
   };
-
-  //hotels details
-  const [hotelList, setHotelList] = useState([
-    {
-      hotelName: "",
-      roomType: "",
-      numberOfNight: 0,
-      checkIn: "",
-      checkOut: "",
-      rating: "",
-      hotelAddress: "", // hotelAddress: "",
-    },
-  ]);
 
   const handleinputchangeHotel = (e, index) => {
     const list = [...hotelList];
@@ -359,9 +349,6 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   //itinerary list
-  const [itineraryList, setItineraryList] = useState([
-    { day: "", itineraryName: "" },
-  ]);
 
   const handleinputchangeItinerary = (e, index) => {
     // // console.log(e, index, "e, index");
@@ -423,6 +410,54 @@ const AddQuotation = ({ show, setShow }) => {
     setTravelList(list);
   };
   // // console.log(selectedTourIdArr, "selectedTourIdArr");
+  const clearFunc = () => {
+    setDestinationName("");
+    setDurationOfTour(1);
+    setDays(0);
+    setNumberOfGuest(1);
+    setNoOfTravellerArray([
+      { name: "", age: "", passengerType: "Adult", bed: "false", isNew: false },
+    ]);
+    setIsAirport(false);
+    setIsLand(false);
+    setPerPersonLandPrice(0);
+    setPerPersonAirportPrice(0);
+    setTotalPersonLandPrice(0);
+    setTotalPersonAirportPrice(0);
+    setQuotationObj(null);
+    setQuotationId("");
+    setClientsArr([]);
+    setNumberofAdults(0);
+    setNumberOfChildrenWithBed(0);
+    setNumberOfChildrenWithoutBed(0);
+    setNumberOfInfants(0);
+
+    setVisaRequired("false");
+
+    ////
+    setTermAndCondition("");
+    //////product details
+    setAmount(0);
+    setTax(0);
+    setIsUpdateTour(false);
+    setTourArr([]);
+    setAirportTransfer("");
+    // setTravelList([{ name: "", startDate: "", endDate: "" }]);
+    setSelectedLeadIdArr([]);
+    setShowModal(false);
+    setHotelList([
+      {
+        hotelName: "",
+        roomType: "",
+        numberOfNight: 0,
+        checkIn: "",
+        checkOut: "",
+        rating: "",
+        hotelAddress: "", // hotelAddress: "",
+      },
+    ]);
+    setItineraryList([{ day: "", itineraryName: "" }]);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -487,9 +522,11 @@ const AddQuotation = ({ show, setShow }) => {
     if (!quotationId) {
       dispatch(quotationAdd(obj));
       setShow(false);
+      clearFunc();
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
       setShow(false);
+      clearFunc();
     }
     // console.log(obj, "send Obj9");
   };
@@ -622,7 +659,7 @@ const AddQuotation = ({ show, setShow }) => {
                       {travelList &&
                         travelList.map((item, index) => {
                           return (
-                            <div className="row" key={index}>
+                            <div className="row">
                               <div className="col-md-4 mb-3">
                                 <label className="col-form-label ">
                                   Tour <span className="text-danger">*</span>
@@ -1216,7 +1253,7 @@ const AddQuotation = ({ show, setShow }) => {
                     </table>
                   </div>
                 </div>
-                <div className="col-12">
+                {/* <div className="col-12">
                   <button
                     className="btn add-btn"
                     type="submit"
@@ -1225,7 +1262,7 @@ const AddQuotation = ({ show, setShow }) => {
                     {" "}
                     {isUpdateTour ? "Update" : "Save"}{" "}
                   </button>
-                </div>
+                </div> */}
                 {/* 
               <div className="col-12">
                 <button
@@ -1245,6 +1282,7 @@ const AddQuotation = ({ show, setShow }) => {
                 variant="secondary"
                 onClick={() => {
                   setShow(false);
+                  clearFunc();
                 }}
               >
                 Close

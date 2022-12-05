@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
-  // remainderGet
-  // addRemainder
-  // updateRemainder
-  // deleteRemainder
-  // setRemainder
-
   addRemainder,
   updateRemainder,
   setRemainder,
@@ -25,7 +19,12 @@ import DatePicker from "react-date-picker";
 import { toastError } from "../../../utils/toastUtils";
 // import { toastError } from "../../../utils/toastUtils";
 
-const AddRemainder = ({ showRemainder, setShowRemainder }) => {
+const AddRemainder = ({
+  showRemainder,
+  setShowRemainder,
+  isChangeCheckBox,
+  setIsChangeCheckBox,
+}) => {
   const dispatch = useDispatch();
   const remainderObj = useSelector((state) => state.remainder.remainderObj);
 
@@ -83,6 +82,7 @@ const AddRemainder = ({ showRemainder, setShowRemainder }) => {
       toastError("Follow time is mandatory ");
       return;
     } else {
+      setIsChangeCheckBox(true);
       let obj = {
         heading,
         description,
@@ -91,13 +91,14 @@ const AddRemainder = ({ showRemainder, setShowRemainder }) => {
         createdBy: { ...createdBy, role },
         followTime,
       };
-      console.log(obj, "obj23");
+      // console.log(obj, "obj23");
       if (remainderObj?._id) {
         obj.Id = followupId;
         dispatch(updateRemainder(obj));
         setShowRemainder(false);
         setIsUpdate(false);
       } else {
+        // setIsChangeCheckBox(true);
         dispatch(addRemainder(obj));
         setShowRemainder(false);
         setIsUpdate(false);
@@ -272,6 +273,7 @@ const AddRemainder = ({ showRemainder, setShowRemainder }) => {
                 variant="secondary"
                 onClick={() => {
                   setShowRemainder(false);
+                  setIsChangeCheckBox(false);
                 }}
               >
                 Close

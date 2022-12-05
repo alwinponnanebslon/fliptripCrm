@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams, withRouter } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { admin, rolesObj } from "../../utils/roles";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -9,6 +9,11 @@ import Notes from "../../MainPage/Lead/Notes/Notes";
 // import Accordion from "react-bootstrap/Accordion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {
+  addRemainder,
+  updateRemainder,
+  setRemainder,
+} from "../../redux/features/remainder/remainderSlice";
 import {
   Accordion,
   AccordionItem,
@@ -18,8 +23,13 @@ import {
 } from "react-accessible-accordion";
 
 import "react-accessible-accordion/dist/fancy-example.css";
+import { toastError } from "../../utils/toastUtils";
 const LeadSidebar = (props) => {
+  const userObj = useSelector((state) => state.auth.user);
+  const [createdBy, setCreatedBy] = useState(null);
   const role = useSelector((state) => state.auth.role);
+  const dispatch = useDispatch();
+  const location = useLocation();
 
   const [isSideMenu, setSideMenu] = useState("");
   const [level2Menu, setLevel2Menu] = useState("");
@@ -41,6 +51,44 @@ const LeadSidebar = (props) => {
   const [startDate, setStartDate] = useState(new Date());
   const [startDate1, setStartDate1] = useState(new Date());
   const [showLeadStatusModal, setShowLeadStatusModal] = useState(false);
+  const [isOtherReason, setIsOtherReason] = useState(false);
+
+  const [otherReason, setOtherReason] = useState("");
+  const [sendDataToDb, setSendDataToDb] = useState(false);
+
+  // const ParamsPathName = location.pathname.split("/").length;
+
+  const [leadStatusReason, setLeadStatusReason] = useState([
+    {
+      heading: "Call Not Picked",
+      followDate: new Date().toLocaleDateString(),
+      followTime: new Date().toLocaleTimeString(),
+    },
+    {
+      heading: "Call Not Answer",
+      followDate: new Date().toLocaleDateString(), //  date: new Date().toDateString(),
+      followTime: new Date().toLocaleTimeString(),
+    },
+    {
+      heading: "Call Back Later",
+      followDate: new Date().toLocaleDateString(),
+      followTime: new Date().toLocaleTimeString(),
+    },
+    {
+      heading: "Not Interested",
+      followDate: new Date().toLocaleDateString(),
+      followTime: new Date().toLocaleTimeString(),
+    },
+    {
+      heading: "Other Reason",
+      followDate: new Date().toLocaleDateString(),
+      followTime: new Date().toLocaleTimeString(),
+    },
+  ]);
+
+  useEffect(() => {
+    setCreatedBy(userObj);
+  }, [userObj]);
 
   const toggleSidebar = (value) => {
     // // console.log(value);
@@ -54,15 +102,44 @@ const LeadSidebar = (props) => {
     setLevel3Menu(value);
   };
 
-  const location = useLocation();
-
   useEffect(() => {
     setPathName(location.pathname);
   }, [location]);
 
   const params = useParams();
   const leadId = params.leadId;
-  // // console.log(params.leadId, "lead Id ");
+  // console.log(params.leadId, "lead Id ");
+  const clearFunc = () => {
+    setOtherReason("");
+    setSendDataToDb(false);
+    setIsOtherReason(false);
+  };
+  const handleSubmitStatusOfLead = (e) => {
+    console.log(e, "e.");
+    let obj = { ...e };
+    obj.leadId = leadId;
+    obj.createdBy = createdBy;
+    if (e.heading == "Other Reason") {
+      setIsOtherReason(true);
+      obj.otherReason = otherReason;
+      if (obj.otherReason.length <= 0) {
+        toastError("Other Reason is mandatory");
+        return;
+      } else {
+        setSendDataToDb(true);
+      }
+      if (sendDataToDb) {
+        setShowLeadStatusModal(false);
+        dispatch(addRemainder(obj));
+        clearFunc();
+      }
+    } else {
+      dispatch(addRemainder(obj));
+      setShowLeadStatusModal(false);
+    }
+    console.log(obj, "object  get");
+  };
+
   return (
     <div className="sidebar leadsidebar" id="sidebar">
       <Scrollbars
@@ -93,15 +170,17 @@ const LeadSidebar = (props) => {
                     </div>
                   </Link>
                 </li>
-                <li className={pathname?.includes("quotes") ? "active" : ""}>
-                  <Link to={`/admin/lead/${leadId}/quotes`}>
-                    <i className="la la-file" />
-                    <div className="textblock2">
-                      <span>Create Quote</span>
-                      <span className="textsmall">PENDING TASKS</span>
-                    </div>
-                  </Link>
-                </li>
+                {role != "SUPERVISOR" && (
+                  <li className={pathname?.includes("quotes") ? "active" : ""}>
+                    <Link to={`/admin/lead/${leadId}/quotes`}>
+                      <i className="la la-file" />
+                      <div className="textblock2">
+                        <span>Create Quote</span>
+                        <span className="textsmall">PENDING TASKS</span>
+                      </div>
+                    </Link>
+                  </li>
+                )}
                 {/* <li
                   className={
                     pathname?.includes("quotation-follow-up") ? "active" : ""
@@ -115,28 +194,36 @@ const LeadSidebar = (props) => {
                     </div>
                   </Link>
                 </li> */}
-                <li
-                  className={pathname?.includes("quotePayment") ? "active" : ""}
-                >
-                  <Link to={`/admin/lead/${leadId}/quotePayment`}>
-                    <i className="la la-file-text-o" />
-                    <div className="textblock2">
-                      <span>Quotation Payment</span>
-                      <span className="textsmall">CREATE AND MANAGE</span>
-                    </div>
-                  </Link>
-                </li>
-                <li
-                  className={pathname?.includes("costingSheet") ? "active" : ""}
-                >
-                  <Link to={`/admin/lead/${leadId}/costingSheet`}>
-                    <i className="la la-file-text-o" />
-                    <div className="textblock2">
-                      <span>Costing Sheet</span>
-                      <span className="textsmall">CREATE AND MANAGE</span>
-                    </div>
-                  </Link>
-                </li>
+                {role != "SUPERVISOR" && (
+                  <li
+                    className={
+                      pathname?.includes("quotePayment") ? "active" : ""
+                    }
+                  >
+                    <Link to={`/admin/lead/${leadId}/quotePayment`}>
+                      <i className="la la-file-text-o" />
+                      <div className="textblock2">
+                        <span>Quotation Payment</span>
+                        <span className="textsmall">CREATE AND MANAGE</span>
+                      </div>
+                    </Link>
+                  </li>
+                )}
+                {/* {role != "SUPERVISOR" && (
+                  <li
+                    className={
+                      pathname?.includes("costingSheet") ? "active" : ""
+                    }
+                  >
+                    <Link to={`/admin/lead/${leadId}/costingSheet`}>
+                      <i className="la la-file-text-o" />
+                      <div className="textblock2">
+                        <span>Costing Sheet</span>
+                        <span className="textsmall">CREATE AND MANAGE</span>
+                      </div>
+                    </Link>
+                  </li>
+                )} */}
                 {/* <li
                 className={pathname?.includes("costingSheetAdd") ? "active" : ""}
               >
@@ -276,7 +363,6 @@ const LeadSidebar = (props) => {
                   ""
                 )}
               </li> */}
-
                 {/* <li className="submenu">
                 <a
                   className={isSideMenu == "leadprogress" ? "subdrop" : ""}
@@ -564,21 +650,21 @@ const LeadSidebar = (props) => {
                   <Notes />
                 </li>
                 {/* z */}
-                <li className="submenu">
-                  <a
-                    // href="#"
-                    className={isSideMenu == "notes" ? "subdrop" : ""}
-                    onClick={() =>
-                      // toggleSidebar(isSideMenu == "notes" ? "" : "notes")
-                      setShowLeadStatusModal(true)
-                    }
+                {role != "SUPERVISOR" && (
+                  <li
+                    className={pathname?.includes("LeadStatus") ? "active" : ""}
                   >
-                    <i className="fa fa-sticky-note-o" />
-                    <span> Lead Status </span>{" "}
-                    {/* <span className="menu-arrow" /> */}
-                  </a>
-                  <Notes />
-                </li>
+                    <Link
+                      to={`/admin/lead/${leadId}`}
+                      onClick={() => setShowLeadStatusModal(true)}
+                    >
+                      <i className="la la-file-text-o" />
+                      <div className="textblock2">
+                        <span>Lead Status Update</span>
+                      </div>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -640,103 +726,78 @@ const LeadSidebar = (props) => {
         )} */}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
-        <Modal show={showLeadStatusModal} onHide={handleClose} className="add_details_modal">
+        <Modal
+          show={showLeadStatusModal}
+          onHide={handleClose}
+          className="add_details_modal"
+        >
           <Modal.Header>
             <Modal.Title> Lead Status </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="container-fluid add_detail_frm">
               <div className="row">
-                <div className="col-lg-12 text-end">
-                  <Button className="btn-cancle col-lg-8" onClick={handleClose}>
-                    Cancel{" "}
-                  </Button>{" "}
-                  &nbsp;
-                  {/* <Button className="btn-submit" onClick={handleClose}>
-                  {" "}
-                  Submit
-                </Button> */}
-                </div>
-
-                <div className="col-lg-12">
-                  {/* <p>Traveler Details</p> */}
-                </div>
-
-                {/* <div className="col-lg-3 col-sm-4">
-                  <div className="form-group">
-                    <label>
-                      age <span>*</span>{" "}
-                    </label>
-                    <input type="text" name="name" className="form-control" />
-                  </div>
-                </div> */}
-              </div>
-              {/* <div className="col-lg-12 text-end">
-                <Button className="btn-cancle" onClick={handleClose}>
-                  {" "}
-                  Cancel{" "}
-                </Button>{" "}
-                &nbsp;
-                {/* <Button className="btn-submit" onClick={handleClose}>
-                  {" "}
-                  Submit
-                </Button> 
-            </div> */}
-              <div className="row mt-3">
-
-                <div className="col-lg-6 col-sm-6 col-md-12">
-                  <div className="form-group">
-                    <label>call not picked</label>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
-
-                <div className="col-lg-3 col-sm-6 col-md-6">
-                  <div className="form-group">
-                    <label>Issued place</label>
-                    <input type="text" className="form-control" />
-                  </div>
+                <div className="col-lg-12 text-end mb-4">
+                  {leadStatusReason.map((el, key) => {
+                    return (
+                      <Button
+                        key={key}
+                        className="btn-cancle col-lg-12 mb-3"
+                        onClick={(e) => {
+                          handleSubmitStatusOfLead(el);
+                        }}
+                      >
+                        {el.heading}
+                      </Button>
+                    );
+                  })}
                 </div>
               </div>
-
             </div>
-            <div className="foter-modal">
-              <div className="container">
-                <div className="row">
-                  <div className="col-lg-12">
-                    <button className="col-lg-8" >call not answer </button>
-                    {/* <button className="col-lg-8" >call picked  </button>
-                    <button className="col-lg-8" >not interested </button> */}
-                    {/* <p>
-                      Note: Please select multiple files to upload in one go.
-                    </p> */}
-                  </div>
-                  <div className="col-lg-12" >
-                    <button className="col-lg-8" >call picked  </button>
-                    <button className="col-lg-8" >not interested </button>
-                    {/* <p>
-                      Note: Please select multiple files to upload in one go.
-                    </p> */}
-                  </div>
-                  <div className="col-lg-6 text-end">
-                    <Button className="btn-cancle" onClick={handleClose}>
-                      {" "}
-                      Cancel{" "}
-                    </Button>{" "}
-                    &nbsp;
-                    <Button className="btn-submit" onClick={handleClose}>
-                      {" "}
+
+            {isOtherReason && (
+              <div>
+                <div className="col-lg-12">
+                  <textarea
+                    type="text"
+                    name="OtherReason"
+                    class="form-control"
+                    value={otherReason}
+                    onChange={(e) => setOtherReason(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setShowLeadStatusModal(false);
+                clearFunc();
+              }}
+            >
+              Close
+            </Button>
+            {isOtherReason &&
+              leadStatusReason.map((el, i) => {
+                if (el.heading == "Other Reason") {
+                  return (
+                    <Button
+                      key={i}
+                      variant="primary"
+                      className="btn-cancle col-lg-8   mt-3"
+                      onClick={() => {
+                        handleSubmitStatusOfLead(el);
+                        setSendDataToDb(true);
+                      }}
+                    >
                       Submit
                     </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Modal.Body>
+                  );
+                }
+              })}
+          </Modal.Footer>
         </Modal>
         {/* 
        
@@ -925,7 +986,7 @@ const LeadSidebar = (props) => {
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
         {/*------------------------------------------- addddddd notsssss-------------------------------------- */}
       </Scrollbars>
-    </div >
+    </div>
   );
 };
 

@@ -294,11 +294,10 @@ const ViewCostingSheetForm = () => {
                   <h3 className="mt-3 mb-4 ">Hotel Details</h3>
                   {inputList.map((x, i) => {
                     return (
-                      <div className="row mb-3">
+                      <div className="row mb-3" key={i}>
                         <div class="form-group col-md-4">
                           <label>Hotel Name</label>
                           <input
-                            key={i}
                             readOnly
                             name="hotelName"
                             value={x.hotelName}
@@ -380,11 +379,10 @@ const ViewCostingSheetForm = () => {
                   <h3 className="mt-3 mb-4">Flight Details</h3>
                   {flightList.map((x, i) => {
                     return (
-                      <div className="row mb-3">
+                      <div className="row mb-3" key={i}>
                         <div class="form-group col-md-4">
                           <label>Flight Name</label>
                           <input
-                            key={i}
                             readOnly
                             name="flightName"
                             class="form-control"

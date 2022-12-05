@@ -206,15 +206,14 @@ const AllEmployees = () => {
               displayEmployeeArr.map((el, index) => {
                 return (
                   <div
-                    key={index}
                     className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
+                    key={index}
                   >
                     <div className="profile-widget">
                       <div className="profile-img">
                         <Link
                           to={`/admin/employee-profile/${el._id}`}
                           className="avatar"
-                          key={index}
                         >
                           <img src={Avatar_02} alt="" />
                         </Link>

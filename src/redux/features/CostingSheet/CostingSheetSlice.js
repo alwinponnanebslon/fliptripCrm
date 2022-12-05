@@ -18,13 +18,19 @@ export const costingSheetGet = createAsyncThunk(
   "costingSheet/costingSheetGet",
   async (query) => {
     try {
+      console.log(query, "query312");
       let { data: response } = await get(query);
-      // // console.log(response, " response 231 in");
+      console.log(response, " response 231 in");
       if (response) {
         toastSuccess(response.message);
         const costingSheets = response.data;
         return costingSheets;
       }
+      // if (response && response?.data && response?.data?._id) {
+      //   console.log(response?.data?._id, "response?.data?._id31");
+      //   const costingSheetObj = response.data;
+      //   return costingSheetObj;
+      // }
     } catch (error) {
       toastError(error);
       throw error;
@@ -36,7 +42,7 @@ export const addCosting = createAsyncThunk(
   "costingSheet/add",
   async (payload, thunkApi) => {
     try {
-      let { data: response } = await add(payload);
+      let { data: response } = await add(payload, payload.id);
       if (response) {
         toastSuccess(response.message);
         thunkApi.dispatch(costingSheetGet());

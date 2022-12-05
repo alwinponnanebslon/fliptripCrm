@@ -620,7 +620,6 @@ const Basicinputs = () => {
                       options={
                         tourValueArr && tourValueArr.length > 0
                           ? tourValueArr.map((el) => ({
-
                               ...el,
                               label: el.tourName,
                               value: el._id,

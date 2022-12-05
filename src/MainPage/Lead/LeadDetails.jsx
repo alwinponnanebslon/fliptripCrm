@@ -181,8 +181,8 @@ const ViewCostingSheetForm = () => {
                 {inputList.map((x, i) => {
                   return (
                     <>
-                      <tbody>
-                        <tr key={i}>
+                      <tbody key={i}>
+                        <tr>
                           <td>{x.hotelName}</td>
                           <td>{x.hotelAddress}</td>
                           <td>{x.cost}</td>
@@ -241,8 +241,8 @@ const ViewCostingSheetForm = () => {
                   </thead>
                   {paymentList.map((x, i) => {
                     return (
-                      <tbody >
-                        <tr key={i}>
+                      <tbody key={i}>
+                        <tr>
                           <td>{new Date(x?.receviedDate).toLocaleString()}</td>
                           {/*.toLocaleString()------- 2022-11-25T13:04:06.625Z */}
                           <td>{x.installmentAmount}</td>
@@ -364,8 +364,8 @@ const ViewCostingSheetForm = () => {
                     {obj?.quotationObj?.travellersDetails.map((x, i) => {
                       return (
                         <>
-                          <tbody >
-                            <tr key={i}>
+                          <tbody key={i}>
+                            <tr>
                               <td>{x.guestName}</td>
                               <td>{x.age}</td>
                             </tr>
@@ -485,8 +485,8 @@ const ViewCostingSheetForm = () => {
                 {obj?.quotationObj?.tourListArr.map((x, i) => {
                   return (
                     <>
-                      <tbody>
-                        <tr  key={i}>
+                      <tbody key={i}>
+                        <tr>
                           <td>{x.name}</td>
                           <td>{x.startDate}</td>
                           <td>{x.endDate}</td>

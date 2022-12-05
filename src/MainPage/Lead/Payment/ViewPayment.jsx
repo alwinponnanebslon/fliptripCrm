@@ -26,6 +26,8 @@ export const ViewPayment = () => {
   const quotationStateArr = useSelector(
     (state) => state.quotation.quotationArr
   );
+  const params = useParams();
+  // console.log(parmas,)
   const payMentInvoiceArr = useSelector(
     (state) => state.paymentInvoice.paymentInvoices
   );
@@ -102,7 +104,7 @@ export const ViewPayment = () => {
 
   useEffect(() => {
     if (quotationStateArr) {
-      let tempObj = quotationStateArr.find((el) => el.status == "Approved");
+      let tempObj = quotationStateArr.find((el) => el.status == "Convert");
       if (tempObj) {
         setIsQuotationapproved(true);
         setSelectedQuotation(tempObj);
@@ -389,7 +391,7 @@ export const ViewPayment = () => {
                 </table>
               </div>
             </div>
-            <div style={{ fontSize: 19 }}>Perfoma Invoice</div>
+            {/* <div style={{ fontSize: 19 }}>Perfoma Invoice</div>
 
             <div className="row">
               <div className="col-md-12">
@@ -417,7 +419,7 @@ export const ViewPayment = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> */}
 
             {/* Add Client Modal */}
             <div

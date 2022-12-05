@@ -157,8 +157,8 @@ const Tasks = () => {
                             <ul id="task-list">
                               {fields.map((field, idx) => {
                                 return (
-                                  // <li className="task" key={`${field}-${idx}`}>
-                                  <li className="task" key={idx}>
+                                  <li className="task" key={`${field}-${idx}`}>
+                                    {/* <li className="task" key={idx}> */}
                                     <div className="task-container">
                                       <span className="task-action-btn task-check">
                                         <span

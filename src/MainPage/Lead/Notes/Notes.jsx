@@ -69,8 +69,7 @@ const Notes = () => {
       toastError("note is mandatory ");
       return;
     } else if (remainderDate == "") {
-      toastError("Remainder Date is mandatory")
-
+      toastError("Remainder Date is mandatory");
     }
 
     let obj = {
@@ -118,7 +117,7 @@ const Notes = () => {
     </div>
     </div> */}
       <span
-        className="adnotes "
+        className="adnotes"
         onClick={() => {
           setShow(!show);
         }}
