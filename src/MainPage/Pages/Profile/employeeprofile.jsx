@@ -140,7 +140,7 @@ const EmployeeProfile = () => {
                               1861 Bayonne Ave, Manchester Township, NJ, 08759
                             </div>
                           </li> */}
-                          {console.log(employeeObj, "employeeObj32")}
+                          {/* {console.log(employeeObj, "employeeObj32")} */}
                           {employeeObj?.role == rolesObj.SPOC && (
                             <li>
                               <div className="title">Reports to:</div>
@@ -170,7 +170,7 @@ const EmployeeProfile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="pro-edit">
+                  {/* <div className="pro-edit">
                     <a
                       data-bs-target="#profile_info"
                       data-bs-toggle="modal"
@@ -179,7 +179,7 @@ const EmployeeProfile = () => {
                     >
                       <i className="fa fa-pencil" />
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

@@ -94,7 +94,7 @@ export default [
   {
     path: "/admin/remainder",
     component: Remainder,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
   {
     path: "/admin/notification",

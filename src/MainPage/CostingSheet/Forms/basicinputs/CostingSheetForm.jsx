@@ -168,7 +168,7 @@ const ViewCostingSheetForm = () => {
       } else if (Number.isInteger(parseInt(value))) {
         if (
           inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) +
-            additionalLandPrices >
+          additionalLandPrices >
           parseInt(landCost)
         ) {
           toastError("Hotel price cannot be  greater than total land cost*");
@@ -200,10 +200,10 @@ const ViewCostingSheetForm = () => {
     if (name == "hold") {
       setShowRemainder(true);
       // console.log(isChangeCheckBox, "isChangeCheckBox34");
-      if (isChangeCheckBox == true) {
-        console.log("inside 1");
-        currentObj[name] = checked;
-      }
+      // if (isChangeCheckBox == true) {
+      //   console.log("inside 1");
+      currentObj[name] = checked;
+      // }
       currentObj["reConfirmed"] = false;
       currentObj["pending"] = false;
       // setIsStatusOfLead(true);
@@ -213,10 +213,10 @@ const ViewCostingSheetForm = () => {
       currentObj["pending"] = false;
     } else if (name == "pending") {
       setShowRemainder(true);
-      if (isChangeCheckBox) {
-        console.log("inside 12");
-        currentObj[name] = checked;
-      }
+      // if (isChangeCheckBox) {
+      //   console.log("inside 12");
+      currentObj[name] = checked;
+      // }
       currentObj["hold"] = false;
       currentObj["reConfirmed"] = false;
       // setIsStatusOfLead(true);
