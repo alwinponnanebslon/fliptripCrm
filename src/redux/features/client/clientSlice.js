@@ -17,7 +17,7 @@ import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
 export const clientGet = createAsyncThunk("auth/clientGet", async (payload) => {
   try {
-    // // console.log(payload,"payloadpayload21")
+    console.log(payload, "payloadpayload21");
     let { data: response } = await get(payload);
     // // console.log(response, "responsess");
     return response;

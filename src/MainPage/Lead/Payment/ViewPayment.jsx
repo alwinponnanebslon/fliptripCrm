@@ -519,7 +519,7 @@ export const ViewPayment = () => {
           </div>
         ) : (
           <div className="modal-body">
-            <div>Please get a quotation approved to view</div>
+            <div>Please get a quotation converted to view</div>
           </div>
         )}
       </div>

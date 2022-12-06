@@ -154,21 +154,53 @@ export const AddPayment = () => {
 
   const handlePaymentInput = (e, index) => {
     const { name, value } = e.target;
-    // console.log(name, value)
-    if (name == "installmentAmount") {
-      if (value > total || value <= 0) {
-        toastError(
-          "Amount must be greater than zero or less than total Amount"
-        );
-      }
-    }
-    let list = [...paymentReceviedArr];
-    // console.log(list[index], "paymentReceviedArr")
 
-    // list[index][name] = value;
+    let previousValue = paymentReceviedArr.find((el, i) => i == index);
+    // console.log(name, value)
+    const list = [...paymentReceviedArr];
+    // let list = [...paymentReceviedArr];
+
     setPaymentReceviedArr((pr) =>
       pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
     );
+    if (name == "installmentAmount") {
+      console.log(
+        list.reduce(
+          (acc, el) =>
+            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+          0
+        ) >= parseInt(total),
+        list.reduce(
+          (acc, el) =>
+            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+          0
+        ),
+        parseInt(total)
+      );
+      if (
+        list.reduce(
+          (acc, el) =>
+            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+          0
+        ) >= parseInt(total)
+      ) {
+        toastError(
+          "Amount must be greater than zero or less than total Amount"
+        );
+        setPaymentReceviedArr((pr) =>
+          pr.map((el, i) =>
+            i == index ? { ...el, [name]: previousValue.installmentAmount } : el
+          )
+        );
+      } else {
+        setPaymentReceviedArr((pr) =>
+          pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
+        );
+      }
+    }
+    // console.log(list[index], "paymentReceviedArr")
+
+    // list[index][name] = value;
   };
 
   const handleRemovePaymentRow = (index) => {

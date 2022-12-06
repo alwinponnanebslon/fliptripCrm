@@ -30,8 +30,9 @@ export const getAllLeadName = (query) => {
   // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadName?${query}`);
 };
-export const getAllEmployess = async () => {
-  return await axios.get(`${serverUrl}/getAllEmployes`);
+export const getAllEmployess = async (query) => {
+  console.log(query, "query21");
+  return await axios.get(`${serverUrl}/getAllEmployes?${query}`);
 };
 export const updateEmployeeToDb = async (id, formData, query) => {
   //for admin can update rmeployee

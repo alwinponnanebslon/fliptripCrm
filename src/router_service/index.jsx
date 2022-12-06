@@ -99,7 +99,7 @@ export default [
   {
     path: "/admin/notification",
     component: Notification,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
 
   // {

@@ -1,34 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  addRemainder,
-  updateRemainder,
-  setRemainder,
-} from "../../../redux/features/remainder/remainderSlice";
+// import {
+//   addRemainder,
+//   updateRemainder,
+//   setRemainder,
+// } from "../../../redux/features/remainder/remainderSlice";
 import Select from "react-select";
 
 import {
   addEmployeeToDb,
   getEmployess,
   getAllEmployess,
-} from "../../../Services/user.service";
+} from "../../Services/user.service";
 
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import moment from "moment/moment";
 import DatePicker from "react-date-picker";
-import { toastError } from "../../../utils/toastUtils";
+import { toastError } from "../../utils/toastUtils";
+import {
+  addNotification,
+  setNotification,
+} from "../../redux/features/notification/notificationSlice";
 // import { toastError } from "../../../utils/toastUtils";
 
-const AddRemainder = ({
-  showRemainder,
-  setShowRemainder,
-  isChangeCheckBox,
+const AddNotification = ({
+  showNotification,
+  setShowNotification,
   // setIsChangeCheckBox,
 }) => {
   const dispatch = useDispatch();
-  const remainderObj = useSelector((state) => state.remainder.remainderObj);
+  const notificationObj = useSelector(
+    (state) => state.notification.notificationObj
+  );
 
   const [heading, setHeading] = useState("");
   const [assignTo, setAssignTo] = useState("");
@@ -53,9 +58,16 @@ const AddRemainder = ({
     handleGetAllEmployees();
   }, []);
 
+  const handleEdit = (row) => {
+    // console.log(row, "row update"); //whole object
+    setShowNotification(true);
+    dispatch(setNotification(row));
+  };
+
   const handleGetAllEmployees = async () => {
     try {
-      let { data: res } = await getAllEmployess();
+      // let { data: res } = await getAllEmployess({`role`= `${role}`});
+      let { data: res } = await getAllEmployess(`role=${role}`);
       console.log(res, "1Res23");
       if (res.status) {
         setAllEmployees(res.data);
@@ -72,8 +84,8 @@ const AddRemainder = ({
   }, [userObj]);
 
   useEffect(() => {
-    setEmployeeId(remainderObj?._id);
-  }, [remainderObj]);
+    setEmployeeId(notificationObj?._id);
+  }, [notificationObj]);
 
   useEffect(() => {
     setCreatedBy(userObj);
@@ -81,18 +93,21 @@ const AddRemainder = ({
 
   const clearFunc = () => {
     setHeading("");
+    setDescription("");
+    setEmployeeId("");
     setFollowDate("");
     setFollowTime("");
-    setDescription("");
-    setFollowupId("");
+    // setFollowupId("");
     setIsUpdate(false);
-    setAllEmployees([]);
+    // setAllEmployees([]);
   };
   const handleSubmit = () => {
     // console.log(heading, "heading23");
     if (heading == "" || heading == undefined) {
-      toastError("Remainder heading is mandatory ");
+      toastError("Heading is mandatory ");
       return;
+    } else if (employeeId == "" || employeeId == undefined) {
+      toastError("kindly add whom you send this notification ");
     } else if (followTime == "") {
       toastError("Follow time is mandatory ");
       return;
@@ -101,13 +116,13 @@ const AddRemainder = ({
       let obj = {
         heading,
         description,
-        leadId: userLeadId,
+        userId: employeeId,
         followDate,
         createdBy: { ...createdBy, role },
         followTime,
       };
-      // console.log(obj, "obj23");
-      if (remainderObj?._id && isUpdate) {
+      console.log(obj, "obj23");
+      if (notificationObj?._id) {
         obj.Id = followupId;
         dispatch(updateRemainder(obj));
         setShowRemainder(false);
@@ -115,8 +130,8 @@ const AddRemainder = ({
         clearFunc();
       } else {
         // setIsChangeCheckBox(true);
-        dispatch(addRemainder(obj));
-        setShowRemainder(false);
+        dispatch(addNotification(obj));
+        setShowNotification(false);
         setIsUpdate(false);
         clearFunc();
       }
@@ -135,12 +150,12 @@ const AddRemainder = ({
   };
 
   useEffect(() => {
-    if (remainderObj && remainderObj._id) {
+    if (notificationObj && notificationObj._id) {
       setIsUpdate(true);
-      setFollowupId(remainderObj._id);
-      setHeading(remainderObj.heading);
-      setDescription(remainderObj.description);
-      setFollowDate(moment(remainderObj.followDate).format("YYYY-MM-DD "));
+      setFollowupId(notificationObj._id);
+      setHeading(notificationObj.heading);
+      setDescription(notificationObj.description);
+      setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD "));
     } else {
       setIsUpdate(false);
       setFollowupId("");
@@ -149,7 +164,7 @@ const AddRemainder = ({
       setFollowDate("");
       setFollowTime("");
     }
-  }, [remainderObj]);
+  }, [notificationObj]);
 
   return (
     <div id="add_Remainder" className="modal custom-modal fade" role="dialog">
@@ -160,7 +175,7 @@ const AddRemainder = ({
         <div className="modal-content">
           {/* <div className="modal-header">
             <h5 className="modal-title">
-              {remainderObj?._id ? "Edit" : "Add"} Remainder
+              {notificationObj?._id ? "Edit" : "Add"} Remainder
             </h5>
             <button
               type="button"
@@ -174,10 +189,12 @@ const AddRemainder = ({
           </div> */}
           {/* <div className="modal-body"> */}
 
-          {/* <Modal show={showRemainder} className="add_note"> */}
-          <Modal show={showRemainder}>
+          {/* <Modal show={showNotification} className="add_note"> */}
+          <Modal show={showNotification}>
             <Modal.Header>
-              <Modal.Title>{isUpdate ? "Edit" : "Add"} Remainder</Modal.Title>
+              <Modal.Title>
+                {isUpdate ? "Edit" : "Add"} Notification
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form>
@@ -195,36 +212,36 @@ const AddRemainder = ({
                   </div>
                 </div>
 
-                {/* <div className="form-group row">
-                <label className="col-form-label col-md-2">
-                  Assign to <span className="red">*</span>
-                </label>
-                <div className="col-md-10">
-                  <Select
-                    options={allEmployees.map((el) => {
-                      return {
-                        ...el,
-                        value: el._id,
-                        label:
-                          el.firstName +
-                          " " +
-                          "[" +
-                          el.role +
-                          "]" +
-                          " " +
-                          el.employeeId,
-                      };
-                    })}
-                    placeholder="Select from options"
-                    defaultInputValue={employeeId}
-                    value={employeeObj}
-                    onChange={(e) => {
-                      setEmployeeId(e.value);
-                      setEmployeeObj(e);
-                    }}
-                  />
+                <div className="form-group row">
+                  <label className="col-form-label col-md-2">
+                    Send to <span className="text-danger">*</span>
+                  </label>
+                  <div className="col-md-10">
+                    <Select
+                      options={allEmployees.map((el) => {
+                        return {
+                          ...el,
+                          value: el._id,
+                          label:
+                            el.firstName +
+                            " " +
+                            "[" +
+                            el.role +
+                            "]" +
+                            " " +
+                            el.employeeId,
+                        };
+                      })}
+                      placeholder="Select from options"
+                      defaultInputValue={employeeId}
+                      value={employeeObj}
+                      onChange={(e) => {
+                        setEmployeeId(e.value);
+                        setEmployeeObj(e);
+                      }}
+                    />
+                  </div>
                 </div>
-              </div> */}
                 <div className="form-group row">
                   <label className="col-form-label col-md-2">Description</label>
                   <div className="col-md-10">
@@ -254,48 +271,30 @@ const AddRemainder = ({
                       //   )
                       // }
                     />
-                    {/* {console.log(followTime, "follow23")} */}
                     <input
                       type="time"
                       className="form-control"
                       value={followTime}
                       onChange={(e) => {
                         setFollowTime(e.target.value);
-                        // console.log(e.target.value, "insie23");
                       }}
-                      // onChange={(e) =>
-                      //   setFollowDate(
-                      //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
-                      //   )
-                      // }
                     />
                   </div>
                 </div>
-                {/* <div className="col-12">
-                  <button
-                    onClick={() => handleSubmit()}
-                    // type="submit"
-                    // data-bs-dismiss="modal"
-                    className="btn-submit"
-                  >
-                    {remainderObj?._id ? "Edit" : "Add"} Remainder
-                  </button>
-                </div> */}
               </form>
             </Modal.Body>
             <Modal.Footer>
               <Button
                 variant="secondary"
                 onClick={() => {
-                  setShowRemainder(false);
-                  // setIsChangeCheckBox(false);
+                  setShowNotification(false);
                   clearFunc();
                 }}
               >
                 Close
               </Button>
               <Button variant="primary" onClick={(e) => handleSubmit(e)}>
-                {isUpdate ? "Edit" : "Add"} Remainder
+                {isUpdate ? "Edit" : "Add"} Notification
               </Button>
             </Modal.Footer>
           </Modal>
@@ -306,4 +305,4 @@ const AddRemainder = ({
   );
 };
 
-export default AddRemainder;
+export default AddNotification;

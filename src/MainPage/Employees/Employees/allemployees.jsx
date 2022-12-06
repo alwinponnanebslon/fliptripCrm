@@ -26,6 +26,7 @@ const AllEmployees = () => {
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [displayEmployeeArr, setDisplayEmployeeArr] = useState([]);
   const [isUpdateUser, setIsUpdateUser] = useState(false);
+  const [show, setShow] = useState(false);
 
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
@@ -96,6 +97,7 @@ const AllEmployees = () => {
 
     // dispatch(setTour(row));
     dispatch(serCurrentEmployee(row));
+    setShow(true);
   };
 
   useEffect(() => {
@@ -136,12 +138,15 @@ const AllEmployees = () => {
                 <a
                   href="#"
                   className="btn add-btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_employee"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_employee"
+                  onClick={() => {
+                    setShow(true);
+                  }}
                 >
                   <i className="fa fa-plus" /> Add Employee
                 </a>
-                <div className="view-icons">
+                {/* <div className="view-icons">
                   <Link
                     to="/app/employee/allemployees"
                     className="grid-view btn btn-link active"
@@ -154,7 +159,7 @@ const AllEmployees = () => {
                   >
                     <i className="fa fa-bars" />
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -232,8 +237,8 @@ const AllEmployees = () => {
                             <a
                               className="dropdown-item"
                               href="#"
-                              data-bs-toggle="modal"
-                              data-bs-target="#add_employee"
+                              // data-bs-toggle="modal"
+                              // data-bs-target="#add_employee"
                               // onClick={() => handleEdit(row)}
                               onClick={() => handleEdit(el)}
                             >
@@ -267,10 +272,10 @@ const AllEmployees = () => {
         </div>
         {/* /Page Content */}
         {/* Add Employee Modal */}
-        <Addemployee />
+        <Addemployee show={show} setShow={setShow} />
         {/* /Add Employee Modal */}
         {/* Edit Employee Modal */}
-        <Editemployee />
+        <Editemployee show={show} setShow={setShow} />
         {/* /Edit Employee Modal */}
         {/* Delete Employee Modal */}
         <div

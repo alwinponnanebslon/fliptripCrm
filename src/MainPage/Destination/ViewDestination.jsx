@@ -8,6 +8,9 @@ import { useSelector, useDispatch } from "react-redux";
 import "antd/dist/antd.css";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
 import "../antdstyle.css";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { toastError, toastSuccess } from "../../utils/toastUtils";
 import {
   tourGet,
   updateTour,
@@ -25,6 +28,8 @@ const ViewDestination = () => {
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
+  const [show, setShow] = useState(false);
+  const [destinationNameQuery, setDestinationNameQuery] = useState("");
 
   useEffect(() => {
     handleInit();
@@ -35,17 +40,20 @@ const ViewDestination = () => {
   };
 
   useEffect(() => {
+    console.log(toursResultArr, "toursResultArr3q");
     setTourMainArr(toursResultArr);
   }, [toursResultArr]);
 
-  const ClearData = () => {
+  const clearFunc = () => {
     setName("");
     setDescription("");
+    setIsUpdateTour(false);
+    setTourId("");
   };
   const handleEdit = (row) => {
     // // console.log(row, "row update"); //whole object
     setIsUpdateTour(true);
-
+    setShow(true);
     dispatch(setTour(row));
   };
 
@@ -72,21 +80,35 @@ const ViewDestination = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name == "") {
+    if (name == "" || name == undefined) {
       toastError("Tour Name is mandatory");
-      // throw "tour name is mandatory";
+      return;
+    } else if (description == "" || description == undefined) {
+      toastError("Tour description is mandatory");
+      return;
     }
 
     let obj = { name, description };
+    console.log(obj, "obj23");
     if (isUpdateTour) {
       obj.Id = tourId;
+      setShow(false);
       setIsUpdateTour(false);
       dispatch(updateTour(obj));
-      ClearData();
+      clearFunc();
     } else {
+      setShow(false);
       dispatch(addTour(obj));
-      ClearData();
+      clearFunc();
     }
+  };
+
+  const handleFilterByDestinationName = (query) => {
+    setDestinationNameQuery(query);
+    let tempArr = tourMainArr.filter((el) =>
+      `${el.name}`.toLowerCase().includes(query.toLowerCase())
+    );
+    setTourMainArr([...tempArr]);
   };
 
   const tour_columns = [
@@ -99,7 +121,8 @@ const ViewDestination = () => {
     {
       title: "Description",
       dataIndex: "description",
-      sorter: (a, b) => a.description.length - b.description.length,
+      render: (row, record) => <div>{record.description}</div>,
+      // sorter: (a, b) => a.description.length - b.description.length,
     },
     {
       title: "Status",
@@ -118,7 +141,7 @@ const ViewDestination = () => {
                   ? "fa fa-dot-circle-o text-success"
                   : "fa fa-dot-circle-o text-danger"
               }
-            />{" "}
+            />
             {record.status ? "Active" : "Inactive"}{" "}
           </a>
           <div className="dropdown-menu">
@@ -155,8 +178,8 @@ const ViewDestination = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              data-bs-toggle="modal"
-              data-bs-target="#add_destination"
+              // data-bs-toggle="modal"
+              // data-bs-target="#add_destination"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
@@ -193,18 +216,33 @@ const ViewDestination = () => {
                 <li className="breadcrumb-item active">Destinations</li>
               </ul>
             </div>
+
             <div className="col-auto float-end ml-auto">
               <a
                 href="#"
                 className="btn add-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#add_destination"
+                // data-bs-toggle="modal"
+                // data-bs-target="#add_destination"
+                onClick={() => {
+                  setShow(true);
+                }}
               >
                 <i className="fa fa-plus" /> Add Destination
               </a>
             </div>
           </div>
         </div>
+        {/* <div className="col-sm-6 col-md-3">
+          <div className="form-group form-focus">
+            <input
+              value={destinationNameQuery}
+              onChange={(e) => handleFilterByDestinationName(e.target.value)}
+              type="text"
+              className="form-control floating"
+            />
+            <label className="focus-label">Destination Name-</label>
+          </div>
+        </div> */}
         {/* /Page Header */}
         {/* Search Filter */}
         {/* <div className="row filter-row">
@@ -270,7 +308,7 @@ const ViewDestination = () => {
           role="document"
         >
           <div className="modal-content">
-            <div className="modal-header">
+            {/* <div className="modal-header">
               <h5 className="modal-title">
                 {isUpdateTour ? "Edit" : "Add"} Destination
               </h5>
@@ -282,42 +320,69 @@ const ViewDestination = () => {
               >
                 <span aria-hidden="true">×</span>
               </button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={handleSubmit}>
-                <div className="form-group row">
-                  <label className="col-form-label col-md-2">
-                    Tour Name <span className="text-danger">*</span>
-                  </label>
-                  <div className="col-md-10">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+            </div> */}
+            <Modal show={show} className="add_client">
+              <Modal.Header>
+                <Modal.Title>
+                  {isUpdateTour ? "Edit" : "Add"} Destination
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <form>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Tour Name <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="form-group row">
-                  <label className="col-form-label col-md-2">Description</label>
-                  <div className="col-md-10">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Description <span className="text-danger">*</span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-12">
-                  <button data-bs-dismiss="modal" className="btn add-btn">
-                    {" "}
-                    {isUpdateTour ? "Update" : "Save"}{" "}
-                  </button>
-                </div>
-              </form>
-            </div>
+                  <div className="col-12">
+                    <button
+                      data-bs-dismiss="modal"
+                      className="btn add-btn"
+                      onClick={(e) => {
+                        handleSubmit(e);
+                      }}
+                    >
+                      {isUpdateTour ? "Update" : "Save"}
+                    </button>
+                  </div>
+                </form>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button
+                  variant="secondary "
+                  onClick={() => {
+                    setShow(false);
+                    clearFunc();
+                    // setShowModal(false);
+                  }}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </div>

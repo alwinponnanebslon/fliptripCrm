@@ -3,6 +3,8 @@ import moment from "moment";
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import {
   getAllTeamLeadsEmployees,
   returnAllEmployees,
@@ -22,7 +24,7 @@ import styles from "./selectStyles.module.css";
 //   returnAllEmployees,
 // } from "../../../redux/features/employee/employeeSlice";
 
-const Addemployee = () => {
+const Addemployee = ({ show, setShow }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -78,7 +80,7 @@ const Addemployee = () => {
   useEffect(() => {
     if (employeeObj && employeeObj._id) {
       setFirstName(employeeObj.firstName);
-      setLastName(employeeObj.lastName);
+      setLastName(employeeObj?.lastName);
       setEmail(employeeObj.email);
       setPhone(employeeObj.phone);
       setPassword(employeeObj.password);
@@ -98,7 +100,7 @@ const Addemployee = () => {
     }
   }, [employeeObj]);
 
-  const ClearData = () => {
+  const ClearFunc = () => {
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -131,7 +133,7 @@ const Addemployee = () => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-
+      console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
       if (res.success) {
@@ -140,7 +142,7 @@ const Addemployee = () => {
         handleGetAllEmployees();
         // getAllEmployess();
         window.location.reload();
-        ClearData();
+        ClearFunc();
         dispatch(returnAllEmployees);
       }
     } catch (error) {
@@ -237,7 +239,7 @@ const Addemployee = () => {
         toastSuccess(res.message);
         handleGetAllEmployees();
         window.location.reload();
-        ClearData();
+        ClearFunc();
         // // console.log(obj)
       }
     } catch (error) {
@@ -261,216 +263,226 @@ const Addemployee = () => {
           role="document"
         >
           <div className="modal-content">
-            <div className="modal-header">
+            {/* <div className="modal-header">
               <h5 className="modal-title">
                 {prevDocUpdated ? "Update" : "Add"} Employee
               </h5>
               <button
                 type="button"
                 className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
+                // data-bs-dismiss="modal"
+                // aria-label="Close"
               >
                 <span aria-hidden="true">×</span>
               </button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        First Name <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        className="form-control"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">Last Name</label>
-                      <input
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        className="form-control"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  {!prevDocUpdated && (
+            </div> */}
+            {/* <div className="modal-body"> */}
+            <Modal size="lg" show={show} className="add_employee">
+              <Modal.Header>
+                <Modal.Title>
+                  {prevDocUpdated ? "Update" : "Add"} Employee
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <form>
+                  <div className="row">
                     <div className="col-sm-6">
                       <div className="form-group">
                         <label className="col-form-label">
-                          Email <span className="text-danger">*</span>
+                          First Name <span className="text-danger">*</span>
                         </label>
                         <input
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
                           className="form-control"
-                          type="email"
+                          type="text"
                         />
                       </div>
                     </div>
-                  )}
-                  {!prevDocUpdated && (
                     <div className="col-sm-6">
                       <div className="form-group">
-                        <label className="col-form-label">Password</label>
+                        <label className="col-form-label">Last Name</label>
                         <input
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
                           className="form-control"
-                          type="password"
+                          type="text"
                         />
                       </div>
                     </div>
-                  )}
-                  {!prevDocUpdated && (
+                    {!prevDocUpdated && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">
+                            Email <span className="text-danger">*</span>
+                          </label>
+                          <input
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="form-control"
+                            type="email"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {!prevDocUpdated && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">Password</label>
+                          <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="form-control"
+                            type="password"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {!prevDocUpdated && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">
+                            Confirm Password
+                          </label>
+                          <input
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="form-control"
+                            type="password"
+                          />
+                        </div>
+                      </div>
+                    )}
                     <div className="col-sm-6">
                       <div className="form-group">
                         <label className="col-form-label">
-                          Confirm Password
+                          Employee ID <span className="text-danger">*</span>
                         </label>
                         <input
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          value={employeeId}
+                          onChange={(e) => setEmployeeId(e.target.value)}
+                          type="text"
                           className="form-control"
-                          type="password"
                         />
                       </div>
                     </div>
-                  )}
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Employee ID <span className="text-danger">*</span>
-                      </label>
-                      <input
-                        value={employeeId}
-                        onChange={(e) => setEmployeeId(e.target.value)}
-                        type="text"
-                        className="form-control"
-                      />
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Joining Date <span className="text-danger">*</span>
+                        </label>
+                        <div>
+                          <input
+                            checked={employeeObj.doj ? employeeObj.doj : ""}
+                            onChange={(e) => setDoj(e.target.value)}
+                            className="form-control datetimepicker"
+                            type="date"
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Joining Date <span className="text-danger">*</span>
-                      </label>
-                      <div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Birth Date <span className="text-danger">*</span>
+                        </label>
+                        <div>
+                          <input
+                            onChange={(e) => setDob(e.target.value)}
+                            className="form-control datetimepicker"
+                            type="date"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Phone<span className="text-danger">*</span>{" "}
+                        </label>
                         <input
-                          checked={employeeObj.doj ? employeeObj.doj : ""}
-                          onChange={(e) => setDoj(e.target.value)}
-                          className="form-control datetimepicker"
-                          type="date"
+                          value={phone}
+                          maxLength={10}
+                          onChange={(e) => setPhone(e.target.value)}
+                          className="form-control"
+                          type="text"
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Birth Date <span className="text-danger">*</span>
-                      </label>
-                      <div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <label className="col-form-label">
+                          Emergency Contact
+                          <span className="text-danger">*</span>
+                        </label>
                         <input
-                          onChange={(e) => setDob(e.target.value)}
-                          className="form-control datetimepicker"
-                          type="date"
+                          value={emergencyContact}
+                          maxLength={10}
+                          onChange={(e) => setEmergencyContact(e.target.value)}
+                          className="form-control"
+                          type="text"
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">Phone </label>
-                      <input
-                        value={phone}
-                        maxLength={10}
-                        onChange={(e) => setPhone(e.target.value)}
-                        className="form-control"
-                        type="text"
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="form-group">
-                      <label className="col-form-label">
-                        Emergency Contact
-                      </label>
-                      <input
-                        value={emergencyContact}
-                        maxLength={10}
-                        onChange={(e) => setEmergencyContact(e.target.value)}
-                        className="form-control"
-                        type="text"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="col-md-6 mt-3">
-                    <div className="form-group">
-                      <label>
-                        Role <span className="text-danger">*</span>
-                      </label>
-                      <select
-                        value={role}
-                        onChange={(e) => {
-                          setRole(e.target.value);
-                        }}
-                        className={styles.selectStyle}
-                      >
-                        <option value="">Please Select Role</option>
-                        <option value={rolesObj.TEAMLEAD}>
-                          {rolesObj.TEAMLEAD}
-                        </option>
-                        <option value={rolesObj.SPOC}>{rolesObj.SPOC}</option>
-                        <option value={rolesObj.SUPERVISOR}>
-                          {rolesObj.SUPERVISOR}
-                        </option>
-                        <option value={rolesObj.ACCOUNT}>
-                          {rolesObj.ACCOUNT}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {role == rolesObj.SPOC && reduxrole == "ADMIN" && (
                     <div className="col-md-6 mt-3">
                       <div className="form-group">
                         <label>
-                          Team Lead<span className="text-danger">*</span>
+                          Role <span className="text-danger">*</span>
                         </label>
                         <select
-                          value={leadId}
+                          value={role}
                           onChange={(e) => {
-                            setLeadId(e.target.value);
+                            setRole(e.target.value);
                           }}
                           className={styles.selectStyle}
                         >
-                          <option value="">Please Select Team Lead</option>
-                          {teamLeadsArr &&
-                            teamLeadsArr.length > 0 &&
-                            teamLeadsArr.map((el, index) => {
-                              return (
-                                <option
-                                  key={index}
-                                  value={el._id}
-                                >{`${el.firstName} ${el.lastName}`}</option>
-                              );
-                            })}
+                          <option value="">Please Select Role</option>
+                          <option value={rolesObj.TEAMLEAD}>
+                            {rolesObj.TEAMLEAD}
+                          </option>
+                          <option value={rolesObj.SPOC}>{rolesObj.SPOC}</option>
+                          <option value={rolesObj.SUPERVISOR}>
+                            {rolesObj.SUPERVISOR}
+                          </option>
+                          <option value={rolesObj.ACCOUNT}>
+                            {rolesObj.ACCOUNT}
+                          </option>
                         </select>
                       </div>
                     </div>
-                  )}
-                  {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
-                </div>
-                {/* <div className="table-responsive m-t-15">
+
+                    {role == rolesObj.SPOC && reduxrole == "ADMIN" && (
+                      <div className="col-md-6 mt-3">
+                        <div className="form-group">
+                          <label>
+                            Team Lead<span className="text-danger">*</span>
+                          </label>
+                          <select
+                            value={leadId}
+                            onChange={(e) => {
+                              setLeadId(e.target.value);
+                            }}
+                            className={styles.selectStyle}
+                          >
+                            <option value="">Please Select Team Lead</option>
+                            {teamLeadsArr &&
+                              teamLeadsArr.length > 0 &&
+                              teamLeadsArr.map((el, index) => {
+                                return (
+                                  <option
+                                    key={index}
+                                    value={el._id}
+                                  >{`${el.firstName} ${el.lastName}`}</option>
+                                );
+                              })}
+                          </select>
+                        </div>
+                      </div>
+                    )}
+                    {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
+                  </div>
+                  {/* <div className="table-responsive m-t-15">
                   <table className="table table-striped custom-table">
                     <thead>
                       <tr>
@@ -655,19 +667,33 @@ const Addemployee = () => {
                     </tbody>
                   </table>
                 </div> */}
-                <div className="submit-section">
-                  <button
-                    className="btn btn-primary submit-btn"
-                    onClick={(e) => {
-                      handleCheckIsUpdateOrCreate(e);
-                    }}
-                    data-bs-dismiss="modal"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
+                  <div className="submit-section">
+                    <button
+                      className="btn btn-primary submit-btn"
+                      onClick={(e) => {
+                        handleCheckIsUpdateOrCreate(e);
+                      }}
+                      data-bs-dismiss="modal"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setShow(false);
+                    ClearFunc();
+                  }}
+                >
+                  Close
+                </Button>
+                {/* <Button variant="primary">Save changes</Button> */}
+              </Modal.Footer>
+            </Modal>
+            {/* </div> */}
           </div>
         </div>
       </div>

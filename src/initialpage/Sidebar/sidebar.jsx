@@ -195,7 +195,19 @@ const Sidebar = (props) => {
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> Notification
+                  </Link>
+                </li>
                 {/* <li
                   className={
                     pathname?.includes("leads")
@@ -323,7 +335,19 @@ const Sidebar = (props) => {
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> Notification
+                  </Link>
+                </li>
                 {/* <li
                   className={
                     pathname?.includes("leads")
@@ -439,6 +463,19 @@ const Sidebar = (props) => {
                     <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> Notification
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -513,6 +550,19 @@ const Sidebar = (props) => {
                     <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> Notification
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -575,10 +625,36 @@ const Sidebar = (props) => {
                     <i className="la la-adjust" /> <span>Remainder</span>
                   </Link>
                 </li>
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> Notification
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
         )}
+        {/* <li
+          className={
+            pathname?.includes("Notification")
+              ? "active"
+              : pathname?.includes("Notification")
+              ? "active"
+              : ""
+          }
+        >
+          <Link to="/admin/notifcation">
+            <i className="la la-bell" /> Notification 
+          </Link>
+        </li> */}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
         <Modal show={show} onHide={handleClose} className="add_details_modal">

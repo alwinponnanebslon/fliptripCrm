@@ -1282,7 +1282,7 @@ const AddQuotation = ({ show, setShow }) => {
                 variant="secondary"
                 onClick={() => {
                   setShow(false);
-                  clearFunc();
+                  // clearFunc();
                 }}
               >
                 Close

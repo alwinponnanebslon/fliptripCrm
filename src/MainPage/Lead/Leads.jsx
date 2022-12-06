@@ -125,8 +125,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-          ? "rgba(255,155,68,0.5)"
-          : "white",
+        ? "rgba(255,155,68,0.5)"
+        : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -412,7 +412,17 @@ const Leads = () => {
     // let getfilterLead = await getLeadFilterByDate(query);
     // console.log(getfilterLead.data, "1querytotototo");
   };
-
+  const clearFunc = () => {
+    setSubject("");
+    setClientId("");
+    setPhone("");
+    setName("");
+    setEmail("");
+    setPriority("");
+    setAgentId("");
+    setSpocId("");
+    setDescription("");
+  };
   const handleSubmitLead = async (e) => {
     e.preventDefault();
     try {
@@ -486,6 +496,7 @@ const Leads = () => {
           toastSuccess(res.message);
           handleGetAllLeads();
           setShow(!show);
+          clearFunc();
         }
       } else {
         let { data: res } = await updatelead(obj, leadUpdateId);
@@ -495,6 +506,7 @@ const Leads = () => {
           setLeadUpdateId("");
           handleGetAllLeads();
           setShow(!show);
+          clearFunc();
         }
       }
     } catch (err) {
@@ -686,7 +698,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -798,7 +810,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -820,7 +832,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -844,7 +856,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1221,9 +1233,11 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -1454,9 +1468,11 @@ const Leads = () => {
               >
                 <img alt="" src={record?.image} />
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -2161,18 +2177,18 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                      ? columns_TeamLeader
-                      : role == "SPOC"
-                        ? columns_SPOC
-                        : role == "SUPERVISOR"
-                          ? columns_SUPERVISOR
-                          : []
+                    ? columns_TeamLeader
+                    : role == "SPOC"
+                    ? columns_SPOC
+                    : role == "SUPERVISOR"
+                    ? columns_SUPERVISOR
+                    : []
                 }
                 // columns={columns}
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-              // onChange={console.log("change")}
+                // onChange={console.log("change")}
               />
             </div>
           </div>
@@ -2213,7 +2229,7 @@ const Leads = () => {
       <Modal
         size="lg"
         show={show}
-      // className="add_note"
+        // className="add_note"
       >
         <Modal.Header>
           <Modal.Title>
@@ -2490,7 +2506,8 @@ const Leads = () => {
           <Button
             variant="secondary"
             onClick={() => {
-              setShow(!show);
+              setShow(false);
+              clearFunc();
             }}
           >
             Close

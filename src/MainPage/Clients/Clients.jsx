@@ -39,7 +39,9 @@ const Clients = () => {
   const [description, setDescription] = useState("");
   const [tourId, setTourId] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
-
+  const [clientName, setClientName] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [clientNameQuery, setClientNameQuery] = useState("");
   useEffect(() => {
     handleInit();
   }, []);
@@ -49,6 +51,7 @@ const Clients = () => {
   };
   //  dispatch(leadGetById(leadId));
   useEffect(() => {
+    console.log(clientResultArr, "clientResultArr241");
     setClientMainArr(clientResultArr);
   }, [clientResultArr]);
 
@@ -56,6 +59,7 @@ const Clients = () => {
     // // console.log(row, "row update"); //whole object
 
     dispatch(setclientObj(row));
+    setShowModal(true);
   };
 
   const handleDelete = (id) => {
@@ -107,8 +111,8 @@ const Clients = () => {
         <div className="d-flex">
           <a
             className="dropdown-item"
-            data-bs-toggle="modal"
-            data-bs-target="#add_client"
+            // data-bs-toggle="modal"
+            // data-bs-target="#add_client"
             onClick={() => handleEdit(row)}
           >
             <i className="fa fa-pencil m-r-5" /> Edit
@@ -120,6 +124,27 @@ const Clients = () => {
       ),
     },
   ];
+
+  // const handleGetClientByName = (name) => {
+  //   // console.log("pouiop");
+  //   if (name) {
+  //     console.log(name, "name12");
+  //     dispatch(clientGet(name));
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // console.log(clientName, "clientName3qs");
+  //   handleGetClientByName(clientName);
+  // }, [clientName]);
+
+  const handleFilterByClientName = (query) => {
+    setClientNameQuery(query);
+    let tempArr = clientResultArr.filter((el) =>
+      `${el.name}`.toLowerCase().includes(query.toLowerCase())
+    );
+    setClientMainArr([...tempArr]);
+  };
 
   return (
     <div className="page-wrapper">
@@ -141,38 +166,56 @@ const Clients = () => {
                 <li className="breadcrumb-item active">Clients</li>
               </ul>
             </div>
+
             <div className="col-auto float-end ml-auto">
               <a
                 href="#"
                 className="btn add-btn"
-                data-bs-toggle="modal"
-                data-bs-target="#add_client"
+                // data-bs-toggle="modal"
+                // data-bs-target="#add_client"
+                onClick={() => {
+                  setShowModal(true);
+                }}
               >
                 <i className="fa fa-plus" /> Add Client
               </a>
-              {/* <div className="view-icons">
-                <Link to="/app/employees/clients" className="grid-view btn btn-link active"><i className="fa fa-th" /></Link>
-                <Link to="/app/employees/clients-list" className="list-view btn btn-link"><i className="fa fa-bars" /></Link>
-              </div> */}
             </div>
           </div>
         </div>
         {/* /Page Header */}
         {/* Search Filter */}
         <div className="row filter-row">
-          <div className="col-sm-6 col-md-3">
+          {/* <div className="col-sm-6 col-md-3">
             <div className="form-group form-focus">
               <input type="text" className="form-control floating" />
               <label className="focus-label">Client ID</label>
             </div>
-          </div>
+          </div> */}
+          {/* <div className="col-sm-6 col-md-3">
+            <div className="form-group form-focus">
+              <input
+                type="text"
+                className="form-control floating"
+                onChange={(e) => {
+                  setClientName(e.target.value);
+                }}
+              />
+              <label className="focus-label">Client Name2</label>
+            </div>
+          </div> */}
           <div className="col-sm-6 col-md-3">
             <div className="form-group form-focus">
-              <input type="text" className="form-control floating" />
-              <label className="focus-label">Client Name</label>
+              <input
+                value={clientNameQuery}
+                Client
+                onChange={(e) => handleFilterByClientName(e.target.value)}
+                type="text"
+                className="form-control floating"
+              />
+              <label className="focus-label">Client Name-</label>
             </div>
           </div>
-          <div className="col-sm-6 col-md-3">
+          {/* <div className="col-sm-6 col-md-3">
             <div className="form-group form-focus select-focus">
               <select className="select floating">
                 <option>Select Company</option>
@@ -181,13 +224,12 @@ const Clients = () => {
               </select>
               <label className="focus-label">Company</label>
             </div>
-          </div>
-          <div className="col-sm-6 col-md-3">
+          </div> */}
+          {/* <div className="col-sm-6 col-md-3">
             <a href="#" className="btn btn-success btn-block w-100">
-              {" "}
-              Search{" "}
+              Search
             </a>
-          </div>
+          </div> */}
         </div>
         {/* Search Filter */}
         <div className="row">
@@ -216,7 +258,7 @@ const Clients = () => {
 
       {/* /Page Content */}
       {/* Add Client Modal */}
-      <AddClient />
+      <AddClient show={showModal} setShowModal={setShowModal} />
 
       {/* /Add Client Modal */}
     </div>

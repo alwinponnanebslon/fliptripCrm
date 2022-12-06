@@ -25,6 +25,7 @@ import {
   setNotification,
 } from "../../redux/features/notification/notificationSlice";
 import { remainderGetForOneDay } from "../../redux/features/remainder/remainderSlice";
+import { leadGet } from "../../redux/features/lead/leadSlice";
 
 const Header = (props) => {
   const role = useSelector((state) => state.auth.role);
@@ -35,14 +36,26 @@ const Header = (props) => {
     (state) => state.notification.notifications
   );
   const remainderArray = useSelector((state) => state.remainder.remainders);
+  const leadArray = useSelector((state) => state.lead.leadArr);
   const [dataArr, setDataArr] = useState([]);
   const [remainderArr, setRemainderArr] = useState([]);
   const [remainderArrData, setRemainderArrData] = useState([]);
+  const [leadArr, setLeadArr] = useState([]);
 
   const dispatch = useDispatch();
+
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
+
+  useEffect(() => {
+    dispatch(leadGet());
+  }, []);
+  useEffect(() => {
+    console.log(leadArray, "leadArray123");
+    setLeadArr(leadArray);
+    // dispatch(leadGet());
+  }, [leadArray]);
 
   const onMenuClik = () => {
     props.onMenuClick();
@@ -70,14 +83,79 @@ const Header = (props) => {
 
   useEffect(() => {
     // console.log(notificationResultArr, "notificationResultArr23");
-    setDataArr(notificationResultArr);
+    // console.log(userId, "userId343");
+    let filter = notificationResultArr.filter((el) => {
+      // console.log(el.userId, "el.user23");
+      if (`${el?.userId}` == `${userId}`) {
+        return el;
+      }
+    });
+    // console.log(filter, "234");
+    // console.log(userId, "u1serId343");
+    setDataArr(filter);
+
+    // setDataArr(notificationResultArr);
   }, [notificationResultArr]);
 
   useEffect(() => {
-    console.log(remainderArray, "remainderArray324");
+    // console.log(remainderArray, "remainderArray324");
     setRemainderArrData(remainderArray);
   }, [remainderArray]);
 
+  const handleSearchLead = (value) => {
+    console.log(value, "vlue");
+    const filteredData = leadArr.filter((el) => {
+      if (value === "") {
+        return el.clientObj.name;
+      } else {
+        return el.clientObj.name.toLowerCase().includes(value);
+      }
+    });
+    {
+      console.log(filteredData, "filteredData34");
+    }
+    return (
+      <ul>
+        {filteredData.map((item) => (
+          <li key={item._id}>{item.clientObj.name}</li>
+        ))}
+      </ul>
+    );
+    // for (let el of leadArr) {
+    //   if (el.clientObj) {
+    //     console.log(el, "el.cliet213  ");
+    //     if (value == "") {
+    //       return el;
+    //     } else {
+    //       return el.clientObj.name.includes(value);
+    //     }
+
+    //     // el.clientObj.filter((ele) => {
+    //     //   if (value == "") {
+    //     //     return ele;
+    //     //   } else {
+    //     //     return ele.name.includes(value);
+    //     //   }
+    //     // });
+    //   }
+    // }
+
+    // leadArr.map((el) => {
+    //   console.log(el, "el2");
+    //   if (el.clientObj) {
+    //     el.clientObj.filter((ele) => {
+    //       console.log(ele, "ele1");
+    //       console.log(ele.name, "ele1");
+    //     });
+    //   }
+
+    //   if (value == "") {
+    //     return el;
+    //   } else {
+    //     return el.name.includes(value);
+    //   }
+    // });
+  };
   return (
     <div className="header" style={{ right: "0px" }}>
       {/* Logo */}
@@ -130,7 +208,10 @@ const Header = (props) => {
               <input
                 className="form-control"
                 type="text"
-                placeholder="Search here"
+                placeholder="Search here1"
+                onChange={(e) => {
+                  handleSearchLead(e.target.value);
+                }}
               />
               <button className="btn" type="submit">
                 <i className="fa fa-search" />
@@ -173,19 +254,15 @@ const Header = (props) => {
                             <span className="avatar">
                               <img alt="" src={Avatar_02} />
                             </span>
-                            <div className="media-body">
-                              <p className="noti-details">
-                                <span className="noti-title">
-                                  {el?.createdBy?.name}
-                                </span>
-                                you receive new notification regarding &nbsp;
-                                {/* added new task for you &nbsp; */}
-                                {/* <span className="noti-title"> */}
-                                {/* Patient appointment booking */}
-                                <span className="noti-title">
-                                  {el?.heading}
-                                </span>
-                                {/* </span>  */}
+                            <div className="media">
+                              <p className="noti-details d-flex">
+                                <h5> Heading : </h5> {el?.heading}&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> Decription : </h5> {el?.description}&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
                               </p>
                             </div>
                           </div>
@@ -193,7 +270,19 @@ const Header = (props) => {
                       </li>
                     );
                   })}
-
+                {/* <div className="media-body">
+                              <p className="noti-details">
+                                <span className="noti-title">
+                                  {el?.heading}&nbsp;
+                                  {el?.description}
+                                </span>
+                                from &nbsp;
+                           
+                                <span className="noti-title">
+                                  {el?.createdBy?.name}
+                                </span>
+                              </p>
+                            </div> */}
                 {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
@@ -356,7 +445,7 @@ const Header = (props) => {
                 onClick={() => localStorage.setItem("minheight", "true")}
                 to="/admin/notification"
               >
-                View all Notifications
+                View all Remainders
               </Link>
             </div>
           </div>

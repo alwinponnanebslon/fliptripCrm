@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { toastError } from "../../utils/toastUtils";
 import { useSelector, useDispatch } from "react-redux";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import {
   clientAdd,
   clientUpdate,
 } from "../../redux/features/client/clientSlice";
 
-const AddClient = () => {
+const AddClient = ({ show, setShowModal }) => {
+  // console.log(show, "1234");
   const dispatch = useDispatch();
   const clientResultObj = useSelector((state) => state.client.clientObj);
 
@@ -25,6 +27,15 @@ const AddClient = () => {
     }
   }, [clientResultObj]);
 
+  const clearFunc = () => {
+    setName("");
+    setEmail("");
+    setPhone("");
+    setDob("");
+    setAnniversaryDate("");
+    setClientObj({});
+    setClientId("");
+  };
   useEffect(() => {
     if (clientObj) {
       setClientId(clientObj._id);
@@ -37,14 +48,30 @@ const AddClient = () => {
   }, [clientObj]);
 
   const handleSubmit = (e) => {
-    // console.log('jksdfjksdafdashfdslfhdslfhsdalkfsdklfdsfsdkl');
     e.preventDefault();
 
-    let obj = { name, email, phone, dob, anniversaryDate };
-    if (clientId) {
-      dispatch(clientUpdate({ obj, clientId }));
+    if (name == "" || name == undefined) {
+      toastError("Name is mandatory");
+      return;
+    } else if (email == "" || email == undefined) {
+      toastError("Email is mandatory");
+    } else if (phone == "" || phone == undefined) {
+      toastError("phone is mandatory");
+      return;
+    } else if (phone.length != 10) {
+      toastError("In valid phone number");
+      return;
     } else {
-      dispatch(clientAdd(obj));
+      let obj = { name, email, phone, dob, anniversaryDate };
+      console.log(obj, "obj3q");
+      if (clientId) {
+        dispatch(clientUpdate({ obj, clientId }));
+        clearFunc();
+      } else {
+        dispatch(clientAdd(obj));
+        setShowModal(false);
+        clearFunc();
+      }
     }
   };
 
@@ -55,8 +82,8 @@ const AddClient = () => {
         role="document"
       >
         <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">{clientId ? "Edit" : "Add"} Client</h5>
+          {/* <div className="modal-header">
+             <h5 className="modal-title">{clientId ? "Edit" : "Add"} Client</h5>
             <button
               type="button"
               className="close"
@@ -65,74 +92,82 @@ const AddClient = () => {
             >
               <span aria-hidden="true">×</span>
             </button>
-          </div>
-          <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">
-                      {" "}
-                      Name <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
+          </div> */}
+          {/* <div className="modal-body"> */}
+          <Modal show={show} className="add_client">
+            <Modal.Header>
+              <Modal.Title>{clientId ? "Edit" : "Add"} Client</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {/* <form onSubmit={handleSubmit}> */}
+              <form>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="col-form-label">
+                        {" "}
+                        Name <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">
-                      Email <span className="text-danger">*</span>
-                    </label>
-                    <input
-                      className="form-control floating"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="col-form-label">
+                        Email <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        className="form-control floating"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Phone </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="col-form-label">
+                        Phone <span className="text-danger">*</span>
+                      </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="col-form-label">Dob</label>
+                      <input
+                        className="form-control"
+                        type="date"
+                        value={dob}
+                        onChange={(e) => setDob(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-6">
+                    <div className="form-group">
+                      <label className="col-form-label">Anniversary Date</label>
+                      <input
+                        className="form-control"
+                        type="date"
+                        value={anniversaryDate}
+                        onChange={(e) => setAnniversaryDate(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Dob</label>
-                    <input
-                      className="form-control"
-                      type="date"
-                      value={dob}
-                      onChange={(e) => setDob(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-6">
-                  <div className="form-group">
-                    <label className="col-form-label">Anniversary Date</label>
-                    <input
-                      className="form-control"
-                      type="date"
-                      value={anniversaryDate}
-                      onChange={(e) => setAnniversaryDate(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* <div className="table-responsive m-t-15">
+                {/* <div className="table-responsive m-t-15">
               <table className="table table-striped custom-table">
                 <thead>
                   <tr>
@@ -275,13 +310,32 @@ const AddClient = () => {
                 </tbody>
               </table>
             </div> */}
-              <div className="submit-section">
-                <button className="btn btn-primary submit-btn" ttype="submit">
-                  {clientId ? "Update" : "Add"}
-                </button>
-              </div>
-            </form>
-          </div>
+                <div className="submit-section">
+                  <button
+                    className="btn btn-primary submit-btn"
+                    type="submit"
+                    onClick={(e) => {
+                      handleSubmit(e);
+                    }}
+                  >
+                    {clientId ? "Update" : "Add"}
+                  </button>
+                </div>
+              </form>
+            </Modal.Body>
+
+            <Modal.Footer>
+              <Button
+                variant="secondary "
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* </div> */}
         </div>
       </div>
     </div>

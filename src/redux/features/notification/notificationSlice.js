@@ -89,22 +89,22 @@ export const addNotification = createAsyncThunk(
 //   }
 // );
 
-// export const deleteNotification = createAsyncThunk(
-//   "notification/deletenotification",
-//   async (payload, thunkApi) => {
-//     try {
-//       // console.log(payload, "payload231");
-//       let { data: response } = await notificationDeleteApi(payload.id);
-//       if (response) {
-//         toastSuccess(response.message);
-//         thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
-//       }
-//     } catch (error) {
-//       toastError(error);
-//       throw error;
-//     }
-//   }
-// );
+export const deleteNotification = createAsyncThunk(
+  "notification/deletenotification",
+  async (payload, thunkApi) => {
+    try {
+      console.log(payload, "123payload231");
+      let { data: response } = await notificationDeleteApi(payload);
+      if (response) {
+        toastSuccess(response.message);
+        thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
 
 export const setNotification = createAsyncThunk(
   "notification/setnotification",

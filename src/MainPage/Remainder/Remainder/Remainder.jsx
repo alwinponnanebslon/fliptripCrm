@@ -12,7 +12,8 @@ import {
   addTour,
 } from "../../../redux/features/tour/tourSlice";
 import AddRemainder from "./AddRemainder";
-
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import {
   deleteRemainder,
   remainderGet,
@@ -75,6 +76,7 @@ export const GeneralRemainder = () => {
 
   const handleEdit = (row) => {
     // console.log(row, "row update"); //whole object
+    setShowRemainder(true);
     dispatch(setRemainder(row));
   };
 
@@ -101,20 +103,20 @@ export const GeneralRemainder = () => {
     {
       title: "Description",
       dataIndex: "description",
-      sorter: (a, b) => a.description.length - b.description.length,
+      render: (row, record) => <div>{record.description}</div>,
+      // sorter: (a, b) => a.description.length - b.description.length,
     },
 
     {
       title: "Remainder Date",
       dataIndex: "followDate",
-      render: (row, record) => (
-        <div>{new Date(record.followDate).toDateString()}</div>
-      ),
+      render: (row, record) => <div>{record.followDate}</div>,
     },
     {
       title: "Remainder Time",
       dataIndex: "followTime",
-      sorter: (a, b) => a.followTime.length,
+      render: (row, record) => <div>{record.followTime}</div>,
+      // sorter: (a, b) => a.followTime.length,
     },
     // {
     //   title: "Remainder Date",
@@ -182,8 +184,8 @@ export const GeneralRemainder = () => {
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
-              data-bs-toggle="modal"
-              data-bs-target="#add_Remainder"
+              // data-bs-toggle="modal"
+              // data-bs-target="#add_Remainder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
@@ -384,6 +386,7 @@ export const GeneralRemainder = () => {
         <AddRemainder
           showRemainder={showRemainder}
           setShowRemainder={setShowRemainder}
+          // setIsChangeCheckBox={setIsChangeCheckBox}
         />
       </div>
     </div>

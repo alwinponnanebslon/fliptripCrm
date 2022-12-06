@@ -24,3 +24,7 @@ export const getRemainderCheckForNotificatin = () => {
 export const getNotificationForSpecificUserApi = (id) => {
   return axios.get(`${serverUrl}/getSpecificUserNotification/${id}`);
 };
+// notificationDeleteApi;
+export const notificationDeleteApi = (id) => {
+  return axios.delete(`${serverUrl}/deleteById/${id}`);
+};
