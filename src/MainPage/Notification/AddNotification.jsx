@@ -85,6 +85,25 @@ const AddNotification = ({
   }, [userObj]);
 
   useEffect(() => {
+    console.log(notificationObj, "notificationObj23");
+    if (notificationObj && notificationObj._id) {
+      setIsUpdate(true);
+      setEmployeeId(notificationObj?.userObj?.firstName);
+      setFollowupId(notificationObj._id);
+      setHeading(notificationObj.heading);
+      setDescription(notificationObj.description);
+      setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD "));
+    } else {
+      setIsUpdate(false);
+      setFollowupId("");
+      setHeading("");
+      setDescription("");
+      setFollowDate("");
+      setFollowTime("");
+    }
+  }, [notificationObj]);
+
+  useEffect(() => {
     setEmployeeId(notificationObj?._id);
   }, [notificationObj]);
 
@@ -122,11 +141,12 @@ const AddNotification = ({
         createdBy: { ...createdBy, role },
         followTime,
       };
-      console.log(obj, "obj23");
+      // console.log(obj, "obj23");
       if (notificationObj?._id) {
-        obj.Id = followupId;
+        // obj.Id = followupId;
         // dispatch(updateRemainder(obj));
         dispatch(updateNotification(obj));
+        console.log("12348");
         setShowNotification(false);
         setIsUpdate(false);
         clearFunc();
@@ -150,23 +170,6 @@ const AddNotification = ({
     setDescription("");
     setFollowDate("");
   };
-
-  useEffect(() => {
-    if (notificationObj && notificationObj._id) {
-      setIsUpdate(true);
-      setFollowupId(notificationObj._id);
-      setHeading(notificationObj.heading);
-      setDescription(notificationObj.description);
-      setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD "));
-    } else {
-      setIsUpdate(false);
-      setFollowupId("");
-      setHeading("");
-      setDescription("");
-      setFollowDate("");
-      setFollowTime("");
-    }
-  }, [notificationObj]);
 
   return (
     <div id="add_Remainder" className="modal custom-modal fade" role="dialog">

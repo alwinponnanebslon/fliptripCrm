@@ -79,22 +79,22 @@ function Notification() {
       setNotificationArr(filter);
     } else {
       if (notificationvalue == "RECEIVED") {
-        console.log(userId, "userId343");
+        // console.log(userId, "userId343");
         let filter = NotificationArray.filter((el) => {
-          console.log(el.userId, "el.user23");
+          // console.log(el.userId, "el.user23");
           if (`${el?.userId}` == `${userId}`) {
             return el;
           }
         });
-        console.log(filter, "234");
-        console.log(userId, "u1serId343");
+        // console.log(filter, "234");
+        // console.log(userId, "u1serId343");
         setNotificationArr(filter);
       }
     }
   }, [notificationvalue]);
 
   const handleEdit = (row) => {
-    // console.log(row, "row update"); //whole object
+    // console.log(row, "12row update"); //whole object
     setShowNotification(true);
     dispatch(setNotification(row));
   };
@@ -323,136 +323,3 @@ function Notification() {
 export default Notification;
 //
 //
-
-//
-
-//
-
-//
-//
-//
-//
-
-//
-//
-//
-
-export const GeneralRemainder = () => {
-  //   useEffect(() => {
-  //     handleInit();
-  //     // handleCheckFollowUpForNotification();
-  //   }, []);
-  //   const handleInit = () => {
-  //     dispatch(remainderGet(userLeadId));
-  //   };
-  //   useEffect(() => {
-  //     setRemainderArr(remainderResultArr);
-  //   }, [remainderResultArr]);
-  //   const handleEdit = (row) => {
-  //     // console.log(row, "row update"); //whole object
-  //     setShowRemainder(true);
-  //     dispatch(setRemainder(row));
-  //   };
-  //   const handleRemainderDelete = (id) => {
-  //     dispatch(deleteRemainder({ id, leadId: userLeadId }));
-  //   };
-  //   const handleSatus = (row, status) => {
-  //     let obj = {
-  //       Id: row._id,
-  //       leadId: leadId,
-  //       status: status,
-  //     };
-  //     dispatch(updateRemainder(obj));
-  //   };
-  // const tour_columns = [
-  //   {
-  //     title: "Heading ",
-  //     dataIndex: "heading",
-  //     sorter: (a, b) => a.heading.length - b.heading.length,
-  //   },
-  //   {
-  //     title: "Description",
-  //     dataIndex: "description",
-  //     sorter: (a, b) => a.description.length - b.description.length,
-  //   },
-  //   {
-  //     title: "Remainder Date",
-  //     dataIndex: "followDate",
-  //     render: (row, record) => (
-  //       <div>{new Date(record.followDate).toDateString()}</div>
-  //     ),
-  //   },
-  //   {
-  //     title: "Remainder Time",
-  //     dataIndex: "followTime",
-  //     sorter: (a, b) => a.followTime.length,
-  //   },
-  //   {
-  //     title: "Action",
-  //     render: (row, record) => (
-  //       <div className="dropdown dropdown-action text-end">
-  //         <a
-  //           href="#"
-  //           className="action-icon dropdown-toggle"
-  //           data-bs-toggle="dropdown"
-  //           aria-expanded="false"
-  //         >
-  //           <i className="material-icons">more_vert</i>
-  //         </a>
-  //         <div className="dropdown-menu dropdown-menu-right">
-  //           <a className="dropdown-item" onClick={() => handleEdit(row)}>
-  //             <i className="fa fa-pencil m-r-5" /> Edit
-  //           </a>
-  //           <a
-  //             className="dropdown-item"
-  //             onClick={() => handleRemainderDelete(row._id)}
-  //           >
-  //             <i className="fa fa-trash-o m-r-5" /> Delete
-  //           </a>
-  //         </div>
-  //       </div>
-  //     ),
-  //   },
-  // ];
-  // useEffect(() => {
-  //   setShowRemainder(showRemainder);
-  // }, [showRemainder]);
-  // return (
-  //   <div className="page-wrapper">
-  //     <div className={Notification ? "Notification" : ""}>
-  //       <form className="form row">
-  //         <div className={Notification ? "col-12 col-md-6" : "col-12"}>
-  //           <label className="blue-1 fs-12">{name}</label>
-  //           <input
-  //             readOnly
-  //             value={name}
-  //             // onChange={(event) => setName(event.target.value)}
-  //             // type="text"
-  //             className="form-control"
-  //           />
-  //           <div className="row">
-  //             <div className="col-md-12">
-  //               <div className="table-responsive">
-  //                 <Table
-  //                   className="table-striped"
-  //                   pagination={{
-  //                     total: NotificationArray.length,
-  //                     showTotal: (total, range) =>
-  //                       `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-  //                     // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
-  //                   }}
-  //                   style={{ overflowX: "auto" }}
-  //                   columns={tour_columns}
-  //                   dataSource={NotificationArray}
-  //                   rowKey={(record) => record.id}
-  //                 />
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       </form>
-  //     </div>
-  //   </div>
-  // );
-};
-// export default GeneralRemainder;

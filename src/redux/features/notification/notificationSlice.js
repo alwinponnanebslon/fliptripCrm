@@ -74,7 +74,7 @@ export const updateNotification = createAsyncThunk(
   "notification/updatenotification",
   async (formData, thunkApi) => {
     try {
-      console.log(formData, "formadadt");
+      console.log(formData, "f1ormadadt");
       let { data: response } = await updateNotificationApi(
         formData,
         formData.Id

@@ -440,25 +440,45 @@ const Addemployee = ({ show, setShow }) => {
                         <label>
                           Role <span className="text-danger">*</span>
                         </label>
-                        <select
-                          value={role}
-                          onChange={(e) => {
-                            setRole(e.target.value);
-                          }}
-                          className={styles.selectStyle}
-                        >
-                          <option value="">Please Select Role</option>
-                          <option value={rolesObj.TEAMLEAD}>
-                            {rolesObj.TEAMLEAD}
-                          </option>
-                          <option value={rolesObj.SPOC}>{rolesObj.SPOC}</option>
-                          <option value={rolesObj.SUPERVISOR}>
-                            {rolesObj.SUPERVISOR}
-                          </option>
-                          <option value={rolesObj.ACCOUNT}>
-                            {rolesObj.ACCOUNT}
-                          </option>
-                        </select>
+                        {reduxrole == "ADMIN" && (
+                          <select
+                            value={role}
+                            onChange={(e) => {
+                              setRole(e.target.value);
+                            }}
+                            className={styles.selectStyle}
+                          >
+                            <option value="">Please Select Role</option>
+
+                            <option value={rolesObj.SPOC}>
+                              {rolesObj.SPOC}
+                            </option>
+                            <option value={rolesObj.SUPERVISOR}>
+                              {rolesObj.SUPERVISOR}
+                            </option>
+                            <option value={rolesObj.ACCOUNT}>
+                              {rolesObj.ACCOUNT}
+                            </option>
+
+                            <option value={rolesObj.TEAMLEAD}>
+                              {rolesObj.TEAMLEAD}
+                            </option>
+                          </select>
+                        )}
+                        {reduxrole == "TEAMLEAD" && (
+                          <select
+                            value={role}
+                            onChange={(e) => {
+                              setRole(e.target.value);
+                            }}
+                            className={styles.selectStyle}
+                          >
+                            <option value="">Please Select Role</option>
+                            <option value={rolesObj.SPOC}>
+                              {rolesObj.SPOC}
+                            </option>
+                          </select>
+                        )}
                       </div>
                     </div>
 
