@@ -7,7 +7,7 @@ export const addRemainderApi = (obj) => {
 };
 
 export const getRemainderApi = (id) => {
-  // console.log(id, "0po90p");
+  console.log(id, "0po90p");
   return axios.get(`${serverUrl}/${id}`);
 };
 export const remainderDeleteApi = (id) => {

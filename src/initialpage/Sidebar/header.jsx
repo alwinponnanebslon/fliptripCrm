@@ -24,7 +24,10 @@ import {
   addNotification,
   setNotification,
 } from "../../redux/features/notification/notificationSlice";
-import { remainderGetForOneDay } from "../../redux/features/remainder/remainderSlice";
+import {
+  remainderGetForOneDay,
+  remainderGet,
+} from "../../redux/features/remainder/remainderSlice";
 import { leadGet } from "../../redux/features/lead/leadSlice";
 
 const Header = (props) => {
@@ -42,7 +45,7 @@ const Header = (props) => {
   const [remainderArrData, setRemainderArrData] = useState([]);
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
-
+  // remainderArrData
   const dispatch = useDispatch();
 
   const handlesidebar = () => {
@@ -75,7 +78,7 @@ const Header = (props) => {
     };
     dispatch(notificationGetForSpecificUser(userId));
     dispatch(remainderGetForOneDay(obj));
-    // dispatch(remainderGet(userLeadId));
+    dispatch(remainderGet(userId));
   };
 
   useEffect(() => {
@@ -99,7 +102,7 @@ const Header = (props) => {
   }, [notificationResultArr]);
 
   useEffect(() => {
-    // console.log(remainderArray, "remainderArray324");
+    console.log(remainderArray, "remainderArray324");
     setRemainderArrData(remainderArray);
   }, [remainderArray]);
 
@@ -112,6 +115,7 @@ const Header = (props) => {
         return el.clientObj.name.toLowerCase().includes(value);
       }
     });
+    setSearchData(filteredData);
     {
       // console.log(filteredData, "filteredData34");
     }
@@ -205,7 +209,7 @@ const Header = (props) => {
       {/* Header Menu */}
       <ul className="nav user-menu">
         {/* Search */}
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <div className="top-nav-search">
             <a href="" className="responsive-search">
               <i className="fa fa-search" />
@@ -214,7 +218,7 @@ const Header = (props) => {
               <input
                 className="form-control"
                 type="text"
-                placeholder="Search here1"
+                placeholder="Search here"
                 onChange={(e) => {
                   handleSearchLead(e.target.value);
                 }}
@@ -224,8 +228,179 @@ const Header = (props) => {
               </button>
             </form>
           </div>
-        </li> */}
+        </li>
+        {/* 
 
+*/}
+        <li className="nav-item dropdown">
+          <a
+            // href=""
+            className="dropdown-toggle nav-link"
+            data-bs-toggle="dropdown"
+          >
+            {/* <i className="fa fa-bell-o" /> */}
+            {/* <span className="badge badge-pill">{dataArr.length}</span> */}
+          </a>
+          <div className="dropdown-menu notifications">
+            {/* <div className="topnav-dropdown-header"> */}
+            {/* <span className="notification-title">Notifications</span> */}
+            {/* <a href="" className="clear-noti">
+                Clear All
+              </a> */}
+            {/* </div> */}
+            {/* {console.log(dataArr, "123213")} */}
+            <div className="search-content">
+              <ul className="search-list">
+                {dataArr &&
+                  dataArr.map((el, index) => {
+                    return (
+                      // <li className="notification-message" key={index}>
+                      <li className="notification-message" key={index}>
+                        <div className="float-end">
+                          <a
+                            className="btn btn-blue"
+                            readOnly={isNotificationRead ? true : false}
+                            onClick={(e) => {
+                              handleReadNotification(e.target.value);
+                            }}
+                          >
+                            <i /> mark as read
+                          </a>
+                        </div>
+                        <Link
+                          onClick={() =>
+                            localStorage.setItem("minheight", "true")
+                          }
+                          to="/admin/notification"
+                        >
+                          <div className="media">
+                            {/* <span className="avatar">
+                              <img alt="" src={Avatar_02} />
+                            </span> */}
+                            <div className="media">
+                              <p className="noti-details d-flex">
+                                <h5> Heading : </h5> {el?.heading}&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> Decription : </h5> {el?.description}&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                {/* <div className="media-body">
+                              <p className="noti-details">
+                                <span className="noti-title">
+                                  {el?.heading}&nbsp;
+                                  {el?.description}
+                                </span>
+                                from &nbsp;
+                           
+                                <span className="noti-title">
+                                  {el?.createdBy?.name}
+                                </span>
+                              </p>
+                            </div> */}
+                {/* <li className="notification-message">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
+                    <div className="media">
+                      <span className="avatar">
+                        <img alt="" src={Avatar_03} />
+                      </span>
+                      <div className="media-body">
+                        <p className="noti-details">
+                          <span className="noti-title">Tarah Shropshire</span>{" "}
+                          changed the task name{" "}
+                          <span className="noti-title">
+                            Appointment booking with payment gateway
+                          </span>
+                        </p>
+                        <p className="noti-time">
+                          <span className="notification-time">6 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </li> */}
+
+                {/* <li className="notification-message">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
+                    <div className="media">
+                      <span className="avatar">
+                        <img alt="" src={Avatar_17} />
+                      </span>
+                      <div className="media-body">
+                        <p className="noti-details">
+                          <span className="noti-title">Rolland Webber</span>{" "}
+                          completed task{" "}
+                          <span className="noti-title">
+                            Patient and Doctor video conferencing
+                          </span>
+                        </p>
+                        <p className="noti-time">
+                          <span className="notification-time">12 mins ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </li> */}
+                {/* <li className="notification-message">
+                  <Link
+                    onClick={() => localStorage.setItem("minheight", "true")}
+                    to="/app/administrator/activities"
+                  >
+                    <div className="media">
+                      <span className="avatar">
+                        <img alt="" src={Avatar_13} />
+                      </span>
+                      <div className="media-body">
+                        <p className="noti-details">
+                          <span className="noti-title">Bernardo Galaviz</span>{" "}
+                          added new task{" "}
+                          <span className="noti-title">
+                            Private chat module
+                          </span>
+                        </p>
+                        <p className="noti-time">
+                          <span className="notification-time">2 days ago</span>
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </li> */}
+              </ul>
+            </div>
+            <div className="topnav-dropdown-footer">
+              <Link
+                onClick={() => localStorage.setItem("minheight", "true")}
+                to="/admin/notification"
+              >
+                View all Notifications
+              </Link>
+            </div>
+          </div>
+        </li>
+
+        {/* 
+
+
+
+
+
+
+
+*/}
         <li className="nav-item dropdown">
           <a
             // href=""

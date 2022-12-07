@@ -35,9 +35,9 @@ export const GeneralRemainder = () => {
   const remainderResultArr = useSelector((state) => state.remainder.remainders);
   const [remainderArr, setRemainderArr] = useState([]);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [tourId, setTourId] = useState("");
+  // const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [tourId, setTourId] = useState("");
 
   const [followUpCheck, setFollowUpCheck] = useState([]);
   const userLeadId = useSelector((state) => state.auth?.user?._id);
@@ -386,7 +386,7 @@ export const GeneralRemainder = () => {
         <AddRemainder
           showRemainder={showRemainder}
           setShowRemainder={setShowRemainder}
-        // setIsChangeCheckBox={setIsChangeCheckBox}
+          // setIsChangeCheckBox={setIsChangeCheckBox}
         />
       </div>
     </div>

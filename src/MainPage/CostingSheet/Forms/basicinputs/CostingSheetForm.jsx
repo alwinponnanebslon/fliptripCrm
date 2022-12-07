@@ -66,7 +66,7 @@ const ViewCostingSheetForm = () => {
   };
 
   useEffect(() => {
-    console.log(quotationObj, "setQuotationObj");
+    // console.log(quotationObj, "setQuotationObj");
     setIsLocation(true);
   }, [quotationObj]);
 

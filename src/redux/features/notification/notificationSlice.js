@@ -70,24 +70,27 @@ export const addNotification = createAsyncThunk(
   }
 );
 
-// export const updateNotification = createAsyncThunk(
-//   "notification/updatenotification",
-//   async (formData, thunkApi) => {
-//     try {
-//       console.log(formData, "formadadt");
-//       let { data: response } = await updateNotificationApi(formData, formData.Id);
-//       if (response) {
-//         toastSuccess(response.message);
+export const updateNotification = createAsyncThunk(
+  "notification/updatenotification",
+  async (formData, thunkApi) => {
+    try {
+      console.log(formData, "formadadt");
+      let { data: response } = await updateNotificationApi(
+        formData,
+        formData.Id
+      );
+      if (response) {
+        toastSuccess(response.message);
 
-//         thunkApi.dispatch(setNotification(null));
-//         thunkApi.dispatch(notificationGet(`leadId=${formData?.leadId}`));
-//       }
-//     } catch (error) {
-//       toastError(error);
-//       throw error;
-//     }
-//   }
-// );
+        thunkApi.dispatch(setNotification(null));
+        thunkApi.dispatch(notificationGet(`leadId=${formData?.leadId}`));
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
 
 export const deleteNotification = createAsyncThunk(
   "notification/deletenotification",

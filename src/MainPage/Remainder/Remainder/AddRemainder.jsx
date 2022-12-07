@@ -237,7 +237,9 @@ const AddRemainder = ({
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-form-label col-md-2">Follow Date</label>
+                  <label className="col-form-label col-md-2">
+                    Follow Date <span className="text-danger">*</span>
+                  </label>
                   <div className="col-md-10">
                     DatePicker
                     <input

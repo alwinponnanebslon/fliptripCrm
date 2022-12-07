@@ -22,6 +22,7 @@ import { toastError } from "../../utils/toastUtils";
 import {
   addNotification,
   setNotification,
+  updateNotification,
 } from "../../redux/features/notification/notificationSlice";
 // import { toastError } from "../../../utils/toastUtils";
 
@@ -124,8 +125,9 @@ const AddNotification = ({
       console.log(obj, "obj23");
       if (notificationObj?._id) {
         obj.Id = followupId;
-        dispatch(updateRemainder(obj));
-        setShowRemainder(false);
+        // dispatch(updateRemainder(obj));
+        dispatch(updateNotification(obj));
+        setShowNotification(false);
         setIsUpdate(false);
         clearFunc();
       } else {
@@ -254,7 +256,9 @@ const AddNotification = ({
                   </div>
                 </div>
                 <div className="form-group row">
-                  <label className="col-form-label col-md-2">Follow Date</label>
+                  <label className="col-form-label col-md-2">
+                    Follow Date <span className="text-danger">*</span>
+                  </label>
                   <div className="col-md-10">
                     DatePicker
                     <input

@@ -78,6 +78,7 @@ const Addemployee = ({ show, setShow }) => {
   }, [userObjData]);
 
   useEffect(() => {
+    console.log(employeeObj, "21employeeObj234");
     if (employeeObj && employeeObj._id) {
       setFirstName(employeeObj.firstName);
       setLastName(employeeObj?.lastName);
@@ -115,6 +116,7 @@ const Addemployee = ({ show, setShow }) => {
     setLeadId("");
     setTeamLeadsArr("");
     setDocId("");
+    setPrevDocUpdated(false);
   };
 
   const handleEmployeeEdit = async (e) => {
@@ -133,7 +135,7 @@ const Addemployee = ({ show, setShow }) => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-      console.log(obj, "obj23");
+      // console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
       if (res.success) {
@@ -214,6 +216,14 @@ const Addemployee = ({ show, setShow }) => {
       }
       if (role == rolesObj.SPOC && leadId == "") {
         toast.error("Team Lead cannot be empty");
+        return;
+      }
+      if (doj == "") {
+        toast.error("Date of joining is mandatory");
+        return;
+      }
+      if (dob == "") {
+        toast.error("Date of birth is mandatory");
         return;
       }
       let obj = {

@@ -15,12 +15,13 @@ let initialState = {
 };
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
 // const userLeadId = useSelector((state) => state.auth?.user?._id);
+
 export const remainderGet = createAsyncThunk(
   "remainder/remainderGet",
-  async (id) => {
+  async (payload, thunkApi) => {
     try {
-      // console.log(id, "od324");
-      let { data: response } = await getRemainderApi(id);
+      console.log(payload, "od324");
+      let { data: response } = await getRemainderApi(payload);
       // console.log(response, "respo12");
       if (response) {
         toastSuccess(response.message);

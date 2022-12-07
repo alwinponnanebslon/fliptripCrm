@@ -66,6 +66,7 @@ const AddClient = ({ show, setShowModal }) => {
       console.log(obj, "obj3q");
       if (clientId) {
         dispatch(clientUpdate({ obj, clientId }));
+        setShowModal(false);
         clearFunc();
       } else {
         dispatch(clientAdd(obj));
@@ -137,6 +138,7 @@ const AddClient = ({ show, setShowModal }) => {
                         Phone <span className="text-danger">*</span>
                       </label>
                       <input
+                        maxLength={10}
                         className="form-control"
                         type="text"
                         value={phone}

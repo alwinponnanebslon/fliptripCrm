@@ -262,7 +262,7 @@ const LeadView = () => {
                               <div className="chat-bubble">
                                 <div className="chat-content">
                                   <span className="task-chat-user">
-                                    Spoc : {leadObj?.spocObj?.firstName}
+                                    Spoc : {leadObj?.spocObj?.firstName + " "}
                                     {leadObj?.spocObj?.lastName}
                                   </span>
                                 </div>
@@ -300,8 +300,8 @@ const LeadView = () => {
                                 <div className="chat-content">
                                   <span className="task-chat-user">
                                     Team Lead :
-                                    {leadObj?.TeamLeaderOBJECT?.firstName}
-                                    {leadObj?.TeamLeaderOBJECT?.lastName}
+                                    {leadObj?.TeamLeaderOBJECT?.firstName + " "}
+                                    {" " + leadObj?.TeamLeaderOBJECT?.lastName}
                                   </span>
                                 </div>
                               </div>
