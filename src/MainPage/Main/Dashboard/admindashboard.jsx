@@ -98,7 +98,7 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    handleInit();
+    // handleInit();
   }, []);
 
   useEffect(() => {

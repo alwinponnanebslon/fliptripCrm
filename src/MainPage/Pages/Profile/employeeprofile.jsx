@@ -14,16 +14,28 @@ import {
 } from "../../../Entryfile/imagepath";
 import {
   serCurrentEmployee,
-  getEmployeeById,
+  getEmployeeById, userUpdateObj
 } from "../../../redux/features/employee/employeeSlice";
 import { rolesObj } from "../../../utils/roles";
-import { getEmployesById } from "../../../Services/user.service";
+import { getEmployesById, updateEmployee } from "../../../Services/user.service";
+import { useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import { toastError, toastSuccess } from "../../../utils/toastUtils";
 
 const EmployeeProfile = () => {
   const employeeObj = useSelector((state) => state.employee.employeeObj);
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const params = useParams();
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [dob, setDob] = useState("")
+  const [address, setAddress] = useState("")
+  const [pinCode, setPinCode] = useState("")
+  const [phone, setPhone] = useState("")
+  const [show, setShow] = useState(false)
+  const [prevDocId, setPrevDocId] = useState("")
   // console.log(params,"sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 
   const dispatch = useDispatch();
@@ -31,7 +43,22 @@ const EmployeeProfile = () => {
   const handleGetEmployee = () => {
     dispatch(getEmployeeById(params.id));
   };
+  // console.log(params, "oarams3")
 
+  useEffect(() => {
+    // console.log(employeeObj, "234567890-")
+    if (employeeObj && employeeObj._id) {
+
+      setFirstName(employeeObj?.firstName)
+      setLastName(employeeObj?.lastName)
+      setDob(employeeObj?.dob)
+      setPrevDocId(employeeObj?._id)
+      // setAddress(employeeObj?.address)
+      // setPinCode(employeeObj?.pinCode)
+      setPhone(employeeObj?.phone)
+    }
+
+  }, [employeeObj])
   useEffect(() => {
     // console.log("sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
     handleGetAllEmployees();
@@ -46,11 +73,28 @@ const EmployeeProfile = () => {
         dispatch(serCurrentEmployee(res.data));
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       // toastError(error);
     }
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    let obj = {
+      firstName,
+      lastName,
+      dob,
+      phone,
+      prevDocId
+    }
 
+    // dispatch(userUpdateObj(obj))
+    let update = await updateEmployee(prevDocId, obj)
+    if (update.data) {
+      toastSuccess(update.data.message)
+      setShow(false)
+      handleGetAllEmployees();
+    }
+  }
   useEffect(() => {
     if ($(".select").length > 0) {
       $(".select").select2({
@@ -118,7 +162,7 @@ const EmployeeProfile = () => {
                           <li>
                             <div className="title">Phone:</div>
                             <div className="text">
-                              <a href="">{employeeObj?.phone}</a>
+                              <a href="#">{employeeObj?.phone}</a>
                             </div>
                           </li>
                           <li>
@@ -170,22 +214,23 @@ const EmployeeProfile = () => {
                       </div>
                     </div>
                   </div>
-                  {/* <div className="pro-edit">
+                  <div className="pro-edit">
                     <a
                       data-bs-target="#profile_info"
-                      data-bs-toggle="modal"
-                      className="edit-icon"
+                      // data-bs-toggle="modal"
+                      // className="edit-icon"
                       href="#"
+                      onClick={() => { setShow(true) }}
                     >
                       <i className="fa fa-pencil" />
                     </a>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="card tab-box">
+        {/* <div className="card tab-box">
           <div className="row user-tabs">
             <div className="col-lg-12 col-md-12 col-sm-12 line-tabs">
               <ul className="nav nav-tabs nav-tabs-bottom">
@@ -220,7 +265,7 @@ const EmployeeProfile = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* /Page Content */}
       {/* Profile Modal */}
@@ -241,11 +286,16 @@ const EmployeeProfile = () => {
                 <span aria-hidden="true">×</span>
               </button>
             </div>
-            <div className="modal-body">
-              <form>
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="profile-img-wrap edit-img">
+            {/* <div className="modal-body"> */}
+            <Modal size="lg" show={show}>
+              <Modal.Header>
+                {/* <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title> */}
+              </Modal.Header>
+              <Modal.Body>
+                <form>
+                  <div className="row">
+                    <div className="col-md-12">
+                      {/* <div className="profile-img-wrap edit-img">
                       <img
                         className="inline-block"
                         src={Avatar_02}
@@ -255,41 +305,55 @@ const EmployeeProfile = () => {
                         <span className="btn-text">edit</span>
                         <input className="upload" type="file" />
                       </div>
-                    </div>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label>First Name</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            defaultValue="John"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label>Last Name</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            defaultValue="Doe"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label>Birth Date</label>
-                          <div>
+                    </div> */}
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>First Name</label>
                             <input
-                              className="form-control datetimepicker"
-                              type="date"
-                              defaultValue="05/06/1985"
+                              type="text"
+                              className="form-control"
+                              // defaultValue="John"
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
                             />
                           </div>
                         </div>
-                      </div>
-                      <div className="col-md-6">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Last Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                            />
+
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Birth Date</label>
+                            <div className="col-sm-8">
+                              <input
+                                type="date"
+                                className="form-control"
+                                // name="startDate"
+                                value={dob}
+                                onChange={(e) => setDob(e.target.value)}
+                              />
+                            </div>
+
+                            {/* <div>
+                            <input
+                              className="form-control datetimepicker"
+                              type="date"
+                              // defaultValue="05/06/1985"
+                            />
+                          </div> */}
+                          </div>
+                        </div>
+                        {/* <div className="col-md-6">
                         <div className="form-group">
                           <label>Gender</label>
                           <select className="select form-control">
@@ -297,32 +361,33 @@ const EmployeeProfile = () => {
                             <option value="female">Female</option>
                           </select>
                         </div>
+                      </div> */}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="row">
-                  <div className="col-md-12">
+                  <div className="row">
+                    {/* <div className="col-md-12">
                     <div className="form-group">
                       <label>Address</label>
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue="4487 Snowbird Lane"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
                       />
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                  </div> */}
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>State</label>
                       <input
                         type="text"
                         className="form-control"
-                        defaultValue="New York"
+                        // defaultValue="New York"
                       />
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                  </div> */}
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>Country</label>
                       <input
@@ -331,28 +396,32 @@ const EmployeeProfile = () => {
                         defaultValue="United States"
                       />
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                  </div> */}
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>Pin Code</label>
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
-                        defaultValue={10523}
+                        value={pinCode}
+                        onChange={(e) => setPinCode(e.target.value)}
                       />
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group">
-                      <label>Phone Number</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue="631-889-3206"
-                      />
+                  </div> */}
+                    <div className="col-md-6">
+                      <div className="form-group">
+                        <label>Phone Number</label>
+                        <input
+                          maxLength={10}
+                          type="text"
+                          className="form-control"
+                          // defaultValue="631-889-3206"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>
                         Department <span className="text-danger">*</span>
@@ -364,21 +433,21 @@ const EmployeeProfile = () => {
                         <option>Marketing</option>
                       </select>
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                  </div> */}
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>
                         Designation <span className="text-danger">*</span>
                       </label>
                       <select className="select">
                         <option>Select Designation</option>
-                        {/* <option>Web Designer</option> */}
+                        {/* <option>Web Designer</option> 
                         <option>Web Developer</option>
                         <option>Android Developer</option>
                       </select>
                     </div>
-                  </div>
-                  <div className="col-md-6">
+                  </div> */}
+                    {/* <div className="col-md-6">
                     <div className="form-group">
                       <label>
                         Reports To <span className="text-danger">*</span>
@@ -390,13 +459,31 @@ const EmployeeProfile = () => {
                         <option>Jeffery Lalor</option>
                       </select>
                     </div>
+                  </div> */}
                   </div>
-                </div>
-                <div className="submit-section">
-                  <button className="btn btn-primary submit-btn">Submit</button>
-                </div>
-              </form>
-            </div>
+                  {/* <div className="submit-section">
+                    <button className="btn btn-primary submit-btn">Submit</button>
+                  </div> */}
+                </form>
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setShow(false);
+                    // clearFunc();
+                  }}
+                >
+                  Close
+                </Button>
+                <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+                  {/* {isUpdateTour ? "Edit" : "Add"} Quote */}
+                  update
+                </Button>
+              </Modal.Footer>
+            </Modal>
+            {/* </div> */}
           </div>
         </div>
       </div>

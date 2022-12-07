@@ -32,8 +32,10 @@ const Addemployee = ({ show, setShow }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [employeeId, setEmployeeId] = useState("");
-  const [doj, setDoj] = useState(new Date());
-  const [dob, setDob] = useState(new Date());
+  // const [doj, setDoj] = useState(new Date());
+  const [doj, setDoj] = useState("");
+  // const [dob, setDob] = useState(new Date());
+  const [dob, setDob] = useState("");
   const [role, setRole] = useState("");
   const [emergencyContact, setEmergencyContact] = useState("");
   const [leadId, setLeadId] = useState("");
@@ -258,7 +260,8 @@ const Addemployee = ({ show, setShow }) => {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
         handleGetAllEmployees();
-        // window.location.reload();
+        window.location.reload();
+        setShow(false);
         ClearFunc();
         // // console.log(obj)
       }

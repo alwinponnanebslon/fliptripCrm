@@ -581,7 +581,7 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
-            {console.log(remainderArrData, "remainderArrData123213")}
+            {/* {console.log(remainderArrData, "remainderArrData123213")} */}
             <div className="noti-content">
               <ul className="notification-list">
                 {remainderArrData &&
