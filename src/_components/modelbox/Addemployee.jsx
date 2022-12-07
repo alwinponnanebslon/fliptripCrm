@@ -69,16 +69,25 @@ const Addemployee = ({ show, setShow }) => {
     if (reduxrole == rolesObj.TEAMLEAD) {
       setLeadId(userId);
     }
-  }, []);
+    // if (role == "SPOC") {
+    //   setLeadId(userId);
+    // }
+  }, [role]);
 
   useEffect(() => {
     if (userObjData && userObjData._id) {
       setEmployeeObj(userObjData);
     }
   }, [userObjData]);
+  useEffect(() => {
+    // if (userObjData && userObjData._id) {
+    //   setEmployeeObj(userObjData);
+    // }
+    console.log(doj, "doj213");
+  }, [doj]);
 
   useEffect(() => {
-    console.log(employeeObj, "21employeeObj234");
+    // console.log(employeeObj, "21employeeObj234");
     if (employeeObj && employeeObj._id) {
       setFirstName(employeeObj.firstName);
       setLastName(employeeObj?.lastName);
@@ -135,7 +144,7 @@ const Addemployee = ({ show, setShow }) => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-      // console.log(obj, "obj23");
+      console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
       if (res.success) {
@@ -242,13 +251,14 @@ const Addemployee = ({ show, setShow }) => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
+      console.log(obj, "obj123132");
       let { data: res } = await addEmployeeToDb(obj);
 
       if (res.success) {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
         handleGetAllEmployees();
-        window.location.reload();
+        // window.location.reload();
         ClearFunc();
         // // console.log(obj)
       }
