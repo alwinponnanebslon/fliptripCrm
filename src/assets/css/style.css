@@ -9528,3 +9528,10 @@ span.quote-cfee-label {
   top: 0;
   border: 1px solid;
 }
+
+.dropdown-menu.notifications {
+  inset: 0px 0px auto auto !important;
+}
+a.btn.btn-blue {
+  background-color: cadetblue;
+}

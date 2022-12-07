@@ -165,13 +165,13 @@ const Header = (props) => {
   return (
     <div className="header" style={{ right: "0px" }}>
       {/* Logo */}
-      <div className="header-left">
-        <Link to="/app/main/dashboard" className="logo">
+      {/* <div className="header-left">
+       <Link to="/app/main/dashboard" className="logo">
           <img src={headerlogo} width={40} height={40} alt="" />
-        </Link>
-      </div>
+        </Link> 
+      </div> */}
       {/* /Logo */}
-      <a
+      {/* <a
         id="toggle_btn"
         href="#"
         style={{
@@ -188,20 +188,20 @@ const Header = (props) => {
           <span />
           <span />
         </span>
-      </a>
+      </a> */}
       {/* Header Title */}
       <div className="page-title-box">
         <h3>Fliptrip Holidays</h3>
       </div>
       {/* /Header Title */}
-      <a
+      {/* <a
         id="mobile_btn"
         className="mobile_btn"
         href="#"
         onClick={() => onMenuClik()}
       >
         <i className="fa fa-bars" />
-      </a>
+      </a> */}
       {/* Header Menu */}
       <ul className="nav user-menu">
         {/* Search */}
@@ -252,7 +252,7 @@ const Header = (props) => {
                       <li className="notification-message" key={index}>
                         <div className="float-end">
                           <a
-                            className="btn btn-primary"
+                            className="btn btn-blue"
                             readOnly={isNotificationRead ? true : false}
                             onClick={(e) => {
                               handleReadNotification(e.target.value);
