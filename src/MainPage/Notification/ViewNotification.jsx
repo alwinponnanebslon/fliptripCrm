@@ -211,6 +211,8 @@ function Notification() {
     //       <div className="dropdown-menu dropdown-menu-right">
     //         <a
     //           className="dropdown-item"
+    //           // data-bs-toggle="modal"
+    //           // data-bs-target="#add_Remainder"
     //           onClick={() => handleEdit(row)}
     //         >
     //           <i className="fa fa-pencil m-r-5" /> Edit

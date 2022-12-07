@@ -386,7 +386,7 @@ export const GeneralRemainder = () => {
         <AddRemainder
           showRemainder={showRemainder}
           setShowRemainder={setShowRemainder}
-          // setIsChangeCheckBox={setIsChangeCheckBox}
+        // setIsChangeCheckBox={setIsChangeCheckBox}
         />
       </div>
     </div>

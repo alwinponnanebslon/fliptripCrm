@@ -180,7 +180,12 @@ const ViewCostingSheetForm = () => {
           }
         }
         if (
+<<<<<<< HEAD
           parseInt(totalAmount) + parseInt(additionalLandPrices) >
+=======
+          inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) +
+          additionalLandPrices >
+>>>>>>> 1d10eaef81117fbd22c2a7daa33f89e2668b2bf7
           parseInt(landCost)
         ) {
           toastError("Hotel price cannot be greater than total land cost*");

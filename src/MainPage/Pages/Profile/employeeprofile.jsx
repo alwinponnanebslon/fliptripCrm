@@ -140,7 +140,7 @@ const EmployeeProfile = () => {
                               1861 Bayonne Ave, Manchester Township, NJ, 08759
                             </div>
                           </li> */}
-                          {console.log(employeeObj, "employeeObj32")}
+                          {/* {console.log(employeeObj, "employeeObj32")} */}
                           {employeeObj?.role == rolesObj.SPOC && (
                             <li>
                               <div className="title">Reports to:</div>
