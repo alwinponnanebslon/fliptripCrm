@@ -151,57 +151,74 @@ export const AddPayment = () => {
     });
     setPaymentReceviedArr(list);
   };
-
   const handlePaymentInput = (e, index) => {
     const { name, value } = e.target;
-
-    let previousValue = paymentReceviedArr.find((el, i) => i == index);
-    // console.log(name, value)
-    const list = [...paymentReceviedArr];
-    // let list = [...paymentReceviedArr];
-
-    setPaymentReceviedArr((pr) =>
-      pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
-    );
+    console.log(name, value);
     if (name == "installmentAmount") {
-      console.log(
-        list.reduce(
-          (acc, el) =>
-            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
-          0
-        ) >= parseInt(total),
-        list.reduce(
-          (acc, el) =>
-            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
-          0
-        ),
-        parseInt(total)
-      );
-      if (
-        list.reduce(
-          (acc, el) =>
-            acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
-          0
-        ) >= parseInt(total)
-      ) {
+      if (value > total || value <= 0) {
         toastError(
-          "Amount must be greater than zero or less than total Amount"
-        );
-        setPaymentReceviedArr((pr) =>
-          pr.map((el, i) =>
-            i == index ? { ...el, [name]: previousValue.installmentAmount } : el
-          )
-        );
-      } else {
-        setPaymentReceviedArr((pr) =>
-          pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
+          "Ammount must be greate than zero ot less than total Amount"
         );
       }
     }
-    // console.log(list[index], "paymentReceviedArr")
-
+    let list = [...paymentReceviedArr];
+    console.log(list[index], "paymentReceviedArr");
     // list[index][name] = value;
+    setPaymentReceviedArr((pr) =>
+      pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
+    );
   };
+
+  // const handlePaymentInput = (e, index) => {
+  //   const { name, value } = e.target;
+
+  //   let previousValue = paymentReceviedArr.find((el, i) => i == index);
+  //   // console.log(name, value)
+  //   const list = [...paymentReceviedArr];
+  //   // let list = [...paymentReceviedArr];
+
+  //   setPaymentReceviedArr((pr) =>
+  //     pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
+  //   );
+  //   if (name == "installmentAmount") {
+  //     console.log(
+  //       list.reduce(
+  //         (acc, el) =>
+  //           acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+  //         0
+  //       ) >= parseInt(total),
+  //       list.reduce(
+  //         (acc, el) =>
+  //           acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+  //         0
+  //       ),
+  //       parseInt(total)
+  //     );
+  //     if (
+  //       list.reduce(
+  //         (acc, el) =>
+  //           acc + parseInt(el.installmentAmount ? el.installmentAmount : 0),
+  //         0
+  //       ) >= parseInt(total)
+  //     ) {
+  //       toastError(
+  //         "Amount must be greater than zero or less than total Amount"
+  //       );
+  //       setPaymentReceviedArr((pr) =>
+  //         pr.map((el, i) =>
+  //           i == index ? { ...el, [name]: previousValue.installmentAmount } : el
+  //         )
+  //       );
+  //     } else {
+  //       setPaymentReceviedArr((pr) =>
+  //         pr.map((el, i) => (i == index ? { ...el, [name]: value } : el))
+  //       );
+  //     }
+  //   }
+  //   // console.log(list[index], "paymentReceviedArr")
+
+  //   // list[index][name] = value;
+  // };
 
   const handleRemovePaymentRow = (index) => {
     const list = [...paymentReceviedArr];
@@ -235,14 +252,14 @@ export const AddPayment = () => {
     });
   };
   useEffect(() => {
-    console.log(paymentReceviedArr, "paymentReceviedArr213");
+    // console.log(paymentReceviedArr, "paymentReceviedArr213");
   }, [paymentReceviedArr]);
 
   const handleSubmit = () => {
     const validation = paymentReceviedArr.every(
       (item) => item.installmentAmount
     );
-    console.log(validation, "validation4");
+    // console.log(validation, "validation4");
     if (!validation) {
       toastError("Please fill all installmentAmount ");
       return;

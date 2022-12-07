@@ -34,6 +34,7 @@ const Quotation = () => {
   const userId = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
   const { leadId } = useParams();
+  // console.log(leadId, "leadId3q4");
   let history = useHistory();
 
   const quotationStateArr = useSelector(
@@ -135,7 +136,7 @@ const Quotation = () => {
             setIsStatusOf(true);
             dispatch(quotationUpdateStatus(obj));
             // navigate("/path/to/push");
-            history.push(`/admin/lead/${userId}/quotePayment`);
+            history.push(`/admin/lead/${leadId}/quotePayment`);
             // history(`/admin/lead/${userId}/quotePayment`);
           },
         },

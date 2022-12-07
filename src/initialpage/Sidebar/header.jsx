@@ -41,6 +41,7 @@ const Header = (props) => {
   const [remainderArr, setRemainderArr] = useState([]);
   const [remainderArrData, setRemainderArrData] = useState([]);
   const [leadArr, setLeadArr] = useState([]);
+  const [isNotificationRead, setIsNotificationRead] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -103,7 +104,7 @@ const Header = (props) => {
   }, [remainderArray]);
 
   const handleSearchLead = (value) => {
-    console.log(value, "vlue");
+    // console.log(value, "vlue");
     const filteredData = leadArr.filter((el) => {
       if (value === "") {
         return el.clientObj.name;
@@ -112,7 +113,7 @@ const Header = (props) => {
       }
     });
     {
-      console.log(filteredData, "filteredData34");
+      // console.log(filteredData, "filteredData34");
     }
     return (
       <ul>
@@ -155,6 +156,11 @@ const Header = (props) => {
     //     return el.name.includes(value);
     //   }
     // });
+  };
+
+  const handleReadNotification = (value) => {
+    props.onMenuClick();
+    setIsNotificationRead(true);
   };
   return (
     <div className="header" style={{ right: "0px" }}>
@@ -199,7 +205,7 @@ const Header = (props) => {
       {/* Header Menu */}
       <ul className="nav user-menu">
         {/* Search */}
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <div className="top-nav-search">
             <a href="" className="responsive-search">
               <i className="fa fa-search" />
@@ -218,11 +224,11 @@ const Header = (props) => {
               </button>
             </form>
           </div>
-        </li>
+        </li> */}
 
         <li className="nav-item dropdown">
           <a
-            href=""
+            // href=""
             className="dropdown-toggle nav-link"
             data-bs-toggle="dropdown"
           >
@@ -244,6 +250,17 @@ const Header = (props) => {
                     return (
                       // <li className="notification-message" key={index}>
                       <li className="notification-message" key={index}>
+                        <div className="float-end">
+                          <a
+                            className="btn btn-primary"
+                            readOnly={isNotificationRead ? true : false}
+                            onClick={(e) => {
+                              handleReadNotification(e.target.value);
+                            }}
+                          >
+                            <i /> mark as read
+                          </a>
+                        </div>
                         <Link
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
@@ -251,9 +268,9 @@ const Header = (props) => {
                           to="/admin/notification"
                         >
                           <div className="media">
-                            <span className="avatar">
+                            {/* <span className="avatar">
                               <img alt="" src={Avatar_02} />
-                            </span>
+                            </span> */}
                             <div className="media">
                               <p className="noti-details d-flex">
                                 <h5> Heading : </h5> {el?.heading}&nbsp;
@@ -389,7 +406,7 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
-            {/* {console.log(remainderArrData, "remainderArrData123213")} */}
+            {console.log(remainderArrData, "remainderArrData123213")}
             <div className="noti-content">
               <ul className="notification-list">
                 {remainderArrData &&
@@ -443,7 +460,7 @@ const Header = (props) => {
             <div className="topnav-dropdown-footer">
               <Link
                 onClick={() => localStorage.setItem("minheight", "true")}
-                to="/admin/notification"
+                to="/admin/remainder"
               >
                 View all Remainders
               </Link>

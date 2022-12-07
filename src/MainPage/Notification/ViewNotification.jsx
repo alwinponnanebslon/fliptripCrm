@@ -52,7 +52,7 @@ function Notification() {
   }, []);
   //
   useEffect(() => {
-    console.log(NotificationArray, "12323424 NotificationArray");
+    // console.log(NotificationArray, "12323424 NotificationArray");
     let filter = NotificationArray.filter((el) => {
       // console.log(el.createdBy._id, "123");
       if (`${el?.createdBy?._id}` == `${userId}`) {
@@ -67,9 +67,6 @@ function Notification() {
   //
 
   useEffect(() => {
-    // let filter = [];
-    // console.log(notificationvalue, "notificationvalue231");
-    //
     if (notificationvalue == "SEND") {
       let filter = NotificationArray.filter((el) => {
         // console.log(el.createdBy._id, "123");
@@ -199,37 +196,35 @@ function Notification() {
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
       render: (row, record) => <div>{record?.createdBy?.name}</div>,
     },
-    {
-      title: "Action",
-      render: (row, record) => (
-        <div className="dropdown dropdown-action text-end">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="material-icons">more_vert</i>
-          </a>
-          <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              // data-bs-toggle="modal"
-              // data-bs-target="#add_Remainder"
-              onClick={() => handleEdit(row)}
-            >
-              <i className="fa fa-pencil m-r-5" /> Edit
-            </a>
-            <a
-              className="dropdown-item"
-              onClick={() => handleNotificationDelete(row._id)}
-            >
-              <i className="fa fa-trash-o m-r-5" /> Delete
-            </a>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Action",
+    //   render: (row, record) => (
+    //     <div className="dropdown dropdown-action text-end">
+    //       <a
+    //         href="#"
+    //         className="action-icon dropdown-toggle"
+    //         data-bs-toggle="dropdown"
+    //         aria-expanded="false"
+    //       >
+    //         <i className="material-icons">more_vert</i>
+    //       </a>
+    //       <div className="dropdown-menu dropdown-menu-right">
+    //         <a
+    //           className="dropdown-item"
+    //           onClick={() => handleEdit(row)}
+    //         >
+    //           <i className="fa fa-pencil m-r-5" /> Edit
+    //         </a>
+    //         <a
+    //           className="dropdown-item"
+    //           onClick={() => handleNotificationDelete(row._id)}
+    //         >
+    //           <i className="fa fa-trash-o m-r-5" /> Delete
+    //         </a>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
   return (
     <div className="page-wrapper">

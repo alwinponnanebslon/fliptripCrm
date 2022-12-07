@@ -3,7 +3,7 @@ import { url } from "./url.service";
 let serverUrl = `${url}/costingSheet`;
 
 export const add = (obj) => {
-  return axios.post(`${serverUrl}/add/${id}`, obj);
+  return axios.post(`${serverUrl}/add`, obj);
 };
 
 export const get = (query) => {

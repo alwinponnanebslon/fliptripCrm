@@ -110,7 +110,7 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationObj) {
-      console.log(quotationObj, "qoationboj----------");
+      // console.log(quotationObj, "qoationboj----------");
       setQuotationId(quotationObj?._id);
       setDestinationName(quotationObj?.destinationName);
       setDurationOfTour(quotationObj?.durationOfTour);

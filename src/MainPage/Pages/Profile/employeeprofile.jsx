@@ -170,7 +170,7 @@ const EmployeeProfile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="pro-edit">
+                  {/* <div className="pro-edit">
                     <a
                       data-bs-target="#profile_info"
                       data-bs-toggle="modal"
@@ -179,7 +179,7 @@ const EmployeeProfile = () => {
                     >
                       <i className="fa fa-pencil" />
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

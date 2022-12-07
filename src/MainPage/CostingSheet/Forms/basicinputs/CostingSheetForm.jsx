@@ -17,10 +17,12 @@ import { getApprovedQuotation } from "../../../../Services/quotation.service.js"
 
 const ViewCostingSheetForm = () => {
   const location = useLocation();
+  // console.log(location, "location3");
   const tempLocation = location;
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
+  // console.log(leadId, "leadId1");
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheets
   );
@@ -63,9 +65,10 @@ const ViewCostingSheetForm = () => {
     setQuotationObj(arr.data.data);
   };
 
-  // useEffect(() => {
-  //   setIsLocation(true);
-  // }, [tempLocation]);
+  useEffect(() => {
+    console.log(quotationObj, "setQuotationObj");
+    setIsLocation(true);
+  }, [quotationObj]);
 
   const handleInit = () => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
@@ -77,7 +80,7 @@ const ViewCostingSheetForm = () => {
   }, []);
 
   useEffect(() => {
-    // console.log(quotationObj, "1quotationObj23");
+    console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
       // setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
       // setTotalCost(quotationObj?.paymentObj?.total);
@@ -87,6 +90,7 @@ const ViewCostingSheetForm = () => {
       setLocationName(quotationObj?.destinationName);
       setLeadName(quotationObj?.leadObj?.clientObj?.name);
       setLeadsId(leadId);
+      // setPrevDocId(quotationObj?._id);
       setinputList([...quotationObj?.hotelDetail]);
       setQuotationId(quotationObj._id);
     }
@@ -94,7 +98,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "costingSheetResultObj23");
+    // console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
@@ -149,8 +153,11 @@ const ViewCostingSheetForm = () => {
     let { name, value, checked } = e.target;
     //hotel
     ("use strict");
-    console.log(name, "name, ", value, " value,", checked, " checked23");
+    // console.log(name, "name, ", value, " value,", checked, " checked23");
     let tempList = [...inputList];
+    let totalAmount = 0;
+    // let tempList = inputList;
+    // let tempValues = Object.values(tempList);
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
       hotelName: tempList[index].hotelName,
@@ -166,17 +173,31 @@ const ViewCostingSheetForm = () => {
         toastError("Cost should be number");
         return;
       } else if (Number.isInteger(parseInt(value))) {
+        for (let el of tempList) {
+          // console.log(el, "cost23");
+          if (el.cost) {
+            totalAmount = totalAmount + parseInt(el.cost);
+          }
+        }
         if (
-          inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) +
-            additionalLandPrices >
+          parseInt(totalAmount) + parseInt(additionalLandPrices) >
           parseInt(landCost)
         ) {
-          toastError("Hotel price cannot be  greater than total land cost*");
+          toastError("Hotel price cannot be greater than total land cost*");
           return;
         }
+        // if (
+        //   inputList.reduce((acc, el) => acc + parseInt(el.cost), 0) +
+        //     additionalLandPrices >
+        //   parseInt(landCost)
+        // ) {
+        //   toastError("Hotel price cannot be  greater than total land cost*");
+        //   return;
+        // }
+
         if (value > +landCost) {
           value = 0;
-          toastError("land price can't be greater than total land cost");
+          toastError("land price cannot be greater than total land cost");
           return;
         }
       }
@@ -200,10 +221,10 @@ const ViewCostingSheetForm = () => {
     if (name == "hold") {
       setShowRemainder(true);
       // console.log(isChangeCheckBox, "isChangeCheckBox34");
-      if (isChangeCheckBox == true) {
-        console.log("inside 1");
-        currentObj[name] = checked;
-      }
+      // if (isChangeCheckBox == true) {
+      //   console.log("inside 1");
+      currentObj[name] = checked;
+      // }
       currentObj["reConfirmed"] = false;
       currentObj["pending"] = false;
       // setIsStatusOfLead(true);
@@ -213,10 +234,10 @@ const ViewCostingSheetForm = () => {
       currentObj["pending"] = false;
     } else if (name == "pending") {
       setShowRemainder(true);
-      if (isChangeCheckBox) {
-        console.log("inside 12");
-        currentObj[name] = checked;
-      }
+      // if (isChangeCheckBox) {
+      //   console.log("inside 12");
+      currentObj[name] = checked;
+      // }
       currentObj["hold"] = false;
       currentObj["reConfirmed"] = false;
       // setIsStatusOfLead(true);
@@ -305,6 +326,7 @@ const ViewCostingSheetForm = () => {
     let { name, value } = e.target;
     ("use strict");
     let tempList = [...flightList];
+    let totalAmount = 0;
     let currentObj = Object.freeze(tempList[index]);
     currentObj = {
       flightName: tempList[index].flightName,
@@ -317,6 +339,17 @@ const ViewCostingSheetForm = () => {
         toastError("Cost should be number");
         return;
       } else if (Number.isInteger(parseInt(value))) {
+        for (let el of tempList) {
+          // console.log(el, "cost23");
+          if (el.cost) {
+            totalAmount = totalAmount + parseInt(el.cost);
+          }
+        }
+        console.log(totalAmount, "1", value, "@", flightCost, "23");
+        // if (parseInt(totalAmount) + parseInt(value) > parseInt(flightCost)) {
+        //   toastError("Flight price cannot be greater than total Flight cost");
+        //   return;
+        // }
         if (
           flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
           parseInt(flightCost)
@@ -324,11 +357,11 @@ const ViewCostingSheetForm = () => {
           toastError("flight price cannot be  greater than total flight cost");
           return;
         }
-        if (value > +flightCost) {
-          value = 0;
-          toastError("flight price cannot be greater than total flight cost");
-          return;
-        }
+        // if (value > +flightCost) {
+        //   value = 0;
+        //   toastError("flight price cannot be greater than total flight cost");
+        //   return;
+        // }
       }
     }
     currentObj[name] = value;
@@ -347,51 +380,62 @@ const ViewCostingSheetForm = () => {
     setFlightList([...flightList, { cost: "", flightName: "" }]);
   };
 
-  // const quotationObtions = () => {
-  //   const temp = quotationObj.map((el) => {
-  //     return { ...el, value: el?.leadId, label: el?.leadId };
-  //   });
-  //   setAb([...temp]);
-  // };
   const handleChangePriceOfAdditionalCost = (value) => {
-    // console.log(value, "Value23");
+    console.log(value, "1Value23");
     // console.log(isNaN(value), "valuwe23");
     // console.log(parseInt(value), "valuwe231234");
+    let list = [];
+    let totalAmount = 0;
+    let tempList = inputList;
+    let tempValues = Object.values(tempList);
+    // console.log(tempValues, "tempValues23");
     if (value == undefined) {
     } else if (isNaN(value) == true) {
+      value = 0;
       // if (parseInt(value) == "NaN") {
       // value = 0;
-      console.log(typeof value, "vlue", value);
-      toastError("Land package price should be number*-");
+      // console.log(typeof value, "vlue", value);
+      toastError("Land package price should be number*");
       return;
     } else {
-      let tempCost = 0;
-      for (let ele of inputList) {
-        // console.log(ele, "1223");
-        if (ele?.cost > 0) {
-          tempCost = tempCost + Number.parseInt(ele?.cost);
+      for (let el of tempValues) {
+        // console.log(el, "cost23");
+        if (el.cost) {
+          totalAmount = totalAmount + parseInt(el.cost);
         }
       }
+      // for (let ele of inputList) {
+      //   // console.log(ele, "1223");
+      //   if (ele?.cost > 0) {
+      //     tempCost = tempCost + Number.parseInt(ele?.cost);
+      //   }
+      // }
+      // let
+      // if (
+      //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+      //   parseInt(totalCost)
+      // ) {
+      //   toastError(
+      //     "addititonal land price cannot be greater than total land cost/"
+      //   );
+      //   return;
+      // }
       // inputList;
-      // console.log(tempCost, landCost, additionalLandPrices, "1234");
-      if (tempCost + parseInt(value) > parseInt(landCost)) {
-        // tempCost = 0;
-        // console.log(tempCost, "11tempCost12");
-        toastError("Hotel price cannot be greater than Total Land costss4");
+      // console.log(totalAmount, landCost, "1234");
+      if (totalAmount + parseInt(value) > parseInt(landCost)) {
+        toastError(
+          "Addititonal land price cannot be greater than total land cost"
+        );
         return;
       } else {
         setAdditionalLandPrices(value);
       }
     }
-
-    // if (value > parseInt(landCost)) {
-    //   toastError("Hotel price cannot be greater than Total Land costss12  ");
-    //   return;
-    // }
   };
-  useEffect(() => {
-    handleChangePriceOfAdditionalCost();
-  }, [additionalLandPrices]);
+
+  // useEffect(() => {
+  //   handleChangePriceOfAdditionalCost();
+  // }, [additionalLandPrices]);
 
   // useEffect(() => {
   //   let tempCost = 0;
@@ -455,11 +499,11 @@ const ViewCostingSheetForm = () => {
     };
     console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
-      dispatch(update(obj, obj.id));
       console.log("update");
+      dispatch(update(obj, obj.id));
     } else {
-      dispatch(addCosting(obj, obj.id));
       console.log("create doc");
+      dispatch(addCosting(obj, obj.id));
     }
   };
 
@@ -467,8 +511,6 @@ const ViewCostingSheetForm = () => {
     setLandPrices(value);
     setTotalCost(+totalCost + +value);
   };
-
-  // useEffect(() => { setTotalCost(+totalCost + +landPrices) }, [landPrices])//==============
 
   return (
     <div className="page-wrapper">
@@ -531,8 +573,8 @@ const ViewCostingSheetForm = () => {
               <div className="col-12 col-md-4 mb-3">
                 <label>Land Package Price</label>
                 <input
-                  type="text"
-                  name="LandPrices"
+                  type="number"
+                  name="additionalLandPrices"
                   class="form-control"
                   value={additionalLandPrices}
                   onChange={(e) =>
@@ -574,7 +616,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost</label>
                           <input
-                            type="text"
+                            type="number"
                             name="cost"
                             value={x.cost}
                             placeholder="Enter Cost"
@@ -674,7 +716,7 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost </label>
                           <input
-                            type="text"
+                            type="number"
                             name="cost"
                             value={x.cost}
                             placeholder="Enter Cost"

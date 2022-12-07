@@ -42,6 +42,7 @@ export const addCosting = createAsyncThunk(
   "costingSheet/add",
   async (payload, thunkApi) => {
     try {
+      console.log(payload, "payload23");
       let { data: response } = await add(payload, payload.id);
       if (response) {
         toastSuccess(response.message);
