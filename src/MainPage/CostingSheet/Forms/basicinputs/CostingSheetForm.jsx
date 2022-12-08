@@ -381,7 +381,7 @@ const ViewCostingSheetForm = () => {
   };
 
   const handleChangePriceOfAdditionalCost = (value) => {
-    console.log(value, "1Value23");
+    // console.log(value, "1Value23");
     // console.log(isNaN(value), "valuwe23");
     // console.log(parseInt(value), "valuwe231234");
     let list = [];

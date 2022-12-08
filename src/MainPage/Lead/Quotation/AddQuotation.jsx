@@ -106,7 +106,7 @@ const AddQuotation = ({ show, setShow }) => {
   }, [clients]);
 
   useEffect(() => {
-    if (quotationObj) {
+    if (quotationObj && quotationObj._id) {
       console.log(quotationObj, "qoationboj----------");
       setQuotationId(quotationObj?._id);
       setDestinationName(quotationObj?.destinationName);
@@ -247,7 +247,7 @@ const AddQuotation = ({ show, setShow }) => {
   //   let { name, value } = e.target;
   //   ("use strict");
   //   let tempList = [...travelList];
-  //   // let totalAmount = 0;
+  //   // let totalAmount = 00;
   //   let currentObj = Object.freeze(tempList[index]);
   //   currentObj = {
   //     name: tempList[index].name,
@@ -265,70 +265,219 @@ const AddQuotation = ({ show, setShow }) => {
   //   // }
   // };
   const handleinputchangeHotel = (e, index) => {
-    const list = [...hotelList];
+    let { name, value } = e.target;
+    if (quotationObj && quotationObj._id) {
+      ("use strict");
+      // // console.log(name, "name");
+      let list = [...hotelList];
+      let currentObj = Object.freeze(list[index]);
+      currentObj = {
+        hotelName: list[index].hotelName,
+        roomType: list[index].roomType,
+        numberOfNight: list[index].numberOfNight,
+        checkIn: list[index].checkIn,
+        checkOut: list[index].checkOut,
+        rating: list[index].rating,
+        hotelAddress: list[index].hotelAddress,
+      };
 
-    const { name, value } = e.target;
-    // // console.log(name, "name");
-    if (name == "rating") {
-      if (value > 6 || value < 1) {
-        toastError("invalid rating, kindly provide valid rating");
+      if (name == "rating") {
+        if (value > 6 || value < 1) {
+          toastError("invalid rating, kindly provide valid rating");
+          return;
+        }
+      }
+
+      if (name == "numberOfNight") {
+        if (value < "0" && value) {
+          toastError(`Number of nights cannot be less than 0`);
+          return;
+        }
+        let checkInDate = new Date(currentObj["checkIn"]);
+        let checkOutDate = new Date();
+        checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+        currentObj["checkOut"] = checkOutDate;
+      }
+
+      if (name == "checkIn") {
+        let checkInDate = new Date(value);
+        let checkOutDate = new Date(value);
+        if (
+          !currentObj["numberOfNight"] ||
+          currentObj["numberOfNight"] == "0"
+        ) {
+          toastError("please enter number of nights");
+          return;
+        }
+        checkOutDate.setDate(
+          checkInDate.getDate() + parseInt(currentObj["numberOfNight"])
+        );
+        currentObj[name] = checkInDate;
+        // console.log("checkedIn", checkInDate, "checkInDate")
+        currentObj["checkOut"] = checkOutDate;
+      }
+
+      // console.log(list, "list");
+      for (let el of list) {
+        // console.log(el, "el");
+        if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
+          toastError("check-Out wil be less than checkin ");
+          return;
+        }
+      }
+      currentObj[name] = value;
+
+      if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+        toastError("Please enter duration of tour");
         return;
       }
-    }
-
-    if (name == "numberOfNight") {
-      if (value < "0" && value) {
-        toastError(`Number of nights cannot be less than 0`);
-        return;
-      }
-      let checkInDate = new Date(list[index]["checkIn"]);
-      let checkOutDate = new Date();
-      checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-      list[index]["checkOut"] = checkOutDate;
-    }
-
-    if (name == "checkIn") {
-      let checkInDate = new Date(value);
-      let checkOutDate = new Date(value);
       if (
-        !list[index]["numberOfNight"] ||
-        list[index]["numberOfNight"] == "0"
+        list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+        parseInt(durationOfTour)
       ) {
-        toastError("please enter number of nights");
+        toastError(
+          "Total number of nights cannot be more than duration of tour"
+        );
         return;
       }
-      checkOutDate.setDate(
-        checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
-      );
-      list[index][name] = checkInDate;
-      // console.log("checkedIn", checkInDate, "checkInDate")
-      list[index]["checkOut"] = checkOutDate;
-    }
+      currentObj[name] = value;
+      list[index] = currentObj;
+      setHotelList([...list]);
+    } else {
+      const list = [...hotelList];
 
-    // console.log(list, "list");
-    for (let el of list) {
-      // console.log(el, "el");
-      if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
-        toastError("check-Out wil be less than checkin ");
+      const { name, value } = e.target;
+      // // console.log(name, "name");
+      if (name == "rating") {
+        if (value > 6 || value < 1) {
+          toastError("invalid rating, kindly provide valid rating");
+          return;
+        }
+      }
+
+      if (name == "numberOfNight") {
+        if (value < "0" && value) {
+          toastError(`Number of nights cannot be less than 0`);
+          return;
+        }
+        let checkInDate = new Date(list[index]["checkIn"]);
+        let checkOutDate = new Date();
+        checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+        list[index]["checkOut"] = checkOutDate;
+      }
+
+      if (name == "checkIn") {
+        let checkInDate = new Date(value);
+        let checkOutDate = new Date(value);
+        if (
+          !list[index]["numberOfNight"] ||
+          list[index]["numberOfNight"] == "0"
+        ) {
+          toastError("please enter number of nights");
+          return;
+        }
+        checkOutDate.setDate(
+          checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
+        );
+        list[index][name] = checkInDate;
+        // console.log("checkedIn", checkInDate, "checkInDate")
+        list[index]["checkOut"] = checkOutDate;
+      }
+
+      // console.log(list, "list");
+      for (let el of list) {
+        // console.log(el, "el");
+        if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
+          toastError("check-Out wil be less than checkin ");
+          return;
+        }
+      }
+      list[index][name] = value;
+
+      if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+        toastError("Please enter duration of tour");
         return;
       }
-    }
-    list[index][name] = value;
+      if (
+        list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+        parseInt(durationOfTour)
+      ) {
+        toastError(
+          "Total number of nights cannot be more than duration of tour"
+        );
+        return;
+      }
 
-    if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
-      toastError("Please enter duration of tour");
-      return;
+      setHotelList([...list]);
     }
-    if (
-      list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-      parseInt(durationOfTour)
-    ) {
-      toastError("Total number of nights cannot be more than duration of tour");
-      return;
-    }
-
-    setHotelList([...list]);
+    // setHotelList([...list]);
   };
+
+  // const handleinputchangeHotel = (e, index) => {
+  //   const list = [...hotelList];
+
+  //   const { name, value } = e.target;
+  //   // // console.log(name, "name");
+  //   if (name == "rating") {
+  //     if (value > 6 || value < 1) {
+  //       toastError("invalid rating, kindly provide valid rating");
+  //       return;
+  //     }
+  //   }
+
+  //   if (name == "numberOfNight") {
+  //     if (value < "0" && value) {
+  //       toastError(`Number of nights cannot be less than 0`);
+  //       return;
+  //     }
+  //     let checkInDate = new Date(list[index]["checkIn"]);
+  //     let checkOutDate = new Date();
+  //     checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+  //     list[index]["checkOut"] = checkOutDate;
+  //   }
+
+  //   if (name == "checkIn") {
+  //     let checkInDate = new Date(value);
+  //     let checkOutDate = new Date(value);
+  //     if (
+  //       !list[index]["numberOfNight"] ||
+  //       list[index]["numberOfNight"] == "0"
+  //     ) {
+  //       toastError("please enter number of nights");
+  //       return;
+  //     }
+  //     checkOutDate.setDate(
+  //       checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
+  //     );
+  //     list[index][name] = checkInDate;
+  //     // console.log("checkedIn", checkInDate, "checkInDate")
+  //     list[index]["checkOut"] = checkOutDate;
+  //   }
+
+  //   // console.log(list, "list");
+  //   for (let el of list) {
+  //     // console.log(el, "el");
+  //     if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
+  //       toastError("check-Out wil be less than checkin ");
+  //       return;
+  //     }
+  //   }
+  //   list[index][name] = value;
+
+  //   if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+  //     toastError("Please enter duration of tour");
+  //     return;
+  //   }
+  //   if (
+  //     list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+  //     parseInt(durationOfTour)
+  //   ) {
+  //     toastError("Total number of nights cannot be more than duration of tour");
+  //     return;
+  //   }
+
+  //   setHotelList([...list]);
+  // };
 
   const handleremoveHotel = (index) => {
     const list = [...hotelList];
@@ -587,11 +736,13 @@ const AddQuotation = ({ show, setShow }) => {
     if (!quotationId) {
       dispatch(quotationAdd(obj));
       setShow(false);
-      clearFunc();
+      window.location.reload();
+      // clearFunc();
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
       setShow(false);
-      clearFunc();
+      window.location.reload();
+      // clearFunc();
     }
     // console.log(obj, "send Obj9");
   };
@@ -1347,7 +1498,8 @@ aria-label="Close"
                 variant="secondary"
                 onClick={() => {
                   setShow(false);
-                  clearFunc();
+                  window.location.reload();
+                  // clearFunc();
                 }}
               >
                 Close
