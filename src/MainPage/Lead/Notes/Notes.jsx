@@ -51,7 +51,7 @@ const Notes = () => {
     }
   }, []);
   useEffect(() => {
-    console.log(notesResultArr, "notesResultArr34");
+    // console.log(notesResultArr, "notesResultArr34");
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
 
@@ -77,7 +77,7 @@ const Notes = () => {
       note,
       reminderDate,
       leadId,
-      createdBy,
+      createdBy: { ...createdBy, role },
     };
     // console.log(obj, "obj a1folow");
     if (note != "" && note != undefined) {
@@ -132,7 +132,8 @@ const Notes = () => {
                 <div className="alignright mb8">
                   <span className=" flexfull">
                     {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
-                    {noteItem?.createdBy?.name}
+                    {noteItem?.createdBy?.name + " "}
+                    {"[" + noteItem?.createdBy?.role + "]"}
                   </span>
                 </div>
                 <div className="noteMessage">

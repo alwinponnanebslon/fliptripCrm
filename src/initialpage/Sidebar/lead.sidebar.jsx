@@ -636,7 +636,7 @@ const LeadSidebar = (props) => {
                   ""
                 )}
               </li> */}
-                <li className="submenu">
+                {/* <li className="submenu">
                   <a
                     href="#"
                     className={isSideMenu == "notes" ? "subdrop" : ""}
@@ -648,41 +648,42 @@ const LeadSidebar = (props) => {
                     <span className="menu-arrow" />
                   </a>
                   <Notes />
-                </li>
+                </li> */}
 
                 {/* 
                 
                 */}
-                {/* <li className="submenu">
-                  <a
-                    href="#"
-                    className={isSideMenu == "notes" ? "subdrop" : ""}
-                    onClick={() =>
-                      toggleSidebar(isSideMenu == "notes" ? "" : "notes")
-                    }
-                  >
-                    <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
-                    <span className="menu-arrow" />
-                  </a>
-                  {isSideMenu == "notes" ? (
-                    <ul>
-                      <li>
-                        <Link
-                          className={
-                            pathname?.includes("admin/dashboard")
-                              ? "active"
-                              : ""
-                          }
-                          to="/admin/dashboard"
-                        >
-                          Admin Dashboard
-                        </Link>
-                      </li>
-                    </ul>
-                  ) : (
-                    ""
-                  )}
-                </li> */}
+                {role != "SUPERVISOR" && role != "ACCOUNT" && (
+                  <li className="submenu">
+                    <a
+                      href="#"
+                      className={isSideMenu == "notes" ? "subdrop" : ""}
+                      onClick={() =>
+                        toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                      }
+                    >
+                      <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
+                      <span className="menu-arrow" />
+                    </a>
+                    {isSideMenu == "notes" ? (
+                      <ul>
+                        <li>
+                          <Notes />
+                          <Link
+                          // className={
+                          //   pathname?.includes("admin/dashboard")
+                          //     ? "active"
+                          //     : ""
+                          // }
+                          // to="/admin/dashboard"
+                          ></Link>
+                        </li>
+                      </ul>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                )}
                 {/* 
                 
 

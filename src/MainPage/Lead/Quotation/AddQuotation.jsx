@@ -58,11 +58,8 @@ const AddQuotation = ({ show, setShow }) => {
   const [travelList, setTravelList] = useState([
     { name: "", startDate: "", endDate: "" },
   ]);
-  // const [selectedTourIdArr, setSelectedTourIdArr] = useState([]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  // const [leadName, setLeadName] = useState("");
-  // const statusOfTour = true;
   //hotels details
   const [itineraryList, setItineraryList] = useState([
     { day: "", itineraryName: "" },
@@ -140,6 +137,7 @@ const AddQuotation = ({ show, setShow }) => {
       setNumberOfChildrenWithoutBed(
         quotationObj?.travelPassengerObj?.noOfChildrenWithoutBed
       );
+      setIsUpdateTour(true);
       setNumberOfInfants(quotationObj?.travelPassengerObj?.noOfInfants);
       setTourArr(quotationObj?.tourListArr);
       // console.log(
