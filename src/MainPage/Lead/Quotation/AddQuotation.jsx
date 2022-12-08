@@ -107,7 +107,7 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationObj) {
-      // console.log(quotationObj, "qoationboj----------");
+      console.log(quotationObj, "qoationboj----------");
       setQuotationId(quotationObj?._id);
       setDestinationName(quotationObj?.destinationName);
       setDurationOfTour(quotationObj?.durationOfTour);
@@ -157,7 +157,7 @@ const AddQuotation = ({ show, setShow }) => {
     if (tourValueArr && tourValueArr.length) {
       setTourArr(tourValueArr);
     }
-  }, [tourValueArr]);
+  }, [tourValueArr, isUpdateTour]);
 
   useEffect(() => {
     let landPrice = 0;
@@ -411,20 +411,20 @@ const AddQuotation = ({ show, setShow }) => {
   const clearFunc = () => {
     setDestinationName("");
     setDurationOfTour(1);
-    setDays(0);
+    // setDays(0);
     setNumberOfGuest(1);
     setNoOfTravellerArray([
       { name: "", age: "", passengerType: "Adult", bed: "false", isNew: false },
     ]);
     setIsAirport(false);
     setIsLand(false);
-    setPerPersonLandPrice(0);
-    setPerPersonAirportPrice(0);
-    setTotalPersonLandPrice(0);
-    setTotalPersonAirportPrice(0);
-    setQuotationObj(null);
-    setQuotationId("");
-    setClientsArr([]);
+    // setPerPersonLandPrice(0);
+    // setPerPersonAirportPrice(0);
+    // setTotalPersonLandPrice(0);
+    // setTotalPersonAirportPrice(0);
+    // setQuotationObj(null);
+    // setQuotationId("");
+    // setClientsArr([]);
     setNumberofAdults(0);
     setNumberOfChildrenWithBed(0);
     setNumberOfChildrenWithoutBed(0);
@@ -440,7 +440,7 @@ const AddQuotation = ({ show, setShow }) => {
     setIsUpdateTour(false);
     setAirportTransfer("");
     // setTravelList([{ name: "", startDate: "", endDate: "" }]);
-    setSelectedLeadIdArr([]);
+    // setSelectedLeadIdArr([]);
     setShowModal(false);
     setHotelList([
       {
@@ -618,8 +618,8 @@ const AddQuotation = ({ show, setShow }) => {
             <button
               type="button"
               className="close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
+data-bs-dismiss="modal"
+aria-label="Close"
             >
               <span aria-hidden="true">×</span>
             </button> */}
@@ -656,7 +656,7 @@ const AddQuotation = ({ show, setShow }) => {
                       {travelList &&
                         travelList.map((item, index) => {
                           return (
-                            <div className="row">
+                            <div className="row" key={index}>
                               <div className="col-md-4 mb-3">
                                 <label className="col-form-label ">
                                   Tour <span className="text-danger">*</span>
@@ -1260,7 +1260,7 @@ const AddQuotation = ({ show, setShow }) => {
                     {isUpdateTour ? "Update" : "Save"}{" "}
                   </button>
                 </div> */}
-                {/* 
+                {/*
               <div className="col-12">
                 <button
                   data-bs-dismiss="modal"
@@ -1279,7 +1279,7 @@ const AddQuotation = ({ show, setShow }) => {
                 variant="secondary"
                 onClick={() => {
                   setShow(false);
-                  // clearFunc();
+                  clearFunc();
                 }}
               >
                 Close
