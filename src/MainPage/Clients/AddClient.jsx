@@ -7,6 +7,7 @@ import {
   clientAdd,
   clientUpdate,
 } from "../../redux/features/client/clientSlice";
+import moment from "moment";
 
 const AddClient = ({ show, setShowModal }) => {
   // console.log(show, "1234");
@@ -37,13 +38,16 @@ const AddClient = ({ show, setShowModal }) => {
     setClientId("");
   };
   useEffect(() => {
-    if (clientObj) {
+    console.log(clientObj, "clientObj23")
+    if (clientObj && clientObj._id) {
       setClientId(clientObj._id);
+      setDob(moment(clientObj.dob).format("YYYY-MM-DD"));
       setName(clientObj.name);
       setEmail(clientObj.email);
-      setDob(clientObj.dob);
       setPhone(clientObj.phone);
-      setAnniversaryDate(clientObj.anniversaryDate);
+
+      // setAnniversaryDate(clientObj.anniversaryDate);
+      setAnniversaryDate(moment(clientObj.anniversaryDate).format("YYYY-MM-DD"));
     }
   }, [clientObj]);
 

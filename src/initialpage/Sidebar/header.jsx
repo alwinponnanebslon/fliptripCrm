@@ -209,7 +209,7 @@ const Header = (props) => {
       {/* Header Menu */}
       <ul className="nav user-menu">
         {/* Search */}
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <div className="top-nav-search">
             <a href="" className="responsive-search">
               <i className="fa fa-search" />
@@ -218,7 +218,7 @@ const Header = (props) => {
               <input
                 className="form-control"
                 type="text"
-                placeholder="Search here"
+                placeholder="Search here1"
                 onChange={(e) => {
                   handleSearchLead(e.target.value);
                 }}
@@ -228,7 +228,7 @@ const Header = (props) => {
               </button>
             </form>
           </div>
-        </li>
+        </li> */}
         {/* 
 
 */}
@@ -256,7 +256,7 @@ const Header = (props) => {
                     return (
                       // <li className="notification-message" key={index}>
                       <li className="notification-message" key={index}>
-                        <div className="float-end">
+                        {/* <div className="float-end">
                           <a
                             className="btn btn-blue"
                             readOnly={isNotificationRead ? true : false}
@@ -266,7 +266,7 @@ const Header = (props) => {
                           >
                             <i /> mark as read
                           </a>
-                        </div>
+                        </div> */}
                         <Link
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
@@ -381,14 +381,14 @@ const Header = (props) => {
                 </li> */}
               </ul>
             </div>
-            <div className="topnav-dropdown-footer">
+            {/* <div className="topnav-dropdown-footer">
               <Link
                 onClick={() => localStorage.setItem("minheight", "true")}
                 to="/admin/notification"
               >
                 View all Notifications
               </Link>
-            </div>
+            </div> */}
           </div>
         </li>
 
@@ -425,7 +425,7 @@ const Header = (props) => {
                     return (
                       // <li className="notification-message" key={index}>
                       <li className="notification-message" key={index}>
-                        <div className="float-end">
+                        {/* <div className="float-end">
                           <a
                             className="btn btn-blue"
                             readOnly={isNotificationRead ? true : false}
@@ -435,7 +435,7 @@ const Header = (props) => {
                           >
                             <i /> mark as read
                           </a>
-                        </div>
+                        </div> */}
                         <Link
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
@@ -454,7 +454,13 @@ const Header = (props) => {
                                 <h5> Decription : </h5> {el?.description}&nbsp;
                               </p>
                               <p className="noti-details d-flex">
-                                <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
+                                <h5> SenderName : </h5> {el?.createdBy?.name} [{el?.createdBy?.role}]&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> follow date : </h5> {new Date(el?.followDate).toLocaleDateString()}&nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> follow Time : </h5> {el?.followTime}&nbsp;
                               </p>
                             </div>
                           </div>
@@ -602,8 +608,15 @@ const Header = (props) => {
                               <h5> Decription : </h5> {el?.description}&nbsp;
                             </p>
                             <p className="noti-details d-flex">
-                              <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
+                              <h5> follow date : </h5> {new Date(el?.followDate).toLocaleDateString()}&nbsp;
                             </p>
+                            <p className="noti-details d-flex">
+                              <h5> follow Time : </h5> {el?.followTime}&nbsp;
+                            </p>
+
+                            {/* <p className="noti-details d-flex">
+                              <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
+                            </p> */}
                           </div>
 
                           {/* <div className="media">

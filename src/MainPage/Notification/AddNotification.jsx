@@ -95,7 +95,8 @@ const AddNotification = ({
       setFollowupId(notificationObj._id);
       setHeading(notificationObj.heading);
       setDescription(notificationObj.description);
-      setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD "));
+      setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD"));
+      setFollowTime(moment(notificationObj.followTime).format("YYYY-MM-DD"))
     }
     // else {
     //   setIsUpdate(false);
@@ -270,7 +271,7 @@ const AddNotification = ({
                     Follow Date <span className="text-danger">*</span>
                   </label>
                   <div className="col-md-10">
-                    DatePicker
+                    {/* DatePicker */}
                     <input
                       type="date"
                       className="form-control"
@@ -279,11 +280,11 @@ const AddNotification = ({
                         setFollowDate(e.target.value);
                         // console.log(e.target.value, "insie");
                       }}
-                      // onChange={(e) =>
-                      //   setFollowDate(
-                      //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
-                      //   )
-                      // }
+                    // onChange={(e) =>
+                    //   setFollowDate(
+                    //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
+                    //   )
+                    // }
                     />
                     <input
                       type="time"

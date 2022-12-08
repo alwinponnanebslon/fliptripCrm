@@ -59,7 +59,7 @@ function Notification() {
         return el;
       }
     });
-    // console.log(filter, "123fiter23");
+    console.log(filter, "123fiter23");
 
     setNotificationArr(filter);
     // setNotificationArr(NotificationArray);
@@ -152,14 +152,12 @@ function Notification() {
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            {/* <a
               className="dropdown-item"
-              // data-bs-toggle="modal"
-              // data-bs-target="#add_Reminder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
-            </a>
+            </a> */}
             <a
               className="dropdown-item"
               onClick={() => handleNotificationDelete(row._id)}

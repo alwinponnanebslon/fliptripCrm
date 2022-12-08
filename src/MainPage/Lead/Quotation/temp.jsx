@@ -2726,3 +2726,43 @@ const handleinputchangeHotel = (e, index) => {
     setHotelList([...list]);
     // setHotelList([...list]);
   };
+
+  // 
+  // 
+  // 
+  
+  <select
+
+  // options={allEmployees.map((el) => {
+  //   return {
+  //     ...el,
+  //     value: el._id,
+  //     label:
+  //       el.firstName +
+  //       " " +
+  //       "[" +
+  //       el.role +
+  //       "]" +
+  //       " " +
+  //       el.employeeId,
+  //   };
+  // })}
+  // value={employeeObj}
+  value={employeeId}
+  onChange={(e) => {
+    setEmployeeId(e.value);
+    setEmployeeObj(e);
+  }}
+// className={styles.selectStyle}
+
+>  <option value="">Please Select </option>
+  {allEmployees &&
+    allEmployees.length > 0 &&
+    allEmployees.map((el, index) => {
+      return (
+        <option
+          key={index}
+          value={el._id}
+        >{`${el.firstName} ${el.lastName} [${el.role} ]`}</option>
+      );
+    })}  </select>

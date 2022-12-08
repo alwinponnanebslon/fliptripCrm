@@ -12,6 +12,8 @@ import {
   Avatar_10,
   Avatar_16,
 } from "../../../Entryfile/imagepath";
+import moment from "moment";
+
 import {
   serCurrentEmployee,
   getEmployeeById, userUpdateObj
@@ -51,7 +53,8 @@ const EmployeeProfile = () => {
 
       setFirstName(employeeObj?.firstName)
       setLastName(employeeObj?.lastName)
-      setDob(employeeObj?.dob)
+      setDob(moment(employeeObj.doj).format("YYYY-MM-DD"));
+      // setDob(employeeObj?.dob)
       setPrevDocId(employeeObj?._id)
       // setAddress(employeeObj?.address)
       // setPinCode(employeeObj?.pinCode)

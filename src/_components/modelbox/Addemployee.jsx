@@ -19,6 +19,7 @@ import {
 import { rolesObj } from "../../utils/roles";
 import { toastError, toastSuccess } from "../../utils/toastUtils";
 import styles from "./selectStyles.module.css";
+// import styles from ".";
 // import {
 //   getAllEmployees,
 //   returnAllEmployees,
@@ -105,8 +106,6 @@ const Addemployee = ({ show, setShow }) => {
       setEmployeeId(employeeObj.employeeId);
       setDoj(moment(employeeObj.doj).format("YYYY-MM-DD"));
       setDob(moment(employeeObj.dob).format("YYYY-MM-DD"));
-      // setDoj(new Date(employeeObj.doj).toLocaleDateString());
-      // setDob(new Date(employeeObj.dob).toLocaleDateString());
       setRole(employeeObj.role);
       setEmergencyContact(employeeObj.emergencyContact);
       setLeadId(employeeObj.leadId);
@@ -150,7 +149,7 @@ const Addemployee = ({ show, setShow }) => {
       // if (role == rolesObj.SPOC) {
       //   obj.leadId = leadId;
       // }
-      console.log(obj, "obj23");
+      // console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
       if (res.success) {
@@ -257,7 +256,7 @@ const Addemployee = ({ show, setShow }) => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-      console.log(obj, "obj123132");
+      // console.log(obj, "obj123132");
       let { data: res } = await addEmployeeToDb(obj);
 
       if (res.success) {
@@ -400,7 +399,7 @@ const Addemployee = ({ show, setShow }) => {
                         </label>
                         <div>
                           <input
-                            checked={employeeObj.doj ? employeeObj.doj : ""}
+                            //   // checked={employeeObj.doj ? employeeObj.doj : ""}
                             valu={doj}
                             onChange={(e) => setDoj(e.target.value)}
                             className="form-control datetimepicker"
