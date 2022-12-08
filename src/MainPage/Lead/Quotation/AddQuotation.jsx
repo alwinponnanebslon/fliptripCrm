@@ -243,7 +243,27 @@ const AddQuotation = ({ show, setShow }) => {
     list.splice(index, 1);
     setTravelList(list);
   };
+  // const handleTourValueChange = (e, index) => {
+  //   let { name, value } = e.target;
+  //   ("use strict");
+  //   let tempList = [...travelList];
+  //   // let totalAmount = 0;
+  //   let currentObj = Object.freeze(tempList[index]);
+  //   currentObj = {
+  //     name: tempList[index].name,
+  //     startDate: tempList[index].startDate,
+  //     endDate: tempList[index].endDate,
 
+  //     // startDate: "", endDate: ""
+  //     // flightName: tempList[index].flightName,
+  //     // cost: tempList[index].cost,
+  //   };
+
+  //   currentObj[name] = value;
+  //   tempList[index] = currentObj;
+  //   setTravelList([...tempList]);
+  //   // }
+  // };
   const handleinputchangeHotel = (e, index) => {
     const list = [...hotelList];
 
@@ -400,13 +420,58 @@ const AddQuotation = ({ show, setShow }) => {
     setItineraryList([...itenaryArr]);
   };
 
+  // const handleTourValueChange = (e, index) => {
+  //   let { name, value } = e.target;
+  //   const list = [...travelList];
+  //   // console.log(list, "travelList");
+  //   list[index][name] = value;
+  //   setTravelList(list);
+  // };
+
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
-    const list = [...travelList];
-    // console.log(list, "travelList");
-    list[index][name] = value;
-    setTravelList(list);
+    ("use strict");
+    let tempList = [...travelList];
+    // let totalAmount = 0;
+    let currentObj = Object.freeze(tempList[index]);
+    currentObj = {
+      name: tempList[index].name,
+      startDate: tempList[index].startDate,
+      endDate: tempList[index].endDate,
+
+      // startDate: "", endDate: ""
+      // flightName: tempList[index].flightName,
+      // cost: tempList[index].cost,
+    };
+
+    // if (name == "cost") {
+    //   if (isNaN(value)) {
+    //     value = 0;
+    //     toastError("Cost should be number");
+    //     return;
+    //   } else if (Number.isInteger(parseInt(value))) {
+    //     for (let el of tempList) {
+    //       if (el.cost) {
+    //         totalAmount = totalAmount + parseInt(el.cost);
+    //       }
+    //     }
+    //     console.log(totalAmount, "1", value, "@", flightCost, "23");
+
+    //     if (
+    //       flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
+    //       parseInt(flightCost)
+    //     ) {
+    //       toastError("flight price cannot be  greater than total flight cost");
+    //       return;
+    //     }
+    //   }
+    // }
+    currentObj[name] = value;
+    tempList[index] = currentObj;
+    setTravelList([...tempList]);
+    // }
   };
+
   // // console.log(selectedTourIdArr, "selectedTourIdArr");
   const clearFunc = () => {
     setDestinationName("");
@@ -439,7 +504,7 @@ const AddQuotation = ({ show, setShow }) => {
     setTax(0);
     setIsUpdateTour(false);
     setAirportTransfer("");
-    // setTravelList([{ name: "", startDate: "", endDate: "" }]);
+    setTravelList([{ name: "", startDate: "", endDate: "" }]);
     // setSelectedLeadIdArr([]);
     setShowModal(false);
     setHotelList([
@@ -475,7 +540,8 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (travelList[0]?.endDate == "") {
       toastError("Tour End Date is mandatory");
       return;
-    } else if (durationOfTour <= 0) {
+    }
+    if (durationOfTour <= 0) {
       toastError("Tour Duration is mandatory");
       return;
     } else if (numberOfGuest <= 0) {
@@ -484,7 +550,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (numberofAdults <= 0) {
       toastError("Number Of Adult is mandatory");
       return;
-    } else if (hotelList[0]?.hotelName == "") {
+    }
+    // else
+    if (hotelList[0]?.hotelName == "") {
       toastError("Hotel Details are mandatory");
       return;
     }
