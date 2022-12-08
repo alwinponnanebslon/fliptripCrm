@@ -68,7 +68,9 @@ const AddNotification = ({
   const handleGetAllEmployees = async () => {
     try {
       // let { data: res } = await getAllEmployess({`role`= `${role}`});
-      let { data: res } = await getAllEmployess(`role=${role}`);
+      let { data: res } = await getAllEmployess(
+        `role=${role}&id=${userLeadId}`
+      );
       console.log(res, "1Res23");
       if (res.status) {
         setAllEmployees(res.data);
@@ -88,24 +90,27 @@ const AddNotification = ({
     console.log(notificationObj, "notificationObj23");
     if (notificationObj && notificationObj._id) {
       setIsUpdate(true);
-      setEmployeeId(notificationObj?.userObj?.firstName);
+      setEmployeeId(notificationObj?._id);
+      // setEmployeeId(notificationObj?.userObj?.firstName);
       setFollowupId(notificationObj._id);
       setHeading(notificationObj.heading);
       setDescription(notificationObj.description);
       setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD "));
-    } else {
-      setIsUpdate(false);
-      setFollowupId("");
-      setHeading("");
-      setDescription("");
-      setFollowDate("");
-      setFollowTime("");
     }
+    // else {
+    //   setIsUpdate(false);
+    //   setFollowupId("");
+    //   setHeading("");
+    //   setDescription("");
+    //   setFollowDate("");
+    //   setFollowTime("");
+    // }
   }, [notificationObj]);
 
-  useEffect(() => {
-    setEmployeeId(notificationObj?._id);
-  }, [notificationObj]);
+  // useEffect(() => {
+  //
+  //   setEmployeeId(notificationObj?._id);
+  // }, [notificationObj]);
 
   useEffect(() => {
     setCreatedBy(userObj);
@@ -117,7 +122,7 @@ const AddNotification = ({
     setEmployeeId("");
     setFollowDate("");
     setFollowTime("");
-    // setFollowupId("");
+    setFollowupId("");
     setIsUpdate(false);
     // setAllEmployees([]);
   };
@@ -137,16 +142,18 @@ const AddNotification = ({
         heading,
         description,
         userId: employeeId,
+        leadId: employeeId,
         followDate,
         createdBy: { ...createdBy, role },
         followTime,
       };
       // console.log(obj, "obj23");
-      if (notificationObj?._id) {
-        // obj.Id = followupId;
+      if (notificationObj && notificationObj._id) {
+        // console.log()
+        obj.id = followupId;
         // dispatch(updateRemainder(obj));
         dispatch(updateNotification(obj));
-        console.log("12348");
+        // console.log("12348");
         setShowNotification(false);
         setIsUpdate(false);
         clearFunc();
@@ -216,7 +223,7 @@ const AddNotification = ({
                     />
                   </div>
                 </div>
-
+                {/* console.log(A ) */}
                 <div className="form-group row">
                   <label className="col-form-label col-md-2">
                     Send to <span className="text-danger">*</span>
@@ -238,7 +245,7 @@ const AddNotification = ({
                         };
                       })}
                       placeholder="Select from options"
-                      defaultInputValue={employeeId}
+                      // defaultInputValue={employeeId}
                       value={employeeObj}
                       onChange={(e) => {
                         setEmployeeId(e.value);

@@ -419,7 +419,7 @@ const Leads = () => {
     setName("");
     setEmail("");
     setPriority("");
-    setAgentId("");
+    // setAgentId("");
     setSpocId("");
     setDescription("");
   };
@@ -1231,7 +1231,7 @@ const Leads = () => {
                 to={`/admin/employee-profile/${record?.agentObj?._id}`}
                 className="avatar"
               >
-                <img alt="" src={record?.image} />
+                {/* <img alt="" src={record?.image} /> */}
               </Link>
               <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
                 record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
@@ -1389,8 +1389,8 @@ const Leads = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_Lead"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_Lead"
                   onClick={() => handleEdit(record)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit
@@ -1466,7 +1466,7 @@ const Leads = () => {
                 to={`/admin/employee-profile/${record?.agentObj?._id}`}
                 className="avatar"
               >
-                <img alt="" src={record?.image} />
+                {/* <img alt="" src={record?.image} /> */}
               </Link>
               <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
                 record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
@@ -1623,8 +1623,8 @@ const Leads = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_Lead"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_Lead"
                   onClick={() => handleEdit(record)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit
@@ -1742,8 +1742,8 @@ const Leads = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_Lead"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_Lead"
                   onClick={() => handleEdit(record)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit

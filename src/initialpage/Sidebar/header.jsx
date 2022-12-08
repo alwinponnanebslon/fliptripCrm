@@ -25,9 +25,9 @@ import {
   setNotification,
 } from "../../redux/features/notification/notificationSlice";
 import {
-  remainderGetForOneDay,
-  remainderGet,
-} from "../../redux/features/remainder/remainderSlice";
+  reminderGetForOneDay,
+  reminderGet,
+} from "../../redux/features/reminder/reminderSlice";
 import { leadGet } from "../../redux/features/lead/leadSlice";
 
 const Header = (props) => {

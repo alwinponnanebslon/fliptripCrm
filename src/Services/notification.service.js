@@ -14,9 +14,10 @@ export const getNotificationApi = (query) => {
 //   return axios.delete(`${serverUrl}/deleteById/${id}`);
 // };
 
-// export const updateRemainderApi = (formData, id) => {
-//   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
-// };
+export const updateNotificationApi = (formData, id) => {
+  console.log(id, formData, "11111111234");
+  return axios.patch(`${serverUrl}/updateById/${id}`, formData);
+};
 
 export const getRemainderCheckForNotificatin = () => {
   return axios.get(`${serverUrl}/getRemainderCheckForNotification`);

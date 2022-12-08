@@ -57,12 +57,12 @@ export default [
   {
     path: "/admin/employee-profile/:id",
     component: EmployeeProfile,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "SUPERVISOR"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "SUPERVISOR", "ACCOUNT"],
   },
   {
     path: "/admin/clients",
     component: Clients,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "SUPERVISOR"],
   },
 
   {
