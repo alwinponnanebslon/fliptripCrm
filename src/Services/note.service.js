@@ -7,7 +7,8 @@ export const addNoteApi = (obj) => {
 };
 
 export const getNotesApi = (query) => {
-  return axios.get(`${serverUrl}/?${query}`)
+  console.log(query, "2134r4ew");
+  return axios.get(`${serverUrl}/?${query}`);
 };
 export const NoteDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);

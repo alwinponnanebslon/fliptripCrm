@@ -38,7 +38,7 @@ const Notes = () => {
   }, [userObj]);
 
   const handleInit = () => {
-    dispatch(noteGet(`leadId=${leadId}`));
+    dispatch(noteGet(`leadId=${leadId}&role=${role}`));
   };
 
   useEffect(() => {
@@ -51,6 +51,7 @@ const Notes = () => {
     }
   }, []);
   useEffect(() => {
+    console.log(notesResultArr, "notesResultArr34");
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
 
@@ -157,7 +158,7 @@ const Notes = () => {
           <Modal.Title>{noteResultobj?._id ? "Edit" : "Add"} Notes</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="container">
               <div className="row">
                 <div className="col-lg-12">
@@ -207,7 +208,8 @@ const Notes = () => {
                     <Button
                       type="submit"
                       className="btn-submit"
-                      onClick={() => {
+                      onClick={(e) => {
+                        handleSubmit(e);
                         if (params.search.includes("true")) {
                           if (note?.trim().length > 0) {
                             history.push(`/admin/leads`);

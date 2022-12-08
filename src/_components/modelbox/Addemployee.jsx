@@ -129,7 +129,7 @@ const Addemployee = ({ show, setShow }) => {
     setRole("");
     setEmergencyContact("");
     setLeadId("");
-    setTeamLeadsArr("");
+    // setTeamLeadsArr("");
     setDocId("");
     setPrevDocUpdated(false);
   };

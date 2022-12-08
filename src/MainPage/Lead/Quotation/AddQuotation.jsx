@@ -440,7 +440,6 @@ const AddQuotation = ({ show, setShow }) => {
     setAmount(0);
     setTax(0);
     setIsUpdateTour(false);
-    setTourArr([]);
     setAirportTransfer("");
     // setTravelList([{ name: "", startDate: "", endDate: "" }]);
     setSelectedLeadIdArr([]);

@@ -16,6 +16,7 @@ import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
 export const noteGet = createAsyncThunk("note/noteGet", async (query) => {
   try {
+    // console.log(query, "query34");
     let { data: response } = await getNotesApi(query);
     if (response) {
       toastSuccess(response.message);

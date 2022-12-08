@@ -467,7 +467,7 @@ const Quotation = () => {
                 }}
               />
             </div>
-            <div className="col-lg-2">
+            <div className="col-lg-2 z-12">
               <Select
                 options={options2}
                 placeholder="Status Type"

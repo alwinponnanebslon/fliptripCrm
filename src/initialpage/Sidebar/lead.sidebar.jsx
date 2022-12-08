@@ -649,6 +649,45 @@ const LeadSidebar = (props) => {
                   </a>
                   <Notes />
                 </li>
+
+                {/* 
+                
+                */}
+                {/* <li className="submenu">
+                  <a
+                    href="#"
+                    className={isSideMenu == "notes" ? "subdrop" : ""}
+                    onClick={() =>
+                      toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                    }
+                  >
+                    <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
+                    <span className="menu-arrow" />
+                  </a>
+                  {isSideMenu == "notes" ? (
+                    <ul>
+                      <li>
+                        <Link
+                          className={
+                            pathname?.includes("admin/dashboard")
+                              ? "active"
+                              : ""
+                          }
+                          to="/admin/dashboard"
+                        >
+                          Admin Dashboard
+                        </Link>
+                      </li>
+                    </ul>
+                  ) : (
+                    ""
+                  )}
+                </li> */}
+                {/* 
+                
+
+                
+                */}
                 {/* z */}
                 {role != "SUPERVISOR" && (
                   <li
