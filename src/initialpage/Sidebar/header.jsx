@@ -38,14 +38,14 @@ const Header = (props) => {
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
-  const remainderArray = useSelector((state) => state.remainder.remainders);
+  const reminderArray = useSelector((state) => state.reminder.reminders);
   const leadArray = useSelector((state) => state.lead.leadArr);
   const [dataArr, setDataArr] = useState([]);
-  const [remainderArr, setRemainderArr] = useState([]);
-  const [remainderArrData, setRemainderArrData] = useState([]);
+  const [reminderArr, setReminderArr] = useState([]);
+  const [reminderArrData, setReminderArrData] = useState([]);
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
-  // remainderArrData
+  // reminderArrData
   const dispatch = useDispatch();
 
   const handlesidebar = () => {
@@ -77,8 +77,8 @@ const Header = (props) => {
       userId,
     };
     dispatch(notificationGetForSpecificUser(userId));
-    dispatch(remainderGetForOneDay(obj));
-    dispatch(remainderGet(userId));
+    dispatch(reminderGetForOneDay(obj));
+    dispatch(reminderGet(userId));
   };
 
   useEffect(() => {
@@ -102,9 +102,9 @@ const Header = (props) => {
   }, [notificationResultArr]);
 
   useEffect(() => {
-    console.log(remainderArray, "remainderArray324");
-    setRemainderArrData(remainderArray);
-  }, [remainderArray]);
+    console.log(reminderArray, "reminderArray324");
+    setReminderArrData(reminderArray);
+  }, [reminderArray]);
 
   const handleSearchLead = (value) => {
     // console.log(value, "vlue");
@@ -572,27 +572,27 @@ const Header = (props) => {
             {/* <i class="fa-solid fa-alarm-clock"></i> */}
             {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
             <i className="fa fa-clock-o" />
-            <span className="badge badge-pill">{remainderArrData.length}</span>
+            <span className="badge badge-pill">{reminderArrData.length}</span>
           </a>
           <div className="dropdown-menu notifications">
             <div className="topnav-dropdown-header">
-              <span className="notification-title">Remainder</span>
+              <span className="notification-title">Reminder</span>
               {/* <a href="" className="clear-noti">
                 Clear All
               </a> */}
             </div>
-            {/* {console.log(remainderArrData, "remainderArrData123213")} */}
+            {/* {console.log(reminderArrData, "reminderArrData123213")} */}
             <div className="noti-content">
               <ul className="notification-list">
-                {remainderArrData &&
-                  remainderArrData.map((el, index) => {
+                {reminderArrData &&
+                  reminderArrData.map((el, index) => {
                     return (
                       <li className="notification-message" key={index}>
                         <Link
                           onClick={() =>
                             localStorage.setItem("minheight", "true")
                           }
-                          to="/admin/remainder"
+                          to="/admin/reminder"
                         >
                           <div className="media">
                             <p className="noti-details d-flex">
@@ -635,9 +635,9 @@ const Header = (props) => {
             <div className="topnav-dropdown-footer">
               <Link
                 onClick={() => localStorage.setItem("minheight", "true")}
-                to="/admin/remainder"
+                to="/admin/reminder"
               >
-                View all Remainders
+                View all Reminders
               </Link>
             </div>
           </div>

@@ -141,8 +141,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -168,9 +168,9 @@ const Sidebar = (props) => {
                     <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("remainder") ? "active" : ""}>
-                  <Link to="/admin/remainder">
-                    <i className="la la-adjust" /> <span>Remainder</span>
+                <li className={pathname?.includes("reminder") ? "active" : ""}>
+                  <Link to="/admin/reminder">
+                    <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
                 {/* <li
@@ -187,8 +187,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -200,8 +200,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -308,9 +308,9 @@ const Sidebar = (props) => {
                     <i className="la la-globe" /> <span>Destinations</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("remainder") ? "active" : ""}>
-                  <Link to="/admin/remainder">
-                    <i className="la la-adjust" /> <span>Remainder</span>
+                <li className={pathname?.includes("reminder") ? "active" : ""}>
+                  <Link to="/admin/reminder">
+                    <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li> */}
                 {/* <li
@@ -327,8 +327,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -340,8 +340,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -420,8 +420,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -450,17 +450,17 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("remainder") ? "active" : ""}>
-                  <Link to="/admin/remainder">
-                    <i className="la la-adjust" /> <span>Remainder</span>
+                <li className={pathname?.includes("reminder") ? "active" : ""}>
+                  <Link to="/admin/reminder">
+                    <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
                 <li
@@ -468,8 +468,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -537,17 +537,17 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("remainder") ? "active" : ""}>
-                  <Link to="/admin/remainder">
-                    <i className="la la-adjust" /> <span>Remainder</span>
+                <li className={pathname?.includes("reminder") ? "active" : ""}>
+                  <Link to="/admin/reminder">
+                    <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
                 <li
@@ -555,8 +555,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -612,17 +612,17 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
                   </Link>
                 </li>
-                <li className={pathname?.includes("remainder") ? "active" : ""}>
-                  <Link to="/admin/remainder">
-                    <i className="la la-adjust" /> <span>Remainder</span>
+                <li className={pathname?.includes("reminder") ? "active" : ""}>
+                  <Link to="/admin/reminder">
+                    <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
                 <li
@@ -630,8 +630,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">

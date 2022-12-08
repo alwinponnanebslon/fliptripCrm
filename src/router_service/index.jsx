@@ -38,9 +38,9 @@ import Quotation from "../MainPage/quotation";
 import Destination from "../MainPage/Destination";
 import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
 import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
-//remainder
+//reminder
 
-import Remainder from "../MainPage/Remainder/Remainder/Remainder";
+import Reminder from "../MainPage/Reminder/Reminder/Reminder";
 import Notification from "../MainPage/Notification/ViewNotification";
 
 export default [
@@ -92,8 +92,8 @@ export default [
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC"],
   },
   {
-    path: "/admin/remainder",
-    component: Remainder,
+    path: "/admin/reminder",
+    component: Reminder,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
   {

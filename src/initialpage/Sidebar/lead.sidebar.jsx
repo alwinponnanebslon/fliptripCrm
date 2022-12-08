@@ -10,10 +10,10 @@ import Notes from "../../MainPage/Lead/Notes/Notes";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import {
-  addRemainder,
-  updateRemainder,
-  setRemainder,
-} from "../../redux/features/remainder/remainderSlice";
+  addReminder,
+  updateReminder,
+  setReminder,
+} from "../../redux/features/reminder/reminderSlice";
 import {
   Accordion,
   AccordionItem,
@@ -130,11 +130,11 @@ const LeadSidebar = (props) => {
       }
       if (sendDataToDb) {
         setShowLeadStatusModal(false);
-        dispatch(addRemainder(obj));
+        dispatch(addReminder(obj));
         clearFunc();
       }
     } else {
-      dispatch(addRemainder(obj));
+      dispatch(addReminder(obj));
       setShowLeadStatusModal(false);
     }
     console.log(obj, "object  get");

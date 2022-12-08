@@ -69,15 +69,15 @@ export default [
   },
 ];
 
-// function remainder() {
+// function reminder() {
 //   const counterRef = useRef([]);
-//   const [currentRemainder, setCurrentRemainder] = useState([]);
+//   const [currentReminder, setCurrentReminder] = useState([]);
 
-//   const counterRemainderRef = useRef([]);
+//   const counterReminderRef = useRef([]);
 
 //   useEffect(() => {
-//     counterRef.current = RemainderArray;
-//   }, [RemainderArray]);
+//     counterRef.current = ReminderArray;
+//   }, [ReminderArray]);
 
 //   function myCallback() {
 //     let temp = [];
@@ -104,7 +104,7 @@ export default [
 //         console.log(el.followTime, time, "time");
 //         array2.push(...temp);
 //         // temp.push(el);
-//         setCurrentRemainder([...currentRemainder, el]);
+//         setCurrentReminder([...currentReminder, el]);
 //       }
 //       // console.log(temp, "temp123");
 //     }
@@ -121,5 +121,5 @@ export default [
 //     };
 //   }, []);
 // }
-// remainder();
+// reminder();
 // // export default AdminDashboard;

@@ -11,15 +11,15 @@ import {
   setTour,
   addTour,
 } from "../../../redux/features/tour/tourSlice";
-import AddRemainder from "./AddRemainder";
+import AddReminder from "./AddReminder";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import {
-  deleteRemainder,
-  remainderGet,
-  updateRemainder,
-  setRemainder,
-} from "../../../redux/features/remainder/remainderSlice";
+  deleteReminder,
+  reminderGet,
+  updateReminder,
+  setReminder,
+} from "../../../redux/features/reminder/reminderSlice";
 
 import { Table } from "antd";
 
@@ -28,12 +28,12 @@ import { Table } from "antd";
 //   getfollowUpCheckForNotificatin,
 // } from "../../../Services/followUp";
 
-export const GeneralRemainder = () => {
+export const GeneralReminder = () => {
   const role = useSelector((state) => state.auth.role);
   const userId = useSelector((state) => state.auth.user._id);
   const dispatch = useDispatch();
-  const remainderResultArr = useSelector((state) => state.remainder.remainders);
-  const [remainderArr, setRemainderArr] = useState([]);
+  const reminderResultArr = useSelector((state) => state.reminder.reminders);
+  const [reminderArr, setReminderArr] = useState([]);
 
   // const [name, setName] = useState("");
   // const [description, setDescription] = useState("");
@@ -42,7 +42,7 @@ export const GeneralRemainder = () => {
   const [followUpCheck, setFollowUpCheck] = useState([]);
   const userLeadId = useSelector((state) => state.auth?.user?._id);
   const { leadId } = useParams();
-  const [showRemainder, setShowRemainder] = useState(false);
+  const [showReminder, setShowReminder] = useState(false);
 
   useEffect(() => {
     handleInit();
@@ -65,23 +65,23 @@ export const GeneralRemainder = () => {
   // setTimeout(getData, time);
 
   const handleInit = () => {
-    dispatch(remainderGet(userLeadId));
+    dispatch(reminderGet(userLeadId));
     // dispatch(quotationGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
-    // console.log(remainderArr, "remainderArr32");
-    setRemainderArr(remainderResultArr);
-  }, [remainderResultArr]);
+    // console.log(reminderArr, "reminderArr32");
+    setReminderArr(reminderResultArr);
+  }, [reminderResultArr]);
 
   const handleEdit = (row) => {
     // console.log(row, "row update"); //whole object
-    setShowRemainder(true);
-    dispatch(setRemainder(row));
+    setShowReminder(true);
+    dispatch(setReminder(row));
   };
 
-  const handleRemainderDelete = (id) => {
-    dispatch(deleteRemainder({ id, leadId: userLeadId }));
+  const handleReminderDelete = (id) => {
+    dispatch(deleteReminder({ id, leadId: userLeadId }));
   };
 
   const handleSatus = (row, status) => {
@@ -91,7 +91,7 @@ export const GeneralRemainder = () => {
       status: status,
     };
 
-    dispatch(updateRemainder(obj));
+    dispatch(updateReminder(obj));
   };
 
   const tour_columns = [
@@ -108,18 +108,18 @@ export const GeneralRemainder = () => {
     },
 
     {
-      title: "Remainder Date",
+      title: "Reminder Date",
       dataIndex: "followDate",
       render: (row, record) => <div>{record.followDate}</div>,
     },
     {
-      title: "Remainder Time",
+      title: "Reminder Time",
       dataIndex: "followTime",
       render: (row, record) => <div>{record.followTime}</div>,
       // sorter: (a, b) => a.followTime.length,
     },
     // {
-    //   title: "Remainder Date",
+    //   title: "Reminder Date",
     //   dataIndex: "followDate",
     //   sorter: (a, b) => new Date(a.followDate + "").toDateString(),
     //   // -        new Date(b.followDate + "").toLocaleString(),
@@ -185,14 +185,14 @@ export const GeneralRemainder = () => {
             <a
               className="dropdown-item"
               // data-bs-toggle="modal"
-              // data-bs-target="#add_Remainder"
+              // data-bs-target="#add_Reminder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
             <a
               className="dropdown-item"
-              onClick={() => handleRemainderDelete(row._id)}
+              onClick={() => handleReminderDelete(row._id)}
             >
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a>
@@ -259,14 +259,14 @@ export const GeneralRemainder = () => {
   ];
 
   useEffect(() => {
-    // console.log(remainderArr, "remainderArr32");
-    setShowRemainder(showRemainder);
-  }, [showRemainder]);
+    // console.log(reminderArr, "reminderArr32");
+    setShowReminder(showReminder);
+  }, [showReminder]);
 
   return (
     <div className="page-wrapper">
       <Helmet>
-        <title>Create Remainder</title>
+        <title>Create Reminder</title>
         <meta name="description" content="Login page" />
       </Helmet>
       <div className="container-fluid p-0">
@@ -274,13 +274,13 @@ export const GeneralRemainder = () => {
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">
-                <i className="la la-file-text-o" /> General Remainder
+                <i className="la la-file-text-o" /> General Reminder
               </h3>
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
                   <Link to="/app/main/dashboard">Dashboard</Link>
                 </li>
-                <li className="breadcrumb-item active"> General Remainder</li>
+                <li className="breadcrumb-item active"> General Reminder</li>
               </ul>
             </div>
 
@@ -289,12 +289,12 @@ export const GeneralRemainder = () => {
                 href="#"
                 className="btn add-btn"
                 // data-bs-toggle="modal"
-                // data-bs-target="#add_Remainder"
+                // data-bs-target="#add_Reminder"
                 onClick={() => {
-                  setShowRemainder(true);
+                  setShowReminder(true);
                 }}
               >
-                <i className="fa fa-plus" /> Add Remainder
+                <i className="fa fa-plus" /> Add Reminder
               </a>
             </div>
           </div>
@@ -363,33 +363,33 @@ export const GeneralRemainder = () => {
             </div>
           </div>
         </div> */}
-        {/* {console.log(remainderArr, "remainderArr12")} */}
+        {/* {console.log(reminderArr, "reminderArr12")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
               <Table
                 className="table-striped"
                 pagination={{
-                  total: remainderArr.length,
+                  total: reminderArr.length,
                   showTotal: (total, range) =>
                     `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                   // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
                 }}
                 style={{ overflowX: "auto" }}
                 columns={tour_columns}
-                dataSource={remainderArr}
+                dataSource={reminderArr}
                 rowKey={(record) => record.id}
               />
             </div>
           </div>
         </div>
-        <AddRemainder
-          showRemainder={showRemainder}
-          setShowRemainder={setShowRemainder}
+        <AddReminder
+          showReminder={showReminder}
+          setShowReminder={setShowReminder}
           // setIsChangeCheckBox={setIsChangeCheckBox}
         />
       </div>
     </div>
   );
 };
-export default GeneralRemainder;
+export default GeneralReminder;

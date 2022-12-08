@@ -11,7 +11,7 @@ import noteReducer from "./features/note/noteSlice";
 import costingSheetReducer from "./features/CostingSheet/CostingSheetSlice";
 import paymentReducer from "./features/payment/paymentSlice";
 import paymentInvoiceReducer from "./features/paymentInvoice/paymentInvoiceSlice";
-import remainderReducer from "./features/remainder/remainderSlice";
+import reminderReducer from "./features/reminder/reminderSlice";
 import notificationReducer from "./features/notification/notificationSlice";
 
 const rootReducer = combineReducers({
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
   costingSheet: costingSheetReducer,
   payment: paymentReducer,
   paymentInvoice: paymentInvoiceReducer,
-  remainder: remainderReducer,
+  reminder: reminderReducer,
   notification: notificationReducer,
 });
 

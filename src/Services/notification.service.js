@@ -19,8 +19,8 @@ export const updateNotificationApi = (formData, id) => {
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
 
-export const getRemainderCheckForNotificatin = () => {
-  return axios.get(`${serverUrl}/getRemainderCheckForNotification`);
+export const getReminderCheckForNotificatin = () => {
+  return axios.get(`${serverUrl}/getReminderCheckForNotification`);
 };
 export const getNotificationForSpecificUserApi = (id) => {
   return axios.get(`${serverUrl}/getSpecificUserNotification/${id}`);

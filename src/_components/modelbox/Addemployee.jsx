@@ -85,11 +85,16 @@ const Addemployee = ({ show, setShow }) => {
     // if (userObjData && userObjData._id) {
     //   setEmployeeObj(userObjData);
     // }
-    console.log(doj, "doj213");
+    // console.log(doj, "doj213");
+    // console.log(dob, "121doj213");
   }, [doj]);
 
   useEffect(() => {
-    // console.log(employeeObj, "21employeeObj234");
+    console.log(employeeObj, "21employeeObj234");
+    // console.log(new Date(employeeObj.doj).toLocaleDateString(), "1234");
+    // console.log(new Date(employeeObj.dob).toLocaleDateString(), "7890");
+    console.log(moment(employeeObj.doj).format("YYYY-MM-DD"), "7890");
+    console.log(moment(employeeObj.dob).format("YYYY-MM-DD"), "71213");
     if (employeeObj && employeeObj._id) {
       setFirstName(employeeObj.firstName);
       setLastName(employeeObj?.lastName);
@@ -98,16 +103,15 @@ const Addemployee = ({ show, setShow }) => {
       setPassword(employeeObj.password);
       setConfirmPassword(employeeObj.confirmPassword);
       setEmployeeId(employeeObj.employeeId);
-      setDoj(employeeObj.doj);
-      setDob(employeeObj.dob);
+      setDoj(moment(employeeObj.doj).format("YYYY-MM-DD"));
+      setDob(moment(employeeObj.dob).format("YYYY-MM-DD"));
+      // setDoj(new Date(employeeObj.doj).toLocaleDateString());
+      // setDob(new Date(employeeObj.dob).toLocaleDateString());
       setRole(employeeObj.role);
       setEmergencyContact(employeeObj.emergencyContact);
       setLeadId(employeeObj.leadId);
       setPrevDocUpdated(true);
       setDocId(employeeObj._id);
-      //
-      //
-      //
       //
     }
   }, [employeeObj]);
@@ -140,12 +144,12 @@ const Addemployee = ({ show, setShow }) => {
         doj,
         phone,
         dob,
-        role,
+
         emergencyContact,
       };
-      if (role == rolesObj.SPOC) {
-        obj.leadId = leadId;
-      }
+      // if (role == rolesObj.SPOC) {
+      //   obj.leadId = leadId;
+      // }
       console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
@@ -397,6 +401,7 @@ const Addemployee = ({ show, setShow }) => {
                         <div>
                           <input
                             checked={employeeObj.doj ? employeeObj.doj : ""}
+                            valu={doj}
                             onChange={(e) => setDoj(e.target.value)}
                             className="form-control datetimepicker"
                             type="date"
@@ -411,6 +416,7 @@ const Addemployee = ({ show, setShow }) => {
                         </label>
                         <div>
                           <input
+                            value={dob}
                             onChange={(e) => setDob(e.target.value)}
                             className="form-control datetimepicker"
                             type="date"
@@ -448,52 +454,63 @@ const Addemployee = ({ show, setShow }) => {
                       </div>
                     </div>
 
-                    <div className="col-md-6 mt-3">
-                      <div className="form-group">
-                        <label>
-                          Role <span className="text-danger">*</span>
-                        </label>
-                        {reduxrole == "ADMIN" && (
-                          <select
-                            value={role}
-                            onChange={(e) => {
-                              setRole(e.target.value);
-                            }}
-                            className={styles.selectStyle}
-                          >
-                            <option value="">Please Select Role</option>
+                    {/* {console.log(prevDocUpdated, "prevDocUpdated34")} */}
+                    {
+                      <div>
+                        {prevDocUpdated == false ? (
+                          <div className="col-md-6 mt-3">
+                            <div className="form-group">
+                              <label>
+                                Role <span className="text-danger">*</span>
+                              </label>
+                              {reduxrole == "ADMIN" && (
+                                <select
+                                  value={role}
+                                  onChange={(e) => {
+                                    setRole(e.target.value);
+                                  }}
+                                  className={styles.selectStyle}
+                                >
+                                  <option value="">Please Select Role</option>
 
-                            <option value={rolesObj.SPOC}>
-                              {rolesObj.SPOC}
-                            </option>
-                            <option value={rolesObj.SUPERVISOR}>
-                              {rolesObj.SUPERVISOR}
-                            </option>
-                            <option value={rolesObj.ACCOUNT}>
-                              {rolesObj.ACCOUNT}
-                            </option>
+                                  <option value={rolesObj.SPOC}>
+                                    {rolesObj.SPOC}
+                                  </option>
+                                  <option value={rolesObj.SUPERVISOR}>
+                                    {rolesObj.SUPERVISOR}
+                                  </option>
+                                  <option value={rolesObj.ACCOUNT}>
+                                    {rolesObj.ACCOUNT}
+                                  </option>
 
-                            <option value={rolesObj.TEAMLEAD}>
-                              {rolesObj.TEAMLEAD}
-                            </option>
-                          </select>
-                        )}
-                        {reduxrole == "TEAMLEAD" && (
-                          <select
-                            value={role}
-                            onChange={(e) => {
-                              setRole(e.target.value);
-                            }}
-                            className={styles.selectStyle}
-                          >
-                            <option value="">Please Select Role</option>
-                            <option value={rolesObj.SPOC}>
-                              {rolesObj.SPOC}
-                            </option>
-                          </select>
+                                  <option value={rolesObj.TEAMLEAD}>
+                                    {rolesObj.TEAMLEAD}
+                                  </option>
+                                </select>
+                              )}
+
+                              {reduxrole == "TEAMLEAD" && (
+                                <select
+                                  // readOnly={prevDocUpdated == false ? true : false}
+                                  value={role}
+                                  onChange={(e) => {
+                                    setRole(e.target.value);
+                                  }}
+                                  className={styles.selectStyle}
+                                >
+                                  <option value="">Please Select Role</option>
+                                  <option value={rolesObj.SPOC}>
+                                    {rolesObj.SPOC}
+                                  </option>
+                                </select>
+                              )}
+                            </div>
+                          </div>
+                        ) : (
+                          ""
                         )}
                       </div>
-                    </div>
+                    }
 
                     {role == rolesObj.SPOC && reduxrole == "ADMIN" && (
                       <div className="col-md-6 mt-3">

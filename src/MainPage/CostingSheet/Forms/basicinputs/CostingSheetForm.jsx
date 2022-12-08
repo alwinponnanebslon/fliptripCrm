@@ -12,7 +12,7 @@ import {
   costingSheetGet,
   setCostingSheet,
 } from "../../../../redux/features/CostingSheet/CostingSheetSlice.js";
-import AddRemainder from "../../../Remainder/Remainder/AddRemainder";
+import AddReminder from "../../../Reminder/Reminder/AddReminder";
 import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
 
 const ViewCostingSheetForm = () => {
@@ -57,7 +57,7 @@ const ViewCostingSheetForm = () => {
   const [additionalLandName, setAdditionalLandName] = useState("");
   const [additionalLandPrices, setAdditionalLandPrices] = useState(0);
   const [isLocation, setIsLocation] = useState(false);
-  const [showRemainder, setShowRemainder] = useState(false);
+  const [showReminder, setShowReminder] = useState(false);
   const [isChangeCheckBox, setIsChangeCheckBox] = useState(false);
 
   const getQuotation = async () => {
@@ -219,7 +219,7 @@ const ViewCostingSheetForm = () => {
     //   }
     // }
     if (name == "hold") {
-      setShowRemainder(true);
+      setShowReminder(true);
       // console.log(isChangeCheckBox, "isChangeCheckBox34");
       // if (isChangeCheckBox == true) {
       //   console.log("inside 1");
@@ -233,7 +233,7 @@ const ViewCostingSheetForm = () => {
       currentObj["hold"] = false;
       currentObj["pending"] = false;
     } else if (name == "pending") {
-      setShowRemainder(true);
+      setShowReminder(true);
       // if (isChangeCheckBox) {
       //   console.log("inside 12");
       currentObj[name] = checked;
@@ -241,7 +241,7 @@ const ViewCostingSheetForm = () => {
       currentObj["hold"] = false;
       currentObj["reConfirmed"] = false;
       // setIsStatusOfLead(true);
-      // history.push(`/admin/remainder`);
+      // history.push(`/admin/reminder`);
     } else {
       currentObj[name] = value;
     }
@@ -816,9 +816,9 @@ const ViewCostingSheetForm = () => {
           </div>
         </form>
       </div>
-      <AddRemainder
-        showRemainder={showRemainder}
-        setShowRemainder={setShowRemainder}
+      <AddReminder
+        showReminder={showReminder}
+        setShowReminder={setShowReminder}
         // isChangeCheckBox={isChangeCheckBox}
         setIsChangeCheckBox={setIsChangeCheckBox}
       />

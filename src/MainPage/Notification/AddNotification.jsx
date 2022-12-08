@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 // import {
-//   addRemainder,
-//   updateRemainder,
-//   setRemainder,
-// } from "../../../redux/features/remainder/remainderSlice";
+//   addReminder,
+//   updateReminder,
+//   setReminder,
+// } from "../../../redux/features/reminder/reminderSlice";
 import Select from "react-select";
 
 import {
@@ -151,7 +151,7 @@ const AddNotification = ({
       if (notificationObj && notificationObj._id) {
         // console.log()
         obj.id = followupId;
-        // dispatch(updateRemainder(obj));
+        // dispatch(updateReminder(obj));
         dispatch(updateNotification(obj));
         // console.log("12348");
         setShowNotification(false);
@@ -170,7 +170,7 @@ const AddNotification = ({
   // console.log(followDate, "fooldate");
 
   const handleClose = () => {
-    dispatch(setRemainder(null));
+    dispatch(setReminder(null));
     setIsUpdate(false);
     setFollowupId("");
     setHeading("");
@@ -179,7 +179,7 @@ const AddNotification = ({
   };
 
   return (
-    <div id="add_Remainder" className="modal custom-modal fade" role="dialog">
+    <div id="add_Reminder" className="modal custom-modal fade" role="dialog">
       <div
         className="modal-dialog modal-dialog-centered modal-lg"
         role="document"
@@ -187,7 +187,7 @@ const AddNotification = ({
         <div className="modal-content">
           {/* <div className="modal-header">
             <h5 className="modal-title">
-              {notificationObj?._id ? "Edit" : "Add"} Remainder
+              {notificationObj?._id ? "Edit" : "Add"} Reminder
             </h5>
             <button
               type="button"

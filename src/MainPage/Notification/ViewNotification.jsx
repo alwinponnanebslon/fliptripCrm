@@ -155,7 +155,7 @@ function Notification() {
             <a
               className="dropdown-item"
               // data-bs-toggle="modal"
-              // data-bs-target="#add_Remainder"
+              // data-bs-target="#add_Reminder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
@@ -212,7 +212,7 @@ function Notification() {
     //         <a
     //           className="dropdown-item"
     //           // data-bs-toggle="modal"
-    //           // data-bs-target="#add_Remainder"
+    //           // data-bs-target="#add_Reminder"
     //           onClick={() => handleEdit(row)}
     //         >
     //           <i className="fa fa-pencil m-r-5" /> Edit
@@ -287,7 +287,7 @@ function Notification() {
 
 
 */}
-        {/* {console.log(remainderArr, "remainderArr12")} */}
+        {/* {console.log(reminderArr, "reminderArr12")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">

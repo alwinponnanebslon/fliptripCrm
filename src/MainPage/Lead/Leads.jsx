@@ -1785,7 +1785,7 @@ const Leads = () => {
 
     // let obj = {
     //   note,
-    //   remainderDate,
+    //   reminderDate,
     //   leadId,
     //   createdBy,
     // };

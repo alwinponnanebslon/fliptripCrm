@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
-  addRemainder,
-  updateRemainder,
-  setRemainder,
-} from "../../../redux/features/remainder/remainderSlice";
+  addReminder,
+  updateReminder,
+  setReminder,
+} from "../../../redux/features/reminder/reminderSlice";
 import Select from "react-select";
 
 import {
@@ -21,14 +21,14 @@ import DatePicker from "react-date-picker";
 import { toastError } from "../../../utils/toastUtils";
 // import { toastError } from "../../../utils/toastUtils";
 
-const AddRemainder = ({
-  showRemainder,
-  setShowRemainder,
+const AddReminder = ({
+  showReminder,
+  setShowReminder,
   isChangeCheckBox,
   // setIsChangeCheckBox,
 }) => {
   const dispatch = useDispatch();
-  const remainderObj = useSelector((state) => state.remainder.remainderObj);
+  const reminderObj = useSelector((state) => state.reminder.reminderObj);
 
   const [heading, setHeading] = useState("");
   const [assignTo, setAssignTo] = useState("");
@@ -72,8 +72,8 @@ const AddRemainder = ({
   }, [userObj]);
 
   useEffect(() => {
-    setEmployeeId(remainderObj?._id);
-  }, [remainderObj]);
+    setEmployeeId(reminderObj?._id);
+  }, [reminderObj]);
 
   useEffect(() => {
     setCreatedBy(userObj);
@@ -91,7 +91,7 @@ const AddRemainder = ({
   const handleSubmit = () => {
     // console.log(heading, "heading23");
     if (heading == "" || heading == undefined) {
-      toastError("Remainder heading is mandatory ");
+      toastError("Reminder heading is mandatory ");
       return;
     } else if (followTime == "") {
       toastError("Follow time is mandatory ");
@@ -107,16 +107,16 @@ const AddRemainder = ({
         followTime,
       };
       // console.log(obj, "obj23");
-      if (remainderObj?._id && isUpdate) {
+      if (reminderObj?._id && isUpdate) {
         obj.Id = followupId;
-        dispatch(updateRemainder(obj));
-        setShowRemainder(false);
+        dispatch(updateReminder(obj));
+        setShowReminder(false);
         setIsUpdate(false);
         clearFunc();
       } else {
         // setIsChangeCheckBox(true);
-        dispatch(addRemainder(obj));
-        setShowRemainder(false);
+        dispatch(addReminder(obj));
+        setShowReminder(false);
         setIsUpdate(false);
         clearFunc();
       }
@@ -126,7 +126,7 @@ const AddRemainder = ({
   // console.log(followDate, "fooldate");
 
   const handleClose = () => {
-    dispatch(setRemainder(null));
+    dispatch(setReminder(null));
     setIsUpdate(false);
     setFollowupId("");
     setHeading("");
@@ -135,12 +135,12 @@ const AddRemainder = ({
   };
 
   useEffect(() => {
-    if (remainderObj && remainderObj._id) {
+    if (reminderObj && reminderObj._id) {
       setIsUpdate(true);
-      setFollowupId(remainderObj._id);
-      setHeading(remainderObj.heading);
-      setDescription(remainderObj.description);
-      setFollowDate(moment(remainderObj.followDate).format("YYYY-MM-DD "));
+      setFollowupId(reminderObj._id);
+      setHeading(reminderObj.heading);
+      setDescription(reminderObj.description);
+      setFollowDate(moment(reminderObj.followDate).format("YYYY-MM-DD "));
     } else {
       setIsUpdate(false);
       setFollowupId("");
@@ -149,10 +149,10 @@ const AddRemainder = ({
       setFollowDate("");
       setFollowTime("");
     }
-  }, [remainderObj]);
+  }, [reminderObj]);
 
   return (
-    <div id="add_Remainder" className="modal custom-modal fade" role="dialog">
+    <div id="add_Reminder" className="modal custom-modal fade" role="dialog">
       <div
         className="modal-dialog modal-dialog-centered modal-lg"
         role="document"
@@ -160,7 +160,7 @@ const AddRemainder = ({
         <div className="modal-content">
           {/* <div className="modal-header">
             <h5 className="modal-title">
-              {remainderObj?._id ? "Edit" : "Add"} Remainder
+              {reminderObj?._id ? "Edit" : "Add"} Reminder
             </h5>
             <button
               type="button"
@@ -174,10 +174,10 @@ const AddRemainder = ({
           </div> */}
           {/* <div className="modal-body"> */}
 
-          {/* <Modal show={showRemainder} className="add_note"> */}
-          <Modal show={showRemainder}>
+          {/* <Modal show={showReminder} className="add_note"> */}
+          <Modal show={showReminder}>
             <Modal.Header>
-              <Modal.Title>{isUpdate ? "Edit" : "Add"} Remainder</Modal.Title>
+              <Modal.Title>{isUpdate ? "Edit" : "Add"} Reminder</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <form>
@@ -280,7 +280,7 @@ const AddRemainder = ({
                     // data-bs-dismiss="modal"
                     className="btn-submit"
                   >
-                    {remainderObj?._id ? "Edit" : "Add"} Remainder
+                    {reminderObj?._id ? "Edit" : "Add"} Reminder
                   </button>
                 </div> */}
               </form>
@@ -289,7 +289,7 @@ const AddRemainder = ({
               <Button
                 variant="secondary"
                 onClick={() => {
-                  setShowRemainder(false);
+                  setShowReminder(false);
                   // setIsChangeCheckBox(false);
                   clearFunc();
                 }}
@@ -297,7 +297,7 @@ const AddRemainder = ({
                 Close
               </Button>
               <Button variant="primary" onClick={(e) => handleSubmit(e)}>
-                {isUpdate ? "Edit" : "Add"} Remainder
+                {isUpdate ? "Edit" : "Add"} Reminder
               </Button>
             </Modal.Footer>
           </Modal>
@@ -308,4 +308,4 @@ const AddRemainder = ({
   );
 };
 
-export default AddRemainder;
+export default AddReminder;

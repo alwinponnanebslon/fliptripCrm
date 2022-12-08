@@ -27,7 +27,7 @@ const Notes = () => {
   const [noteMainArr, setNoteMainArr] = useState([]);
   const [show, setShow] = useState(false);
   const [note, setNote] = useState("");
-  const [remainderDate, setRemainderDate] = useState("");
+  const [reminderDate, setReminderDate] = useState("");
   const { leadId } = useParams();
   const [noteId, setNoteId] = useState("");
   const [createdBy, setCreatedBy] = useState(null);
@@ -68,13 +68,13 @@ const Notes = () => {
     if (note == "") {
       toastError("note is mandatory ");
       return;
-    } else if (remainderDate == "") {
-      toastError("Remainder Date is mandatory");
+    } else if (reminderDate == "") {
+      toastError("Reminder Date is mandatory");
     }
 
     let obj = {
       note,
-      remainderDate,
+      reminderDate,
       leadId,
       createdBy,
     };
@@ -100,12 +100,10 @@ const Notes = () => {
     if (noteResultobj) {
       setNoteId(noteResultobj._id);
       setNote(noteResultobj.heading);
-      setRemainderDate(
-        moment(noteResultobj.remainderDate).format("MM/DD/YYYY")
-      );
+      setReminderDate(moment(noteResultobj.reminderDate).format("MM/DD/YYYY"));
     }
   }, [noteResultobj]);
-  // console.log(note, "1", remainderDate, "2", leadId, "3", createdBy);
+  // console.log(note, "1", reminderDate, "2", leadId, "3", createdBy);
 
   return (
     <div className="notes_body">
@@ -132,7 +130,7 @@ const Notes = () => {
               <div className="textnote">
                 <div className="alignright mb8">
                   <span className=" flexfull">
-                    {moment(noteItem?.remainderDate).format("DD-MM-YYYY")} By{" "}
+                    {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
                     {noteItem?.createdBy?.name}
                   </span>
                 </div>
@@ -181,8 +179,8 @@ const Notes = () => {
                     <input
                       type="date"
                       min={moment(new Date()).format("YYYY-MM-DD")}
-                      value={remainderDate}
-                      onChange={(e) => setRemainderDate(e.target.value)}
+                      value={reminderDate}
+                      onChange={(e) => setReminderDate(e.target.value)}
                       className="form-control"
                     />
                   </div>

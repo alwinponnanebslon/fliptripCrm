@@ -49,9 +49,9 @@ import {
   getAllCost,
   getAllSalesOfTenDays,
 } from "../../../Services/costingSheet.services";
-import { getRemainderApi } from "../../../Services/remainder.service";
+import { getReminderApi } from "../../../Services/reminder.service";
 
-import { remainderGetForOneDay } from "../../../redux/features/remainder/remainderSlice";
+import { reminderGetForOneDay } from "../../../redux/features/reminder/reminderSlice";
 
 import { addNotification } from "../../../redux/features/notification/notificationSlice";
 
@@ -70,7 +70,7 @@ const AdminDashboard = () => {
   const [allSalesArr, setAllSalesArr] = useState([]);
   const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
 
-  const [remainderArr, setRemainderArr] = useState([]);
+  const [reminderArr, setReminderArr] = useState([]);
 
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
@@ -83,16 +83,16 @@ const AdminDashboard = () => {
   const [data2, setData2] = useState([]);
 
   const userId = useSelector((state) => state.auth?.user?._id);
-  const RemainderArray = useSelector((state) => state.remainder.remainders);
+  const ReminderArray = useSelector((state) => state.reminder.reminders);
   const counterRef = useRef([]);
-  const [currentRemainder, setCurrentRemainder] = useState([]);
+  const [currentReminder, setCurrentReminder] = useState([]);
 
-  const counterRemainderRef = useRef([]);
+  const counterReminderRef = useRef([]);
 
   const handleInit = async () => {
     let obj = { userId, role };
-    dispatch(remainderGetForOneDay(obj));
-    // const arr = await getRemainderApi(role, userId);
+    dispatch(reminderGetForOneDay(obj));
+    // const arr = await getReminderApi(role, userId);
     // console.log(arr, "arr32");
     // dispatch(quotationGet(`leadId=${leadId}`));
   };
@@ -102,9 +102,9 @@ const AdminDashboard = () => {
   }, []);
 
   useEffect(() => {
-    // console.log(RemainderArray, "123 RemainderArray");
-    setRemainderArr(RemainderArray);
-  }, [RemainderArray]);
+    // console.log(ReminderArray, "123 ReminderArray");
+    setReminderArr(ReminderArray);
+  }, [ReminderArray]);
 
   const toggleMobileMenu = () => {
     setMenu(!menu);
@@ -138,12 +138,12 @@ const AdminDashboard = () => {
   let array2 = [];
 
   useEffect(() => {
-    // console.log(remainderArr, "remainderArr34");
-  }, [remainderArr]);
+    // console.log(reminderArr, "reminderArr34");
+  }, [reminderArr]);
 
   useEffect(() => {
-    counterRef.current = RemainderArray;
-  }, [RemainderArray]);
+    counterRef.current = ReminderArray;
+  }, [ReminderArray]);
 
   function myCallback() {
     let temp = [];
@@ -179,7 +179,7 @@ const AdminDashboard = () => {
         console.log(el.followTime, time, "time");
         array2.push(...temp);
         // temp.push(el);
-        setCurrentRemainder([...currentRemainder, el]);
+        setCurrentReminder([...currentReminder, el]);
       }
       // console.log(temp, "temp123");
     }
@@ -210,14 +210,14 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    // console.log(currentRemainder, "Array231");
-    if (currentRemainder.length > 0) {
-      dispatch(addNotification(currentRemainder));
-      setData2(currentRemainder);
+    // console.log(currentReminder, "Array231");
+    if (currentReminder.length > 0) {
+      dispatch(addNotification(currentReminder));
+      setData2(currentReminder);
       setIsNotificationOccurs(true);
-      setCurrentRemainder([]);
+      setCurrentReminder([]);
     }
-  }, [currentRemainder]);
+  }, [currentReminder]);
 
   const handleGetAllLeads = async () => {
     try {
