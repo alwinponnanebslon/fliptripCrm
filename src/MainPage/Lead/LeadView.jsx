@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useLocation, useHistory } from "react-router-dom";
 import {
   Avatar_11,
   Avatar_08,
@@ -15,14 +15,19 @@ import {
 import EditLead from "../../_components/modelbox/EditLead";
 import { leadGetById } from "../../redux/features/lead/leadSlice";
 import { useDispatch, useSelector } from "react-redux";
+// import {} from "react-router-dom";
 import { generateFilePath } from "../../utils/FileURL";
+import Notes from "../Lead/Notes/Notes";
 
 const LeadView = () => {
   const dispatch = useDispatch();
   const { leadId } = useParams();
+  const params = useLocation();
+  console.log(params, "12313aparams12");
   const currentLead = useSelector((state) => state.lead.lead);
   const [leadObj, setLeadObj] = useState(null);
   const role = useSelector((state) => state.auth.role);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     // console.log(currentLead, "123currentLead");
@@ -34,6 +39,17 @@ const LeadView = () => {
   }, []);
 
   useEffect(() => {}, [currentLead]);
+
+  useEffect(() => {
+    // handleInit();
+    // console.log(params.search.includes("true"), "params.search.include");
+    // console.log(params, "params.search.include");
+    if (params.search.includes("true")) {
+      console.log(true, "rewe");
+      // setIsReadyOnlyNotes(true);
+      setShow(true);
+    }
+  }, []);
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight");
@@ -528,6 +544,7 @@ const LeadView = () => {
             </div>
           </div>
         </div>
+        <Notes show1={show} setShow1={setShow} />
       </div>
       {/* /Task Followers Modal */}
     </div>

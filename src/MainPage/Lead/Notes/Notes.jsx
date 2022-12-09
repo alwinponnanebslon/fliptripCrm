@@ -15,7 +15,7 @@ import moment from "moment/moment";
 
 import { toastError } from "../../../utils/toastUtils";
 
-const Notes = () => {
+const Notes = ({ show1, setShow1 }) => {
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const params = useLocation();
@@ -25,14 +25,14 @@ const Notes = () => {
   const noteResultobj = useSelector((state) => state.note.noteObj);
   const notesResultArr = useSelector((state) => state.note.notes);
   const [noteMainArr, setNoteMainArr] = useState([]);
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   const [note, setNote] = useState("");
   const [reminderDate, setReminderDate] = useState("");
   const { leadId } = useParams();
   const [noteId, setNoteId] = useState("");
   const [createdBy, setCreatedBy] = useState(null);
   const [isReadyOnlyNotes, setIsReadyOnlyNotes] = useState(false);
-
+  const [show, setShow] = useState(show1);
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
@@ -48,6 +48,7 @@ const Notes = () => {
     if (params.search.includes("true")) {
       console.log(true, "rewe");
       setIsReadyOnlyNotes(true);
+
       setShow(true);
     }
   }, []);
@@ -202,6 +203,11 @@ const Notes = () => {
                       onClick={() => {
                         setShow(!show);
                         setIsReadyOnlyNotes(false);
+                        if (params.search.includes("true")) {
+                          // if (note?.trim().length > 0) {
+                          history.push(`/admin/leads`);
+                          // }
+                        }
                       }}
                     >
                       Cancel

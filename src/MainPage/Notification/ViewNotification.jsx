@@ -308,7 +308,8 @@ function Notification() {
               />
             </div>
           </div>
-        </div>
+        </div> 
+        
         <AddNotification
           showNotification={showNotification}
           setShowNotification={setShowNotification}

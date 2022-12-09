@@ -669,14 +669,14 @@ const LeadSidebar = (props) => {
                       <ul>
                         <li>
                           <Notes />
-                          <Link
+                          {/* <Link
                           // className={
                           //   pathname?.includes("admin/dashboard")
                           //     ? "active"
                           //     : ""
                           // }
                           // to="/admin/dashboard"
-                          ></Link>
+                          ></Link> */}
                         </li>
                       </ul>
                     ) : (
