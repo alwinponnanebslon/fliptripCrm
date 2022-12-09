@@ -20,7 +20,7 @@ const Notes = () => {
   const userObj = useSelector((state) => state.auth.user);
   const params = useLocation();
   const history = useHistory();
-  // console.log(params, "aparams12");
+  console.log(params, "aparams12");
   const dispatch = useDispatch();
   const noteResultobj = useSelector((state) => state.note.noteObj);
   const notesResultArr = useSelector((state) => state.note.notes);
@@ -43,9 +43,10 @@ const Notes = () => {
 
   useEffect(() => {
     handleInit();
-    // console.log(params.search.includes("true"), "params.search.include");
+    console.log(params.search.includes("true"), "params.search.include");
+    console.log(params, "params.search.include");
     if (params.search.includes("true")) {
-      // console.log(true, "rewe");
+      console.log(true, "rewe");
       setIsReadyOnlyNotes(true);
       setShow(true);
     }
@@ -194,7 +195,7 @@ const Notes = () => {
                 <div className="row">
                   <div className="col-lg-12 text-end">
                     <Button
-                      disabled={isReadyOnlyNotes}
+                      // disabled={isReadyOnlyNotes}
                       // readOnly={isReadyOnlyNotes}
                       type="button"
                       className="btn-cancle"

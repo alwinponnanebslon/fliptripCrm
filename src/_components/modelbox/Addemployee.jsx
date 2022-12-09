@@ -510,35 +510,39 @@ const Addemployee = ({ show, setShow }) => {
                         )}
                       </div>
                     }
-
-                    {role == rolesObj.SPOC && reduxrole == "ADMIN" && (
-                      <div className="col-md-6 mt-3">
-                        <div className="form-group">
-                          <label>
-                            Team Lead<span className="text-danger">*</span>
-                          </label>
-                          <select
-                            value={leadId}
-                            onChange={(e) => {
-                              setLeadId(e.target.value);
-                            }}
-                            className={styles.selectStyle}
-                          >
-                            <option value="">Please Select Team Lead</option>
-                            {teamLeadsArr &&
-                              teamLeadsArr.length > 0 &&
-                              teamLeadsArr.map((el, index) => {
-                                return (
-                                  <option
-                                    key={index}
-                                    value={el._id}
-                                  >{`${el.firstName} ${el.lastName}`}</option>
-                                );
-                              })}
-                          </select>
-                        </div>
-                      </div>
-                    )}
+                    {prevDocUpdated == false
+                      ? role == rolesObj.SPOC &&
+                        reduxrole == "ADMIN" && (
+                          <div className="col-md-6 mt-3">
+                            <div className="form-group">
+                              <label>
+                                Team Lead<span className="text-danger">*</span>
+                              </label>
+                              <select
+                                value={leadId}
+                                onChange={(e) => {
+                                  setLeadId(e.target.value);
+                                }}
+                                className={styles.selectStyle}
+                              >
+                                <option value="">
+                                  Please Select Team Lead
+                                </option>
+                                {teamLeadsArr &&
+                                  teamLeadsArr.length > 0 &&
+                                  teamLeadsArr.map((el, index) => {
+                                    return (
+                                      <option
+                                        key={index}
+                                        value={el._id}
+                                      >{`${el.firstName} ${el.lastName}`}</option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
+                          </div>
+                        )
+                      : ""}
                     {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
                   </div>
                   {/* <div className="table-responsive m-t-15">

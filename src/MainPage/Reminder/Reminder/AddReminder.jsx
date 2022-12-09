@@ -28,7 +28,7 @@ const AddReminder = ({
   // setIsChangeCheckBox,
 }) => {
   const dispatch = useDispatch();
-  const reminderObj = useSelector((state) => state.reminder.reminderObj);
+  let reminderObj = useSelector((state) => state.reminder.reminderObj);
 
   const [heading, setHeading] = useState("");
   const [assignTo, setAssignTo] = useState("");
@@ -48,6 +48,8 @@ const AddReminder = ({
   const role = useSelector((state) => state.auth.role);
 
   const [createdBy, setCreatedBy] = useState(null);
+  const [reminderObject, setReminderObject] = useState({});
+  const [isUpdate2, setIsUpdate2] = useState(false);
 
   useEffect(() => {
     handleGetAllEmployees();
@@ -72,7 +74,9 @@ const AddReminder = ({
   }, [userObj]);
 
   useEffect(() => {
+    console.log(reminderObj, "reminderObj123");
     setEmployeeId(reminderObj?._id);
+    setReminderObject(reminderObj);
   }, [reminderObj]);
 
   useEffect(() => {
@@ -86,7 +90,11 @@ const AddReminder = ({
     setDescription("");
     setFollowupId("");
     setIsUpdate(false);
+    setIsUpdate2(false);
+
     setAllEmployees([]);
+    setReminderObject({});
+    reminderObj = {};
   };
   const handleSubmit = () => {
     // console.log(heading, "heading23");
@@ -135,21 +143,24 @@ const AddReminder = ({
   };
 
   useEffect(() => {
-    if (reminderObj && reminderObj._id) {
+    // console.log(reminderObj, "reminderObj121324");
+    // console.log(reminderObject, "reminderObj12");
+    if (reminderObject && reminderObject._id) {
       setIsUpdate(true);
-      setFollowupId(reminderObj._id);
-      setHeading(reminderObj.heading);
-      setDescription(reminderObj.description);
-      setFollowDate(moment(reminderObj.followDate).format("YYYY-MM-DD "));
-    } else {
-      setIsUpdate(false);
-      setFollowupId("");
-      setHeading("");
-      setDescription("");
-      setFollowDate("");
-      setFollowTime("");
+      setFollowupId(reminderObject._id);
+      setHeading(reminderObject.heading);
+      setDescription(reminderObject.description);
+      setFollowDate(moment(reminderObject.followDate).format("YYYY-MM-DD "));
     }
-  }, [reminderObj]);
+    //  else {
+    //   setIsUpdate(false);
+    //   setFollowupId("");
+    //   setHeading("");
+    //   setDescription("");
+    //   setFollowDate("");
+    //   setFollowTime("");
+    // }
+  }, [reminderObject]);
 
   return (
     <div id="add_Reminder" className="modal custom-modal fade" role="dialog">

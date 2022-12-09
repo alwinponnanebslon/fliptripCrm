@@ -102,7 +102,7 @@ const Header = (props) => {
   }, [notificationResultArr]);
 
   useEffect(() => {
-    console.log(reminderArray, "reminderArray324");
+    // console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
@@ -454,10 +454,13 @@ const Header = (props) => {
                                 <h5> Decription : </h5> {el?.description}&nbsp;
                               </p>
                               <p className="noti-details d-flex">
-                                <h5> SenderName : </h5> {el?.createdBy?.name} [{el?.createdBy?.role}]&nbsp;
+                                <h5> SenderName : </h5> {el?.createdBy?.name} [
+                                {el?.createdBy?.role}]&nbsp;
                               </p>
                               <p className="noti-details d-flex">
-                                <h5> follow date : </h5> {new Date(el?.followDate).toLocaleDateString()}&nbsp;
+                                <h5> follow date : </h5>{" "}
+                                {new Date(el?.followDate).toLocaleDateString()}
+                                &nbsp;
                               </p>
                               <p className="noti-details d-flex">
                                 <h5> follow Time : </h5> {el?.followTime}&nbsp;
@@ -608,7 +611,9 @@ const Header = (props) => {
                               <h5> Decription : </h5> {el?.description}&nbsp;
                             </p>
                             <p className="noti-details d-flex">
-                              <h5> follow date : </h5> {new Date(el?.followDate).toLocaleDateString()}&nbsp;
+                              <h5> follow date : </h5>{" "}
+                              {new Date(el?.followDate).toLocaleDateString()}
+                              &nbsp;
                             </p>
                             <p className="noti-details d-flex">
                               <h5> follow Time : </h5> {el?.followTime}&nbsp;

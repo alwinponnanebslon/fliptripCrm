@@ -64,7 +64,7 @@ const LeadView = () => {
                       <span>Status: </span>{" "}
                       <span className="badge badge-warning">
                         {leadObj?.status}
-                      </span>{" "}
+                      </span>
                       <span className="m-l-15 text-muted">Client: </span>
                       <a href="#">{leadObj?.clientObj?.name}</a>
                       <span className="m-l-15 text-muted">Created: </span>
