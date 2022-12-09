@@ -56,7 +56,7 @@ const Header = (props) => {
     dispatch(leadGet());
   }, []);
   useEffect(() => {
-    console.log(leadArray, "leadArray123");
+    // console.log(leadArray, "leadArray123");
     setLeadArr(leadArray);
     // dispatch(leadGet());
   }, [leadArray]);

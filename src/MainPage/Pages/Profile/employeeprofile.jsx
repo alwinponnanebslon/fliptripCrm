@@ -16,10 +16,14 @@ import moment from "moment";
 
 import {
   serCurrentEmployee,
-  getEmployeeById, userUpdateObj
+  getEmployeeById,
+  userUpdateObj,
 } from "../../../redux/features/employee/employeeSlice";
 import { rolesObj } from "../../../utils/roles";
-import { getEmployesById, updateEmployee } from "../../../Services/user.service";
+import {
+  getEmployesById,
+  updateEmployee,
+} from "../../../Services/user.service";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
@@ -30,14 +34,14 @@ const EmployeeProfile = () => {
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const params = useParams();
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [dob, setDob] = useState("")
-  const [address, setAddress] = useState("")
-  const [pinCode, setPinCode] = useState("")
-  const [phone, setPhone] = useState("")
-  const [show, setShow] = useState(false)
-  const [prevDocId, setPrevDocId] = useState("")
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
+  const [address, setAddress] = useState("");
+  const [pinCode, setPinCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [show, setShow] = useState(false);
+  const [prevDocId, setPrevDocId] = useState("");
   // console.log(params,"sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
 
   const dispatch = useDispatch();
@@ -50,18 +54,16 @@ const EmployeeProfile = () => {
   useEffect(() => {
     // console.log(employeeObj, "234567890-")
     if (employeeObj && employeeObj._id) {
-
-      setFirstName(employeeObj?.firstName)
-      setLastName(employeeObj?.lastName)
+      setFirstName(employeeObj?.firstName);
+      setLastName(employeeObj?.lastName);
       setDob(moment(employeeObj.doj).format("YYYY-MM-DD"));
       // setDob(employeeObj?.dob)
-      setPrevDocId(employeeObj?._id)
+      setPrevDocId(employeeObj?._id);
       // setAddress(employeeObj?.address)
       // setPinCode(employeeObj?.pinCode)
-      setPhone(employeeObj?.phone)
+      setPhone(employeeObj?.phone);
     }
-
-  }, [employeeObj])
+  }, [employeeObj]);
   useEffect(() => {
     // console.log("sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
     handleGetAllEmployees();
@@ -81,23 +83,23 @@ const EmployeeProfile = () => {
     }
   };
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     let obj = {
       firstName,
       lastName,
       dob,
       phone,
-      prevDocId
-    }
+      prevDocId,
+    };
 
     // dispatch(userUpdateObj(obj))
-    let update = await updateEmployee(prevDocId, obj)
+    let update = await updateEmployee(prevDocId, obj);
     if (update.data) {
-      toastSuccess(update.data.message)
-      setShow(false)
+      toastSuccess(update.data.message);
+      setShow(false);
       handleGetAllEmployees();
     }
-  }
+  };
   useEffect(() => {
     if ($(".select").length > 0) {
       $(".select").select2({
@@ -171,7 +173,7 @@ const EmployeeProfile = () => {
                           <li>
                             <div className="title">Email:</div>
                             <div className="text">
-                              <a href="">{employeeObj?.email}</a>
+                              <a href="#">{employeeObj?.email}</a>
                             </div>
                           </li>
                           <li>
@@ -223,7 +225,9 @@ const EmployeeProfile = () => {
                       // data-bs-toggle="modal"
                       // className="edit-icon"
                       href="#"
-                      onClick={() => { setShow(true) }}
+                      onClick={() => {
+                        setShow(true);
+                      }}
                     >
                       <i className="fa fa-pencil" />
                     </a>
@@ -331,7 +335,6 @@ const EmployeeProfile = () => {
                               value={lastName}
                               onChange={(e) => setLastName(e.target.value)}
                             />
-
                           </div>
                         </div>
                         <div className="col-md-6">

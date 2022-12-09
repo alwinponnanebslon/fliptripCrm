@@ -20,7 +20,7 @@ const Notes = ({ show1, setShow1 }) => {
   const userObj = useSelector((state) => state.auth.user);
   const params = useLocation();
   const history = useHistory();
-  console.log(params, "aparams12");
+  console.log(params, "aparams2312");
   const dispatch = useDispatch();
   const noteResultobj = useSelector((state) => state.note.noteObj);
   const notesResultArr = useSelector((state) => state.note.notes);
@@ -43,8 +43,8 @@ const Notes = ({ show1, setShow1 }) => {
 
   useEffect(() => {
     handleInit();
-    console.log(params.search.includes("true"), "params.search.include");
-    console.log(params, "params.search.include");
+    // console.log(params.search.includes("true"), "params.search.include");
+    // console.log(params, "params.search.include");
     if (params.search.includes("true")) {
       console.log(true, "rewe");
       setIsReadyOnlyNotes(true);
@@ -201,8 +201,8 @@ const Notes = ({ show1, setShow1 }) => {
                       type="button"
                       className="btn-cancle"
                       onClick={() => {
-                        setShow(!show);
-                        setIsReadyOnlyNotes(false);
+                        setShow1(false);
+                        // setIsReadyOnlyNotes(false);
                         if (params.search.includes("true")) {
                           // if (note?.trim().length > 0) {
                           history.push(`/admin/leads`);

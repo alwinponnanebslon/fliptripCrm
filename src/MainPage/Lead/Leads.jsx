@@ -50,6 +50,7 @@ import LeadView from "./LeadView";
 import LeadDetails from "./LeadDetails";
 import { date } from "yup";
 import { shouldForwardProp } from "@mui/system";
+import Notes from "../Lead/Notes/Notes";
 
 const Leads = () => {
   const dispatch = useDispatch();
@@ -97,7 +98,8 @@ const Leads = () => {
   const [dateTo, setDateTo] = useState("");
   const [isStatusOfLead, setIsStatusOfLead] = useState(false);
   const [show, setShow] = useState(false);
-
+  const [isNotesSend, setIsNotesSend] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
   const agentSelect = useRef();
 
   const [data, setData] = useState([
@@ -552,13 +554,19 @@ const Leads = () => {
     }
   };
 
+  // useEffect(() => {
+  //   if (showNotes == true) {
+  //     updateStatusOfLead(id, obj);
+  //   }
+  // }, [showNotes]);
+
   const handleLeadStatusUpdate = async (id, value, status) => {
     try {
       // console.log(id, value, status, "value123");
       if (value == "CLOSED" || value == leadStatus.closedBySpoc) {
         if (isStatusOfLead == false && status != "CLOSED") {
           confirmAlert({
-            title: "Are you sure to Close this Lead",
+            title: "Are you sure to close this Lead",
             // message: "Are you sure to do this.",
             buttons: [
               {
@@ -567,9 +575,13 @@ const Leads = () => {
                   let obj = {
                     status: value,
                   };
-                  updateStatusOfLead(id, obj);
-                  // isStatusofLEAD = true;
+                  setShowNotes(true);
                   setIsStatusOfLead(true);
+                  // handleChangeStatusOf(id,obj)
+                  // if (showNotes) {
+                  updateStatusOfLead(id, obj);
+                  // }
+                  // isStatusofLEAD = true;
                   history.push(`/admin/lead/${id}/?${true}`);
                 },
               },
@@ -2240,7 +2252,6 @@ const Leads = () => {
       >
         <Modal.Header>
           <Modal.Title>
-            {" "}
             {leadObj && leadObj._id ? " Edit " : " Add "}Lead{" "}
           </Modal.Title>
         </Modal.Header>
@@ -2611,6 +2622,7 @@ const Leads = () => {
               </div>
             </div>
           </div>
+          {/* <Notes show1={showNotes} setShow1={setShowNotes} /> */}
         </div>
       </div>
 
