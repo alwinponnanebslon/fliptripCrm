@@ -152,12 +152,9 @@ function Notification() {
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            {/* <a
-              className="dropdown-item"
-              onClick={() => handleEdit(row)}
-            >
+            <a className="dropdown-item" onClick={() => handleEdit(row)}>
               <i className="fa fa-pencil m-r-5" /> Edit
-            </a> */}
+            </a>
             <a
               className="dropdown-item"
               onClick={() => handleNotificationDelete(row._id)}
@@ -308,8 +305,8 @@ function Notification() {
               />
             </div>
           </div>
-        </div> 
-        
+        </div>
+
         <AddNotification
           showNotification={showNotification}
           setShowNotification={setShowNotification}

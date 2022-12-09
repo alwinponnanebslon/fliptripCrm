@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+
 import {
   getAllTeamLeadsEmployees,
   returnAllEmployees,
+  serCurrentEmployee,
 } from "../../redux/features/employee/employeeSlice";
 import { getAllEmployees } from "../../redux/features/employee/employeeSlice";
 import {
@@ -50,7 +52,7 @@ const Addemployee = ({ show, setShow }) => {
   const reduxrole = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const userId = useSelector((state) => state.auth.user._id);
-  const userObjData = useSelector((state) => state.employee.employeeObj);
+  const employeeObject = useSelector((state) => state.employee.employeeObj);
 
   const handleGetAllEmployees = async () => {
     try {
@@ -78,24 +80,17 @@ const Addemployee = ({ show, setShow }) => {
   }, [role]);
 
   useEffect(() => {
-    if (userObjData && userObjData._id) {
-      setEmployeeObj(userObjData);
+    if (employeeObject && employeeObject._id) {
+      setEmployeeObj(employeeObject);
     }
-  }, [userObjData]);
-  useEffect(() => {
-    // if (userObjData && userObjData._id) {
-    //   setEmployeeObj(userObjData);
-    // }
-    // console.log(doj, "doj213");
-    // console.log(dob, "121doj213");
-  }, [doj]);
+  }, [employeeObject]);
 
   useEffect(() => {
-    console.log(employeeObj, "21employeeObj234");
+    // console.log(employeeObj, "21employeeObj234");
     // console.log(new Date(employeeObj.doj).toLocaleDateString(), "1234");
     // console.log(new Date(employeeObj.dob).toLocaleDateString(), "7890");
-    console.log(moment(employeeObj.doj).format("YYYY-MM-DD"), "7890");
-    console.log(moment(employeeObj.dob).format("YYYY-MM-DD"), "71213");
+    // console.log(moment(employeeObj.doj).format("YYYY-MM-DD"), "7890");
+    // console.log(moment(employeeObj.dob).format("YYYY-MM-DD"), "71213");
     if (employeeObj && employeeObj._id) {
       setFirstName(employeeObj.firstName);
       setLastName(employeeObj?.lastName);
@@ -127,9 +122,10 @@ const Addemployee = ({ show, setShow }) => {
     setDob("");
     setRole("");
     setEmergencyContact("");
-    setLeadId("");
+    // setLeadId("");
     // setTeamLeadsArr("");
-    setDocId("");
+    dispatch(serCurrentEmployee({}));
+    // setDocId("");
     setPrevDocUpdated(false);
   };
 

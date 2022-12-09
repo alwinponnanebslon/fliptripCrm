@@ -6,6 +6,7 @@ import {
   updateReminder,
   setReminder,
 } from "../../../redux/features/reminder/reminderSlice";
+
 import Select from "react-select";
 
 import {
@@ -73,6 +74,7 @@ const AddReminder = ({
     setCreatedBy(userObj);
   }, [userObj]);
 
+  console.log(reminderObj, "23reminderObj123");
   useEffect(() => {
     console.log(reminderObj, "reminderObj123");
     setEmployeeId(reminderObj?._id);
@@ -90,11 +92,10 @@ const AddReminder = ({
     setDescription("");
     setFollowupId("");
     setIsUpdate(false);
-    setIsUpdate2(false);
-
+    dispatch(setReminder({}));
     setAllEmployees([]);
     setReminderObject({});
-    reminderObj = {};
+    setReminderObject([]);
   };
   const handleSubmit = () => {
     // console.log(heading, "heading23");
@@ -143,7 +144,6 @@ const AddReminder = ({
   };
 
   useEffect(() => {
-    // console.log(reminderObj, "reminderObj121324");
     // console.log(reminderObject, "reminderObj12");
     if (reminderObject && reminderObject._id) {
       setIsUpdate(true);

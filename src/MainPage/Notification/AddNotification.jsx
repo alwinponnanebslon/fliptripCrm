@@ -91,12 +91,11 @@ const AddNotification = ({
     if (notificationObj && notificationObj._id) {
       setIsUpdate(true);
       setEmployeeId(notificationObj?._id);
-      // setEmployeeId(notificationObj?.userObj?.firstName);
       setFollowupId(notificationObj._id);
       setHeading(notificationObj.heading);
       setDescription(notificationObj.description);
       setFollowDate(moment(notificationObj.followDate).format("YYYY-MM-DD"));
-      setFollowTime(moment(notificationObj.followTime).format("YYYY-MM-DD"))
+      setFollowTime(moment(notificationObj.followTime).format("YYYY-MM-DD"));
     }
     // else {
     //   setIsUpdate(false);
@@ -125,6 +124,7 @@ const AddNotification = ({
     setFollowTime("");
     setFollowupId("");
     setIsUpdate(false);
+    dispatch(setNotification({}));
     // setAllEmployees([]);
   };
   const handleSubmit = () => {
@@ -247,7 +247,7 @@ const AddNotification = ({
                       })}
                       placeholder="Select from options"
                       // defaultInputValue={employeeId}
-                      value={employeeObj}
+                      // value={employeeObj}
                       onChange={(e) => {
                         setEmployeeId(e.value);
                         setEmployeeObj(e);
@@ -280,11 +280,11 @@ const AddNotification = ({
                         setFollowDate(e.target.value);
                         // console.log(e.target.value, "insie");
                       }}
-                    // onChange={(e) =>
-                    //   setFollowDate(
-                    //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
-                    //   )
-                    // }
+                      // onChange={(e) =>
+                      //   setFollowDate(
+                      //     moment(e.target.value).format("YYYY-MM-DD, h:mm:ss a")
+                      //   )
+                      // }
                     />
                     <input
                       type="time"

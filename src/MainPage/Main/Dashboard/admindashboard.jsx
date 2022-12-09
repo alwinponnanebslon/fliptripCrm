@@ -348,47 +348,51 @@ const AdminDashboard = () => {
 
   const handleFilterDateFromAndTo = async () => {
     if (dateTo != "" && dateFrom != "") {
-      // let getfilterLead = await getLeadFilterByDate(
-      let { data: res } = await getLeadFilterByDate(
-        dateFrom,
-        dateTo,
-        role,
-        userAuthorise?.user?._id
-      );
-      // console.log(res.data, "g1");
-      setDisplayLeadsArr(res.data);
-      setLeadsArr(res.data); ////////////////////////
-      // let allLeadArr = res.data;
-      // let tempArray = [];
-      // for (let el of allLeadArr) {
-      //   tempArray.push({
-      //     y: el.date + "",
-      //     "Total Lead": el.totalLead,
-      //     "Total Convert Lead": el.closedLead,
-      //   });
-      // }
-      let allLeadArr = res.arr;
-      let tempArray = [];
-      for (let el of allLeadArr) {
-        tempArray.push({
-          y: el.date + "",
-          "Total Lead": el.totalLead,
-          "Total Convert Lead": el.closedLead,
-        });
+      if (Date.parse(dateFrom) > Date.parse(dateTo)) {
+        toastError("In valid date");
+      } else {
+        // let getfilterLead = await getLeadFilterByDate(
+        let { data: res } = await getLeadFilterByDate(
+          dateFrom,
+          dateTo,
+          role,
+          userAuthorise?.user?._id
+        );
+        // console.log(res.data, "g1");
+        setDisplayLeadsArr(res.data);
+        setLeadsArr(res.data); ////////////////////////
+        // let allLeadArr = res.data;
+        // let tempArray = [];
+        // for (let el of allLeadArr) {
+        //   tempArray.push({
+        //     y: el.date + "",
+        //     "Total Lead": el.totalLead,
+        //     "Total Convert Lead": el.closedLead,
+        //   });
+        // }
+        let allLeadArr = res.arr;
+        let tempArray = [];
+        for (let el of allLeadArr) {
+          tempArray.push({
+            y: el.date + "",
+            "Total Lead": el.totalLead,
+            "Total Convert Lead": el.closedLead,
+          });
+        }
+        setAllLeadArr(tempArray);
+        let allLeadArray = res.data;
+        // let tempArray2 = [];
+        // for (let el of allLeadArray) {
+        //   tempArray2.push({
+        //     y: el.date + "",
+        //     "Total Sales": el.totalCost,
+        //     "Total Revenue": el.profit,
+        //   });
+        // }
+        setDisplayAllCostObj(res.dataOfCosting);
+        setAllCostObj(res.dataOfCosting);
+        // setAllSalesArr(tempArray2);
       }
-      setAllLeadArr(tempArray);
-      let allLeadArray = res.data;
-      // let tempArray2 = [];
-      // for (let el of allLeadArray) {
-      //   tempArray2.push({
-      //     y: el.date + "",
-      //     "Total Sales": el.totalCost,
-      //     "Total Revenue": el.profit,
-      //   });
-      // }
-      setDisplayAllCostObj(res.dataOfCosting);
-      setAllCostObj(res.dataOfCosting);
-      // setAllSalesArr(tempArray2);
     }
   };
 

@@ -234,17 +234,18 @@ const Leads = () => {
       setLeadId(leadObj.leadId);
       setSpocId(leadObj.spocId);
       setDescription(leadObj.description);
-    } else {
-      setSubject("");
-      setClientId("");
-      setPhone("");
-      setName("");
-      setEmail("");
-      setPriority("");
-      setAgentId("");
-      setSpocId("");
-      setDescription("");
     }
+    // else {
+    //   setSubject("");
+    //   setClientId("");
+    //   setPhone("");
+    //   setName("");
+    //   setEmail("");
+    //   setPriority("");
+    //   setAgentId("");
+    //   setSpocId("");
+    //   setDescription("");
+    // }
   }, [leadUpdateId]);
 
   useEffect(() => {
@@ -426,6 +427,8 @@ const Leads = () => {
     // setAgentId("");
     setSpocId("");
     setDescription("");
+    setLeadObj({});
+    setLeadUpdateId("");
   };
   const handleSubmitLead = async (e) => {
     e.preventDefault();
@@ -2359,7 +2362,10 @@ const Leads = () => {
                           {" "}
                           <option value=""> --- Select Team Lead</option>
                         </Select> */}
-
+            {/* {leadObj && leadObj._id ? (
+              " "
+            ) : (
+              <div> */}
             {role != rolesObj.TEAMLEAD &&
               role != rolesObj.SPOC &&
               role != rolesObj.ACCOUNT && (
@@ -2475,6 +2481,9 @@ const Leads = () => {
                 </div>
               </div>
             )}
+            {/* </div>
+            )} */}
+
             <div className="form-group">
               <label>
                 Description <span className="text-danger">*</span>
