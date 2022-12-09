@@ -644,7 +644,7 @@ const AddQuotation = ({ show, setShow }) => {
     setNumberOfChildrenWithoutBed(0);
     setNumberOfInfants(0);
 
-    setVisaRequired("false");
+    // setVisaRequired("false");
 
     ////
     setTermAndCondition("");
@@ -733,16 +733,16 @@ const AddQuotation = ({ show, setShow }) => {
       termAndCondition,
     };
     // console.log(obj, "234234");
-    if (!quotationId) {
+    if (!isUpdateTour) {
       dispatch(quotationAdd(obj));
       setShow(false);
-      window.location.reload();
-      // clearFunc();
+      // window.location.reload();
+      clearFunc();
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
       setShow(false);
-      window.location.reload();
-      // clearFunc();
+      // window.location.reload();
+      clearFunc();
     }
     // console.log(obj, "send Obj9");
   };
@@ -1498,8 +1498,8 @@ aria-label="Close"
                 variant="secondary"
                 onClick={() => {
                   setShow(false);
-                  window.location.reload();
-                  // clearFunc();
+                  // window.location.reload();
+                  clearFunc();
                 }}
               >
                 Close

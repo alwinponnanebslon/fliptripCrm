@@ -378,15 +378,19 @@ const Leads = () => {
 
   const handleFilterDateFromAndTo = async () => {
     if (dateTo != "" && dateFrom != "") {
-      let getfilterLead = await getLeadFilterByDate(
-        dateFrom,
-        dateTo,
-        role,
-        userAuthorise?.user?._id
-      );
-      console.log(getfilterLead.data.data, "getfilterLeadw4");
-      setDisplayLeadsArr(getfilterLead.data.data);
-      setLeadsArr(getfilterLead.data.data);
+      if (Date.parse(dateFrom) > Date.parse(dateTo)) {
+        toastError("In valid date");
+      } else {
+        let getfilterLead = await getLeadFilterByDate(
+          dateFrom,
+          dateTo,
+          role,
+          userAuthorise?.user?._id
+        );
+        console.log(getfilterLead.data.data, "getfilterLeadw4");
+        setDisplayLeadsArr(getfilterLead.data.data);
+        setLeadsArr(getfilterLead.data.data);
+      }
     }
   };
 
