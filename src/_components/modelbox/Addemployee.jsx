@@ -259,7 +259,7 @@ const Addemployee = ({ show, setShow }) => {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
         handleGetAllEmployees();
-        window.location.reload();
+        // window.location.reload();
         setShow(false);
         ClearFunc();
         // // console.log(obj)
@@ -396,7 +396,7 @@ const Addemployee = ({ show, setShow }) => {
                         <div>
                           <input
                             //   // checked={employeeObj.doj ? employeeObj.doj : ""}
-                            valu={doj}
+                            value={doj}
                             onChange={(e) => setDoj(e.target.value)}
                             className="form-control datetimepicker"
                             type="date"

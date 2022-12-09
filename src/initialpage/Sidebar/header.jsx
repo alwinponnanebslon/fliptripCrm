@@ -446,7 +446,7 @@ const Header = (props) => {
                             {/* <span className="avatar">
                               <img alt="" src={Avatar_02} />
                             </span> */}
-                            <div className="media">
+                            {/* <div className="media">
                               <p className="noti-details d-flex">
                                 <h5> Heading : </h5> {el?.heading}&nbsp;
                               </p>
@@ -465,6 +465,33 @@ const Header = (props) => {
                               <p className="noti-details d-flex">
                                 <h5> follow Time : </h5> {el?.followTime}&nbsp;
                               </p>
+                            </div> */}
+                            <div className="media">
+                              <p className="noti-details d-flex">
+                                <h5> {el?.createdBy?.name + "  "} :</h5>{" "}
+                                {" " + el?.heading}
+                                &nbsp;
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> {el?.description} </h5> &nbsp;
+                              </p>
+                              {/* <p className="noti-details d-flex">
+                                <h5> SenderName : </h5> {el?.createdBy?.name} [
+                                {el?.createdBy?.role}]&nbsp;
+                              </p> */}
+                              <p className="noti-details d-flex">
+                                <h5>
+                                  {new Date(
+                                    el?.followDate
+                                  ).toLocaleDateString()}{" "}
+                                  at {el?.followTime}
+                                </h5>
+                                {/* {new Date(el?.followDate).toLocaleDateString()} */}
+                                &nbsp;
+                              </p>
+                              {/* <p className="noti-details d-flex">
+                                <h5> {el?.followTime}</h5> &nbsp;
+                              </p> */}
                             </div>
                           </div>
                         </Link>

@@ -83,7 +83,7 @@ const AllEmployees = () => {
         toastSuccess(res.message);
         // // console.log(res, "res")
         // dispatch(returnAllEmployees(res.data));
-        window.location.reload();
+        // window.location.reload();
       }
     } catch (error) {
       console.error(error);
