@@ -31,7 +31,7 @@ export const getAllLeadName = (query) => {
   return axios.get(`${serverUrl}/getAllLeadName?${query}`);
 };
 export const getAllEmployess = async (query) => {
-  console.log(query, "12query21");
+  // console.log(query, "12query21");
   return await axios.get(`${serverUrl}/getAllEmployes?${query}`);
 };
 export const updateEmployeeToDb = async (id, formData, query) => {

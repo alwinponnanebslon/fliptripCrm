@@ -40,7 +40,7 @@ const ViewDestination = () => {
   };
 
   useEffect(() => {
-    console.log(toursResultArr, "toursResultArr3q");
+    // console.log(toursResultArr, "toursResultArr3q");
     setTourMainArr(toursResultArr);
   }, [toursResultArr]);
 
@@ -48,6 +48,7 @@ const ViewDestination = () => {
     setName("");
     setDescription("");
     setIsUpdateTour(false);
+    dispatch(setTour({}));
     setTourId("");
   };
   const handleEdit = (row) => {
@@ -71,10 +72,10 @@ const ViewDestination = () => {
   };
 
   useEffect(() => {
-    if (tourResultObj) {
-      setTourId(tourResultObj._id);
-      setName(tourResultObj.name);
-      setDescription(tourResultObj.description);
+    if (tourResultObj && tourResultObj._id) {
+      setTourId(tourResultObj?._id);
+      setName(tourResultObj?.name);
+      setDescription(tourResultObj?.description);
     }
   }, [tourResultObj]);
 

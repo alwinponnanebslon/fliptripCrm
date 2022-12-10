@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import {
   clientAdd,
-  clientUpdate,
+  clientUpdate, setclientObj,
 } from "../../redux/features/client/clientSlice";
 import moment from "moment";
 
@@ -34,17 +34,18 @@ const AddClient = ({ show, setShowModal }) => {
     setPhone("");
     setDob("");
     setAnniversaryDate("");
+    dispatch(setclientObj({}));
     setClientObj({});
     setClientId("");
   };
   useEffect(() => {
     console.log(clientObj, "clientObj23")
     if (clientObj && clientObj._id) {
-      setClientId(clientObj._id);
-      setDob(moment(clientObj.dob).format("YYYY-MM-DD"));
-      setName(clientObj.name);
-      setEmail(clientObj.email);
-      setPhone(clientObj.phone);
+      setClientId(clientObj?._id);
+      setDob(moment(clientObj?.dob).format("YYYY-MM-DD"));
+      setName(clientObj?.name);
+      setEmail(clientObj?.email);
+      setPhone(clientObj?.phone);
 
       // setAnniversaryDate(clientObj.anniversaryDate);
       setAnniversaryDate(moment(clientObj.anniversaryDate).format("YYYY-MM-DD"));
@@ -67,7 +68,7 @@ const AddClient = ({ show, setShowModal }) => {
       return;
     } else {
       let obj = { name, email, phone, dob, anniversaryDate };
-      console.log(obj, "obj3q");
+      // console.log(obj, "obj3q");
       if (clientId) {
         dispatch(clientUpdate({ obj, clientId }));
         setShowModal(false);
@@ -335,6 +336,7 @@ const AddClient = ({ show, setShowModal }) => {
                 variant="secondary "
                 onClick={() => {
                   setShowModal(false);
+                  clearFunc()
                 }}
               >
                 Close

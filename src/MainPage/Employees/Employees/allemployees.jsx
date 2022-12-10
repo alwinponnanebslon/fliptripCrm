@@ -27,10 +27,22 @@ const AllEmployees = () => {
   const [displayEmployeeArr, setDisplayEmployeeArr] = useState([]);
   const [isUpdateUser, setIsUpdateUser] = useState(false);
   const [show, setShow] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   const role = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(employees, "employees234")
+    if (employees && employees.length > 0) {
+      setEmployeeArr(employees);
+      setDisplayEmployeeArr(employeeArr);
+      // setDisplayEmployeeArr(employees)
+    }
+  }, [employees, isDelete]);
+
+
   const toggleMobileMenu = () => {
     setMenu(!menu);
   };
@@ -66,8 +78,10 @@ const AllEmployees = () => {
     try {
       let { data: res } = await getEmployess(userObj._id, role);
       if (res.success) {
-        // // console.log(res, "res");
         dispatch(returnAllEmployees(res.data));
+        console.log(res?.data, "res2");
+        // setEmployeeArr(res.data);
+        // setDisplayEmployeeArr(employeeArr);
       }
     } catch (error) {
       console.error(error);
@@ -78,10 +92,10 @@ const AllEmployees = () => {
   const handleEmployeeDelete = async () => {
     try {
       let { data: res } = await deleteEmployees(selectedEmployee._id);
+      console.log(res, "resdel")
       if (res.success) {
-        handleGetAllEmployees();
         toastSuccess(res.message);
-        // // console.log(res, "res")
+        handleGetAllEmployees();
         // dispatch(returnAllEmployees(res.data));
         // window.location.reload();
       }
@@ -104,12 +118,7 @@ const AllEmployees = () => {
     handleGetAllEmployees();
   }, []);
 
-  useEffect(() => {
-    if (employees && employees.length > 0) {
-      setEmployeeArr(employees);
-      setDisplayEmployeeArr(employeeArr);
-    }
-  }, [employees]);
+
 
   return (
     <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>

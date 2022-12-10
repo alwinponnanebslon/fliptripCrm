@@ -92,20 +92,20 @@ const Addemployee = ({ show, setShow }) => {
     // console.log(moment(employeeObj.doj).format("YYYY-MM-DD"), "7890");
     // console.log(moment(employeeObj.dob).format("YYYY-MM-DD"), "71213");
     if (employeeObj && employeeObj._id) {
-      setFirstName(employeeObj.firstName);
+      setFirstName(employeeObj?.firstName);
       setLastName(employeeObj?.lastName);
-      setEmail(employeeObj.email);
-      setPhone(employeeObj.phone);
-      setPassword(employeeObj.password);
-      setConfirmPassword(employeeObj.confirmPassword);
-      setEmployeeId(employeeObj.employeeId);
-      setDoj(moment(employeeObj.doj).format("YYYY-MM-DD"));
-      setDob(moment(employeeObj.dob).format("YYYY-MM-DD"));
-      setRole(employeeObj.role);
-      setEmergencyContact(employeeObj.emergencyContact);
-      setLeadId(employeeObj.leadId);
+      setEmail(employeeObj?.email);
+      setPhone(employeeObj?.phone);
+      setPassword(employeeObj?.password);
+      setConfirmPassword(employeeObj?.confirmPassword);
+      setEmployeeId(employeeObj?.employeeId);
+      setDoj(moment(employeeObj?.doj).format("YYYY-MM-DD"));
+      setDob(moment(employeeObj?.dob).format("YYYY-MM-DD"));
+      setRole(employeeObj?.role);
+      setEmergencyContact(employeeObj?.emergencyContact);
+      setLeadId(employeeObj?.leadId);
       setPrevDocUpdated(true);
-      setDocId(employeeObj._id);
+      setDocId(employeeObj?._id);
       //
     }
   }, [employeeObj]);
@@ -163,11 +163,6 @@ const Addemployee = ({ show, setShow }) => {
     }
   };
 
-  const handleCheckIsUpdateOrCreate = async (e) => {
-    {
-      prevDocUpdated ? handleEmployeeEdit(e) : handleEmployeeCreate(e);
-    }
-  };
 
   const handleEmployeeCreate = async (e) => {
     e.preventDefault();
@@ -269,6 +264,13 @@ const Addemployee = ({ show, setShow }) => {
       toastError(error);
     }
   };
+
+  const handleCheckIsUpdateOrCreate = async (e) => {
+    {
+      prevDocUpdated ? handleEmployeeEdit(e) : handleEmployeeCreate(e);
+    }
+  };
+
 
   useEffect(() => {
     if (employees && employees.length > 0) {
@@ -508,36 +510,36 @@ const Addemployee = ({ show, setShow }) => {
                     }
                     {prevDocUpdated == false
                       ? role == rolesObj.SPOC &&
-                        reduxrole == "ADMIN" && (
-                          <div className="col-md-6 mt-3">
-                            <div className="form-group">
-                              <label>
-                                Team Lead<span className="text-danger">*</span>
-                              </label>
-                              <select
-                                value={leadId}
-                                onChange={(e) => {
-                                  setLeadId(e.target.value);
-                                }}
-                                className={styles.selectStyle}
-                              >
-                                <option value="">
-                                  Please Select Team Lead
-                                </option>
-                                {teamLeadsArr &&
-                                  teamLeadsArr.length > 0 &&
-                                  teamLeadsArr.map((el, index) => {
-                                    return (
-                                      <option
-                                        key={index}
-                                        value={el._id}
-                                      >{`${el.firstName} ${el.lastName}`}</option>
-                                    );
-                                  })}
-                              </select>
-                            </div>
+                      reduxrole == "ADMIN" && (
+                        <div className="col-md-6 mt-3">
+                          <div className="form-group">
+                            <label>
+                              Team Lead<span className="text-danger">*</span>
+                            </label>
+                            <select
+                              value={leadId}
+                              onChange={(e) => {
+                                setLeadId(e.target.value);
+                              }}
+                              className={styles.selectStyle}
+                            >
+                              <option value="">
+                                Please Select Team Lead
+                              </option>
+                              {teamLeadsArr &&
+                                teamLeadsArr.length > 0 &&
+                                teamLeadsArr.map((el, index) => {
+                                  return (
+                                    <option
+                                      key={index}
+                                      value={el._id}
+                                    >{`${el.firstName} ${el.lastName}`}</option>
+                                  );
+                                })}
+                            </select>
                           </div>
-                        )
+                        </div>
+                      )
                       : ""}
                     {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
                   </div>

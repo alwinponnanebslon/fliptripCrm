@@ -51,7 +51,7 @@ const Clients = () => {
   };
   //  dispatch(leadGetById(leadId));
   useEffect(() => {
-    console.log(clientResultArr, "clientResultArr241");
+    // console.log(clientResultArr, "clientResultArr241");
     setClientMainArr(clientResultArr);
   }, [clientResultArr]);
 
