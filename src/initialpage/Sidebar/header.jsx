@@ -29,6 +29,7 @@ import {
   reminderGet,
 } from "../../redux/features/reminder/reminderSlice";
 import { leadGet } from "../../redux/features/lead/leadSlice";
+import { Bell, BookOpen, AlertTriangle } from 'react-feather';
 
 const Header = (props) => {
   const role = useSelector((state) => state.auth.role);
@@ -45,6 +46,8 @@ const Header = (props) => {
   const [reminderArrData, setReminderArrData] = useState([]);
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
+  const [messageCount, setMessageCount] = useState(dataArr.length);
+  const [changeNotificationColor, setChangeNotificationColor] = useState("Gray");
   // reminderArrData
   const dispatch = useDispatch();
 
@@ -116,9 +119,7 @@ const Header = (props) => {
       }
     });
     setSearchData(filteredData);
-    {
-      // console.log(filteredData, "filteredData34");
-    }
+
     return (
       <ul>
         {filteredData.map((item) => (
@@ -161,11 +162,38 @@ const Header = (props) => {
     //   }
     // });
   };
+  // console.log(dataArr, "data23")
+  const handleClick = (index) => {
+    // let tempArr = [...dataArr]
+    // ("use strict");
+    let tempList = [...dataArr];
+    // let totalAmount = 0;
+
+    // if (currentObj) {
+    if (tempList[index]) {
+      // console.log(currentObj, "1325465")
+      setChangeNotificationColor("LightGray")
+    }
+
+    setDataArr([...tempList]);
+
+    // console.log(value, "234567890")
+    // setChangeNotificationColor("LightGray")
+    // props.onMenuClick();
+    // setIsNotificationRead(true);
+  };
 
   const handleReadNotification = (value) => {
     props.onMenuClick();
     setIsNotificationRead(true);
   };
+  const mystyle = {
+    // color: "white",
+    // backgroundColor: "DodgerBlue",
+    padding: "1px",
+    fontFamily: "Arial"
+  };
+
   return (
     <div className="header" style={{ right: "0px" }}>
       {/* Logo */}
@@ -424,7 +452,8 @@ const Header = (props) => {
                   dataArr.map((el, index) => {
                     return (
                       // <li className="notification-message" key={index}>
-                      <li className="notification-message" key={index}>
+
+                      <li key={index}>
                         {/* <div className="float-end">
                           <a
                             className="btn btn-blue"
@@ -436,66 +465,57 @@ const Header = (props) => {
                             <i /> mark as read
                           </a>
                         </div> */}
+                        {/* <div className="notification-container">
+                          <div className=
+                            {
+                              el ?
+                                'notification notify show-count' :
+                                'notification notify'
+                            }
+                            data-count={messageCount}
+                            onClick={event => handleClick(event)}>
+                            <Bell color={'#282828'} size={30} />
+                          </div>
+                        </div> */}
                         <Link
-                          onClick={() =>
+                          onClick={() => {
                             localStorage.setItem("minheight", "true")
-                          }
-                          to="/admin/notification"
+                            handleClick(index)
+                          }}
+                          to="#"
+                        // to="/admin/notification"
                         >
-                          <div className="media">
-                            {/* <span className="avatar">
-                              <img alt="" src={Avatar_02} />
-                            </span> */}
-                            {/* <div className="media">
-                              <p className="noti-details d-flex">
-                                <h5> Heading : </h5> {el?.heading}&nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> Decription : </h5> {el?.description}&nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> SenderName : </h5> {el?.createdBy?.name} [
-                                {el?.createdBy?.role}]&nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> follow date : </h5>{" "}
-                                {new Date(el?.followDate).toLocaleDateString()}
-                                &nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> follow Time : </h5> {el?.followTime}&nbsp;
-                              </p>
-                            </div> */}
-                            <div className="media">
-                              <p className="noti-details d-flex">
-                                <h5> {el?.createdBy?.name + "  "} :</h5>{" "}
-                                {" " + el?.heading}
-                                &nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> {el?.description} </h5> &nbsp;
-                              </p>
-                              {/* <p className="noti-details d-flex">
-                                <h5> SenderName : </h5> {el?.createdBy?.name} [
-                                {el?.createdBy?.role}]&nbsp;
-                              </p> */}
-                              <p className="noti-details d-flex">
-                                <h5>
-                                  {new Date(
-                                    el?.followDate
-                                  ).toLocaleDateString()}{" "}
-                                  at {el?.followTime}
-                                </h5>
-                                {/* {new Date(el?.followDate).toLocaleDateString()} */}
-                                &nbsp;
-                              </p>
-                              {/* <p className="noti-details d-flex">
-                                <h5> {el?.followTime}</h5> &nbsp;
-                              </p> */}
-                            </div>
+
+                          <div style={{ backgroundColor: changeNotificationColor }} index={index} >
+                            {/* <div className="media "  > */}
+
+                            <p className="noti-details d-flex"  >
+                              {/* <div > */}
+                              <h5  > {el?.createdBy?.name + "  "} :</h5>
+                              <h5>{" " + el?.heading}</h5>
+                              &nbsp;
+                              {/* </div> */}
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5 > {el?.description} </h5> &nbsp;
+                            </p>
+
+                            <p className="noti-details d-flex" >
+                              <h5>
+                                {new Date(
+                                  el?.followDate
+                                ).toLocaleDateString()}{" "}
+                                at {el?.followTime}
+                              </h5>
+
+                              &nbsp;
+                            </p>
+
+                            {/* </div> */}
                           </div>
                         </Link>
                       </li>
+
                     );
                   })}
                 {/* <div className="media-body">
@@ -511,30 +531,7 @@ const Header = (props) => {
                                 </span>
                               </p>
                             </div> */}
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_03} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Tarah Shropshire</span>{" "}
-                          changed the task name{" "}
-                          <span className="noti-title">
-                            Appointment booking with payment gateway
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">6 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
+
 
                 {/* <li className="notification-message">
                   <Link
@@ -560,30 +557,7 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_13} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Bernardo Galaviz</span>{" "}
-                          added new task{" "}
-                          <span className="noti-title">
-                            Private chat module
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">2 days ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
+
               </ul>
             </div>
             <div className="topnav-dropdown-footer">

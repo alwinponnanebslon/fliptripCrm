@@ -160,7 +160,7 @@ const AdminDashboard = () => {
     }
     let time = `${tempHour}:${tempMinute}`; //13:9
 
-    console.log(time, "curenttime123");
+    // console.log(time, "curenttime123");
     let DbTemp = counterRef.current;
 
     for (let el of DbTemp) {
