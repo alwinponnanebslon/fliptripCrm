@@ -174,7 +174,7 @@ const AdminDashboard = () => {
       //     array2.push(el);
       //   }
       // } else
-      console.log(el.followTime, "el.folow23");
+      // console.log(el.followTime, "el.folow23");
       if (el.followTime == time) {
         console.log(el.followTime, time, "time");
         array2.push(...temp);

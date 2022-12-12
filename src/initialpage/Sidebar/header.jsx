@@ -47,7 +47,8 @@ const Header = (props) => {
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
   const [messageCount, setMessageCount] = useState(dataArr.length);
-  const [changeNotificationColor, setChangeNotificationColor] = useState("Gray");
+  const [changeNotificationColor, setChangeNotificationColor] =
+    useState("Gray");
   // reminderArrData
   const dispatch = useDispatch();
 
@@ -172,7 +173,7 @@ const Header = (props) => {
     // if (currentObj) {
     if (tempList[index]) {
       // console.log(currentObj, "1325465")
-      setChangeNotificationColor("LightGray")
+      setChangeNotificationColor("LightGray");
     }
 
     setDataArr([...tempList]);
@@ -191,7 +192,7 @@ const Header = (props) => {
     // color: "white",
     // backgroundColor: "DodgerBlue",
     padding: "1px",
-    fontFamily: "Arial"
+    fontFamily: "Arial",
   };
 
   return (
@@ -479,35 +480,33 @@ const Header = (props) => {
                         </div> */}
                         <Link
                           onClick={() => {
-                            localStorage.setItem("minheight", "true")
-                            handleClick(index)
+                            localStorage.setItem("minheight", "true");
+                            handleClick(index);
                           }}
                           to="#"
-                        // to="/admin/notification"
+                          // to="/admin/notification"
                         >
-
-                          <div style={{ backgroundColor: changeNotificationColor }} index={index} >
-                            {/* <div className="media "  > */}
-
-                            <p className="noti-details d-flex"  >
+                          {/* <div
+                            style={{ backgroundColor: changeNotificationColor }}
+                            index={index}
+                          > */}
+                          <div className="media ">
+                            <p className="noti-details d-flex">
                               {/* <div > */}
-                              <h5  > {el?.createdBy?.name + "  "} :</h5>
+                              <h5> {el?.createdBy?.name + "  "} :</h5>
                               <h5>{" " + el?.heading}</h5>
                               &nbsp;
                               {/* </div> */}
                             </p>
                             <p className="noti-details d-flex">
-                              <h5 > {el?.description} </h5> &nbsp;
+                              <h5> {el?.description} </h5> &nbsp;
                             </p>
 
-                            <p className="noti-details d-flex" >
+                            <p className="noti-details d-flex">
                               <h5>
-                                {new Date(
-                                  el?.followDate
-                                ).toLocaleDateString()}{" "}
+                                {new Date(el?.followDate).toLocaleDateString()}{" "}
                                 at {el?.followTime}
                               </h5>
-
                               &nbsp;
                             </p>
 
@@ -515,7 +514,6 @@ const Header = (props) => {
                           </div>
                         </Link>
                       </li>
-
                     );
                   })}
                 {/* <div className="media-body">
@@ -531,7 +529,6 @@ const Header = (props) => {
                                 </span>
                               </p>
                             </div> */}
-
 
                 {/* <li className="notification-message">
                   <Link
@@ -557,7 +554,6 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
-
               </ul>
             </div>
             <div className="topnav-dropdown-footer">
@@ -604,13 +600,29 @@ const Header = (props) => {
                           }
                           to="/admin/reminder"
                         >
+                          {/* <div
+                            style={{ backgroundColor: changeNotificationColor }}
+                            index={index}
+                          > */}
+                          <div className="media ">
+                            <p className="noti-details d-flex">
+                              <h5>{" " + el?.heading}</h5>
+                              &nbsp;
+                              {/* </div> */}
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5> {el?.description} </h5> &nbsp;
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5>
+                                {new Date(el?.followDate).toLocaleDateString()}{" "}
+                                at {el?.followTime}
+                              </h5>
+                              &nbsp;
+                            </p>
+                          </div>
+                          {/* 
                           <div className="media">
-                            <p className="noti-details d-flex">
-                              <h5> Heading : </h5> {el?.heading}&nbsp;
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5> Decription : </h5> {el?.description}&nbsp;
-                            </p>
                             <p className="noti-details d-flex">
                               <h5> follow date : </h5>{" "}
                               {new Date(el?.followDate).toLocaleDateString()}
@@ -619,32 +631,7 @@ const Header = (props) => {
                             <p className="noti-details d-flex">
                               <h5> follow Time : </h5> {el?.followTime}&nbsp;
                             </p>
-
-                            {/* <p className="noti-details d-flex">
-                              <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
-                            </p> */}
-                          </div>
-
-                          {/* <div className="media">
-                            <span className="avatar">
-                              <img alt="" src={Avatar_02} />
-                            </span>
-                            <div className="media-body">
-                              <p className="noti-details">
-                                <span className="noti-title">
-                                  {el?.createdBy?.name}
-                                </span>
-                                you receive new notification regarding &nbsp; */}
-                          {/* added new task for you &nbsp; */}
-                          {/* <span className="noti-title"> */}
-                          {/* Patient appointment booking */}
-                          {/* <span className="noti-title">
-                                  {el?.heading}
-                                </span> */}
-                          {/* </span>  */}
-                          {/* </p>
-                            </div> */}
-                          {/* </div> */}
+                          </div> */}
                         </Link>
                       </li>
                     );

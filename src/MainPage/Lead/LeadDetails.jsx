@@ -42,7 +42,7 @@ const ViewCostingSheetForm = () => {
   };
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "costingSheetResultObj234");
+    // console.log(costingSheetResultObj, "costingSheetResultObj234");
     setObj(costingSheetResultObj);
   }, [costingSheetResultObj]);
 
