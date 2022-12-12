@@ -47,7 +47,8 @@ const Header = (props) => {
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
   const [messageCount, setMessageCount] = useState(dataArr.length);
-  const [changeNotificationColor, setChangeNotificationColor] = useState("Gray");
+  const [changeNotificationColor, setChangeNotificationColor] =
+    useState("Gray");
   // reminderArrData
   const dispatch = useDispatch();
 
@@ -172,7 +173,7 @@ const Header = (props) => {
     // if (currentObj) {
     if (tempList[index]) {
       // console.log(currentObj, "1325465")
-      setChangeNotificationColor("LightGray")
+      setChangeNotificationColor("LightGray");
     }
 
     setDataArr([...tempList]);
@@ -191,7 +192,7 @@ const Header = (props) => {
     // color: "white",
     // backgroundColor: "DodgerBlue",
     padding: "1px",
-    fontFamily: "Arial"
+    fontFamily: "Arial",
   };
 
   return (
@@ -438,23 +439,23 @@ const Header = (props) => {
             <i className="fa fa-bell-o" />
             <span className="badge badge-pill">{dataArr.length}</span>
           </a>
-          <div className="dropdown-menu notifications">
-            <div className="topnav-dropdown-header">
-              <span className="notification-title">Notifications</span>
-              {/* <a href="" className="clear-noti">
-                Clear All
-              </a> */}
-            </div>
-            {/* {console.log(dataArr, "123213")} */}
-            <div className="noti-content">
-              <ul className="notification-list">
-                {dataArr &&
-                  dataArr.map((el, index) => {
-                    return (
-                      // <li className="notification-message" key={index}>
 
-                      <li key={index}>
-                        {/* <div className="float-end">
+          {/* <div className="dropdown-menu notifications"> */}
+          {isNotificationRead && (
+            <div className="">
+              <div className="topnav-dropdown-header">
+                <span className="notification-title">Notifications</span>
+              </div>
+              {/* {console.log(dataArr, "123213")} */}
+              <div className="noti-content">
+                <ul className="notification-list">
+                  {dataArr &&
+                    dataArr.map((el, index) => {
+                      return (
+                        // <li className="notification-message" key={index}>
+
+                        <li key={index}>
+                          {/* <div className="float-end">
                           <a
                             className="btn btn-blue"
                             readOnly={isNotificationRead ? true : false}
@@ -465,7 +466,7 @@ const Header = (props) => {
                             <i /> mark as read
                           </a>
                         </div> */}
-                        {/* <div className="notification-container">
+                          {/* <div className="notification-container">
                           <div className=
                             {
                               el ?
@@ -477,48 +478,50 @@ const Header = (props) => {
                             <Bell color={'#282828'} size={30} />
                           </div>
                         </div> */}
-                        <Link
-                          onClick={() => {
-                            localStorage.setItem("minheight", "true")
-                            handleClick(index)
-                          }}
-                          to="#"
-                        // to="/admin/notification"
-                        >
+                          <Link
+                            onClick={() => {
+                              localStorage.setItem("minheight", "true");
+                              handleClick(index);
+                            }}
+                            to="#"
+                            // to="/admin/notification"
+                          >
+                            <div
+                              style={{
+                                backgroundColor: changeNotificationColor,
+                              }}
+                              index={index}
+                            >
+                              {/* <div className="media "  > */}
 
-                          <div style={{ backgroundColor: changeNotificationColor }} index={index} >
-                            {/* <div className="media "  > */}
+                              <p className="noti-details d-flex">
+                                {/* <div > */}
+                                <h5> {el?.createdBy?.name + "  "} :</h5>
+                                <h5>{" " + el?.heading}</h5>
+                                &nbsp;
+                                {/* </div> */}
+                              </p>
+                              <p className="noti-details d-flex">
+                                <h5> {el?.description} </h5> &nbsp;
+                              </p>
 
-                            <p className="noti-details d-flex"  >
-                              {/* <div > */}
-                              <h5  > {el?.createdBy?.name + "  "} :</h5>
-                              <h5>{" " + el?.heading}</h5>
-                              &nbsp;
+                              <p className="noti-details d-flex">
+                                <h5>
+                                  {new Date(
+                                    el?.followDate
+                                  ).toLocaleDateString()}{" "}
+                                  at {el?.followTime}
+                                </h5>
+                                &nbsp;
+                              </p>
+
                               {/* </div> */}
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5 > {el?.description} </h5> &nbsp;
-                            </p>
-
-                            <p className="noti-details d-flex" >
-                              <h5>
-                                {new Date(
-                                  el?.followDate
-                                ).toLocaleDateString()}{" "}
-                                at {el?.followTime}
-                              </h5>
-
-                              &nbsp;
-                            </p>
-
-                            {/* </div> */}
-                          </div>
-                        </Link>
-                      </li>
-
-                    );
-                  })}
-                {/* <div className="media-body">
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  {/* <div className="media-body">
                               <p className="noti-details">
                                 <span className="noti-title">
                                   {el?.heading}&nbsp;
@@ -532,8 +535,7 @@ const Header = (props) => {
                               </p>
                             </div> */}
 
-
-                {/* <li className="notification-message">
+                  {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
                     to="/app/administrator/activities"
@@ -557,18 +559,18 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
-
-              </ul>
+                </ul>
+              </div>
+              <div className="topnav-dropdown-footer">
+                <Link
+                  onClick={() => localStorage.setItem("minheight", "true")}
+                  to="/admin/notification"
+                >
+                  View all Notifications
+                </Link>
+              </div>
             </div>
-            <div className="topnav-dropdown-footer">
-              <Link
-                onClick={() => localStorage.setItem("minheight", "true")}
-                to="/admin/notification"
-              >
-                View all Notifications
-              </Link>
-            </div>
-          </div>
+          )}
         </li>
         {/* 
         
