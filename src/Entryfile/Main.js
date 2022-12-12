@@ -27,12 +27,36 @@ import "../assets/js/multiselect.min.js";
 import "../assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css";
 import "../assets/css/bootstrap-datetimepicker.min.css";
 import "../assets/css/style.css";
+import { onMessageListener } from "../firebase";
+import Swal from "sweetalert2";
 window.Popper = require("popper.js").default;
 
-const MainApp = () => (
-  <Router>
-    <App />
-  </Router>
-);
+
+
+const MainApp = () => {
+  onMessageListener()
+    .then((payload) => {
+      // setNotification({title: payload.notification.title, body: payload.notification.body})
+      // setShow(true);
+      // console.log(payload);
+      // console.log("Received background message ", payload);
+
+      // const notificationTitle = payload.notification.title;
+      // const notificationOptions = {
+      //   body: payload.notification.body,
+      // };
+      Swal.fire(
+        payload?.data?.title,
+        payload?.data?.content,
+      )
+    })
+    .catch((err) => console.log("failed: ", err))
+  return (
+
+    < Router >
+      <App />
+    </Router >
+  )
+}
 
 export default MainApp;

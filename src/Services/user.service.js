@@ -43,3 +43,7 @@ export const updateEmployee = async (id, formData, query) => {
   console.log(id, formData, "in services234");
   return await axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
+
+export const registerUserFcmToken = async (obj) => {
+  return await axios.post(`${serverUrl}/registerUserFcmToken`, obj)
+}

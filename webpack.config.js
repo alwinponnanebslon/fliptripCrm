@@ -142,7 +142,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       filename: "./index.html",
-      favicon: './public/favicon.png'
+      favicon: './public/favicon.png',
+      'firebase-messaging-sw.js': './public/firebase-messaging-sw.js'
     }),
     new MiniCssExtractPlugin({ // plugin for controlling how compiled css will be outputted and named
       filename: "css/[name].css",

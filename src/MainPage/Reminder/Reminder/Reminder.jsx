@@ -182,14 +182,12 @@ export const GeneralReminder = () => {
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
+            {/* <a
               className="dropdown-item"
-              // data-bs-toggle="modal"
-              // data-bs-target="#add_Reminder"
               onClick={() => handleEdit(row)}
             >
               <i className="fa fa-pencil m-r-5" /> Edit
-            </a>
+            </a> */}
             <a
               className="dropdown-item"
               onClick={() => handleReminderDelete(row._id)}

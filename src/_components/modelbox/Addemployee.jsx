@@ -80,6 +80,7 @@ const Addemployee = ({ show, setShow }) => {
   }, [role]);
 
   useEffect(() => {
+    // console.log(employeeObject, "employeeObject234");
     if (employeeObject && employeeObject._id) {
       setEmployeeObj(employeeObject);
     }
@@ -124,6 +125,7 @@ const Addemployee = ({ show, setShow }) => {
     setEmergencyContact("");
     // setLeadId("");
     // setTeamLeadsArr("");
+    setEmployeeObj({});
     dispatch(serCurrentEmployee({}));
     // setDocId("");
     setPrevDocUpdated(false);

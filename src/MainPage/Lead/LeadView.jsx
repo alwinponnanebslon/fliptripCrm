@@ -23,7 +23,7 @@ const LeadView = () => {
   const dispatch = useDispatch();
   const { leadId } = useParams();
   const params = useLocation();
-  console.log(params, "12313aparams12");
+  // console.log(params, "12313aparams12");
   const currentLead = useSelector((state) => state.lead.lead);
   const [leadObj, setLeadObj] = useState(null);
   const role = useSelector((state) => state.auth.role);

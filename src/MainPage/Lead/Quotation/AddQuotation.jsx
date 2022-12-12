@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   quotationAdd,
   quotationUpdate,
+  setQuotationObj,
 } from "../../../redux/features/quotation/quotationSlice";
 import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
 import { clientGet } from "../../../redux/features/client/clientSlice";
@@ -35,7 +36,7 @@ const AddQuotation = ({ show, setShow }) => {
   const [perPersonAirPortPrice, setPerPersonAirportPrice] = useState(0);
   const [totalPersonLandPrice, setTotalPersonLandPrice] = useState(0);
   const [totalPersonAirPortPrice, setTotalPersonAirportPrice] = useState(0);
-  const [quotationObj, setQuotationObj] = useState(null);
+  const [quotationObject, setQuotationObject] = useState({});
   const [quotationId, setQuotationId] = useState("");
   const [clientsArr, setClientsArr] = useState([]);
 
@@ -60,9 +61,10 @@ const AddQuotation = ({ show, setShow }) => {
   ]);
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [isUpateDoc, setIsUpateDoc] = useState(false);
   //hotels details
   const [itineraryList, setItineraryList] = useState([
-    { day: "", itineraryName: "" },
+    { day: "", itineraryName: "", itineraryHeading: "" },
   ]);
 
   const [hotelList, setHotelList] = useState([
@@ -95,7 +97,8 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationStateObj) {
-      setQuotationObj(quotationStateObj);
+      console.log(quotationStateObj, "quotationStateObj213");
+      setQuotationObject(quotationStateObj);
     }
   }, [quotationStateObj]);
 
@@ -106,51 +109,52 @@ const AddQuotation = ({ show, setShow }) => {
   }, [clients]);
 
   useEffect(() => {
-    if (quotationObj && quotationObj._id) {
-      console.log(quotationObj, "qoationboj----------");
-      setQuotationId(quotationObj?._id);
-      setDestinationName(quotationObj?.destinationName);
-      setDurationOfTour(quotationObj?.durationOfTour);
-      setNumberOfGuest(quotationObj?.numberOfGuest);
-      setVisaRequired(quotationObj?.visa);
-      setNoOfTravellerArray(quotationObj?.travelPassengerArr);
-      setIsAirport(quotationObj?.isFlight);
-      setIsLand(quotationObj?.isLand);
-      setPerPersonLandPrice(quotationObj?.perPersonLandPrice);
-      setPerPersonAirportPrice(quotationObj?.perPersonAirPortPrice);
+    if (quotationObject && quotationObject._id) {
+      console.log(quotationObject, "qoationboj----------");
+      setQuotationId(quotationObject?._id);
+      setDestinationName(quotationObject?.destinationName);
+      setDurationOfTour(quotationObject?.durationOfTour);
+      setNumberOfGuest(quotationObject?.numberOfGuest);
+      setVisaRequired(quotationObject?.visa);
+      setNoOfTravellerArray(quotationObject?.travelPassengerArr);
+      setIsAirport(quotationObject?.isFlight);
+      setIsLand(quotationObject?.isLand);
+      setPerPersonLandPrice(quotationObject?.perPersonLandPrice);
+      setPerPersonAirportPrice(quotationObject?.perPersonAirPortPrice);
       setTotalPersonAirportPrice(
-        quotationObj?.numberOfGuest * quotationObj?.perPersonAirPortPrice
+        quotationObject?.numberOfGuest * quotationObject?.perPersonAirPortPrice
       );
       setTotalPersonLandPrice(
-        quotationObj?.numberOfGuest * quotationObj?.perPersonLandPrice
+        quotationObject?.numberOfGuest * quotationObject?.perPersonLandPrice
       );
-      setItineraryList(quotationObj?.itineraryDetails);
-      setTravelList(quotationObj?.tourListArr);
-      setHotelList(quotationObj?.hotelDetail);
-      setAirportTransfer(quotationObj?.airportTransfer);
-      setAmount(quotationObj?.amount);
-      setTermAndCondition(quotationObj?.termAndCondition);
-      setNumberofAdults(quotationObj?.travelPassengerObj?.noOfAdults);
+      setItineraryList(quotationObject?.itineraryDetails);
+      setTravelList(quotationObject?.tourListArr);
+      setHotelList(quotationObject?.hotelDetail);
+      setAirportTransfer(quotationObject?.airportTransfer);
+      setAmount(quotationObject?.amount);
+      setTermAndCondition(quotationObject?.termAndCondition);
+      setNumberofAdults(quotationObject?.travelPassengerObj?.noOfAdults);
       setNumberOfChildrenWithBed(
-        quotationObj?.travelPassengerObj?.noOfChildrenWithBed
+        quotationObject?.travelPassengerObj?.noOfChildrenWithBed
       );
       setNumberOfChildrenWithoutBed(
-        quotationObj?.travelPassengerObj?.noOfChildrenWithoutBed
+        quotationObject?.travelPassengerObj?.noOfChildrenWithoutBed
       );
       setIsUpdateTour(true);
-      setNumberOfInfants(quotationObj?.travelPassengerObj?.noOfInfants);
-      setTourArr(quotationObj?.tourListArr);
+      setNumberOfInfants(quotationObject?.travelPassengerObj?.noOfInfants);
+      setTourArr(quotationObject?.tourListArr);
+      setIsUpateDoc(true);
       // console.log(
-      //   quotationObj?.noOfAdults,
-      //   quotationObj?.noOfChildrenWithBed,
-      //   quotationObj?.noOfChildrenWithoutBed,
-      //   quotationObj?.noOfInfants
+      //   quotationObject?.noOfAdults,
+      //   quotationObject?.noOfChildrenWithBed,
+      //   quotationObject?.noOfChildrenWithoutBed,
+      //   quotationObject?.noOfInfants
       // );
-      // console.log(quotationObj.travelPassengerArr, "sadfsaf")
-      // set(quotationObj.destinationName);
-      // setDestinationName(quotationObj.destinationName);
+      // console.log(quotationObject.travelPassengerArr, "sadfsaf")
+      // set(quotationObject.destinationName);
+      // setDestinationName(quotationObject.destinationName);
     }
-  }, [quotationObj]);
+  }, [quotationObject]);
 
   useEffect(() => {
     // console.log(travelList, "tyuertret--------------------------------------------------------")
@@ -243,30 +247,10 @@ const AddQuotation = ({ show, setShow }) => {
     list.splice(index, 1);
     setTravelList(list);
   };
-  // const handleTourValueChange = (e, index) => {
-  //   let { name, value } = e.target;
-  //   ("use strict");
-  //   let tempList = [...travelList];
-  //   // let totalAmount = 00;
-  //   let currentObj = Object.freeze(tempList[index]);
-  //   currentObj = {
-  //     name: tempList[index].name,
-  //     startDate: tempList[index].startDate,
-  //     endDate: tempList[index].endDate,
 
-  //     // startDate: "", endDate: ""
-  //     // flightName: tempList[index].flightName,
-  //     // cost: tempList[index].cost,
-  //   };
-
-  //   currentObj[name] = value;
-  //   tempList[index] = currentObj;
-  //   setTravelList([...tempList]);
-  //   // }
-  // };
   const handleinputchangeHotel = (e, index) => {
     let { name, value } = e.target;
-    if (quotationObj && quotationObj._id) {
+    if (quotationObject && quotationObject._id) {
       ("use strict");
       // // console.log(name, "name");
       let list = [...hotelList];
@@ -518,19 +502,41 @@ const AddQuotation = ({ show, setShow }) => {
   //itinerary list
 
   const handleinputchangeItinerary = (e, index) => {
-    // // console.log(e, index, "e, index");
-    const { name, value } = e.target;
-    if (name == "day") {
-      if (value > 7 || value < 1) {
-        toastError("invalid day, kindly provide valid day");
+    console.log(itineraryList, "itineraryList");
+    if (itineraryList && isUpateDoc == true) {
+      console.log("iiioop");
+      ("use strict");
+      let list = [...itineraryList];
+      let currentObj = Object.freeze(list[index]);
+      console.log(currentObj, "currentObj243");
+      currentObj = {
+        day: list[index].day,
+        itineraryHeading: list[index].itineraryHeading,
+        itineraryName: list[index].itineraryName,
+      };
+      const { name, value } = e.target;
+      if (name == "day") {
+        if (value > 7 || value < 1) {
+          toastError("invalid day, kindly provide valid day");
+        }
       }
+
+      currentObj[name] = value;
+      list[index] = currentObj;
+      setItineraryList(list);
+    } else {
+      const { name, value } = e.target;
+      if (name == "day") {
+        if (value > 7 || value < 1) {
+          toastError("invalid day, kindly provide valid day");
+        }
+      }
+      const list = [...itineraryList];
+      list[index][name] = value;
+      setItineraryList(list);
     }
-    const list = [...itineraryList];
-    // console.log(list, "listitinerary");
-    list[index][name] = value;
-    setItineraryList(list);
   };
-  // // console.log(selectedTourIdArr, "selectedTourIdArr");
+
   const handleremoveItinerary = (index) => {
     const list = [...itineraryList];
     list.splice(index, 1);
@@ -636,17 +642,15 @@ const AddQuotation = ({ show, setShow }) => {
     // setPerPersonAirportPrice(0);
     // setTotalPersonLandPrice(0);
     // setTotalPersonAirportPrice(0);
-    // setQuotationObj(null);
+
     // setQuotationId("");
     // setClientsArr([]);
     setNumberofAdults(0);
     setNumberOfChildrenWithBed(0);
     setNumberOfChildrenWithoutBed(0);
     setNumberOfInfants(0);
+    dispatch(setQuotationObj({}));
 
-    // setVisaRequired("false");
-
-    ////
     setTermAndCondition("");
     //////product details
     setAmount(0);

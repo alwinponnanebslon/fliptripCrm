@@ -625,48 +625,54 @@ const ViewCostingSheetForm = () => {
                           />
                         </div>
                         {/*  */}
-                        <div className="col-12 mb-3">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="hold"
-                            value={x.hold}
-                            checked={x.hold == true ? true : false}
-                            id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
-                          />
-                          <label className="form-check-label fs-14">Hold</label>
-                        </div>
-                        <div className="col-12 mb-3">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="reConfirmed"
-                            value={x.reConfirmed}
-                            checked={x.reConfirmed == true ? true : false}
-                            id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
-                          />
-                          <label className="form-check-label fs-14">
-                            Re-confirmed
-                          </label>
-                        </div>
-                        <div className="col-12 mb-3">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="pending"
-                            value={x.pending}
-                            checked={x.pending == true ? true : false}
-                            id="publish-checkbox"
-                            onChange={(e) => handleinputchange(e, i)}
-                          />
-                          <label className="form-check-label fs-14">
-                            pending
-                          </label>
-                        </div>
-                        {/*  */}
 
+                        {/*  */}
+                        <div className="row">
+                          <div class="form-group col-md-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="hold"
+                              value={x.hold}
+                              checked={x.hold == true ? true : false}
+                              id="publish-checkbox"
+                              onChange={(e) => handleinputchange(e, i)}
+                            />
+                            <label className="form-check-label fs-14">
+                              Hold
+                            </label>
+                          </div>
+                          {/* <div className="col-4 mb-3"> */}
+                          <div class="form-group col-md-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="reConfirmed"
+                              value={x.reConfirmed}
+                              checked={x.reConfirmed == true ? true : false}
+                              id="publish-checkbox"
+                              onChange={(e) => handleinputchange(e, i)}
+                            />
+                            <label className="form-check-label fs-14">
+                              Re-confirmed
+                            </label>
+                          </div>
+                          {/* <div className="col-4 mb-3"> */}
+                          <div class="form-group col-md-3">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              name="pending"
+                              value={x.pending}
+                              checked={x.pending == true ? true : false}
+                              id="publish-checkbox"
+                              onChange={(e) => handleinputchange(e, i)}
+                            />
+                            <label className="form-check-label fs-14">
+                              pending
+                            </label>
+                          </div>
+                        </div>
                         <div class="form-group col-md-2 mt-4">
                           {inputList.length !== 1 && (
                             <button
@@ -687,6 +693,10 @@ const ViewCostingSheetForm = () => {
                             </button>
                           )}
                         </div>
+                        {/* <div class=" col-md-4 row "> */}
+                        {/* <div className="col-4 mb-3"> */}
+
+                        {/* </div> */}
                       </div>
                     );
                   })}

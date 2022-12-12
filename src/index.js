@@ -7,7 +7,7 @@ import { persistor, store } from "./redux/Store";
 import { PersistGate } from "redux-persist/integration/react";
 import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { registerServiceWorker } from "./serviceWorker";
 function Loading() {
   return <div>loading...</div>;
 }
@@ -26,3 +26,5 @@ if (module.hot) {
   // enables hot module replacement if plugin is installed
   module.hot.accept();
 }
+
+registerServiceWorker()
