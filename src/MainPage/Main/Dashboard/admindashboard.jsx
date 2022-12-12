@@ -56,6 +56,8 @@ import { reminderGetForOneDay } from "../../../redux/features/reminder/reminderS
 import { addNotification } from "../../../redux/features/notification/notificationSlice";
 
 import { date } from "yup/lib/locale.js";
+import { fetchToken } from "../../../firebase.js";
+import { registerUserFcmToken } from "../../../Services/user.service.js";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -69,6 +71,25 @@ const AdminDashboard = () => {
   const [allLeadArr, setAllLeadArr] = useState([]);
   const [allSalesArr, setAllSalesArr] = useState([]);
   const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
+
+const authObj=useSelector((state)=>state.auth)
+
+  const getUserFcmToken = async () => {
+    try {
+      let temp = await fetchToken();
+     console.log(temp)
+      let { data: res } = await registerUserFcmToken({ fcmToken: temp,userId:authObj?.user?._id });
+      if (res) {
+        console.log(res);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+    useEffect(()=>{
+      getUserFcmToken()
+    },[])
 
   const [reminderArr, setReminderArr] = useState([]);
 
