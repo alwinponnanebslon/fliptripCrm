@@ -79,6 +79,7 @@ const Notes = ({ show1, setShow1 }) => {
       note,
       reminderDate,
       leadId,
+
       createdBy: { ...createdBy, role },
     };
     // console.log(obj, "obj a1folow");
@@ -196,12 +197,13 @@ const Notes = ({ show1, setShow1 }) => {
                 <div className="row">
                   <div className="col-lg-12 text-end">
                     <Button
-                      // disabled={isReadyOnlyNotes}
+                      disabled={params.search.includes("true") ? true : false}
                       // readOnly={isReadyOnlyNotes}
                       type="button"
                       className="btn-cancle"
                       onClick={() => {
-                        setShow1(false);
+                        // setShow1(false);
+                        setShow(false);
                         // setIsReadyOnlyNotes(false);
                         if (params.search.includes("true")) {
                           // if (note?.trim().length > 0) {

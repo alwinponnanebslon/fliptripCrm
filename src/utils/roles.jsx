@@ -10,8 +10,8 @@ export const leadStatus = {
   open: "OPEN",
   reopened: "REOPENED",
   on_Hold: "ON_HOLD",
-  closed: "CLOSED",
-  closedBySpoc: "CLOSED_BY_SPOC",
+  convert: "CONVERT",
+  convertBySpoc: "CONVERT_BY_SPOC",
   in_Progress: "IN_PROGRESS",
   cancelled: "CANCELLED",
 };

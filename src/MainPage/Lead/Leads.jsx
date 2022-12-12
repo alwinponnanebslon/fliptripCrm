@@ -432,7 +432,7 @@ const Leads = () => {
     setDescription("");
     setLeadObj({});
     setLeadUpdateId("");
-    setAgentsArr([]);
+    // setAgentsArr([]);
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
@@ -567,8 +567,8 @@ const Leads = () => {
   const handleLeadStatusUpdate = async (id, value, status) => {
     try {
       // console.log(id, value, status, "value123");
-      if (value == "CLOSED" || value == leadStatus.closedBySpoc) {
-        if (isStatusOfLead == false && status != "CLOSED") {
+      if (value == "CONVERT" || value == leadStatus.convertBySpoc) {
+        if (isStatusOfLead == false && status != "CONVERT") {
           confirmAlert({
             title: "Are you sure to close this Lead",
             // message: "Are you sure to do this.",
@@ -710,7 +710,7 @@ const Leads = () => {
 
   const handleReturndropDown = (record) => {
     // console.log(record?.status, "role");
-    // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
+    // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.convert , "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.convert")
     if (role == "ADMIN") {
       return (
         <>
@@ -726,7 +726,7 @@ const Leads = () => {
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
+            ) : record?.status == leadStatus.convertBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -734,7 +734,7 @@ const Leads = () => {
 
             {record?.status}
           </a>
-          {/* {record?.status != leadStatus.closed && ( */}
+          {/* {record?.status != leadStatus.convert && ( */}
           <div className="dropdown-menu dropdown-menu-right">
             <a
               className="dropdown-item"
@@ -778,13 +778,13 @@ const Leads = () => {
                 onClick={() =>
                   handleLeadStatusUpdate(
                     record?._id,
-                    leadStatus.closed,
+                    leadStatus.convert,
 
                     record?.status
                   )
                 }
               >
-                <i className="fa fa-dot-circle-o text-success" /> Closed
+                <i className="fa fa-dot-circle-o text-success" /> Convert
               </a>
             ) : (
               <a
@@ -792,12 +792,13 @@ const Leads = () => {
                 onClick={() =>
                   handleLeadStatusUpdate(
                     record?._id,
-                    leadStatus.closedBySpoc,
+                    leadStatus.convertBySpoc,
                     record?._status
                   )
                 }
               >
-                <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+                <i className="fa fa-dot-circle-o text-warning" /> Convert By
+                Spoc
               </a>
             )}
             <a
@@ -828,7 +829,7 @@ const Leads = () => {
           {/* )} */}
         </>
       );
-    } else if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
+    } else if (role == rolesObj.SPOC && record?.status == leadStatus.convert) {
       return (
         <>
           <div>
@@ -838,7 +839,7 @@ const Leads = () => {
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
+            ) : record?.status == leadStatus.convertBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -849,7 +850,7 @@ const Leads = () => {
       );
     } else if (
       role == rolesObj.SPOC &&
-      record?.status == leadStatus.closedBySpoc
+      record?.status == leadStatus.convertBySpoc
     ) {
       return (
         <>
@@ -860,7 +861,7 @@ const Leads = () => {
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
+            ) : record?.status == leadStatus.convertBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -884,7 +885,7 @@ const Leads = () => {
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
-            ) : record?.status == leadStatus.closedBySpoc ? (
+            ) : record?.status == leadStatus.convertBySpoc ? (
               <i className="fa fa-dot-circle-o text-warning" />
             ) : (
               <i className="fa fa-dot-circle-o text-success" />
@@ -932,10 +933,10 @@ const Leads = () => {
               <a
                 className="dropdown-item"
                 onClick={() =>
-                  handleLeadStatusUpdate(record?._id, leadStatus.closed)
+                  handleLeadStatusUpdate(record?._id, leadStatus.convert)
                 }
               >
-                <i className="fa fa-dot-circle-o text-success" /> Closed
+                <i className="fa fa-dot-circle-o text-success" /> Convert
               </a>
             ) : ( */}
             <a
@@ -943,12 +944,12 @@ const Leads = () => {
               onClick={() =>
                 handleLeadStatusUpdate(
                   record?._id,
-                  leadStatus.closedBySpoc,
+                  leadStatus.convertBySpoc,
                   record?.status
                 )
               }
             >
-              <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+              <i className="fa fa-dot-circle-o text-warning" /> Convert By Spoc
             </a>
             {/* )} */}
             <a
@@ -983,7 +984,7 @@ const Leads = () => {
 
   // const handleReturndropDown = (record) => {
   //   // // console.log(record?.status, "role");
-  //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.closed, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.closed")
+  //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.convert, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.convert")
   //   if (role == "ADMIN") {
   //     return (
   //       <>
@@ -1009,7 +1010,7 @@ const Leads = () => {
   //       </>
   //     );
   //   } else
-  //   if (role == rolesObj.SPOC && record?.status == leadStatus.closed) {
+  //   if (role == rolesObj.SPOC && record?.status == leadStatus.convert) {
   //     return (
   //       <>
   //         <div>
@@ -1019,7 +1020,7 @@ const Leads = () => {
   //           ) : record?.status == leadStatus.open ||
   //             record?.status == leadStatus.reopened ? (
   //             <i className="fa fa-dot-circle-o text-info" />
-  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //           ) : record?.status == leadStatus.convertBySpoc ? (
   //             <i className="fa fa-dot-circle-o text-warning" />
   //           ) : (
   //             <i className="fa fa-dot-circle-o text-success" />
@@ -1030,7 +1031,7 @@ const Leads = () => {
   //     );
   //   } else if (
   //     role == rolesObj.SPOC &&
-  //     record?.status == leadStatus.closedBySpoc
+  //     record?.status == leadStatus.convertBySpoc
   //   ) {
   //     return (
   //       <>
@@ -1041,7 +1042,7 @@ const Leads = () => {
   //           ) : record?.status == leadStatus.open ||
   //             record?.status == leadStatus.reopened ? (
   //             <i className="fa fa-dot-circle-o text-info" />
-  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //           ) : record?.status == leadStatus.convertBySpoc ? (
   //             <i className="fa fa-dot-circle-o text-warning" />
   //           ) : (
   //             <i className="fa fa-dot-circle-o text-success" />
@@ -1065,7 +1066,7 @@ const Leads = () => {
   //           ) : record?.status == leadStatus.on_Hold ||
   //             record?.status == leadStatus.cancelled ? (
   //             <i className="fa fa-dot-circle-o text-danger" />
-  //           ) : record?.status == leadStatus.closedBySpoc ? (
+  //           ) : record?.status == leadStatus.convertBySpoc ? (
   //             <i className="fa fa-dot-circle-o text-warning" />
   //           ) : (
   //             <i className="fa fa-dot-circle-o text-success" />
@@ -1104,7 +1105,7 @@ const Leads = () => {
   //                 handleLeadStatusUpdate(record?._id, leadStatus.closed)
   //               }
   //             >
-  //               <i className="fa fa-dot-circle-o text-success" /> Closed
+  //               <i className="fa fa-dot-circle-o text-success" /> Convert
   //             </a>
   //           ) : (
   //             <a
@@ -1113,7 +1114,7 @@ const Leads = () => {
   //                 handleLeadStatusUpdate(record?._id, leadStatus.closedBySpoc)
   //               }
   //             >
-  //               <i className="fa fa-dot-circle-o text-warning" /> Closed By Spoc
+  //               <i className="fa fa-dot-circle-o text-warning" /> Convert By Spoc
   //             </a>
   //           )}
   //           <a
@@ -1911,9 +1912,9 @@ const Leads = () => {
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
-                          return x.status == "CLOSED" ||
-                            x.status == "CLOSED_BY_SPOC"
-                            ? "CLOSED"
+                          return x.status == "CONVERT" ||
+                            x.status == "CONVERT_BY_SPOC"
+                            ? "CONVERT"
                             : "";
                         }).length
                       }

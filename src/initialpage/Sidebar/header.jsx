@@ -610,13 +610,30 @@ const Header = (props) => {
                               &nbsp;
                               {/* </div> */}
                             </p>
+
                             <p className="noti-details d-flex">
-                              <h5> {el?.description} </h5> &nbsp;
+                              <h5>
+                                {el.description
+                                  ? el?.description
+                                  : el?.otherReason}
+                              </h5>
+                              &nbsp;
                             </p>
                             <p className="noti-details d-flex">
                               <h5>
-                                {new Date(el?.followDate).toLocaleDateString()}{" "}
-                                at {el?.followTime}
+                                {el.followDate
+                                  ? new Date(
+                                      el?.followDate
+                                    ).toLocaleDateString()
+                                  : new Date(
+                                      el?.leadStatusDate
+                                    ).toLocaleDateString()}
+                                at
+                                {el.followTime
+                                  ? el?.followTime
+                                  : el?.leadStatusTime}
+                                {/* {new Date(el?.followDate).toLocaleDateString()}{" "}
+                                at {el?.followTime} */}
                               </h5>
                               &nbsp;
                             </p>

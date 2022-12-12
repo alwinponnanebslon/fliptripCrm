@@ -36,11 +36,8 @@ const LeadSidebar = (props) => {
   const [level3Menu, setLevel3Menu] = useState("");
   const [pathname, setPathName] = useState("");
 
-
   const [leadStatusDate, setLeadStatusDate] = useState(new Date());
   const [leadStatusTime, setLeadStatusTime] = useState("");
-
-
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -61,6 +58,7 @@ const LeadSidebar = (props) => {
 
   const [otherReason, setOtherReason] = useState("");
   const [sendDataToDb, setSendDataToDb] = useState(false);
+  const [notesData, setNotesData] = useState("");
 
   // const ParamsPathName = location.pathname.split("/").length;
 
@@ -120,25 +118,40 @@ const LeadSidebar = (props) => {
     setSendDataToDb(false);
     setIsOtherReason(false);
   };
+  useEffect(() => {
+    if (notesData == "Other Reason") {
+      setIsOtherReason(true);
+    }
+  }, [notesData]);
+
   const handleSubmitStatusOfLead = (e) => {
-    console.log(e, "e.");
-    let obj = { ...e };
+    // console.log(e, "e.");
+    let obj = {
+      leadStatusDate,
+      leadStatusTime,
+      heading: notesData,
+      otherReason,
+    };
+
     obj.leadId = leadId;
     obj.createdBy = createdBy;
-    if (e.heading == "Other Reason") {
-      setIsOtherReason(true);
-      obj.otherReason = otherReason;
+    if (notesData == "Other Reason") {
+      // setIsOtherReason(true);
+      // obj.otherReason = otherReason;
       if (obj.otherReason.length <= 0) {
         toastError("Other Reason is mandatory");
         return;
       } else {
-        setSendDataToDb(true);
-      }
-      if (sendDataToDb) {
+        // setSendDataToDb(true);
         setShowLeadStatusModal(false);
         dispatch(addReminder(obj));
         clearFunc();
       }
+      // if (sendDataToDb) {
+      // setShowLeadStatusModal(false);
+      // dispatch(addReminder(obj));
+      // clearFunc();
+      // }
     } else {
       dispatch(addReminder(obj));
       setShowLeadStatusModal(false);
@@ -772,6 +785,7 @@ const LeadSidebar = (props) => {
         )} */}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
+        {console.log(notesData, "setNotesData")}
         <Modal
           show={showLeadStatusModal}
           onHide={handleClose}
@@ -786,15 +800,16 @@ const LeadSidebar = (props) => {
                 <div className="col-lg-12 text-end mb-4">
                   {leadStatusReason.map((el, key) => {
                     return (
-                      <Button
+                      <button
                         key={key}
                         className="btn-cancle col-lg-12 mb-3"
+                        // onChange={()=>{setNotesData(el.heading)}}
                         onClick={(e) => {
-                          handleSubmitStatusOfLead(el);
+                          setNotesData(el.heading);
                         }}
                       >
                         {el.heading}
-                      </Button>
+                      </button>
                     );
                   })}
 
@@ -840,24 +855,34 @@ const LeadSidebar = (props) => {
             >
               Close
             </Button>
-            {isOtherReason &&
-              leadStatusReason.map((el, i) => {
-                if (el.heading == "Other Reason") {
-                  return (
-                    <Button
-                      key={i}
-                      variant="primary"
-                      className="btn-cancle col-lg-8   mt-3"
-                      onClick={() => {
-                        handleSubmitStatusOfLead(el);
-                        setSendDataToDb(true);
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  );
+            {/* <Button
+              variant="secondary"
+              onClick={(e) => {
+                handleSubmit(e)
+                setShowLeadStatusModal(false);
+                clearFunc();
+              }}
+            >
+              Close
+            </Button> */}
+            {/* {isOtherReason &&
+              leadStatusReason.map((el, i) => { */}
+            {/* if (el.heading == "Other Reason") {
+                  return ( */}
+            <Button
+              // key={i}
+              variant="primary"
+              className="btn-cancle col-lg-8   mt-3"
+              onClick={(el) => {
+                handleSubmitStatusOfLead(el);
+                setSendDataToDb(true);
+              }}
+            >
+              Submit
+            </Button>
+            {/* );
                 }
-              })}
+              // })} */}
           </Modal.Footer>
         </Modal>
         <Modal show={show} onHide={handleClose} className="add_details_modal">

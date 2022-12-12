@@ -297,7 +297,7 @@ const authObj=useSelector((state)=>state.auth)
         tempArray.push({
           y: el.date + "",
           "Total Lead": el.totalLead,
-          "Total Convert Lead": el.closedLead,
+          "Total Convert Lead": el.convertLead,
         });
       }
       setAllLeadArr(tempArray);
@@ -335,7 +335,7 @@ const authObj=useSelector((state)=>state.auth)
     // handleGetAllSalesOfTenDays();
   }, []);
 
-  let closedLeadArr = [];
+  let convertLeadArr = [];
   let inProgressArr = [];
   let onHoldArr = [];
   let declinedArr = [];
@@ -345,10 +345,10 @@ const authObj=useSelector((state)=>state.auth)
 
   temp.map((x) => {
     if (
-      x.status == leadStatus?.closed ||
-      x.status == leadStatus?.closedBySpoc
+      x.status == leadStatus?.convert  ||
+      x.status == leadStatus?.convertBySpoc
     ) {
-      closedLeadArr.push(x);
+      convertLeadArr.push(x);
     } else if (
       x.status == leadStatus.open ||
       x.status == leadStatus.in_Progress ||
@@ -397,7 +397,7 @@ const authObj=useSelector((state)=>state.auth)
           tempArray.push({
             y: el.date + "",
             "Total Lead": el.totalLead,
-            "Total Convert Lead": el.closedLead,
+            "Total Convert Lead": el.convertLead,
           });
         }
         setAllLeadArr(tempArray);
@@ -540,9 +540,9 @@ const authObj=useSelector((state)=>state.auth)
                       <h3 className="mb-3">
                         {
                           leadsArr.filter((x) => {
-                            return x.status == "CLOSED" ||
-                              x.status == "CLOSED_BY_SPOC"
-                              ? "CLOSED"
+                            return x.status == "CONVERT" ||
+                              x.status == "CONVERT_BY_SPOC"
+                              ? "CONVERT"
                               : "";
                           }).length
                         }
@@ -935,7 +935,7 @@ const authObj=useSelector((state)=>state.auth)
                     </div>
                     <div className="stats-info">
                       <p>
-                        Closed Leads{" "}
+                        Convert Leads{" "}
                         <strong>
                           22 <small>/ 212</small>
                         </strong>
@@ -975,7 +975,7 @@ const authObj=useSelector((state)=>state.auth)
                       <div className="col-md-6 col-6 text-center">
                         <div className="stats-box mb-4">
                           <p>Pending Lead</p>
-                          <h3>{leadsArr.length - closedLeadArr.length}</h3>
+                          <h3>{leadsArr.length - convertLeadArr.length}</h3>
                         </div>
                       </div>
                     </div>
@@ -1061,7 +1061,7 @@ const authObj=useSelector((state)=>state.auth)
                     <p>
                       <i className="fa fa-dot-circle-o text-purple me-2" />
                       Converted Lead
-                      <span className="float-end">{closedLeadArr.length}</span>
+                      <span className="float-end">{convertLeadArr.length}</span>
                     </p>
                     <p>
                       <i className="fa fa-dot-circle-o text-warning me-2" />
