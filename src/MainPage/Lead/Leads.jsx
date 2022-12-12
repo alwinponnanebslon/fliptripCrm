@@ -45,8 +45,9 @@ import {
 
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 import { tourGet } from "../../redux/features/tour/tourSlice";
-import { clientGet, setObj } from "../../redux/features/client/clientSlice";
+import { clientGet, setclientObj, setObj } from "../../redux/features/client/clientSlice";
 import LeadView from "./LeadView";
+import { get } from '../../Services/client.service'
 import LeadDetails from "./LeadDetails";
 import { date } from "yup";
 import { shouldForwardProp } from "@mui/system";
@@ -73,6 +74,7 @@ const Leads = () => {
   const role = useSelector((state) => state.auth.role);
   const userAuthorise = useSelector((state) => state.auth);
 
+  const [clientArr, setClientArr] = useState([]);
   // console.log(userAuthorise, "role223");
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
@@ -102,6 +104,21 @@ const Leads = () => {
   const [showNotes, setShowNotes] = useState(false);
   const agentSelect = useRef();
 
+  const getAllClients = async () => {
+    try {
+      const { data: res } = await get();
+      if (res) {
+        setClientArr(res?.data)
+      }
+    } catch (error) {
+      toastError(error)
+    }
+  }
+
+  useEffect(() => {
+    getAllClients()
+  }, [])
+
   const [data, setData] = useState([
     {
       id: 1,
@@ -127,8 +144,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-        ? "rgba(255,155,68,0.5)"
-        : "white",
+          ? "rgba(255,155,68,0.5)"
+          : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -483,10 +500,12 @@ const Leads = () => {
         description,
         fileUrl,
         priority,
+        clientId: clientId,
         createdBy: userObj,
         clientObj,
         agentId: spocId,
         spocId,
+
       };
 
       if (agentId != "" && leadId == "") {
@@ -721,7 +740,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -834,7 +853,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -856,7 +875,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -880,7 +899,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1257,11 +1276,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1492,11 +1509,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1830,6 +1845,17 @@ const Leads = () => {
     //   return;
     // }
   };
+  const handleClientSelection = (id) => {
+    let tempIndex = clientArr.findIndex(el => el?._id == id);
+    if (tempIndex != -1) {
+      let obj = clientArr[tempIndex]
+      setName(obj?.name)
+      setPhone(obj?.phone)
+      setEmail(obj?.email)
+      setClientId(obj?._id)
+      setclientObj(obj)
+    }
+  }
 
   return (
     <div className="page-wrapper">
@@ -2201,18 +2227,18 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                    ? columns_TeamLeader
-                    : role == "SPOC"
-                    ? columns_SPOC
-                    : role == "SUPERVISOR"
-                    ? columns_SUPERVISOR
-                    : []
+                      ? columns_TeamLeader
+                      : role == "SPOC"
+                        ? columns_SPOC
+                        : role == "SUPERVISOR"
+                          ? columns_SUPERVISOR
+                          : []
                 }
                 // columns={columns}
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-                // onChange={console.log("change")}
+              // onChange={console.log("change")}
               />
             </div>
           </div>
@@ -2253,7 +2279,7 @@ const Leads = () => {
       <Modal
         size="lg"
         show={show}
-        // className="add_note"
+      // className="add_note"
       >
         <Modal.Header>
           <Modal.Title>
@@ -2276,29 +2302,30 @@ const Leads = () => {
                 />
               </div>
             </div>
-            {/* <div className="col-md-6">
-                  <div className="form-group">
-                    <label>Client ({clientsArr.length})</label>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>Client ({clientArr.length})</label>
 
-                    <select
-                      className="select form-control"
-                      value={clientId}
-                      onChange={(e) => {
-                        setClientId(e.target.value);
-                      }}
-                    >
-                      <option value=""> --- Select Clients</option>
-                      {clientsArr &&
-                        clientsArr.map((client, i) => {
-                          return (
-                            <option key={i} value={client._id}>
-                              {client.name}
-                            </option>
-                          );
-                        })}
-                    </select>
-                  </div>
-                </div> */}
+                <select
+                  className="select form-control"
+                  value={clientId}
+                  onChange={(e) => {
+                    setClientId(e.target.value);
+                    handleClientSelection(e.target.value)
+                  }}
+                >
+                  <option value=""> --- Select Clients</option>
+                  {clientArr &&
+                    clientArr.map((client, i) => {
+                      return (
+                        <option key={i} value={client._id}>
+                          {client.name}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+            </div>
             <div className="col-md-6">
               <div className="form-group">
                 <label>
