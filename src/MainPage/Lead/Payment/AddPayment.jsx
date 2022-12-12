@@ -171,7 +171,7 @@ export const AddPayment = () => {
       //   );
       //   return;
       // }
-      if (value > total || value <= 0) {
+      if (value && value > total || value < 0) {
         toastError("Amount must be greate than zero ot less than total Amount");
         return;
       }
@@ -483,10 +483,10 @@ export const AddPayment = () => {
                   value={tcs}
                   onChange={(e) => setTcs(e.target.value)}
                   type="number"
-                  // button="edit"
+                // button="edit"
                 />
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary mt-4"
                   onClick={(e) => {
                     setHandleEditInputInTcs(!handleEditInputInTcs);
                   }}

@@ -74,7 +74,7 @@ const AddQuotation = ({ show, setShow }) => {
       numberOfNight: 0,
       checkIn: "",
       checkOut: "",
-      rating: "",
+      rating: 2,
       hotelAddress: "", // hotelAddress: "",
     },
   ]);
@@ -480,7 +480,7 @@ const AddQuotation = ({ show, setShow }) => {
         numberOfNight: 0,
         checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
-        rating: "",
+        rating: 2,
         hotelAddress: "", //  hotelAddress: "",
         bookingSource: "",
       },
@@ -667,7 +667,7 @@ const AddQuotation = ({ show, setShow }) => {
         numberOfNight: 0,
         checkIn: "",
         checkOut: "",
-        rating: "",
+        rating: 2,
         hotelAddress: "", // hotelAddress: "",
       },
     ]);
@@ -763,9 +763,9 @@ const AddQuotation = ({ show, setShow }) => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -777,9 +777,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -791,9 +791,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -805,9 +805,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -819,7 +819,7 @@ const AddQuotation = ({ show, setShow }) => {
     }
   };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -1234,10 +1234,10 @@ aria-label="Close"
                             )}
                           </div>
                           {durationOfTour &&
-                          hotelList.reduce(
-                            (acc, el) => acc + parseInt(el.numberOfNight),
-                            0
-                          ) < durationOfTour ? (
+                            hotelList.reduce(
+                              (acc, el) => acc + parseInt(el.numberOfNight),
+                              0
+                            ) < durationOfTour ? (
                             <div className="col-md-12">
                               {/* {hotelList.length - 1 === i && ( */}
                               <button

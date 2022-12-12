@@ -36,6 +36,12 @@ const LeadSidebar = (props) => {
   const [level3Menu, setLevel3Menu] = useState("");
   const [pathname, setPathName] = useState("");
 
+
+  const [leadStatusDate, setLeadStatusDate] = useState(new Date());
+  const [leadStatusTime, setLeadStatusTime] = useState("");
+
+
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -791,6 +797,21 @@ const LeadSidebar = (props) => {
                       </Button>
                     );
                   })}
+
+                  <input
+                    type="date"
+                    placeholder="Date"
+                    class="form-control"
+                    value={leadStatusDate}
+                    onChange={(e) => setLeadStatusDate(e.target.value)}
+                  />
+                  <input
+                    type="time"
+                    placeholder="Time"
+                    class="form-control"
+                    value={leadStatusTime}
+                    onChange={(e) => setLeadStatusTime(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
