@@ -141,8 +141,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                              ? "active"
-                              : ""
+                                ? "active"
+                                : ""
                           }
                           to="/admin/employee"
                         >
@@ -187,8 +187,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -200,8 +200,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -327,8 +327,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -340,8 +340,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -420,8 +420,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                              ? "active"
-                              : ""
+                                ? "active"
+                                : ""
                           }
                           to="/admin/employee"
                         >
@@ -450,8 +450,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -468,8 +468,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -537,8 +537,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -555,8 +555,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -612,8 +612,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -630,8 +630,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">

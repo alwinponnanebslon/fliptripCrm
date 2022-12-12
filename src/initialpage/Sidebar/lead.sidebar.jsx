@@ -860,9 +860,6 @@ const LeadSidebar = (props) => {
               })}
           </Modal.Footer>
         </Modal>
-        {/* 
-       
-        */}
         <Modal show={show} onHide={handleClose} className="add_details_modal">
           <Modal.Header>
             <Modal.Title> Add Details </Modal.Title>
