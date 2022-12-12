@@ -163,7 +163,6 @@ const Addemployee = ({ show, setShow }) => {
     }
   };
 
-
   const handleEmployeeCreate = async (e) => {
     e.preventDefault();
     try {
@@ -254,7 +253,7 @@ const Addemployee = ({ show, setShow }) => {
         // dispatch(addEmployee(obj))
         toastSuccess(res.message);
         handleGetAllEmployees();
-        // window.location.reload();
+        window.location.reload();
         setShow(false);
         ClearFunc();
         // // console.log(obj)
@@ -270,7 +269,6 @@ const Addemployee = ({ show, setShow }) => {
       prevDocUpdated ? handleEmployeeEdit(e) : handleEmployeeCreate(e);
     }
   };
-
 
   useEffect(() => {
     if (employees && employees.length > 0) {
@@ -510,36 +508,36 @@ const Addemployee = ({ show, setShow }) => {
                     }
                     {prevDocUpdated == false
                       ? role == rolesObj.SPOC &&
-                      reduxrole == "ADMIN" && (
-                        <div className="col-md-6 mt-3">
-                          <div className="form-group">
-                            <label>
-                              Team Lead<span className="text-danger">*</span>
-                            </label>
-                            <select
-                              value={leadId}
-                              onChange={(e) => {
-                                setLeadId(e.target.value);
-                              }}
-                              className={styles.selectStyle}
-                            >
-                              <option value="">
-                                Please Select Team Lead
-                              </option>
-                              {teamLeadsArr &&
-                                teamLeadsArr.length > 0 &&
-                                teamLeadsArr.map((el, index) => {
-                                  return (
-                                    <option
-                                      key={index}
-                                      value={el._id}
-                                    >{`${el.firstName} ${el.lastName}`}</option>
-                                  );
-                                })}
-                            </select>
+                        reduxrole == "ADMIN" && (
+                          <div className="col-md-6 mt-3">
+                            <div className="form-group">
+                              <label>
+                                Team Lead<span className="text-danger">*</span>
+                              </label>
+                              <select
+                                value={leadId}
+                                onChange={(e) => {
+                                  setLeadId(e.target.value);
+                                }}
+                                className={styles.selectStyle}
+                              >
+                                <option value="">
+                                  Please Select Team Lead
+                                </option>
+                                {teamLeadsArr &&
+                                  teamLeadsArr.length > 0 &&
+                                  teamLeadsArr.map((el, index) => {
+                                    return (
+                                      <option
+                                        key={index}
+                                        value={el._id}
+                                      >{`${el.firstName} ${el.lastName}`}</option>
+                                    );
+                                  })}
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                      )
+                        )
                       : ""}
                     {/* {reduxrole == "TEAMLEAD" && setLeadId(userId)} */}
                   </div>
