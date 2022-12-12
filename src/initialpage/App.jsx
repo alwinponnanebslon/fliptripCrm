@@ -28,6 +28,7 @@ import leadRoutes from "../router_service/lead.routes";
 import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
 // import "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css";
 import Quotation from "../_components/quotation/Quotation";
+import Index from "../MainPage/Pdf/Index";
 // {
 //     if (location.pathname.includes("login") || location.pathname.includes("register") || location.pathname.includes("forgotpassword") || location.pathname.includes("otp") || location.pathname.includes("lockscreen")) {
 //       // $('body').addClass('account-page');
@@ -108,6 +109,12 @@ const App = () => {
         </PrivateRoute>
       </Route>
 
+
+      <Route path="/pdf">
+        <PrivateRoute>
+          <Index />
+        </PrivateRoute>
+      </Route>
       <Route path="/">
         <PublicRoute>
           <LoginPage />

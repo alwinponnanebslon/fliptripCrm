@@ -96,6 +96,18 @@ const Quotation = () => {
     dispatch(setTour(row));
   };
 
+
+  const handleDownload = (row) => {
+    // console.log(row, "row update"); //whole object
+    localStorage.setItem("quotationPdf", JSON.stringify(row))
+
+
+
+    dispatch(setQuotationObj(row));
+    dispatch(setTour(row));
+    history.push("/pdf")
+  };
+
   const handleDelete = (id) => {
     dispatch(quotationDelete({ id, leadId }));
   };
@@ -318,7 +330,27 @@ const Quotation = () => {
       render: (row, record) => (
         <div className="dropdown dropdown-action text-end">
           {isConvert ? (
-            <></>
+            <>
+              <a
+                href="#"
+                className="action-icon dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i className="material-icons">more_vert</i>
+              </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a
+                  className="dropdown-item"
+                  // data-bs-toggle="modal"
+                  // data-bs-target="#add_quote"
+                  onClick={() => handleDownload(row)}
+                >
+                  <i className="fa fa-pencil m-r-5" /> Download
+                </a>
+
+              </div>
+            </>
           ) : (
             <>
               <a
@@ -330,6 +362,7 @@ const Quotation = () => {
                 <i className="material-icons">more_vert</i>
               </a>
               <div className="dropdown-menu dropdown-menu-right">
+
                 <a
                   className="dropdown-item"
                   // data-bs-toggle="modal"
@@ -424,9 +457,9 @@ const Quotation = () => {
                 >
                   <i
                     className="fa fa-plus"
-                    // onClick={() => {
-                    //   setShow(true);
-                    // }}
+                  // onClick={() => {
+                  //   setShow(true);
+                  // }}
                   />
                   Add Quote
                 </a>

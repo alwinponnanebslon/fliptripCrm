@@ -103,11 +103,6 @@ export default [
     component: Notification,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
-  {
-    path: "/admin/pdf",
-    component: Pdf,
-    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
-  },
   // {
   //   path: "/admin/notify",
   //   component: Notify,

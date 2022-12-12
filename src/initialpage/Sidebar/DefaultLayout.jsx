@@ -10,7 +10,7 @@ import routerService from "../../router_service";
 import Header from "./header.jsx";
 import SidebarContent from "./sidebar";
 
-const DefaultLayout = ({children}) => {
+const DefaultLayout = ({ children }) => {
   const [menu, setMenu] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -20,10 +20,10 @@ const DefaultLayout = ({children}) => {
 
   return (
     <>
- 
+
       <div className={`main-wrapper ${menu ? "slide-nav" : ""}`}>
         <Header onMenuClick={(value) => toggleMobileMenu()} />
-          <SidebarContent  />
+        <SidebarContent />
         {children}
         {/* </div> */}
         {/* Delete Employee Modal */}
