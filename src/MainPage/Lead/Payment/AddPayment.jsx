@@ -164,7 +164,7 @@ export const AddPayment = () => {
           totalAmount = totalAmount + parseInt(el.installmentAmount);
         }
       }
-      console.log(totalAmount, "totalAmount213", parseInt(value), "value1");
+      // console.log(totalAmount, "totalAmount213", parseInt(value), "value1");
       // if (parseInt(totalAmount) + parseInt(value) > parseInt(total)) {
       //   toastError(
       //     "Amount must be greate than zero ot less than total Amount*"

@@ -72,24 +72,26 @@ const AdminDashboard = () => {
   const [allSalesArr, setAllSalesArr] = useState([]);
   const [isNotificationOccurs, setIsNotificationOccurs] = useState(false);
 
-const authObj=useSelector((state)=>state.auth)
+  const authObj = useSelector((state) => state.auth);
 
   const getUserFcmToken = async () => {
     try {
       let temp = await fetchToken();
-     console.log(temp)
-      let { data: res } = await registerUserFcmToken({ fcmToken: temp,userId:authObj?.user?._id });
+      console.log(temp);
+      let { data: res } = await registerUserFcmToken({
+        fcmToken: temp,
+        userId: authObj?.user?._id,
+      });
       if (res) {
         console.log(res);
       }
     } catch (error) {
       console.error(error);
     }
-
-  }
-    useEffect(()=>{
-      getUserFcmToken()
-    },[])
+  };
+  useEffect(() => {
+    getUserFcmToken();
+  }, []);
 
   const [reminderArr, setReminderArr] = useState([]);
 
@@ -345,7 +347,7 @@ const authObj=useSelector((state)=>state.auth)
 
   temp.map((x) => {
     if (
-      x.status == leadStatus?.convert  ||
+      x.status == leadStatus?.convert ||
       x.status == leadStatus?.convertBySpoc
     ) {
       convertLeadArr.push(x);
@@ -526,6 +528,7 @@ const authObj=useSelector((state)=>state.auth)
               </div>
             </div>
           )}
+          {console.log(leadsArr, "leads23")}
           {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
             <div className="row">
               <div className="col-md-12">
@@ -569,7 +572,11 @@ const authObj=useSelector((state)=>state.auth)
                       <h3 className="mb-3">
                         {
                           leadsArr.filter((x) => {
-                            return x.status == "OPEN" || x.status == "REOPENED";
+                            return (
+                              x.status == "OPEN" ||
+                              x.status == "REOPENED" ||
+                              x.status == "IN_PROGRESS"
+                            );
                           }).length
                         }
                       </h3>
@@ -595,9 +602,7 @@ const authObj=useSelector((state)=>state.auth)
                       <h3 className="mb-3">
                         {
                           leadsArr.filter((x) => {
-                            return (
-                              x.status == "ON_HOLD" || x.status == "IN_PROGRESS"
-                            );
+                            return x.status == "ON_HOLD";
                           }).length
                         }
                       </h3>

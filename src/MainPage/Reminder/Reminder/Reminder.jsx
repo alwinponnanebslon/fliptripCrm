@@ -103,19 +103,31 @@ export const GeneralReminder = () => {
     {
       title: "Description",
       dataIndex: "description",
-      render: (row, record) => <div>{record.description}</div>,
+      render: (row, record) => (
+        <div>
+          {record.description ? record?.description : record?.otherReason}
+        </div>
+      ),
       // sorter: (a, b) => a.description.length - b.description.length,
     },
 
     {
       title: "Reminder Date",
       dataIndex: "followDate",
-      render: (row, record) => <div>{record.followDate}</div>,
+      render: (row, record) => (
+        <div>
+          {record.followDate ? record?.followDate : record.leadStatusDate}
+        </div>
+      ),
     },
     {
       title: "Reminder Time",
       dataIndex: "followTime",
-      render: (row, record) => <div>{record.followTime}</div>,
+      render: (row, record) => (
+        <div>
+          {record.followTime ? record?.followTime : record?.leadStatusTime}
+        </div>
+      ),
       // sorter: (a, b) => a.followTime.length,
     },
     // {
