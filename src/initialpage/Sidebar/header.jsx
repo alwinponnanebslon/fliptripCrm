@@ -47,8 +47,7 @@ const Header = (props) => {
   const [leadArr, setLeadArr] = useState([]);
   const [isNotificationRead, setIsNotificationRead] = useState(false);
   const [messageCount, setMessageCount] = useState(dataArr.length);
-  const [changeNotificationColor, setChangeNotificationColor] =
-    useState("Gray");
+  const [changeNotificationColor, setChangeNotificationColor] = useState("Gray");
   // reminderArrData
   const dispatch = useDispatch();
 
@@ -173,7 +172,7 @@ const Header = (props) => {
     // if (currentObj) {
     if (tempList[index]) {
       // console.log(currentObj, "1325465")
-      setChangeNotificationColor("LightGray");
+      setChangeNotificationColor("LightGray")
     }
 
     setDataArr([...tempList]);
@@ -192,7 +191,7 @@ const Header = (props) => {
     // color: "white",
     // backgroundColor: "DodgerBlue",
     padding: "1px",
-    fontFamily: "Arial",
+    fontFamily: "Arial"
   };
 
   return (
@@ -480,34 +479,35 @@ const Header = (props) => {
                         </div> */}
                         <Link
                           onClick={() => {
-                            localStorage.setItem("minheight", "true");
-                            handleClick(index);
+                            localStorage.setItem("minheight", "true")
+                            handleClick(index)
                           }}
                           to="#"
-                          // to="/admin/notification"
+                        // to="/admin/notification"
                         >
-                          <div
-                            style={{ backgroundColor: changeNotificationColor }}
-                            index={index}
-                          >
+
+                          <div style={{ backgroundColor: changeNotificationColor }} index={index} >
                             {/* <div className="media "  > */}
 
-                            <p className="noti-details d-flex">
+                            <p className="noti-details d-flex"  >
                               {/* <div > */}
-                              <h5> {el?.createdBy?.name + "  "} :</h5>
+                              <h5  > {el?.createdBy?.name + "  "} :</h5>
                               <h5>{" " + el?.heading}</h5>
                               &nbsp;
                               {/* </div> */}
                             </p>
                             <p className="noti-details d-flex">
-                              <h5> {el?.description} </h5> &nbsp;
+                              <h5 > {el?.description} </h5> &nbsp;
                             </p>
 
-                            <p className="noti-details d-flex">
+                            <p className="noti-details d-flex" >
                               <h5>
-                                {new Date(el?.followDate).toLocaleDateString()}{" "}
+                                {new Date(
+                                  el?.followDate
+                                ).toLocaleDateString()}{" "}
                                 at {el?.followTime}
                               </h5>
+
                               &nbsp;
                             </p>
 
@@ -515,6 +515,7 @@ const Header = (props) => {
                           </div>
                         </Link>
                       </li>
+
                     );
                   })}
                 {/* <div className="media-body">
@@ -530,6 +531,7 @@ const Header = (props) => {
                                 </span>
                               </p>
                             </div> */}
+
 
                 {/* <li className="notification-message">
                   <Link
@@ -555,6 +557,7 @@ const Header = (props) => {
                     </div>
                   </Link>
                 </li> */}
+
               </ul>
             </div>
             <div className="topnav-dropdown-footer">

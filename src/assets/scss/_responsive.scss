@@ -1,0 +1,30 @@
+@media only screen and (min-width: 1200px) {
+  .main-swiper-content h1 {
+    white-space: nowrap;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .main-swiper-slide {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .main-banner .main-swiper-slide .main-swiper-content {
+    padding: 3pc 3pc;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .main-banner .main-swiper-slide .main-swiper-content {
+    p{
+      font-size: 16px !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .main-banner .main-swiper-slide .main-swiper-content {
+    padding: 3pc 1pc !important;
+ 
+  }
+}

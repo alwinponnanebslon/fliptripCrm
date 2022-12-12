@@ -34,7 +34,7 @@ const AllEmployees = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(employees, "employees234")
+    // console.log(employees, "employees234")
     if (employees && employees.length > 0) {
       setEmployeeArr(employees);
       setDisplayEmployeeArr(employeeArr);
@@ -97,7 +97,7 @@ const AllEmployees = () => {
         toastSuccess(res.message);
         handleGetAllEmployees();
         // dispatch(returnAllEmployees(res.data));
-        // window.location.reload();
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);
