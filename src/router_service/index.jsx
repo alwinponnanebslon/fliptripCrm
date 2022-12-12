@@ -43,6 +43,7 @@ import EmployeeProfile from "../MainPage/Pages/Profile/employeeprofile";
 import Reminder from "../MainPage/Reminder/Reminder/Reminder";
 import Notification from "../MainPage/Notification/ViewNotification";
 import Notify from "../MainPage/Notify/ViewNotify";
+import Pdf from "../MainPage/Pdf/Index";
 
 export default [
   {
@@ -100,6 +101,11 @@ export default [
   {
     path: "/admin/notification",
     component: Notification,
+    roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
+  },
+  {
+    path: "/admin/pdf",
+    component: Pdf,
     roleArr: ["ADMIN", "TEAMLEAD", "SPOC", "ACCOUNT", "SUPERVISOR"],
   },
   // {
