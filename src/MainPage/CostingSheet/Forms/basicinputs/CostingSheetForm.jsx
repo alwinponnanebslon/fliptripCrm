@@ -45,7 +45,9 @@ const ViewCostingSheetForm = () => {
       pending: false,
     },
   ]);
-  const [flightList, setFlightList] = useState([{ cost: "", flightName: "" }]);
+  const [flightList, setFlightList] = useState([
+    { flightcost: "", flightName: "" },
+  ]);
   const [totalCost, setTotalCost] = useState(0);
   const [quotationObj, setQuotationObj] = useState({});
   const [quotationId, setQuotationId] = useState("");
@@ -89,6 +91,7 @@ const ViewCostingSheetForm = () => {
       setflightCost(quotationObj?.paymentObj?.flightPrice);
       setLocationName(quotationObj?.destinationName);
       setLeadName(quotationObj?.leadObj?.clientObj?.name);
+      setFlightList(quotationObj?.flightList);
       setLeadsId(leadId);
       // setPrevDocId(quotationObj?._id);
       setinputList([...quotationObj?.hotelDetail]);
@@ -728,7 +731,7 @@ const ViewCostingSheetForm = () => {
                           <input
                             type="number"
                             name="cost"
-                            value={x.cost}
+                            value={x.flightCost}
                             placeholder="Enter Cost"
                             class="form-control"
                             onChange={(e) => handleinputchangeFlight(e, i)}

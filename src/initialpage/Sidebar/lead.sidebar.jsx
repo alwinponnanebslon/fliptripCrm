@@ -228,7 +228,7 @@ const LeadSidebar = (props) => {
                     </Link>
                   </li>
                 )}
-                {/* {role != "SUPERVISOR" && (
+                {role != "SUPERVISOR" && (
                   <li
                     className={
                       pathname?.includes("costingSheet") ? "active" : ""
@@ -242,18 +242,20 @@ const LeadSidebar = (props) => {
                       </div>
                     </Link>
                   </li>
-                )} */}
+                )}
                 {/* <li
-                className={pathname?.includes("costingSheetAdd") ? "active" : ""}
-              >
-                <Link to={`/admin/lead/${leadId}/costingSheetAdd`}>
-                  <i className="la la-file-text-o" />
-                  <div className="textblock2">
-                    <span>Costing Sheet</span>
-                    <span className="textsmall">CREATE AND MANAGE</span>
-                  </div>
-                </Link>
-              </li> */}
+                  className={
+                    pathname?.includes("costingSheetAdd") ? "active" : ""
+                  }
+                >
+                  <Link to={`/admin/lead/${leadId}/costingSheetAdd`}>
+                    <i className="la la-file-text-o" />
+                    <div className="textblock2">
+                      <span>Costing Sheet</span>
+                      <span className="textsmall">CREATE AND MANAGE</span>
+                    </div>
+                  </Link>
+                </li> */}
                 {/* <li
                   className={
                     pathname?.includes("VoucherPayment") ? "active" : ""

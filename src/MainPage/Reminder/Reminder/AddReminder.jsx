@@ -59,13 +59,13 @@ const AddReminder = ({
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getAllEmployess();
-      console.log(res, "1Res23");
+      // console.log(res, "1Res23");
       if (res.status) {
         setAllEmployees(res.data);
         // dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toastError(error);
     }
   };
@@ -74,9 +74,9 @@ const AddReminder = ({
     setCreatedBy(userObj);
   }, [userObj]);
 
-  console.log(reminderObj, "23reminderObj123");
+  // console.log(reminderObj, "23reminderObj123");
   useEffect(() => {
-    console.log(reminderObj, "reminderObj123");
+    // console.log(reminderObj, "reminderObj123");
     setEmployeeId(reminderObj?._id);
     setReminderObject(reminderObj);
   }, [reminderObj]);

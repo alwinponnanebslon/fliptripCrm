@@ -171,7 +171,7 @@ export const AddPayment = () => {
       //   );
       //   return;
       // }
-      if (value && value > total || value < 0) {
+      if ((value && value > total) || value < 0) {
         toastError("Amount must be greate than zero ot less than total Amount");
         return;
       }
@@ -249,10 +249,10 @@ export const AddPayment = () => {
           onClick: () => {
             if (paymentId) {
               obj.paymentId = paymentId;
-              history.push(`/admin/lead/${leadId}/costingSheetAdd`);
+              // history.push(`/admin/lead/${leadId}/costingSheetAdd`);
               dispatch(paymentUpdate(obj));
             } else {
-              history.push(`/admin/lead/${leadId}/costingSheetAdd`);
+              // history.push(`/admin/lead/${leadId}/costingSheetAdd`);
               dispatch(paymentAdd(obj));
             }
           },
@@ -483,7 +483,7 @@ export const AddPayment = () => {
                   value={tcs}
                   onChange={(e) => setTcs(e.target.value)}
                   type="number"
-                // button="edit"
+                  // button="edit"
                 />
                 <button
                   className="btn btn-primary mt-4"

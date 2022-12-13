@@ -20,12 +20,11 @@ const Notes = ({ show1, setShow1 }) => {
   const userObj = useSelector((state) => state.auth.user);
   const params = useLocation();
   const history = useHistory();
-  console.log(params, "aparams2312");
+  // console.log(params, "aparams2312");
   const dispatch = useDispatch();
   const noteResultobj = useSelector((state) => state.note.noteObj);
   const notesResultArr = useSelector((state) => state.note.notes);
   const [noteMainArr, setNoteMainArr] = useState([]);
-  // const [show, setShow] = useState(false);
   const [note, setNote] = useState("");
   const [reminderDate, setReminderDate] = useState("");
   const { leadId } = useParams();
@@ -88,10 +87,12 @@ const Notes = ({ show1, setShow1 }) => {
         obj.Id = noteId;
         dispatch(updatenote(obj));
         setShow(false);
+        // setShow1(false);
         setIsReadyOnlyNotes(false);
       } else {
         dispatch(addnote(obj));
         setShow(false);
+        // setShow1(false);
         setIsReadyOnlyNotes(false);
       }
     } else {

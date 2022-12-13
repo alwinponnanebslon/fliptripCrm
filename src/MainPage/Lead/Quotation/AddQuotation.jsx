@@ -12,7 +12,6 @@ import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-// import Quotation from "./Quotation";
 
 const AddQuotation = ({ show, setShow }) => {
   const { leadId } = useParams();
@@ -62,6 +61,13 @@ const AddQuotation = ({ show, setShow }) => {
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isUpateDoc, setIsUpateDoc] = useState(false);
+  const [flightName, setFlightName] = useState("");
+  const [flightCost, setFlightCost] = useState("");
+  const [IsHotelDetailsRequired, setIsHotelDetailsRequired] = useState(false);
+  const [IsFlightDetailsRequired, setIsFlightDetailsRequired] = useState(false);
+  const [isItineraryDetailsRequired, setIsItineraryDetailsRequired] =
+    useState(false);
+
   //hotels details
   const [itineraryList, setItineraryList] = useState([
     { day: "", itineraryName: "", itineraryHeading: "" },
@@ -76,6 +82,12 @@ const AddQuotation = ({ show, setShow }) => {
       checkOut: "",
       rating: 2,
       hotelAddress: "", // hotelAddress: "",
+    },
+  ]);
+  const [flightList, setflightList] = useState([
+    {
+      flightName: "",
+      flightCost: 0,
     },
   ]);
   useEffect(() => {
@@ -97,7 +109,7 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationStateObj) {
-      console.log(quotationStateObj, "quotationStateObj213");
+      // console.log(quotationStateObj, "quotationStateObj213");
       setQuotationObject(quotationStateObj);
     }
   }, [quotationStateObj]);
@@ -127,6 +139,15 @@ const AddQuotation = ({ show, setShow }) => {
       setTotalPersonLandPrice(
         quotationObject?.numberOfGuest * quotationObject?.perPersonLandPrice
       );
+      setIsItineraryDetailsRequired(
+        quotationObject?.itineraryDetails?.length > 0 ? true : false
+      );
+      setIsHotelDetailsRequired(
+        quotationObject?.hotelDetail?.length > 0 ? true : false
+      );
+      setIsFlightDetailsRequired(
+        quotationObject?.flightlList?.length > 0 ? true : false
+      );
       setItineraryList(quotationObject?.itineraryDetails);
       setTravelList(quotationObject?.tourListArr);
       setHotelList(quotationObject?.hotelDetail);
@@ -144,12 +165,10 @@ const AddQuotation = ({ show, setShow }) => {
       setNumberOfInfants(quotationObject?.travelPassengerObj?.noOfInfants);
       setTourArr(quotationObject?.tourListArr);
       setIsUpateDoc(true);
-      // console.log(
-      //   quotationObject?.noOfAdults,
-      //   quotationObject?.noOfChildrenWithBed,
-      //   quotationObject?.noOfChildrenWithoutBed,
-      //   quotationObject?.noOfInfants
-      // );
+      // set
+      // setFlightName(quotationObject?.flightName);
+      // setFlightCost(quotationObject?.flightCost);
+
       // console.log(quotationObject.travelPassengerArr, "sadfsaf")
       // set(quotationObject.destinationName);
       // setDestinationName(quotationObject.destinationName);
@@ -204,6 +223,7 @@ const AddQuotation = ({ show, setShow }) => {
       }
     }
   }, [numberOfGuest]);
+
   useEffect(() => {
     if (!isAirport) {
       setTotalPersonAirportPrice(0);
@@ -212,6 +232,7 @@ const AddQuotation = ({ show, setShow }) => {
       setTotalPersonLandPrice(0);
     }
   }, [island, isAirport]);
+
   // console.log(selectedTourIdArr, "selectedTourIdArr");
   const handleGuestchange = (e, index) => {
     const { name, value } = e.target;
@@ -252,7 +273,7 @@ const AddQuotation = ({ show, setShow }) => {
     let { name, value } = e.target;
     if (quotationObject && quotationObject._id) {
       ("use strict");
-      // // console.log(name, "name");
+      // console.log(name, "name");
       let list = [...hotelList];
       let currentObj = Object.freeze(list[index]);
       currentObj = {
@@ -397,6 +418,48 @@ const AddQuotation = ({ show, setShow }) => {
     // setHotelList([...list]);
   };
 
+  const handleinputchangeFlight = (e, index) => {
+    let { name, value } = e.target;
+    if (quotationObject && quotationObject._id) {
+      ("use strict");
+      // // console.log(name, "name");
+      let list = [...flightList];
+      let currentObj = Object.freeze(list[index]);
+      currentObj = {
+        flightName: list[index].flightName,
+        flightCost: list[index].flightCost,
+      };
+
+      currentObj[name] = value;
+      list[index] = currentObj;
+      setflightList([...list]);
+    } else {
+      const list = [...flightList];
+
+      const { name, value } = e.target;
+
+      list[index][name] = value;
+      setflightList([...list]);
+    }
+  };
+
+  const handleremoveFlight = (index) => {
+    const list = [...flightList];
+    list.splice(index, 1);
+    setflightList(list);
+  };
+
+  const handleaddclickFlight = () => {
+    let tempFlightArr = [...flightList];
+
+    setflightList([
+      ...tempFlightArr,
+      {
+        flightName: "",
+        flightCost: 0,
+      },
+    ]);
+  };
   // const handleinputchangeHotel = (e, index) => {
   //   const list = [...hotelList];
 
@@ -499,8 +562,6 @@ const AddQuotation = ({ show, setShow }) => {
     setNoOfTravellerArray(list);
   };
 
-  //itinerary list
-
   const handleinputchangeItinerary = (e, index) => {
     console.log(itineraryList, "itineraryList");
     if (itineraryList && isUpateDoc == true) {
@@ -572,16 +633,10 @@ const AddQuotation = ({ show, setShow }) => {
     for (let i = 0; i < parseInt(value) + 1; i++) {
       itenaryArr.push({ day: i + 1, itineraryName: "", itineraryHeading: "" });
     }
+    // if (isItineraryDetailsRequired) {
     setItineraryList([...itenaryArr]);
+    // }
   };
-
-  // const handleTourValueChange = (e, index) => {
-  //   let { name, value } = e.target;
-  //   const list = [...travelList];
-  //   // console.log(list, "travelList");
-  //   list[index][name] = value;
-  //   setTravelList(list);
-  // };
 
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
@@ -593,58 +648,22 @@ const AddQuotation = ({ show, setShow }) => {
       name: tempList[index].name,
       startDate: tempList[index].startDate,
       endDate: tempList[index].endDate,
-
-      // startDate: "", endDate: ""
-      // flightName: tempList[index].flightName,
-      // cost: tempList[index].cost,
     };
 
-    // if (name == "cost") {
-    //   if (isNaN(value)) {
-    //     value = 0;
-    //     toastError("Cost should be number");
-    //     return;
-    //   } else if (Number.isInteger(parseInt(value))) {
-    //     for (let el of tempList) {
-    //       if (el.cost) {
-    //         totalAmount = totalAmount + parseInt(el.cost);
-    //       }
-    //     }
-    //     console.log(totalAmount, "1", value, "@", flightCost, "23");
-
-    //     if (
-    //       flightList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-    //       parseInt(flightCost)
-    //     ) {
-    //       toastError("flight price cannot be  greater than total flight cost");
-    //       return;
-    //     }
-    //   }
-    // }
     currentObj[name] = value;
     tempList[index] = currentObj;
     setTravelList([...tempList]);
-    // }
   };
 
-  // // console.log(selectedTourIdArr, "selectedTourIdArr");
   const clearFunc = () => {
     setDestinationName("");
     setDurationOfTour(1);
-    // setDays(0);
     setNumberOfGuest(1);
     setNoOfTravellerArray([
       { name: "", age: "", passengerType: "Adult", bed: "false", isNew: false },
     ]);
     setIsAirport(false);
     setIsLand(false);
-    // setPerPersonLandPrice(0);
-    // setPerPersonAirportPrice(0);
-    // setTotalPersonLandPrice(0);
-    // setTotalPersonAirportPrice(0);
-
-    // setQuotationId("");
-    // setClientsArr([]);
     setNumberofAdults(0);
     setNumberOfChildrenWithBed(0);
     setNumberOfChildrenWithoutBed(0);
@@ -658,7 +677,6 @@ const AddQuotation = ({ show, setShow }) => {
     setIsUpdateTour(false);
     setAirportTransfer("");
     setTravelList([{ name: "", startDate: "", endDate: "" }]);
-    // setSelectedLeadIdArr([]);
     setShowModal(false);
     setHotelList([
       {
@@ -671,7 +689,11 @@ const AddQuotation = ({ show, setShow }) => {
         hotelAddress: "", // hotelAddress: "",
       },
     ]);
+    setIsFlightDetailsRequired(false);
+    setIsHotelDetailsRequired(false);
+    setIsItineraryDetailsRequired(false);
     setItineraryList([{ day: "", itineraryName: "" }]);
+    setflightList([{ flightName: "", flightCost: 0 }]);
   };
 
   const handleSubmit = (e) => {
@@ -705,9 +727,33 @@ const AddQuotation = ({ show, setShow }) => {
       return;
     }
     // else
-    if (hotelList[0]?.hotelName == "") {
-      toastError("Hotel Details are mandatory");
-      return;
+    if (IsHotelDetailsRequired) {
+      if (hotelList[0]?.hotelName == "") {
+        toastError("Hotel Name is mandatory");
+        return;
+      } else if (hotelList[0]?.roomType == "") {
+        toastError("Hotel Room type is mandatory");
+        return;
+      }
+    }
+
+    if (IsFlightDetailsRequired) {
+      if (flightList[0]?.flightName == "") {
+        toastError("Flight Name is mandatory");
+        return;
+      } else if (flightList[0]?.flightCost == "") {
+        toastError("Flight Cost is mandatory");
+        return;
+      }
+    }
+    if (isItineraryDetailsRequired) {
+      if (itineraryList[0]?.itineraryName == "") {
+        toastError("Itinerary Description is mandatory");
+        return;
+      } else if (itineraryList[0]?.itineraryHeading == "") {
+        toastError("Itinerary Heading  is mandatory");
+        return;
+      }
     }
     // if (adultCount == "") {
     //   toastError("Adult Count is mandatory");
@@ -723,7 +769,6 @@ const AddQuotation = ({ show, setShow }) => {
         noOfChildrenWithoutBed: numberOfChildrenWithoutBed,
         noOfInfants: numberOfInfants,
       },
-      hotelList,
       tourListArr: travelList,
       visa: visaRequired,
       airportTransfer,
@@ -733,10 +778,20 @@ const AddQuotation = ({ show, setShow }) => {
       perPersonAirPortPrice,
       perPersonLandPrice,
       amount,
-      itineraryList,
       termAndCondition,
     };
-    // console.log(obj, "234234");
+
+    if (IsHotelDetailsRequired) {
+      obj.hotelList = hotelList;
+    }
+    if (IsFlightDetailsRequired) {
+      obj.flightList = flightList;
+    }
+    if (isItineraryDetailsRequired) {
+      obj.itineraryList = itineraryList;
+    }
+
+    console.log(obj, "234234");
     if (!isUpdateTour) {
       dispatch(quotationAdd(obj));
       setShow(false);
@@ -763,9 +818,9 @@ const AddQuotation = ({ show, setShow }) => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(numberOfInfants) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -777,9 +832,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-        parseInt(value) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(numberOfInfants) >
+          parseInt(value) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -791,9 +846,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(value) +
-        parseInt(numberOfInfants) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(value) +
+          parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -805,9 +860,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else {
       if (
         parseInt(numberofAdults) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(value) >
+          parseInt(numberOfChildrenWithBed) +
+          parseInt(numberOfChildrenWithoutBed) +
+          parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -819,7 +874,7 @@ const AddQuotation = ({ show, setShow }) => {
     }
   };
 
-  useEffect(() => { }, [
+  useEffect(() => {}, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -924,7 +979,8 @@ aria-label="Close"
                               </div>
                               <div className="col-md-4">
                                 <label className="col-form-label ">
-                                  Expiration Date
+                                  {/* Expiration Date */}
+                                  Tour End Date
                                 </label>
                                 <div className="col-sm-8">
                                   <input
@@ -970,7 +1026,11 @@ aria-label="Close"
                   <div className=" form-group col-md-6">
                     <label className="col-form-label ">
                       Duration Of Tour <span className="text-danger">*</span>{" "}
-                      (in Nights) ({`${durationOfTour}N/${days}D`})
+                      (in Nights) (
+                      {`${durationOfTour ? durationOfTour : 0}N/${
+                        days ? days : 0
+                      }D`}
+                      )
                     </label>
                     <input
                       type="number"
@@ -1116,91 +1176,107 @@ aria-label="Close"
                     </div>
                   </div>
                 </div>
+                <div className="form-group col-md-6 mt-5">
+                  <label className="text-danger ">
+                    Hotel Details Required
+                    {/* <span className="text-danger">*</span> */}
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="IsHotelDetailsRequired"
+                    style={{ marginLeft: 10 }}
+                    value={IsHotelDetailsRequired}
+                    checked={IsHotelDetailsRequired}
+                    onChange={(e) => {
+                      setIsHotelDetailsRequired(!IsHotelDetailsRequired);
+                    }}
+                  />
+                </div>
+                {IsHotelDetailsRequired && (
+                  <div className="content">
+                    <h3 className="mt-3 mb-4 ">Hotel details</h3>
+                    {hotelList &&
+                      hotelList.map((hotel, i) => {
+                        return (
+                          <div className="row mb-3" key={i}>
+                            <div className="form-group col-md-4">
+                              <label>Hotel Name</label>
+                              <input
+                                type="text"
+                                name="hotelName"
+                                className="form-control"
+                                placeholder="Name"
+                                value={hotel.hotelName}
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
 
-                <div className="content">
-                  <h3 className="mt-3 mb-4 ">Hotel details</h3>
-                  {hotelList &&
-                    hotelList.map((hotel, i) => {
-                      return (
-                        <div className="row mb-3" key={i}>
-                          <div className="form-group col-md-4">
-                            <label>Hotel Name</label>
-                            <input
-                              type="text"
-                              name="hotelName"
-                              className="form-control"
-                              placeholder="Name"
-                              value={hotel.hotelName}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
+                            <div className="form-group col-md-4">
+                              <label> Room Type</label>
+                              <input
+                                type="text"
+                                name="roomType"
+                                value={hotel.roomType}
+                                className="form-control"
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
+                            <div className="form-group col-md-4">
+                              <label>Rating</label>
+                              <select
+                                className="form-control"
+                                name="rating"
+                                value={parseInt(hotel.rating)}
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              >
+                                <option value={2}>2</option>
+                                <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
+                              </select>
+                            </div>
 
-                          <div className="form-group col-md-4">
-                            <label> Room Type</label>
-                            <input
-                              type="text"
-                              name="roomType"
-                              value={hotel.roomType}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
-                          <div className="form-group col-md-4">
-                            <label>Rating</label>
-                            <select
-                              className="form-control"
-                              name="rating"
-                              value={parseInt(hotel.rating)}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            >
-                              <option value={2}>2</option>
-                              <option value={3}>3</option>
-                              <option value={4}>4</option>
-                              <option value={5}>5</option>
-                            </select>
-                          </div>
+                            <div className="form-group col-md-4">
+                              <label> Check In </label>
+                              <input
+                                type="date"
+                                // type="text"
+                                name="checkIn"
+                                value={`${moment(hotel.checkIn).format(
+                                  "YYYY-MM-DD"
+                                )}`}
+                                className="form-control"
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
 
-                          <div className="form-group col-md-4">
-                            <label> Check In </label>
-                            <input
-                              type="date"
-                              // type="text"
-                              name="checkIn"
-                              value={`${moment(hotel.checkIn).format(
-                                "YYYY-MM-DD"
-                              )}`}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
+                            <div className="form-group col-md-4">
+                              <label> Number Of Night</label>
+                              <input
+                                type="number"
+                                name="numberOfNight"
+                                value={`${hotel.numberOfNight}`}
+                                className="form-control"
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
 
-                          <div className="form-group col-md-4">
-                            <label> Number Of Night</label>
-                            <input
-                              type="number"
-                              name="numberOfNight"
-                              value={`${hotel.numberOfNight}`}
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
+                            <div className="form-group col-md-4">
+                              <label> Check Out </label>
+                              <input
+                                type="date"
+                                // type="text"
+                                name="checkOut"
+                                value={`${moment(hotel.checkOut).format(
+                                  "YYYY-MM-DD"
+                                )}`}
+                                disabled
+                                className="form-control"
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
 
-                          <div className="form-group col-md-4">
-                            <label> Check Out </label>
-                            <input
-                              type="date"
-                              // type="text"
-                              name="checkOut"
-                              value={`${moment(hotel.checkOut).format(
-                                "YYYY-MM-DD"
-                              )}`}
-                              disabled
-                              className="form-control"
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
-
-                          {/* <div className="form-group col-md-4">
+                            {/* <div className="form-group col-md-4">
                           <label>Hotel Address</label>
                           <input
                             type="text"
@@ -1210,52 +1286,124 @@ aria-label="Close"
                             onChange={(e) => handleinputchangeHotel(e, i)}
                           />
                         </div> */}
-                          <div className="form-group col-md-4">
-                            <label>Hotel Address</label>
-                            <input
-                              type="text"
-                              name="hotelAddress"
-                              className="form-control"
-                              value={hotel?.hotelAddress}
-                              onChange={(e) => handleinputchangeHotel(e, i)}
-                            />
-                          </div>
+                            <div className="form-group col-md-4">
+                              <label>Hotel Address</label>
+                              <input
+                                type="text"
+                                name="hotelAddress"
+                                className="form-control"
+                                value={hotel?.hotelAddress}
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
 
-                          <div className="form-group col-md-2 mt-4">
-                            {hotelList.length !== 1 && (
-                              <button
-                                type="button"
-                                // className="btn btn-success"
-                                className="btn btn-danger mx-1"
-                                onClick={() => handleremoveHotel(i)}
-                              >
-                                Remove
-                              </button>
-                            )}
-                          </div>
-                          {durationOfTour &&
+                            <div className="form-group col-md-2 mt-4">
+                              {hotelList.length !== 1 && (
+                                <button
+                                  type="button"
+                                  // className="btn btn-success"
+                                  className="btn btn-danger mx-1"
+                                  onClick={() => handleremoveHotel(i)}
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
+                            {durationOfTour &&
                             hotelList.reduce(
                               (acc, el) => acc + parseInt(el.numberOfNight),
                               0
                             ) < durationOfTour ? (
+                              <div className="col-md-12">
+                                {/* {hotelList.length - 1 === i && ( */}
+                                <button
+                                  type="button"
+                                  className="btn btn-success"
+                                  onClick={handleaddclickHotel}
+                                >
+                                  Add More
+                                </button>
+                                {/* )} */}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
+                <div className="form-group col-md-6 mt-5">
+                  <label className="text-danger ">
+                    Flight Details Required
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="IsFlightDetailsRequired"
+                    style={{ marginLeft: 10 }}
+                    value={IsFlightDetailsRequired}
+                    checked={IsFlightDetailsRequired}
+                    onChange={(e) => {
+                      setIsFlightDetailsRequired(!IsFlightDetailsRequired);
+                    }}
+                  />
+                </div>
+                {IsFlightDetailsRequired && (
+                  <div className="content">
+                    <h3 className="mt-3 mb-4 ">Flight details</h3>
+                    {flightList &&
+                      flightList.map((flight, i) => {
+                        return (
+                          <div className="row mb-3" key={i}>
+                            <div className="form-group col-md-4">
+                              <label>Flight Name</label>
+                              <input
+                                type="text"
+                                name="flightName"
+                                className="form-control"
+                                placeholder="Name"
+                                value={flight?.flightName}
+                                onChange={(e) => handleinputchangeFlight(e, i)}
+                              />
+                            </div>
+
+                            <div className="form-group col-md-4">
+                              <label>Flight Cost </label>
+                              <input
+                                type="number"
+                                name="flightCost"
+                                className="form-control"
+                                value={flight?.flightCost}
+                                onChange={(e) => handleinputchangeFlight(e, i)}
+                              />
+                            </div>
+
+                            <div className="form-group col-md-2 mt-4">
+                              {flightList.length !== 1 && (
+                                <button
+                                  type="button"
+                                  // className="btn btn-success"
+                                  className="btn btn-danger mx-1"
+                                  onClick={() => handleremoveFlight(i)}
+                                >
+                                  Remove
+                                </button>
+                              )}
+                            </div>
                             <div className="col-md-12">
-                              {/* {hotelList.length - 1 === i && ( */}
                               <button
                                 type="button"
                                 className="btn btn-success"
-                                onClick={handleaddclickHotel}
+                                onClick={() => handleaddclickFlight()}
                               >
                                 Add More
                               </button>
-                              {/* )} */}
                             </div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      );
-                    })}
-                </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                )}
 
                 <div className="row">
                   <div className="form-group col-3">
@@ -1308,54 +1456,71 @@ aria-label="Close"
                   /> */}
                   </div>
                 </div>
-
-                <div className="content">
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <h3 className="mt-3 mb-4">Itinerary Details</h3>
-                      {itineraryList &&
-                        itineraryList.map((itinerary, i) => {
-                          return (
-                            <div className="row mb-3" key={i}>
-                              <div className="form-group col-md-1">
-                                <label>Day </label>
-                                <div style={{ paddingTop: 10 }}>
-                                  {itinerary.day}
+                <div className="form-group col-md-6 mt-5">
+                  <label className="text-danger ">
+                    Itinerary Details Required
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="isItineraryDetailsRequired"
+                    style={{ marginLeft: 10 }}
+                    value={isItineraryDetailsRequired}
+                    checked={isItineraryDetailsRequired}
+                    onChange={() => {
+                      setIsItineraryDetailsRequired(
+                        !isItineraryDetailsRequired
+                      );
+                    }}
+                  />
+                </div>
+                {isItineraryDetailsRequired && (
+                  <div className="content">
+                    <div className="row">
+                      <div className="col-sm-12">
+                        <h3 className="mt-3 mb-4">Itinerary Details</h3>
+                        {itineraryList &&
+                          itineraryList.map((itinerary, i) => {
+                            return (
+                              <div className="row mb-3" key={i}>
+                                <div className="form-group col-md-1">
+                                  <label>Day </label>
+                                  <div style={{ paddingTop: 10 }}>
+                                    {itinerary.day}
+                                  </div>
+                                </div>
+                                <div className="form-group col-md-5">
+                                  <label>Itinerary Heading</label>
+                                  <input
+                                    type="text"
+                                    name="itineraryHeading"
+                                    className="form-control"
+                                    value={itinerary.itineraryHeading}
+                                    placeholder="Enter Itinerary Heading"
+                                    onChange={(e) =>
+                                      handleinputchangeItinerary(e, i)
+                                    }
+                                  />
+                                </div>
+                                <div className="form-group col-md-12">
+                                  <label>Itinerary Description</label>
+                                  <textarea
+                                    type="text"
+                                    name="itineraryName"
+                                    className="form-control"
+                                    value={itinerary.itineraryName}
+                                    placeholder="Enter Itinerary Description"
+                                    onChange={(e) =>
+                                      handleinputchangeItinerary(e, i)
+                                    }
+                                  />
                                 </div>
                               </div>
-                              <div className="form-group col-md-5">
-                                <label>Itinerary Heading</label>
-                                <input
-                                  type="text"
-                                  name="itineraryHeading"
-                                  className="form-control"
-                                  value={itinerary.itineraryHeading}
-                                  placeholder="Enter Itinerary Heading"
-                                  onChange={(e) =>
-                                    handleinputchangeItinerary(e, i)
-                                  }
-                                />
-                              </div>
-                              <div className="form-group col-md-12">
-                                <label>Itinerary Description</label>
-                                <textarea
-                                  type="text"
-                                  name="itineraryName"
-                                  className="form-control"
-                                  value={itinerary.itineraryName}
-                                  placeholder="Enter Itinerary Description"
-                                  onChange={(e) =>
-                                    handleinputchangeItinerary(e, i)
-                                  }
-                                />
-                              </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                      </div>
                     </div>
                   </div>
-                </div>
-
+                )}
                 <div className="form-group row">
                   <label className="col-form-label col-md-2">
                     Term And Condition
@@ -1411,7 +1576,7 @@ aria-label="Close"
                         <tr>
                           <td>Mode</td>
                           <td>Person</td>
-                          <td>per Person Price</td>
+                          <td>Per Person Price</td>
                           <td>Total</td>
                         </tr>
                       </thead>

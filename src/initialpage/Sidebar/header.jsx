@@ -238,7 +238,7 @@ const Header = (props) => {
       {/* Header Menu */}
       <ul className="nav user-menu">
         {/* Search */}
-        {/* <li className="nav-item">
+        <li className="nav-item">
           <div className="top-nav-search">
             <a href="" className="responsive-search">
               <i className="fa fa-search" />
@@ -257,7 +257,7 @@ const Header = (props) => {
               </button>
             </form>
           </div>
-        </li> */}
+        </li>
         {/* 
 
 */}

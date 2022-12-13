@@ -47,3 +47,7 @@ export const updateEmployee = async (id, formData, query) => {
 export const registerUserFcmToken = async (obj) => {
   return await axios.post(`${serverUrl}/registerUserFcmToken`, obj)
 }
+export const handleCheckValidUserDashboard = async (formData) => {
+  // console.log(formData);
+  return await axios.post(`${serverUrl}/checkValidUserDashboard`, formData);
+};

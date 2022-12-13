@@ -83,6 +83,7 @@ const Quotation = () => {
   };
 
   useEffect(() => {
+    console.log(quotationStateArr, "quotationStateArr231");
     if (quotationStateArr && quotationStateArr.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     }
@@ -96,16 +97,13 @@ const Quotation = () => {
     dispatch(setTour(row));
   };
 
-
   const handleDownload = (row) => {
     // console.log(row, "row update"); //whole object
-    localStorage.setItem("quotationPdf", JSON.stringify(row))
-
-
+    localStorage.setItem("quotationPdf", JSON.stringify(row));
 
     dispatch(setQuotationObj(row));
     dispatch(setTour(row));
-    history.push("/pdf")
+    history.push("/pdf");
   };
 
   const handleDelete = (id) => {
@@ -348,7 +346,6 @@ const Quotation = () => {
                 >
                   <i className="fa fa-pencil m-r-5" /> Download
                 </a>
-
               </div>
             </>
           ) : (
@@ -362,7 +359,6 @@ const Quotation = () => {
                 <i className="material-icons">more_vert</i>
               </a>
               <div className="dropdown-menu dropdown-menu-right">
-
                 <a
                   className="dropdown-item"
                   // data-bs-toggle="modal"
@@ -444,8 +440,8 @@ const Quotation = () => {
               </ul>
             </div>
 
-            <div className="col-auto float-end ml-auto">
-              {isConvert == false && (
+            {isConvert == false && (
+              <div className="col-auto float-end ml-auto">
                 <a
                   href="#"
                   className="btn add-btn"
@@ -457,14 +453,14 @@ const Quotation = () => {
                 >
                   <i
                     className="fa fa-plus"
-                  // onClick={() => {
-                  //   setShow(true);
-                  // }}
+                    // onClick={() => {
+                    //   setShow(true);
+                    // }}
                   />
                   Add Quote
                 </a>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           {/* <div className="list_group_qoute pt-5">
             <div className="row">

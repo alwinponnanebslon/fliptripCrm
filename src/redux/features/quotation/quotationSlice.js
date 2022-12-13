@@ -22,7 +22,9 @@ export const quotationGet = createAsyncThunk(
   "auth/quotationGet",
   async (payload) => {
     try {
+      console.log(payload, "12");
       let { data: response } = await get(payload);
+      console.log(response, "12342");
       return response;
     } catch (error) {
       toastError(error);

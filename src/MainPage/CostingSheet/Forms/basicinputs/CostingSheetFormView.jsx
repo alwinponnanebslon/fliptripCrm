@@ -106,7 +106,7 @@ const ViewCostingSheetForm = () => {
   // }, [inputList, flightList, landCost, flightCost]);
 
   useEffect(() => {
-    console.log(quotationObj, "1quotationObj23");
+    // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
       setTotalCost(quotationObj?.paymentObj?.total);
       setLandCost(quotationObj?.paymentObj?.landPrice);

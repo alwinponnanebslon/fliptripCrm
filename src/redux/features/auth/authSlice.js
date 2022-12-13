@@ -6,7 +6,7 @@ import jwtDecode from "jwt-decode";
 export const loginUser = createAsyncThunk("auth/loginUser", async (payload) => {
   try {
     let { data: res } = await login(payload);
-    console.log(res, "res24");
+    // console.log(res, "res24");s
     let decodedToken = await jwtDecode(res.token);
     localStorage.setItem("AUTH_TOKEN", res.token);
     console.log(decodedToken, "decodedToken23");

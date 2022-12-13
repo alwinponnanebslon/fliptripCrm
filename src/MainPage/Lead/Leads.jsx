@@ -26,6 +26,7 @@ import {
   getAllTeamLeadsEmployees,
   returnAllEmployees,
 } from "../../redux/features/employee/employeeSlice";
+import { quotationGet } from "../../redux/features/quotation/quotationSlice";
 
 import { getEmployess } from "../../Services/user.service";
 
@@ -66,6 +67,7 @@ const Leads = () => {
   // // console.log(agents, "12agents");
   // console.log(teamLeads, "12ateamLeads");
   const destinations = useSelector((state) => state.tour.tours);
+  const quotationArray = useSelector((state) => state.quotation.quotationArr);
   // const clients = useSelector((state) => state.client.clientArr);
   // const [clientObj, setClientObj] = useState({ id: "", name: "" })
 
@@ -106,6 +108,10 @@ const Leads = () => {
   const [show, setShow] = useState(false);
   const [isNotesSend, setIsNotesSend] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
+  const [newClient, setNewClient] = useState(false);
+  const [quotationArrData, setQuotationArrData] = useState([]);
+  const [quotationApproved, setQuotationApproved] = useState(false);
+
   const agentSelect = useRef();
 
   const getAllClients = async () => {
@@ -120,8 +126,23 @@ const Leads = () => {
   };
 
   useEffect(() => {
+    if (newClient) {
+      setPhone("");
+      setEmail("");
+      setName("");
+      setClientId("");
+    }
+  }, [newClient]);
+  useEffect(() => {
     getAllClients();
+    dispatch(quotationGet());
   }, []);
+  useEffect(() => {
+    console.log("23", quotationArray, "quotation21");
+    if (quotationArray.length > 0) {
+      setQuotationArrData(quotationArray);
+    }
+  }, [quotationArray]);
 
   const [data, setData] = useState([
     {
@@ -412,7 +433,7 @@ const Leads = () => {
           role,
           userAuthorise?.user?._id
         );
-        console.log(getfilterLead.data.data, "getfilterLeadw4");
+        // console.log(getfilterLead.data.data, "getfilterLeadw4");
         setDisplayLeadsArr(getfilterLead.data.data);
         setLeadsArr(getfilterLead.data.data);
       }
@@ -523,7 +544,7 @@ const Leads = () => {
         obj.leadId = userObj?._id;
       }
 
-      // console.log(obj, "ovvjb23");
+      console.log(obj, "ovvjb23");
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
@@ -588,7 +609,8 @@ const Leads = () => {
 
   const handleLeadStatusUpdate = async (id, value, status) => {
     try {
-      // console.log(id, value, status, "value123");
+      console.log(id, value, status, "value123");
+
       if (value == "CONVERT" || value == leadStatus.convertBySpoc) {
         if (isStatusOfLead == false && status != "CONVERT") {
           confirmAlert({
@@ -601,14 +623,28 @@ const Leads = () => {
                   let obj = {
                     status: value,
                   };
-                  setShowNotes(true);
-                  setIsStatusOfLead(true);
-                  // handleChangeStatusOf(id,obj)
-                  // if (showNotes) {
-                  updateStatusOfLead(id, obj);
-                  // }
-                  // isStatusofLEAD = true;
-                  history.push(`/admin/lead/${id}/?${true}`);
+                  let existQuotation = quotationArrData.filter((el) => {
+                    // console.log(el.status, "123");
+                    return el.leadId == id && el.status == "Convert";
+                  });
+                  // console.log(existQuotation, "existQuotation21");
+
+                  if (existQuotation.length > 0) {
+                    setShowNotes(true);
+                    setIsStatusOfLead(true);
+                    // handleChangeStatusOf(id,obj)
+                    // if (showNotes) {
+                    updateStatusOfLead(id, obj);
+                    // }
+                    // isStatusofLEAD = true;
+                    history.push(`/admin/lead/${id}/?${true}`);
+                    setQuotationApproved(false);
+                  } else {
+                    // if (quotationApproved == false) {
+                    toastError("Kindly convert quotation for this lead");
+                    return;
+                    // }
+                  }
                 },
               },
               {
@@ -2214,7 +2250,7 @@ const Leads = () => {
         </div>
         {/* /Search Filter */}
         {/* {// console.log("temam,", role)} */}
-        {console.log(displayLeadsArr, "role323", role, "rol2")}
+        {/* {console.log(displayLeadsArr, "role323", role, "rol2")} */}
 
         <div className="row">
           <div className="col-md-12">
@@ -2311,8 +2347,10 @@ const Leads = () => {
             </div>
             <div className="col-md-6">
               <div className="form-group">
-                <label>Client ({clientArr.length})</label>
-
+                <label>
+                  Existing Client ({newClient ? 0 : clientArr.length})
+                </label>
+                {console.log(clientArr, "clientArr123")}
                 <select
                   className="select form-control"
                   value={clientId}
@@ -2322,15 +2360,52 @@ const Leads = () => {
                   }}
                 >
                   <option value=""> --- Select Clients</option>
-                  {clientArr &&
-                    clientArr.map((client, i) => {
-                      return (
-                        <option key={i} value={client._id}>
-                          {client.name}
-                        </option>
-                      );
-                    })}
+                  {newClient
+                    ? 0
+                    : clientArr &&
+                      clientArr.map((client, i) => {
+                        return (
+                          <option key={i} value={client._id}>
+                            {newClient
+                              ? ""
+                              : client.name +
+                                " " +
+                                client.phone +
+                                " " +
+                                " " +
+                                client.email}
+                          </option>
+                        );
+                      })}
                 </select>
+              </div>
+              {/* <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Flight
+                    <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    type="checkbox"
+                    name="IsAirport"
+                    style={{ marginLeft: 10 }}
+                    value={isAirport}
+                    checked={isAirport}
+                    onChange={(e) => {
+                      setIsAirport(!isAirport);
+                    }}
+                  />
+                </div> */}
+              <div className="form-group col-md-6">
+                <label className="col-form-label">New Client</label>
+                <input
+                  type="checkbox"
+                  style={{ marginLeft: 10 }}
+                  value={newClient}
+                  checked={newClient}
+                  onChange={(e) => {
+                    setNewClient(!newClient);
+                  }}
+                ></input>
               </div>
             </div>
             <div className="col-md-6">
