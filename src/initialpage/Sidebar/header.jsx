@@ -269,21 +269,14 @@ const Header = (props) => {
 */}
         {/* {searchDataArr && */}
         {showSearchResult &&
-          <li >
-            {/* <a
-              // href=""
-              className="dropdown-toggle nav-link"
-              data-bs-toggle="dropdown"
-            >
-              {/* <i className="fa fa-bell-o" />
-            </a> */}
-            <div >
+          <li className="nav-item dropdown">
+            
+            <div className="dropdown-menu notifications">
               {console.log(searchDataArr, "123213")}
               <div className="noti-content">
                 <ul className="notification-list">
                   {searchDataArr &&
                     searchDataArr.map((el, index) => {
-                      {/* console.log(el, "ellllll") */ }
                       return (
                         // <li className="notification-message" key={index}>
 
