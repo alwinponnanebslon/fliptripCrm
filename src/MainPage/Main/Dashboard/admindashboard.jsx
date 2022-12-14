@@ -58,11 +58,13 @@ import { reminderGetForOneDay } from "../../../redux/features/reminder/reminderS
 
 import { addNotification } from "../../../redux/features/notification/notificationSlice";
 
-import { date } from "yup/lib/locale.js";
+// import { date } from "yup/lib/locale.js";
 import { fetchToken } from "../../../firebase.js";
 import { registerUserFcmToken } from "../../../Services/user.service.js";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+// import { toastError } from "../../../utils/toastUtils";
+// import { toastError } from "../../../utils/toastUtils";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -98,7 +100,7 @@ const AdminDashboard = () => {
 
   const counterReminderRef = useRef([]);
   const authObj = useSelector((state) => state.auth);
-  const [passwordProtection, setPasswordProtection] = useState(false);
+  const [passwordProtection, setPasswordProtection] = useState(true);
   const schema = yup.object({
     // email: yup
     //   .string()
@@ -481,20 +483,42 @@ const AdminDashboard = () => {
   };
 
   const onSubmit = async (data) => {
-    console.log("data13", data);
-    data.email = userObj.email;
-    if (!data.password) {
-      setError("password", {
-        message: "Please Enter Password",
-      });
-    } else {
-      clearErrors("password");
-      let findAuthenticity = await handleCheckValidUserDashboard(data);
-      if (findAuthenticity.success) {
-        setPasswordProtection(false);
+    // const handleGetAllEmployees = async () => {
+    try {
+      //     // let { data: res } = await getAllEmployess({`role`= `${role}`});
+      //     let { data: res } = await getAllEmployess(
+      //       `role=${role}&id=${userLeadId}`
+      //     );
+      //     console.log(res, "1Res23");
+      //     if (res.status) {
+      //       setAllEmployees(res.data);
+      //       // dispatch(returnAllEmployees(res.data));
+      //     }
+      //   } catch (error) {
+      //     console.error(error);
+      //     toastError(error);
+      //   }
+      // };
+      data.email = userObj.email;
+      console.log("data13", data);
+      if (!data.password) {
+        setError("password", {
+          message: "Please Enter Password",
+        });
+      } else {
+        clearErrors("password");
+        let findAuthenticity = await handleCheckValidUserDashboard(data);
+        console.log(findAuthenticity, "findAuthenticity23")
+        if (findAuthenticity?.data?.success) {
+          toastSuccess(findAuthenticity?.data?.success)
+          setPasswordProtection(false);
+        }
+        // dispatch(loginUser(data));
+        // props.history.push('/app/main/dashboard')
       }
-      // dispatch(loginUser(data));
-      // props.history.push('/app/main/dashboard')
+    } catch (error) {
+      console.error(error);
+      toastError(error);
     }
   };
   // const handleVerifyUserAuthentication=()=>{
@@ -540,24 +564,15 @@ const AdminDashboard = () => {
           <div className="account-box">
             <div className="account-wrapper">
               <p className="account-subtitle">Access To Your Dashboard</p>
-              {/* Account Form */}
+
               <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  {/* <form> */}
                   <div className="form-group"></div>
                   <div className="form-group">
                     <div className="row">
                       <div className="col">
                         <label>Enter Password </label>
                       </div>
-                      {/* <div className="col-md-10">
-                        <input
-                          type="text"
-                          className="form-control"
-                          // value={heading}
-                          // onChange={(e) => setHeading(e.target.value)}
-                        />
-                      </div> */}
                       <Controller
                         name="password"
                         control={control}
@@ -565,18 +580,16 @@ const AdminDashboard = () => {
                           <div className="pass-group">
                             <input
                               type={eye ? "password" : "text"}
-                              className={`form-control  ${
-                                errors?.password ? "error-input" : ""
-                              }`}
+                              className={`form-control  ${errors?.password ? "error-input" : ""
+                                }`}
                               value={value}
                               onChange={onChange}
                               autoComplete="false"
                             />
                             <span
                               onClick={onEyeClick}
-                              className={`fa toggle-password" ${
-                                eye ? "fa-eye-slash" : "fa-eye"
-                              }`}
+                              className={`fa toggle-password" ${eye ? "fa-eye-slash" : "fa-eye"
+                                }`}
                             />
                           </div>
                         )}
@@ -585,17 +598,85 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  {/* <small>{errors?.password?.message}</small> */}
                   <div className="form-group text-center">
                     <button
                       className="btn btn-primary account-btn"
                       type="submit"
-                      // onClick={()=>{handleVerifyUserAuthentication()}}
                     >
                       Check Dashboard
                     </button>
                   </div>
                 </form>
+
+
+                {/* 
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="form-group">
+                    <label>Email Address</label>
+                    <Controller
+                      name="email"
+                      control={control}
+                      render={({ field: { value, onChange } }) => (
+                        <input
+                          className={`form-control  ${
+                            errors?.email ? "error-input" : ""
+                          }`}
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                          autoComplete="false"
+                        />
+                      )}
+                    />
+                    <small>{errors?.email?.message}</small>
+                  </div>
+                  <div className="form-group">
+                    <div className="row">
+                      <div className="col">
+                        <label>Password</label>
+                      </div>
+                      <div className="col-auto">
+                        <Link className="text-muted" to="/forgotpassword">
+                          Forgot password?
+                        </Link>
+                      </div>
+                    </div>
+                    <Controller
+                      name="password"
+                      control={control}
+                      render={({ field: { value, onChange } }) => (
+                        <div className="pass-group">
+                          <input
+                            type={eye ? "password" : "text"}
+                            className={`form-control  ${
+                              errors?.password ? "error-input" : ""
+                            }`}
+                            value={value}
+                            onChange={onChange}
+                            autoComplete="false"
+                          />
+                          <span
+                            onClick={onEyeClick}
+                            className={`fa toggle-password" ${
+                              eye ? "fa-eye-slash" : "fa-eye"
+                            }`}
+                          />
+                        </div>
+                      )}
+                    />
+                    <small>{errors?.password?.message}</small>
+                  </div>
+                  <div className="form-group text-center">
+                    <button
+                      className="btn btn-primary account-btn"
+                      type="submit"
+                    >
+                      Login
+                    </button>
+                  </div>
+                </form>
+                
+                 */}
               </div>
             </div>
           </div>

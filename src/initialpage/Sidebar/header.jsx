@@ -50,6 +50,8 @@ const Header = (props) => {
   const [changeNotificationColor, setChangeNotificationColor] =
     useState("Gray");
   // reminderArrData
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [searchDataArr, setSearchDataArr] = useState([]);
   const dispatch = useDispatch();
 
   const handlesidebar = () => {
@@ -112,14 +114,17 @@ const Header = (props) => {
 
   const handleSearchLead = (value) => {
     // console.log(value, "vlue");
+    console.log(leadArr, "123vlue");
     const filteredData = leadArr.filter((el) => {
       if (value === "") {
         return el.clientObj.name;
       } else {
-        return el.clientObj.name.toLowerCase().includes(value);
+        // return el.clientObj.name.toLowerCase().includes(value);
+        setShowSearchResult(true)
+        return el?.clientObj?.phone.toLowerCase().includes(value);
       }
     });
-    setSearchData(filteredData);
+    setSearchDataArr(filteredData);
 
     return (
       <ul>
@@ -188,6 +193,7 @@ const Header = (props) => {
     props.onMenuClick();
     setIsNotificationRead(true);
   };
+
   const mystyle = {
     // color: "white",
     // backgroundColor: "DodgerBlue",
@@ -261,6 +267,84 @@ const Header = (props) => {
         {/* 
 
 */}
+        {/* {searchDataArr && */}
+        {showSearchResult &&
+          <li >
+            {/* <a
+              // href=""
+              className="dropdown-toggle nav-link"
+              data-bs-toggle="dropdown"
+            >
+              {/* <i className="fa fa-bell-o" />
+            </a> */}
+            <div >
+              {console.log(searchDataArr, "123213")}
+              <div className="noti-content">
+                <ul className="notification-list">
+                  {searchDataArr &&
+                    searchDataArr.map((el, index) => {
+                      {/* console.log(el, "ellllll") */ }
+                      return (
+                        // <li className="notification-message" key={index}>
+
+                        <li className="notification-message" key={index}>
+                          <Link
+                            onClick={() =>
+                              localStorage.setItem("minheight", "true")
+                            }
+                            to="/admin/reminder"
+                          >
+                            {/* <div
+                            style={{ backgroundColor: changeNotificationColor }}
+                            index={index}
+                          > */}
+                            <div className="media ">
+                              <p className="noti-details d-flex">
+                                <h5>{" " + el?.clientObj?.name}</h5>
+                                &nbsp;
+                                {/* </div> */}
+                              </p>
+
+                              <p className="noti-details d-flex">
+                                <h5>
+                                  {el?.clientObj?.email}
+                                </h5>
+                                &nbsp;
+                              </p>
+
+                            </div>
+                            {/* 
+                          <div className="media">
+                            <p className="noti-details d-flex">
+                              <h5> follow date : </h5>{" "}
+                              {new Date(el?.followDate).toLocaleDateString()}
+                              &nbsp;
+                            </p>
+                            <p className="noti-details d-flex">
+                              <h5> follow Time : </h5> {el?.followTime}&nbsp;
+                            </p>
+                          </div> */}
+                          </Link>
+                        </li>
+                      );
+                    })}
+
+                </ul>
+              </div>
+              <div className="topnav-dropdown-footer">
+                <Link
+                  onClick={() => localStorage.setItem("minheight", "true")}
+                  to="/admin/notification"
+                >
+                  View all Notifications
+                </Link>
+              </div>
+            </div>
+          </li>
+        }
+        {/* 
+
+ */}
         <li className="nav-item dropdown">
           <a
             // href=""
@@ -360,30 +444,7 @@ const Header = (props) => {
                   </Link>
                 </li> */}
 
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_17} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Rolland Webber</span>{" "}
-                          completed task{" "}
-                          <span className="noti-title">
-                            Patient and Doctor video conferencing
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">12 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
+
                 {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
@@ -484,7 +545,7 @@ const Header = (props) => {
                             handleClick(index);
                           }}
                           to="#"
-                          // to="/admin/notification"
+                        // to="/admin/notification"
                         >
                           {/* <div
                             style={{ backgroundColor: changeNotificationColor }}
@@ -623,11 +684,11 @@ const Header = (props) => {
                               <h5>
                                 {el.followDate
                                   ? new Date(
-                                      el?.followDate
-                                    ).toLocaleDateString()
+                                    el?.followDate
+                                  ).toLocaleDateString()
                                   : new Date(
-                                      el?.leadStatusDate
-                                    ).toLocaleDateString()}
+                                    el?.leadStatusDate
+                                  ).toLocaleDateString()}
                                 at
                                 {el.followTime
                                   ? el?.followTime
