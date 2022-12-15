@@ -29,6 +29,7 @@ import AdminDashboard from "../MainPage/Main/Dashboard/admindashboard";
 // import "http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css";
 import Quotation from "../_components/quotation/Quotation";
 import Index from "../MainPage/Pdf/Index";
+// import QuotationCreateAndConvert from "../MainPage/Pdf/Quotation";
 // {
 //     if (location.pathname.includes("login") || location.pathname.includes("register") || location.pathname.includes("forgotpassword") || location.pathname.includes("otp") || location.pathname.includes("lockscreen")) {
 //       // $('body').addClass('account-page');
@@ -109,9 +110,9 @@ const App = () => {
         </PrivateRoute>
       </Route>
 
-
       <Route path="/pdf">
         <PrivateRoute>
+          {/* <QuotationCreateAndConvert /> */}
           <Index />
         </PrivateRoute>
       </Route>

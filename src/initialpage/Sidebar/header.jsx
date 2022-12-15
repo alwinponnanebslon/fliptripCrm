@@ -2,7 +2,10 @@
  * App Header
  */
 import React, { useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
+// import { DashboardBox, DashboardTable } from "../../Utility/DashboardBox";
+import { DashboardBox, DashboardTable } from "../../utils/DashboardBox";
+import DataTable from "react-data-table-component";
 
 import {
   Avatar_02,
@@ -19,11 +22,9 @@ import { logoutUser } from "../../redux/features/auth/authSlice";
 
 import { useSelector } from "react-redux";
 
-import {
-  notificationGetForSpecificUser,
-  addNotification,
-  setNotification,
-} from "../../redux/features/notification/notificationSlice";
+import { notificationGetForSpecificUser } from "../../redux/features/notification/notificationSlice";
+import { getAllLeadSearchQuery } from "../../Services/lead.service";
+
 import {
   reminderGetForOneDay,
   reminderGet,
@@ -32,10 +33,12 @@ import { leadGet } from "../../redux/features/lead/leadSlice";
 // import { Bell, BookOpen, AlertTriangle } from 'react-feather';
 
 const Header = (props) => {
+  let history = useHistory();
   const role = useSelector((state) => state.auth.role);
   const user = useSelector((state) => state.auth.user);
   const userId = useSelector((state) => state.auth.user?._id);
 
+  const [query, setQuery] = useState("");
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
@@ -112,61 +115,43 @@ const Header = (props) => {
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
-  const handleSearchLead = (value) => {
-    // console.log(value, "vlue");
-    console.log(leadArr, "123vlue");
-    const filteredData = leadArr.filter((el) => {
-      if (value === "") {
-        return el.clientObj.name;
-      } else {
-        // return el.clientObj.name.toLowerCase().includes(value);
-        setShowSearchResult(true)
-        return el?.clientObj?.phone.toLowerCase().includes(value);
-      }
-    });
-    setSearchDataArr(filteredData);
+  // const handleSearchLead = (value) => {
+  //   // console.log(value, "vlue");
+  //   // console.log(leadArr, "123vlue");
 
-    return (
-      <ul>
-        {filteredData.map((item) => (
-          <li key={item._id}>{item.clientObj.name}</li>
-        ))}
-      </ul>
-    );
-    // for (let el of leadArr) {
-    //   if (el.clientObj) {
-    //     console.log(el, "el.cliet213  ");
-    //     if (value == "") {
-    //       return el;
-    //     } else {
-    //       return el.clientObj.name.includes(value);
-    //     }
+  //   const filteredData = leadArr.filter((el) => {
+  //     if (value === "") {
+  //       return el.clientObj.name;
+  //     } else {
+  //       // return el.clientObj.name.toLowerCase().includes(value);
+  //       setShowSearchResult(true);
+  //       return el?.clientObj?.phone.toLowerCase().includes(value);
+  //     }
+  //   });
+  //   setSearchDataArr(filteredData);
 
-    //     // el.clientObj.filter((ele) => {
-    //     //   if (value == "") {
-    //     //     return ele;
-    //     //   } else {
-    //     //     return ele.name.includes(value);
-    //     //   }
-    //     // });
-    //   }
+  // };
+  const handleSearchLead = async () => {
+    console.log(query, "vlue");
+    // console.log(leadArr, "123vlue");
+
+    const filteredData = await getAllLeadSearchQuery(`name=${query}`);
+    console.log(filteredData, "filteredData34 ");
+
+    if (filteredData && filteredData?.data && filteredData?.data?.data) {
+      setSearchDataArr(filteredData?.data?.data);
+      setShowSearchResult(true);
+    }
+    // const filteredData = await getAllLeadSearchQuery.filter((el) => {
+    // if (value === "") {
+    //   return el.clientObj.name;
+    // } else {
+    //   // return el.clientObj.name.toLowerCase().includes(value);
+    //   setShowSearchResult(true);
+    //   return el?.clientObj?.phone.toLowerCase().includes(value);
     // }
-
-    // leadArr.map((el) => {
-    //   console.log(el, "el2");
-    //   if (el.clientObj) {
-    //     el.clientObj.filter((ele) => {
-    //       console.log(ele, "ele1");
-    //       console.log(ele.name, "ele1");
-    //     });
-    //   }
-
-    //   if (value == "") {
-    //     return el;
-    //   } else {
-    //     return el.name.includes(value);
-    //   }
     // });
+    // setSearchDataArr(filteredData);
   };
   // console.log(dataArr, "data23")
   const handleClick = (index) => {
@@ -193,6 +178,100 @@ const Header = (props) => {
     props.onMenuClick();
     setIsNotificationRead(true);
   };
+
+  const category_columns = [
+    {
+      name: "S.NO.",
+      selector: (row, index) => index + 1,
+      sortable: true,
+      width: "7%",
+    },
+    {
+      name: "Subject",
+      selector: (row) => row?.subject,
+      width: "14%",
+    },
+    {
+      name: "Client Name",
+      selector: (row) => row?.clientObj?.name,
+      width: "10%",
+    },
+    {
+      name: "Client Phone",
+      selector: (row) => row?.clientObj?.phone,
+      width: "10%",
+    },
+    {
+      name: "Created At",
+      selector: (row) =>
+        new Date(row?.createdAt).toLocaleDateString() +
+        " at " +
+        new Date(row?.createdAt).toLocaleTimeString(),
+      width: "20%",
+    },
+    {
+      name: "Created By",
+      selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
+      width: "18%",
+    },
+
+    {
+      name: "View In Brief",
+      minWidth: "210px",
+      maxWidth: "211px",
+      cell: (row) => (
+        // <div className="col-auto float-end ml-auto">
+        //   <a
+        //     href={`/admin/lead/${row._id}`}
+        //     className="btn add-btn"
+        //     onClick={() => {
+        //       history.push(`/admin/lead/${row._id}`);
+        //       // href={`/admin/lead/${row._id}`}
+        //     }}
+        //   >
+        //     <i className="fa fa-view" />
+        //     click to view
+        //   </a>
+        // </div>
+
+        <button
+          onClick={() => {
+            history.push(`/admin/lead/${row._id}`);
+          }}
+        >
+          VIEW
+        </button>
+      ),
+      width: "5%",
+    },
+    {
+      name: (
+        <div className="col-auto float-end ml-auto">
+          <a
+            href="#"
+            className="btn add-btn"
+            onClick={() => {
+              setShowSearchResult(false);
+            }}
+          >
+            <i className="fa fa-close" />
+            Close Tab
+          </a>
+        </div>
+
+        // <button
+        //   onClick={() => {
+        //     setShowSearchResult(false);
+        //   }}
+        // >
+        //   {" "}
+        //   close tab
+        // </button>
+      ),
+
+      // selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
+    },
+  ];
 
   const mystyle = {
     // color: "white",
@@ -246,20 +325,27 @@ const Header = (props) => {
         {/* Search */}
         <li className="nav-item">
           <div className="top-nav-search">
-            <a href="" className="responsive-search">
+            <a href="#" className="responsive-search">
               <i className="fa fa-search" />
             </a>
             <form>
               <input
                 className="form-control"
                 type="text"
-                placeholder="Search here1"
+                placeholder="Search Here"
                 onChange={(e) => {
-                  handleSearchLead(e.target.value);
+                  setQuery(e.target.value);
                 }}
+                value={query}
               />
-              <button className="btn" type="submit">
-                <i className="fa fa-search" />
+              <button className="btn" type="button">
+                <i
+                  className="fa fa-search"
+                  // type="text"
+                  onClick={() => {
+                    handleSearchLead();
+                  }}
+                />
               </button>
             </form>
           </div>
@@ -267,74 +353,9 @@ const Header = (props) => {
         {/* 
 
 */}
+
         {/* {searchDataArr && */}
-        {showSearchResult &&
-          <li className="nav-item dropdown">
-            
-            <div className="dropdown-menu notifications">
-              {console.log(searchDataArr, "123213")}
-              <div className="noti-content">
-                <ul className="notification-list">
-                  {searchDataArr &&
-                    searchDataArr.map((el, index) => {
-                      return (
-                        // <li className="notification-message" key={index}>
 
-                        <li className="notification-message" key={index}>
-                          <Link
-                            onClick={() =>
-                              localStorage.setItem("minheight", "true")
-                            }
-                            to="/admin/reminder"
-                          >
-                            {/* <div
-                            style={{ backgroundColor: changeNotificationColor }}
-                            index={index}
-                          > */}
-                            <div className="media ">
-                              <p className="noti-details d-flex">
-                                <h5>{" " + el?.clientObj?.name}</h5>
-                                &nbsp;
-                                {/* </div> */}
-                              </p>
-
-                              <p className="noti-details d-flex">
-                                <h5>
-                                  {el?.clientObj?.email}
-                                </h5>
-                                &nbsp;
-                              </p>
-
-                            </div>
-                            {/* 
-                          <div className="media">
-                            <p className="noti-details d-flex">
-                              <h5> follow date : </h5>{" "}
-                              {new Date(el?.followDate).toLocaleDateString()}
-                              &nbsp;
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5> follow Time : </h5> {el?.followTime}&nbsp;
-                            </p>
-                          </div> */}
-                          </Link>
-                        </li>
-                      );
-                    })}
-
-                </ul>
-              </div>
-              <div className="topnav-dropdown-footer">
-                <Link
-                  onClick={() => localStorage.setItem("minheight", "true")}
-                  to="/admin/notification"
-                >
-                  View all Notifications
-                </Link>
-              </div>
-            </div>
-          </li>
-        }
         {/* 
 
  */}
@@ -437,7 +458,6 @@ const Header = (props) => {
                   </Link>
                 </li> */}
 
-
                 {/* <li className="notification-message">
                   <Link
                     onClick={() => localStorage.setItem("minheight", "true")}
@@ -475,15 +495,8 @@ const Header = (props) => {
           </div>
         </li>
 
-        {/* 
-
-
-
-
-
-
-
-*/}
+        {/*
+         */}
         <li className="nav-item dropdown">
           <a
             // href=""
@@ -538,7 +551,7 @@ const Header = (props) => {
                             handleClick(index);
                           }}
                           to="#"
-                        // to="/admin/notification"
+                          // to="/admin/notification"
                         >
                           {/* <div
                             style={{ backgroundColor: changeNotificationColor }}
@@ -677,11 +690,11 @@ const Header = (props) => {
                               <h5>
                                 {el.followDate
                                   ? new Date(
-                                    el?.followDate
-                                  ).toLocaleDateString()
+                                      el?.followDate
+                                    ).toLocaleDateString()
                                   : new Date(
-                                    el?.leadStatusDate
-                                  ).toLocaleDateString()}
+                                      el?.leadStatusDate
+                                    ).toLocaleDateString()}
                                 at
                                 {el.followTime
                                   ? el?.followTime
@@ -753,6 +766,19 @@ const Header = (props) => {
       </ul>
       {/* /Header Menu */}
       {/* Mobile Menu */}
+      {showSearchResult && (
+        <div className="container">
+          <DashboardTable>
+            <DataTable
+              columns={category_columns}
+              data={
+                searchDataArr && searchDataArr.length > 0 ? searchDataArr : []
+              }
+              pagination
+            />
+          </DashboardTable>
+        </div>
+      )}
       <div className="dropdown mobile-user-menu">
         <a
           href="#"

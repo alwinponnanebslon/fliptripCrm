@@ -355,6 +355,7 @@ const Leads = () => {
       // // console.log('Error: ', error)
     };
   };
+
   const handleFileSelection = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -1889,6 +1890,7 @@ const Leads = () => {
     // }
   };
   const handleClientSelection = (id) => {
+    console.log(id, "id23");
     let tempIndex = clientArr.findIndex((el) => el?._id == id);
     if (tempIndex != -1) {
       let obj = clientArr[tempIndex];
@@ -1899,6 +1901,11 @@ const Leads = () => {
       setclientObj(obj);
     }
   };
+  const [isClearable, setIsClearable] = useState(true);
+  const [isSearchable, setIsSearchable] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRtl, setIsRtl] = useState(false);
 
   return (
     <div className="page-wrapper">
@@ -2346,11 +2353,51 @@ const Leads = () => {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="form-group">
-                <label>
-                  Existing Client ({newClient ? 0 : clientArr.length})
-                </label>
-                {console.log(clientArr, "clientArr123")}
+              {newClient ? (
+                <div></div>
+              ) : (
+                <div>
+                  <label>
+                    Existing Client ({newClient ? 0 : clientArr.length})
+                  </label>
+                  {/* {console.log(clientArr, "clientArr123")} */}
+                  <Select
+                    classNamePrefix="select"
+                    defaultValue={(e) => {
+                      newClient ? "" : e?.label;
+                    }}
+                    isDisabled={newClient ? "" : isDisabled}
+                    // isLoading={isLoading}
+                    // isClearable={isClearable}
+                    // isRtl={isRtl}
+                    isSearchable={newClient ? "" : isSearchable}
+                    name="color"
+                    className="select"
+                    // value={name}
+                    // defaultInputValue={(e) => {
+                    //   console.log(e, "ewqw");
+                    //   e?.label;
+                    // }}
+
+                    onChange={(e) => {
+                      console.log(e?.value, "e3"); // setClientId(e.target.value);
+                      handleClientSelection(e?.value);
+                    }}
+                    options={
+                      newClient
+                        ? ""
+                        : clientArr &&
+                          clientArr.map((client, i) => {
+                            return {
+                              value: `${client._id}`,
+                              label: `${client?.name}                            
+                              ${client?.email}
+                              ${client?.phone}`,
+                            };
+                          })
+                    }
+                  />
+                  {/*                 
                 <select
                   className="select form-control"
                   value={clientId}
@@ -2377,24 +2424,10 @@ const Leads = () => {
                           </option>
                         );
                       })}
-                </select>
-              </div>
-              {/* <div className="form-group col-md-6">
-                  <label className="col-form-label ">
-                    Flight
-                    <span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="checkbox"
-                    name="IsAirport"
-                    style={{ marginLeft: 10 }}
-                    value={isAirport}
-                    checked={isAirport}
-                    onChange={(e) => {
-                      setIsAirport(!isAirport);
-                    }}
-                  />
-                </div> */}
+                </select> */}
+                </div>
+              )}
+
               <div className="form-group col-md-6">
                 <label className="col-form-label">New Client</label>
                 <input

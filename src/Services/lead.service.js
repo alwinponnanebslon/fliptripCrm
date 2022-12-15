@@ -49,3 +49,7 @@ export const getAllLeadOfTenDays = (id, role) => {
   // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadOfTenDays/${id}?role=${role}`);
 };
+export const getAllLeadSearchQuery = (query) => {
+  console.log(query, "query");
+  return axios.get(`${serverUrl}/getAllLeadBySearchQuery?${query}`);
+};

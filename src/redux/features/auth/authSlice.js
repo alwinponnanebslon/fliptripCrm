@@ -9,7 +9,7 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (payload) => {
     // console.log(res, "res24");s
     let decodedToken = await jwtDecode(res.token);
     localStorage.setItem("AUTH_TOKEN", res.token);
-    console.log(decodedToken, "decodedToken23");
+    // console.log(decodedToken, "decodedToken23");
     return {
       user: decodedToken.user,
       token: res.token,

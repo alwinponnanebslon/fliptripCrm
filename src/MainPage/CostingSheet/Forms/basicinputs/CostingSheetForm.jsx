@@ -45,9 +45,7 @@ const ViewCostingSheetForm = () => {
       pending: false,
     },
   ]);
-  const [flightList, setFlightList] = useState([
-    { flightcost: "", flightName: "" },
-  ]);
+  const [flightList, setFlightList] = useState([{ cost: 0, flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
   const [quotationObj, setQuotationObj] = useState({});
   const [quotationId, setQuotationId] = useState("");
@@ -101,7 +99,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    // console.log(costingSheetResultObj, "costingSheetResultObj23");
+    console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
@@ -270,7 +268,7 @@ const ViewCostingSheetForm = () => {
     }
     setTotalExpense(temp);
     setProfit(totalCost - (+landCost + +flightCost));
-  }, [flightList, totalCost, flightCost, landCost, totalExpense, profit]);
+  }, [flightList, totalCost, landCost, totalExpense, profit]);
 
   // useEffect(() => {
   //   handleinputchange();
@@ -327,6 +325,7 @@ const ViewCostingSheetForm = () => {
 
   const handleinputchangeFlight = (e, index) => {
     let { name, value } = e.target;
+    // console.log()
     ("use strict");
     let tempList = [...flightList];
     let totalAmount = 0;
@@ -360,11 +359,11 @@ const ViewCostingSheetForm = () => {
           toastError("flight price cannot be  greater than total flight cost");
           return;
         }
-        // if (value > +flightCost) {
-        //   value = 0;
-        //   toastError("flight price cannot be greater than total flight cost");
-        //   return;
-        // }
+        if (value > +flightCost) {
+          value = 0;
+          toastError("flight price cannot be greater than total flight cost");
+          return;
+        }
       }
     }
     currentObj[name] = value;
@@ -478,13 +477,7 @@ const ViewCostingSheetForm = () => {
       toastError("Location Name is mandatory");
       return;
     }
-    //  else if (inputList && inputList[0].hotelName == "") {
-    //   toastError(" Hotel details are mandatory");
-    //   return;
-    // } else if (totalCost == "") {
-    //   toastError("Total cost is mandatory");
-    //   return;
-    // }
+
     let obj = {
       leadName,
       leadsId,
@@ -498,7 +491,6 @@ const ViewCostingSheetForm = () => {
       id: prevDocId,
       additionalLandName,
       additionalLandPrices,
-      // isBooked,
     };
     console.log(obj, "obj1");
     if (isUpdatePrevDoc) {
@@ -729,9 +721,10 @@ const ViewCostingSheetForm = () => {
                         <div class="form-group col-md-4">
                           <label>Cost </label>
                           <input
+                            // disabled={true}
                             type="number"
                             name="cost"
-                            value={x.flightCost}
+                            value={x.cost}
                             placeholder="Enter Cost"
                             class="form-control"
                             onChange={(e) => handleinputchangeFlight(e, i)}
@@ -775,7 +768,8 @@ const ViewCostingSheetForm = () => {
                   Total Land Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  readOnly
+                  disabled={true}
+                  // readOnly
                   type="number"
                   className="form-control"
                   value={landCost}
@@ -787,7 +781,8 @@ const ViewCostingSheetForm = () => {
                   Total Flight Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  readOnly
+                  disabled={true}
+                  // readOnly
                   type="number"
                   className="form-control"
                   value={flightCost}
@@ -799,7 +794,8 @@ const ViewCostingSheetForm = () => {
                   Total Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  readOnly
+                  disabled={true}
+                  // readOnly
                   type="number"
                   className="form-control"
                   value={totalCost}
@@ -811,7 +807,8 @@ const ViewCostingSheetForm = () => {
                 Profit<span className="text-danger">*</span>
               </label>
               <input
-                readOnly
+                disabled={true}
+                // readOnly
                 // type="number"
                 className="form-control"
                 value={profit}

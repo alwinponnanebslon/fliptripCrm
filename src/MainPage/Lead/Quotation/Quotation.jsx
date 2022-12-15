@@ -358,6 +358,7 @@ const Quotation = () => {
               >
                 <i className="material-icons">more_vert</i>
               </a>
+
               <div className="dropdown-menu dropdown-menu-right">
                 <a
                   className="dropdown-item"
@@ -372,6 +373,12 @@ const Quotation = () => {
                   onClick={() => handleDelete(row._id)}
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
+                </a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleDownload(row)}
+                >
+                  <i className="fa fa-world m-r-5" /> Download
                 </a>
               </div>
             </>
