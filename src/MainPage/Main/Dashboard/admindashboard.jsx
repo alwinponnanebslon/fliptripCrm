@@ -520,6 +520,11 @@ const AdminDashboard = () => {
       toastError(error);
     }
   };
+  useEffect(() => {
+    if (role == "SUPERVISOR" || role == "ACCOUNT") {
+      setPasswordProtection(false)
+    }
+  }, [role])
   // const handleVerifyUserAuthentication=()=>{
   //   let data={
   //     email:userObj.email,
@@ -559,6 +564,7 @@ const AdminDashboard = () => {
           <meta name="description" content="Dashboard" />
         </Helmet>
         {/* Page Content */}
+        {/* {role != "SUPERVISOR" && role != "ACCOUNT" && */}
         {passwordProtection && (
           <div className="account-box">
             <div className="account-wrapper">
@@ -579,18 +585,16 @@ const AdminDashboard = () => {
                           <div className="pass-group">
                             <input
                               type={eye ? "password" : "text"}
-                              className={`form-control  ${
-                                errors?.password ? "error-input" : ""
-                              }`}
+                              className={`form-control  ${errors?.password ? "error-input" : ""
+                                }`}
                               value={value}
                               onChange={onChange}
                               autoComplete="false"
                             />
                             <span
                               onClick={onEyeClick}
-                              className={`fa toggle-password" ${
-                                eye ? "fa-eye-slash" : "fa-eye"
-                              }`}
+                              className={`fa toggle-password" ${eye ? "fa-eye-slash" : "fa-eye"
+                                }`}
                             />
                           </div>
                         )}
@@ -681,6 +685,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         )}
+        {/* } */}
         {passwordProtection == false && (
           <div className="content container-fluid">
             {/* Page Header */}
@@ -728,7 +733,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             )}
-            {console.log(leadsArr, "leads23")}
+            {/* {console.log(leadsArr, "leads23")} */}
             {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
               <div className="row">
                 <div className="col-md-12">

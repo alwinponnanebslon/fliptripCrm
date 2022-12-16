@@ -433,11 +433,13 @@ const Sidebar = (props) => {
                     ""
                   )}
                 </li>
-                <li className={pathname?.includes("clients") ? "active" : ""}>
-                  <Link to="/admin/clients">
-                    <i className="la la-users" /> <span>Clients</span>
-                  </Link>
-                </li>
+                {role == "ADMIN" &&
+                  <li className={pathname?.includes("clients") ? "active" : ""}>
+                    <Link to="/admin/clients">
+                      <i className="la la-users" /> <span>Clients</span>
+                    </Link>
+                  </li>
+                }
                 <li
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >

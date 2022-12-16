@@ -104,19 +104,19 @@ const ViewCostingSheetForm = () => {
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
-      setProfit(+costingSheetResultObj?.profit);
+      // setProfit(+costingSheetResultObj?.profit);
       setLeadsId(costingSheetResultObj?.leadId);
-      setLandCost(costingSheetResultObj?.landCost);
+      // setLandCost(costingSheetResultObj?.landCost);
       setLeadsId(leadId);
-      setflightCost(costingSheetResultObj?.flightCost);
-      setTotalExpense(costingSheetResultObj?.totalExpense);
-      setinputList([...costingSheetResultObj?.hotelDetails]);
-      setFlightList(costingSheetResultObj?.flightDetails);
-      setTotalCost(+costingSheetResultObj?.totalCost);
+      // setflightCost(costingSheetResultObj?.flightCost);
+      // setTotalExpense(costingSheetResultObj?.totalExpense);
+      // setinputList([...costingSheetResultObj?.hotelDetails]);
+      // setFlightList(costingSheetResultObj?.flightDetails);
+      // setTotalCost(+costingSheetResultObj?.totalCost);
       setPrevDocId(costingSheetResultObj?._id);
       setIsUpdatePrevDoc(true);
       setAdditionalLandName(costingSheetResultObj?.additionalLandName);
-      setAdditionalLandPrices(costingSheetResultObj?.additionalLandPrices);
+      // setAdditionalLandPrices(costingSheetResultObj?.additionalLandPrices);
     }
   }, [costingSheetResultObj]);
 
@@ -555,8 +555,8 @@ const ViewCostingSheetForm = () => {
           <div className="content mb-13">
             <div className="row">
               <div className="col-12 col-md-4 mb-3">
-                <label> Land Package Name </label>
-                <input
+                <label> Land description </label>
+                <textarea
                   type="text"
                   name="cost"
                   value={additionalLandName}
@@ -767,7 +767,7 @@ const ViewCostingSheetForm = () => {
                   Total Land Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  disabled={true}
+                  // disabled={true}
                   // readOnly
                   type="number"
                   className="form-control"
@@ -780,7 +780,7 @@ const ViewCostingSheetForm = () => {
                   Total Flight Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  disabled={true}
+                  // disabled={true}
                   // readOnly
                   type="number"
                   className="form-control"
@@ -793,7 +793,7 @@ const ViewCostingSheetForm = () => {
                   Total Cost<span className="text-danger">*</span>
                 </label>
                 <input
-                  disabled={true}
+                  // disabled={true}
                   // readOnly
                   type="number"
                   className="form-control"
@@ -806,7 +806,7 @@ const ViewCostingSheetForm = () => {
                 Profit<span className="text-danger">*</span>
               </label>
               <input
-                disabled={true}
+                // disabled={true}
                 // readOnly
                 // type="number"
                 className="form-control"
