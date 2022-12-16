@@ -14,6 +14,7 @@ import {
 } from "../../Entryfile/imagepath";
 import EditLead from "../../_components/modelbox/EditLead";
 import { leadGetById } from "../../redux/features/lead/leadSlice";
+import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import { useDispatch, useSelector } from "react-redux";
 // import {} from "react-router-dom";
 import { generateFilePath } from "../../utils/FileURL";
@@ -33,9 +34,14 @@ const LeadView = () => {
     // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
+  const handleCheckCostingSheet =async () => {
+    let check = await handleCheckCostingSheetExist(leadId);
 
+  };
   useEffect(() => {
     dispatch(leadGetById(leadId));
+    handleCheckCostingSheet()
+    // handleCheckCostingSheetExist(leadId);
   }, []);
 
   useEffect(() => {}, [currentLead]);

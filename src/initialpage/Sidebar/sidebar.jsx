@@ -463,7 +463,7 @@ const Sidebar = (props) => {
                     <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
-                <li
+                {/* <li
                   className={
                     pathname?.includes("Notification")
                       ? "active"
@@ -475,7 +475,7 @@ const Sidebar = (props) => {
                   <Link to="/admin/notification">
                     <i className="la la-bell" /> <span>Notification</span>
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>

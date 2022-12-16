@@ -253,7 +253,7 @@ const Addemployee = ({ show, setShow }) => {
 
       if (res.success) {
         // dispatch(addEmployee(obj))
-        toastSuccess(res.message);
+        toastSuccess(res?.message);
         handleGetAllEmployees();
         window.location.reload();
         setShow(false);

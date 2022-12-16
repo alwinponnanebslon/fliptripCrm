@@ -61,7 +61,7 @@ export const addNotification = createAsyncThunk(
       let { data: response } = await addNotificationApi(payload);
       if (response) {
         toastSuccess(response.message);
-        thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
+        // thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
       }
     } catch (error) {
       toastError(error);
@@ -83,7 +83,7 @@ export const updateNotification = createAsyncThunk(
         toastSuccess(response.message);
 
         thunkApi.dispatch(setNotification(null));
-        thunkApi.dispatch(notificationGet(`leadId=${formData?.leadId}`));
+        // thunkApi.dispatch(notificationGet(`leadId=${formData?.leadId}`));
       }
     } catch (error) {
       toastError(error);
@@ -100,7 +100,7 @@ export const deleteNotification = createAsyncThunk(
       let { data: response } = await notificationDeleteApi(payload);
       if (response) {
         toastSuccess(response.message);
-        thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
+        // thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
       }
     } catch (error) {
       toastError(error);

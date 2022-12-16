@@ -13,8 +13,9 @@ import {
   setCostingSheet,
 } from "../../../../redux/features/CostingSheet/CostingSheetSlice.js";
 import AddReminder from "../../../Reminder/Reminder/AddReminder";
-import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
 
+import { getApprovedQuotation } from "../../../../Services/quotation.service.js";
+import { updateLeadStatus } from "../../../../Services/lead.service";
 const ViewCostingSheetForm = () => {
   const location = useLocation();
   // console.log(location, "location3");
@@ -80,7 +81,7 @@ const ViewCostingSheetForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log(quotationObj, "1quotationObj23");
+    // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj._id && isUpdatePrevDoc == false) {
       // setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
       // setTotalCost(quotationObj?.paymentObj?.total);
@@ -99,12 +100,12 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "costingSheetResultObj23");
+    // console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
       setProfit(+costingSheetResultObj?.profit);
-      setLeadsId(costingSheetResultObj?.leadsId);
+      setLeadsId(costingSheetResultObj?.leadId);
       setLandCost(costingSheetResultObj?.landCost);
       setLeadsId(leadId);
       setflightCost(costingSheetResultObj?.flightCost);
@@ -203,15 +204,6 @@ const ViewCostingSheetForm = () => {
         }
       }
     }
-    // if (name == "cost") {
-    //   let temp = 0;
-    //   // if(tempList)
-    //   for (let el of inputList) {
-    //     // console.log(el, "eeeeewr");
-    //     if (el.cost) {
-    //       temp = temp + el.cost;
-    //     }
-    //   }
 
     //   if (value > parseInt(landCost)) {
     //     value = 0;
@@ -269,10 +261,6 @@ const ViewCostingSheetForm = () => {
     setTotalExpense(temp);
     setProfit(totalCost - (+landCost + +flightCost));
   }, [flightList, totalCost, landCost, totalExpense, profit]);
-
-  // useEffect(() => {
-  //   handleinputchange();
-  // }, [isChangeCheckBox]);
 
   const handleremove = (index) => {
     const list = [...inputList];
@@ -467,7 +455,12 @@ const ViewCostingSheetForm = () => {
   //     setIsButtonFlight(false);
   //   }
   // }, [inputList, flightList, landCost, flightCost, additionalLandPrices]);
-
+  const updateStatusOfLead = async (id, obj) => {
+    let { data: res } = await updateLeadStatus(id, obj);
+    if (res.success) {
+      handleGetAllLeads();
+    }
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (leadName == "") {
@@ -492,12 +485,18 @@ const ViewCostingSheetForm = () => {
       additionalLandName,
       additionalLandPrices,
     };
-    console.log(obj, "obj1");
+    // console.log(obj, "obj1");
+
     if (isUpdatePrevDoc) {
-      console.log("update");
+      // console.log("update");
       dispatch(update(obj, obj.id));
     } else {
-      console.log("create doc");
+      // console.log("create doc");
+      let object = {
+        status: "CONVERT",
+      };
+      // handleLeadStatusUpdate(leadId, "Convert", "FROMCOSTING");
+      updateStatusOfLead(leadId, object);
       dispatch(addCosting(obj, obj.id));
     }
   };

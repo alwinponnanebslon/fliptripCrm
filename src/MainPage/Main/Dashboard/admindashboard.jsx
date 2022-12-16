@@ -90,7 +90,6 @@ const AdminDashboard = () => {
   const [menu, setMenu] = useState(false);
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
-  const [notificationArray, setNotificationArray] = useState([]);
   const [data2, setData2] = useState([]);
 
   const userId = useSelector((state) => state.auth?.user?._id);
@@ -156,11 +155,11 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    // handleInit();
+    handleInit();
   }, []);
 
   useEffect(() => {
-    // console.log(ReminderArray, "123 ReminderArray");
+    console.log(ReminderArray, "123 ReminderArray");
     setReminderArr(ReminderArray);
   }, [ReminderArray]);
 
@@ -196,7 +195,7 @@ const AdminDashboard = () => {
   let array2 = [];
 
   useEffect(() => {
-    // console.log(reminderArr, "reminderArr34");
+    console.log(reminderArr, "reminderArr34");
   }, [reminderArr]);
 
   useEffect(() => {
@@ -508,9 +507,9 @@ const AdminDashboard = () => {
       } else {
         clearErrors("password");
         let findAuthenticity = await handleCheckValidUserDashboard(data);
-        console.log(findAuthenticity, "findAuthenticity23")
+        console.log(findAuthenticity, "findAuthenticity23");
         if (findAuthenticity?.data?.success) {
-          toastSuccess(findAuthenticity?.data?.success)
+          toastSuccess(findAuthenticity?.data?.success);
           setPasswordProtection(false);
         }
         // dispatch(loginUser(data));
@@ -580,16 +579,18 @@ const AdminDashboard = () => {
                           <div className="pass-group">
                             <input
                               type={eye ? "password" : "text"}
-                              className={`form-control  ${errors?.password ? "error-input" : ""
-                                }`}
+                              className={`form-control  ${
+                                errors?.password ? "error-input" : ""
+                              }`}
                               value={value}
                               onChange={onChange}
                               autoComplete="false"
                             />
                             <span
                               onClick={onEyeClick}
-                              className={`fa toggle-password" ${eye ? "fa-eye-slash" : "fa-eye"
-                                }`}
+                              className={`fa toggle-password" ${
+                                eye ? "fa-eye-slash" : "fa-eye"
+                              }`}
                             />
                           </div>
                         )}
@@ -607,7 +608,6 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                 </form>
-
 
                 {/* 
                 <form onSubmit={handleSubmit(onSubmit)}>

@@ -83,12 +83,18 @@ const Quotation = () => {
   };
 
   useEffect(() => {
-    console.log(quotationStateArr, "quotationStateArr231");
-    if (quotationStateArr && quotationStateArr.length > 0) {
+    // console.log(quotationStateArr, "quotationStateArr231");
+    if (quotationStateArr && quotationStateArr?.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
+    } else {
+      setIsConvert(false);
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
+
+  useEffect(() => {
+    console.log(isConvert, "isConvert");
+  }, [isConvert]);
 
   const handleEdit = (row) => {
     setShow(true);
@@ -450,7 +456,6 @@ const Quotation = () => {
             {isConvert == false && (
               <div className="col-auto float-end ml-auto">
                 <a
-                  href="#"
                   className="btn add-btn"
                   // data-bs-toggle="modal"
                   // data-bs-target="#add_quote"

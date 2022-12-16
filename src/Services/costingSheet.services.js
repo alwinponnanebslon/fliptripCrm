@@ -29,3 +29,7 @@ export const getAllCost = (id, role) => {
 export const getAllSalesOfTenDays = (id, role) => {
   return axios.get(`${serverUrl}/getAllSalesOfTenDays/${id}?role=${role}`);
 };
+export const handleCheckCostingSheetExist = (id, role) => {
+
+  return axios.get(`${serverUrl}/existCosting`);
+};

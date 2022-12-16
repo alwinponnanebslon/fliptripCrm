@@ -674,7 +674,7 @@ const LeadSidebar = (props) => {
                 {/* 
                 
                 */}
-                {role != "SUPERVISOR" && role != "ACCOUNT" && (
+                {role != "SUPERVISOR" && (
                   <li className="submenu">
                     <a
                       href="#"
@@ -726,10 +726,97 @@ const LeadSidebar = (props) => {
                     </Link>
                   </li>
                 )}
+                {/* <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> <span>Notification</span>
+                  </Link>
+                </li> */}
               </ul>
             </div>
           </div>
         )}
+        {role == rolesObj.ACCOUNT && (
+          <div className="sidebar-inner slimscroll">
+            <div id="sidebar-menu" className="sidebar-menu">
+              <ul>
+                <li className="menu-title">
+                  <Link to="/admin/leads" className="active">
+                    <i className="fa fa-back-arrow"></i> Back
+                  </Link>
+                </li>
+                {/* <li className={pathname?.includes("lead") ? "active" : ""}>
+                  <Link to={`/admin/lead/${leadId}`}>
+                    <i className="la la-file" />
+                  
+                  </Link>
+                </li> */}
+
+                {role != "SUPERVISOR" && (
+                  <li className="submenu">
+                    <a
+                      href="#"
+                      className={isSideMenu == "notes" ? "subdrop" : ""}
+                      onClick={() =>
+                        toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                      }
+                    >
+                      <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
+                      <span className="menu-arrow" />
+                    </a>
+                    {isSideMenu == "notes" ? (
+                      <ul>
+                        <li>
+                          <Notes />
+                          {/* <Link
+                          // className={
+                          //   pathname?.includes("admin/dashboard")
+                          //     ? "active"
+                          //     : ""
+                          // }
+                          // to="/admin/dashboard"
+                          ></Link> */}
+                        </li>
+                      </ul>
+                    ) : (
+                      ""
+                    )}
+                  </li>
+                )}
+                <li
+                  className={
+                    pathname?.includes("Notification")
+                      ? "active"
+                      : pathname?.includes("Notification")
+                      ? "active"
+                      : ""
+                  }
+                >
+                  <Link to="/admin/notification">
+                    <i className="la la-bell" /> <span>Notification</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        )}
+        {/* 
+        
+        
+        
+        
+        
+        
+        
+        */}
+
         {/* {role == rolesObj.SPOC && (
           <div className="sidebar-inner slimscroll">
             <div id="sidebar-menu" className="sidebar-menu">

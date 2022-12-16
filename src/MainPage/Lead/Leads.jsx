@@ -57,7 +57,8 @@ import LeadDetails from "./LeadDetails";
 import { date } from "yup";
 import { shouldForwardProp } from "@mui/system";
 import Notes from "../Lead/Notes/Notes";
-
+import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
+import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheetForm";
 const Leads = () => {
   const dispatch = useDispatch();
   const agents = useSelector(getAllAgents); //spoc
@@ -133,12 +134,14 @@ const Leads = () => {
       setClientId("");
     }
   }, [newClient]);
+
   useEffect(() => {
     getAllClients();
     dispatch(quotationGet());
   }, []);
+
   useEffect(() => {
-    console.log("23", quotationArray, "quotation21");
+    // console.log("23", quotationArray, "quotation21");
     if (quotationArray.length > 0) {
       setQuotationArrData(quotationArray);
     }
@@ -479,6 +482,7 @@ const Leads = () => {
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
+
   const handleSubmitLead = async (e) => {
     e.preventDefault();
     try {
@@ -545,7 +549,7 @@ const Leads = () => {
         obj.leadId = userObj?._id;
       }
 
-      console.log(obj, "ovvjb23");
+      // console.log(obj, "ovvjb23");
       // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
@@ -568,7 +572,7 @@ const Leads = () => {
       }
     } catch (err) {
       toastError(err);
-      console.error(err);
+      // console.error(err);
     }
   };
 
@@ -665,12 +669,27 @@ const Leads = () => {
           handleGetAllLeads();
         }
       }
+      // handleLeadStatusUpdate(leadId,"Convert","FROMCOSTING")
+      console.log(id, value, status, "3r221");
+      if (value == "Convert" && status == "FROMCOSTING") {
+        // setIsStatusOfLead(true);
+        console.log("1234789inside ");
+        let obj = {
+          status: "CONVERT",
+        };
+        updateStatusOfLead(id, obj);
+      }
     } catch (error) {
       console.error(error);
       toastError(error);
     }
   };
-
+  const handleCheckCostingSheet = async () => {
+    let check = await handleCheckCostingSheetExist(leadId);
+  };
+  useEffect(() => {
+    handleCheckCostingSheet(leadId);
+  }, []);
   const handlePriorityChange = (e) => {
     setPriority(e.value);
   };
@@ -1890,7 +1909,7 @@ const Leads = () => {
     // }
   };
   const handleClientSelection = (id) => {
-    console.log(id, "id23");
+    // console.log(id, "id23");
     let tempIndex = clientArr.findIndex((el) => el?._id == id);
     if (tempIndex != -1) {
       let obj = clientArr[tempIndex];
@@ -2362,6 +2381,10 @@ const Leads = () => {
                   </label>
                   {/* {console.log(clientArr, "clientArr123")} */}
                   <Select
+                    components={{
+                      DropdownIndicator: () => null,
+                      IndicatorSeparator: () => null,
+                    }}
                     classNamePrefix="select"
                     defaultValue={(e) => {
                       newClient ? "" : e?.label;
@@ -2769,6 +2792,12 @@ const Leads = () => {
               </div>
             </div>
           </div>
+
+          {/* <ViewCostingSheetForm
+            handleLeadStatusUpdate={handleLeadStatusUpdate}
+          /> */}
+
+          {/* // const handleLeadStatusUpdate = async (id, value, status) => {} */}
           {/* <Notes show1={showNotes} setShow1={setShowNotes} /> */}
         </div>
       </div>
