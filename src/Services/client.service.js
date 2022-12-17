@@ -17,6 +17,9 @@ export const deleteClient = (id) => {
 };
 
 export const updateClient = (formData, id) => {
-  // console.log(formData, id,"dbcall update")
+  console.log(formData, id, "dbcall update");
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
+};
+export const getFilter = (query) => {
+  return axios.get(`${serverUrl}/filter?${query}`);
 };

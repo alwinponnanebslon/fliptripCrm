@@ -2642,97 +2642,93 @@
 //   </Button>
 // </Modal.Footer>
 // </Modal>
-// 
+//
 // /
 // =====================================
 const handleinputchangeHotel = (e, index) => {
-    const { name, value } = e.target;
-    ("use strict");
-    // // console.log(name, "name");
-    let list = [...hotelList];
-    let currentObj = Object.freeze(tempList[index]);
-    currentObj = {
-      hotelName: list[index].hotelName,
-      roomType: list[index].roomType,
-      numberOfNight: list[index].numberOfNight,
-      checkIn: list[index].checkIn,
-      checkOut: list[index].checkOut,
-      rating: list[index].rating,
-      hotelAddress: list[index].hotelAddress,
-      // name: tempList[index].name,
-      // startDate: tempList[index].startDate,
-      // endDate: tempList[index].endDate,
-    };
-
-    if (name == "rating") {
-      if (value > 6 || value < 1) {
-        toastError("invalid rating, kindly provide valid rating");
-        return;
-      }
-    }
-
-    if (name == "numberOfNight") {
-      if (value < "0" && value) {
-        toastError(`Number of nights cannot be less than 0`);
-        return;
-      }
-      let checkInDate = new Date(list[index]["checkIn"]);
-      let checkOutDate = new Date();
-      checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-      list[index]["checkOut"] = checkOutDate;
-    }
-
-    if (name == "checkIn") {
-      let checkInDate = new Date(value);
-      let checkOutDate = new Date(value);
-      if (
-        !list[index]["numberOfNight"] ||
-        list[index]["numberOfNight"] == "0"
-      ) {
-        toastError("please enter number of nights");
-        return;
-      }
-      checkOutDate.setDate(
-        checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
-      );
-      list[index][name] = checkInDate;
-      // console.log("checkedIn", checkInDate, "checkInDate")
-      list[index]["checkOut"] = checkOutDate;
-    }
-
-    // console.log(list, "list");
-    for (let el of list) {
-      // console.log(el, "el");
-      if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
-        toastError("check-Out wil be less than checkin ");
-        return;
-      }
-    }
-    list[index][name] = value;
-
-    if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
-      toastError("Please enter duration of tour");
-      return;
-    }
-    if (
-      list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-      parseInt(durationOfTour)
-    ) {
-      toastError("Total number of nights cannot be more than duration of tour");
-      return;
-    }
-    currentObj[name] = value;
-    list[index] = currentObj;
-    setHotelList([...list]);
-    // setHotelList([...list]);
+  const { name, value } = e.target;
+  ("use strict");
+  // // console.log(name, "name");
+  let list = [...hotelList];
+  let currentObj = Object.freeze(tempList[index]);
+  currentObj = {
+    hotelName: list[index].hotelName,
+    roomType: list[index].roomType,
+    numberOfNight: list[index].numberOfNight,
+    checkIn: list[index].checkIn,
+    checkOut: list[index].checkOut,
+    rating: list[index].rating,
+    hotelAddress: list[index].hotelAddress,
+    // name: tempList[index].name,
+    // startDate: tempList[index].startDate,
+    // endDate: tempList[index].endDate,
   };
 
-  // 
-  // 
-  // 
-  
-  <select
+  if (name == "rating") {
+    if (value > 6 || value < 1) {
+      toastError("invalid rating, kindly provide valid rating");
+      return;
+    }
+  }
 
+  if (name == "numberOfNight") {
+    if (value < "0" && value) {
+      toastError(`Number of nights cannot be less than 0`);
+      return;
+    }
+    let checkInDate = new Date(list[index]["checkIn"]);
+    let checkOutDate = new Date();
+    checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+    list[index]["checkOut"] = checkOutDate;
+  }
+
+  if (name == "checkIn") {
+    let checkInDate = new Date(value);
+    let checkOutDate = new Date(value);
+    if (!list[index]["numberOfNight"] || list[index]["numberOfNight"] == "0") {
+      toastError("please enter number of nights");
+      return;
+    }
+    checkOutDate.setDate(
+      checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
+    );
+    list[index][name] = checkInDate;
+    // console.log("checkedIn", checkInDate, "checkInDate")
+    list[index]["checkOut"] = checkOutDate;
+  }
+
+  // console.log(list, "list");
+  for (let el of list) {
+    // console.log(el, "el");
+    if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
+      toastError("check-Out wil be less than checkin ");
+      return;
+    }
+  }
+  list[index][name] = value;
+
+  if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+    toastError("Please enter duration of tour");
+    return;
+  }
+  if (
+    list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+    parseInt(durationOfTour)
+  ) {
+    toastError("Total number of nights cannot be more than duration of tour");
+    return;
+  }
+  currentObj[name] = value;
+  list[index] = currentObj;
+  setHotelList([...list]);
+  // setHotelList([...list]);
+};
+
+//
+//
+//
+
+<select
   // options={allEmployees.map((el) => {
   //   return {
   //     ...el,
@@ -2753,9 +2749,10 @@ const handleinputchangeHotel = (e, index) => {
     setEmployeeId(e.value);
     setEmployeeObj(e);
   }}
-// className={styles.selectStyle}
-
->  <option value="">Please Select </option>
+  // className={styles.selectStyle}
+>
+  {" "}
+  <option value="">Please Select </option>
   {allEmployees &&
     allEmployees.length > 0 &&
     allEmployees.map((el, index) => {
@@ -2765,4 +2762,106 @@ const handleinputchangeHotel = (e, index) => {
           value={el._id}
         >{`${el.firstName} ${el.lastName} [${el.role} ]`}</option>
       );
-    })}  </select>
+    })}{" "}
+</select>;
+
+//
+//
+//
+//
+
+// ======================================================================================
+//   <Modal
+//   size="lg"
+//   show={show}
+//   // className="add_note"
+// >
+//   <Modal.Header>
+//     <Modal.Title>Add Credentials</Modal.Title>
+//   </Modal.Header>
+//   <Modal.Body>
+//     <form>
+//       <div className="col-md-12">
+//         <div className="form-group">
+//           <label>
+//             PassPort Number<span className="text-danger">*</span>{" "}
+//           </label>
+//           <input
+//             value={passwordNumber}
+//             onChange={(e) => setPassportNumber(e.target.value)}
+//             className="form-control"
+//             type="text"
+//           />
+//         </div>
+//       </div>
+
+//       <div className="col-md-6">
+//         <div className="form-group">
+//           <label>
+//             Expiry Date <span className="text-danger">*</span>
+//           </label>
+//           <input
+//             value={passPortExpiryDate}
+//             onChange={(e) => setPassPortExpiryDates(e.target.value)}
+//             type="text"
+//             className="form-control"
+//           />
+//         </div>
+//       </div>
+
+//       {/* <div className="col-md-6">
+//         <div className="form-group">
+//           <label>
+//             Phone <span className="text-danger">*</span>
+//           </label>
+//           <input
+//             value={phone}
+//             onChange={(e) => setPhone(e.target.value)}
+//             type={"tel"}
+//             maxLength={10}
+//             className="form-control"
+//           />
+//         </div>
+//       </div> */}
+
+//       {/* <div className="col-md-6">
+//         <div className="form-group">
+//           <label>
+//             Email <span className="text-danger">*</span>
+//           </label>
+//           <input
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             type={"text"}
+//             className="form-control"
+//           />
+//         </div>
+//       </div> */}
+//       <div className="form-group">
+//         <label>
+//           Description <span className="text-danger">*</span>
+//         </label>
+//         <textarea
+//           value={description}
+//           onChange={(e) => setDescription(e.target.value)}
+//           className="form-control"
+//         />
+//       </div>
+//     </form>
+//   </Modal.Body>
+//   <Modal.Footer>
+//     <Button
+//       variant="secondary"
+//       onClick={() => {
+//         setShow(false);
+//         clearFunc();
+//       }}
+//     >
+//       Close
+//     </Button>
+//     <Button variant="primary" onClick={(e) => handleSubmit(e)}>
+//        Add Client Details
+//     </Button>
+//   </Modal.Footer>
+// </Modal>
+  

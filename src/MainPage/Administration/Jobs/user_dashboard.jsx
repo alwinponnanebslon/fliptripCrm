@@ -68,8 +68,8 @@ const UserDashboard = (props) => {
     ]
 
   };
-  const { location } = props
-  let pathname = location.pathname
+  // const { location } = props
+  // // let pathname = location.pathname
 
   return (
     <>

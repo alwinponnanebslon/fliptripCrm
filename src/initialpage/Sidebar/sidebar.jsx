@@ -15,11 +15,20 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-
+import {
+  assignLeadToagent,
+  createLead,
+  getLeadsByRole,
+  updateLeadStatus,
+  updatelead,
+  getAllLead,
+  getLeadFilterByDate,
+} from "../../Services/lead.service";
 import "react-accessible-accordion/dist/fancy-example.css";
+
 const Sidebar = (props) => {
   const role = useSelector((state) => state.auth.role);
-
+  const userObj = useSelector((state) => state.auth.user);
   const [isSideMenu, setSideMenu] = useState("");
   const [level2Menu, setLevel2Menu] = useState("");
   const [level3Menu, setLevel3Menu] = useState("");
@@ -40,10 +49,24 @@ const Sidebar = (props) => {
 
   const [startDate, setStartDate] = useState(new Date());
   const [startDate1, setStartDate1] = useState(new Date());
+  const [countOfLead, setCountOfLead] = useState("");
 
   const toggleSidebar = (value) => {
     // console.log(value);
     setSideMenu(value);
+  };
+  const handleGetAllLeads = async () => {
+    try {
+      let { data: res } = await getLeadsByRole(userObj?._id, role);
+      // console.log(res, "lead countRes12");
+      if (res.success) {
+        let tempArr = res.data;
+        setCountOfLead(res.data.length);
+      }
+    } catch (error) {
+      // console.error(error);
+      toastError(error);
+    }
   };
 
   const toggleLvelTwo = (value) => {
@@ -57,6 +80,11 @@ const Sidebar = (props) => {
 
   useEffect(() => {
     setPathName(location.pathname);
+  }, [location]);
+
+  useEffect(() => {
+    handleGetAllLeads();
+    // dispatch(clientGet());
   }, [location]);
   // // console.log(pathname, "athName2");///admin/leads athName2
   const { leadId } = useParams();
@@ -141,8 +169,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -155,12 +183,13 @@ const Sidebar = (props) => {
                   )}
                 </li>
                 {/*  */}
-
-                <li className={pathname?.includes("clients") ? "active" : ""}>
-                  <Link to="/admin/clients">
-                    <i className="la la-users" /> <span>Clients</span>
-                  </Link>
-                </li>
+                {role == "ADMIN" && (
+                  <li className={pathname?.includes("clients") ? "active" : ""}>
+                    <Link to="/admin/clients">
+                      <i className="la la-users" /> <span>Clients</span>
+                    </Link>
+                  </li>
+                )}
                 <li
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >
@@ -187,12 +216,14 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
-                    <i className="la la-ticket" /> <span>Leads</span>
+                    <i className="la la-ticket" />
+                    <span>Leads</span>
+                    <span className="blue-text">{countOfLead}</span>
                   </Link>
                 </li>
                 <li
@@ -200,8 +231,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -327,12 +358,14 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
-                    <i className="la la-ticket" /> <span>Leads</span>
+                    <i className="la la-ticket" />
+                    <span>Leads</span>
+                    <span>{countOfLead}</span>
                   </Link>
                 </li>
                 <li
@@ -340,8 +373,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -420,8 +453,8 @@ const Sidebar = (props) => {
                             pathname?.includes("allemployees")
                               ? "active"
                               : pathname?.includes("employees-list")
-                                ? "active"
-                                : ""
+                              ? "active"
+                              : ""
                           }
                           to="/admin/employee"
                         >
@@ -433,13 +466,7 @@ const Sidebar = (props) => {
                     ""
                   )}
                 </li>
-                {role == "ADMIN" &&
-                  <li className={pathname?.includes("clients") ? "active" : ""}>
-                    <Link to="/admin/clients">
-                      <i className="la la-users" /> <span>Clients</span>
-                    </Link>
-                  </li>
-                }
+
                 <li
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >
@@ -452,12 +479,14 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
-                    <i className="la la-ticket" /> <span>Leads</span>
+                    <i className="la la-ticket" />
+                    <span>Leads</span>
+                    <span className="blue-text"> {countOfLead}</span>
                   </Link>
                 </li>
                 <li className={pathname?.includes("reminder") ? "active" : ""}>
@@ -465,19 +494,19 @@ const Sidebar = (props) => {
                     <i className="la la-adjust" /> <span>Reminder</span>
                   </Link>
                 </li>
-                {/* <li
+                <li
                   className={
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
                     <i className="la la-bell" /> <span>Notification</span>
                   </Link>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>
@@ -521,12 +550,6 @@ const Sidebar = (props) => {
                     ""
                   )}
                 </li>
-
-                <li className={pathname?.includes("clients") ? "active" : ""}>
-                  <Link to="/admin/clients">
-                    <i className="la la-users" /> <span>Clients</span>
-                  </Link>
-                </li>
                 <li
                   className={pathname?.includes("destinations") ? "active" : ""}
                 >
@@ -539,12 +562,14 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
                     <i className="la la-ticket" /> <span>Leads</span>
+                    <span className="blue-text">{countOfLead}</span>
+                    {/* <h4>131331</h4> */}
                   </Link>
                 </li>
                 <li className={pathname?.includes("reminder") ? "active" : ""}>
@@ -557,8 +582,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -614,8 +639,8 @@ const Sidebar = (props) => {
                     pathname?.includes("leads")
                       ? "active"
                       : pathname?.includes("Lead-view")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/leads">
@@ -632,8 +657,8 @@ const Sidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">

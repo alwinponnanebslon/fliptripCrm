@@ -78,7 +78,7 @@ const Header = (props) => {
     dispatch(logoutUser());
   };
 
-  let pathname = location.pathname;
+  // let pathname = location.pathname;
   const handleInit = () => {
     // console.log("user123");
     let obj = {
@@ -133,11 +133,11 @@ const Header = (props) => {
 
   // };
   const handleSearchLead = async () => {
-    console.log(query, "vlue");
+    // console.log(query, "vlue");
     // console.log(leadArr, "123vlue");
 
     const filteredData = await getAllLeadSearchQuery(`name=${query}`);
-    console.log(filteredData, "filteredData34 ");
+    // console.log(filteredData, "filteredData34 ");
 
     if (filteredData && filteredData?.data && filteredData?.data?.data) {
       setSearchDataArr(filteredData?.data?.data);
@@ -524,6 +524,7 @@ const Header = (props) => {
               <i className="fa fa-clock-o" />
               <span className="badge badge-pill">
                 {/* {reminderArrData?.length > 0 ? reminderArrData?.length : 0} */}
+                {console.log(reminderArrData, "reminderArrData?.length")}
                 {reminderArrData?.length}
               </span>
             </a>

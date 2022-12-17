@@ -9564,3 +9564,8 @@ a.btn.btn-blue {
   font-size: 14px;
   font-weight: 600;
 }
+textarea {
+  min-height: 60px;
+  overflow-y: auto;
+  word-wrap: break-word;
+}

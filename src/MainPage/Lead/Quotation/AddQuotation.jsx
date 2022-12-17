@@ -12,8 +12,9 @@ import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
+import { useRef } from "react";
 const AddQuotation = ({ show, setShow }) => {
+  const descriptionRef = useRef();
   const { leadId } = useParams();
 
   const dispatch = useDispatch();
@@ -573,7 +574,7 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   const handleinputchangeItinerary = (e, index) => {
-    console.log(itineraryList, "itineraryList");
+    // console.log(itineraryList, "itineraryList");
     if (itineraryList && isUpateDoc == true) {
       console.log("iiioop");
       ("use strict");
@@ -908,7 +909,18 @@ const AddQuotation = ({ show, setShow }) => {
     numberOfInfants,
     numberOfGuest,
   ]);
+  function textAreaAdjust(e) {
+    let element = descriptionRef.current;
 
+    if (event.key === "Enter") {
+      element.style.height =
+        element.scrollHeight > element.clientHeight
+          ? element.scrollHeight + "px"
+          : "60px";
+    }
+
+    // element.style.height = 25 + element.scrollHeight + "px";
+  }
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
       <div
@@ -1531,7 +1543,12 @@ aria-label="Close"
                                 </div>
                                 <div className="form-group col-md-12">
                                   <label>Itinerary Description</label>
+
                                   <textarea
+                                    ref={descriptionRef}
+                                    onKeyUp={(e) => {
+                                      textAreaAdjust(e);
+                                    }}
                                     type="text"
                                     name="itineraryName"
                                     className="form-control"
@@ -1541,6 +1558,16 @@ aria-label="Close"
                                       handleinputchangeItinerary(e, i)
                                     }
                                   />
+                                  {/* <textarea
+                                    type="text"
+                                    name="itineraryName"
+                                    className="form-control"
+                                    value={itinerary.itineraryName}
+                                    placeholder="Enter Itinerary Description"
+                                    onChange={(e) =>
+                                      handleinputchangeItinerary(e, i)
+                                    }
+                                  /> */}
                                 </div>
                               </div>
                             );
@@ -1609,7 +1636,7 @@ aria-label="Close"
                         </tr>
                       </thead>
                       <tbody>
-                      {isAirport && (
+                        {isAirport && (
                           <tr>
                             <td>Flight</td>
                             <td>{numberOfGuest}</td>

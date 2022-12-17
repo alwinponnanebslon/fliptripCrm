@@ -50,15 +50,17 @@ import {
   clientGet,
   setclientObj,
   setObj,
+  clientUpdate,
 } from "../../redux/features/client/clientSlice";
 import LeadView from "./LeadView";
-import { get } from "../../Services/client.service";
+import { get, updateClient, getFilter } from "../../Services/client.service";
 import LeadDetails from "./LeadDetails";
 import { date } from "yup";
 import { shouldForwardProp } from "@mui/system";
 import Notes from "../Lead/Notes/Notes";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheetForm";
+
 const Leads = () => {
   const dispatch = useDispatch();
   const agents = useSelector(getAllAgents); //spoc
@@ -69,8 +71,6 @@ const Leads = () => {
   // console.log(teamLeads, "12ateamLeads");
   const destinations = useSelector((state) => state.tour.tours);
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
-  // const clients = useSelector((state) => state.client.clientArr);
-  // const [clientObj, setClientObj] = useState({ id: "", name: "" })
 
   const [clientId, setClientId] = useState("");
   const [leadObj, setLeadObj] = useState({});
@@ -112,6 +112,13 @@ const Leads = () => {
   const [newClient, setNewClient] = useState(false);
   const [quotationArrData, setQuotationArrData] = useState([]);
   const [quotationApproved, setQuotationApproved] = useState(false);
+  const [isActiveFilter, setIsActiveFilter] = useState(false);
+  const [showClientDetails, setShowClientDetails] = useState(false);
+  const [clientIdForUpdate, setClientIdForUpdate] = useState("");
+
+  const [passwordNumber, setPassportNumber] = useState("");
+  const [passPortExpiryDate, setPassPortExpiryDates] = useState("");
+  const [filterClientByName, setFilterClientByName] = useState("");
 
   const agentSelect = useRef();
 
@@ -135,8 +142,19 @@ const Leads = () => {
     }
   }, [newClient]);
 
+  const handleGetClient = async () => {
+    let get1 = await getFilter(`name=${filterClientByName}`);
+    // console.log(clientArr)
+    console.log(get1.data.data, "getettte");
+    setClientArr(get1.data.data);
+  };
+
   useEffect(() => {
-    getAllClients();
+    handleGetClient();
+  }, [filterClientByName]);
+
+  useEffect(() => {
+    // getAllClients();
     dispatch(quotationGet());
   }, []);
 
@@ -482,7 +500,52 @@ const Leads = () => {
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
-
+  const handleUpdateLeadsArray = (value1, value2) => {
+    // handleUpdateLeadsArray("OPEN", "REOPENED");
+    // handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
+    //  handleUpdateLeadsArray("OPEN", "REOPENED");
+    //      handleUpdateLeadsArray("CANCELLED");
+    // console.log("1789");
+    let tempArr = leadsArr;
+    // console.log(userAuthorise, "1te");
+    // console.log(tempArr, "1tempArr2");
+    // console.log(tempArr, "atemp23");
+    if (value1 == "OPEN" && value2 == "REOPENED") {
+      let temp = tempArr.filter(
+        (el) => `${el.status}` == value1 || `${el.status}` == value2
+      );
+      setDisplayLeadsArr(temp);
+      // setLeadsArr(temp);
+    } else if (value1 == "CONVERT" && value2 == "CONVERT_BY_SPOC") {
+      let temp = tempArr.filter(
+        (el) => `${el.status}` == value1 || `${el.status}` == value2
+      );
+      setDisplayLeadsArr(temp);
+      // setLeadsArr(temp);
+    } else if (value1 == "CANCELLED") {
+      let temp = tempArr.filter((el) => `${el.status}` == value1);
+      setDisplayLeadsArr(temp);
+      // setLeadsArr(temp);
+    }
+    // } else if (userAuthorise.role == "TEAMLEAD") {
+    //   let temp = tempArr.filter(
+    //     (el) =>
+    //       el.agentId == userAuthorise?.user?._id ||
+    //       el.leadId == userAuthorise?.user?._id
+    //   );
+    //   // console.log(temp, "123temp23");
+    //   setDisplayLeadsArr(temp);
+    //   setLeadsArr(temp);
+    // } else {
+    //   setDisplayLeadsArr(res.data);
+    //   setLeadsArr(res.data);
+    // }
+    // let temp = tempArr.filter((el) => {
+    //   el?.agent;
+    // });
+    // setLeadsArr(res.data);
+    // dispatch(returnAllEmployees(res.data))
+  };
   const handleSubmitLead = async (e) => {
     e.preventDefault();
     try {
@@ -614,7 +677,7 @@ const Leads = () => {
 
   const handleLeadStatusUpdate = async (id, value, status) => {
     try {
-      console.log(id, value, status, "value123");
+      // console.log(id, value, status, "value123");
 
       if (value == "CONVERT" || value == leadStatus.convertBySpoc) {
         if (isStatusOfLead == false && status != "CONVERT") {
@@ -670,10 +733,10 @@ const Leads = () => {
         }
       }
       // handleLeadStatusUpdate(leadId,"Convert","FROMCOSTING")
-      console.log(id, value, status, "3r221");
+      // console.log(id, value, status, "3r221");
       if (value == "Convert" && status == "FROMCOSTING") {
         // setIsStatusOfLead(true);
-        console.log("1234789inside ");
+        // console.log("1234789inside ");
         let obj = {
           status: "CONVERT",
         };
@@ -687,9 +750,11 @@ const Leads = () => {
   const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
   };
+
   useEffect(() => {
     handleCheckCostingSheet(leadId);
   }, []);
+
   const handlePriorityChange = (e) => {
     setPriority(e.value);
   };
@@ -1059,7 +1124,36 @@ const Leads = () => {
       );
     }
   };
+  const handleUpdateClentDetails = (record) => {
+    // setClientIdForUpdateDoc(record.)
+    setShowClientDetails(true);
+    console.log(record, "Record23");
+    setClientIdForUpdate(record?.clientObj?._id);
+  };
 
+  const handleSubmitDetailsClient = async (e) => {
+    e.preventDefault();
+    // console.log(setClientIdForUpdate, "clientid");
+    if (passwordNumber == "") {
+      toastError("Passport Number is mandatory");
+      return;
+    }
+    if (passPortExpiryDate == "") {
+      toastError("Passport Expiry date is mandatory");
+      return;
+    }
+    let obj = {
+      passportNumber: passwordNumber,
+      passportExpiry: passPortExpiryDate,
+    };
+    // console.log(obj, "obj123");
+    // console.log(clientIdForUpdate, "clientIdForUpdate1234");
+    let { data: res } = await updateClient(obj, clientIdForUpdate);
+    if (res?.success) {
+      toastSuccess(res.message);
+      setShowClientDetails(false);
+    }
+  };
   // const handleReturndropDown = (record) => {
   //   // // console.log(record?.status, "role");
   //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.convert, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.convert")
@@ -1236,7 +1330,7 @@ const Leads = () => {
     {
       title: "Assigned Spoc",
       render: (text, record) => (
-        <h2 className="table-avatar">
+        <h2 className={`table-avatar `}>
           <div>
             {record?.agentObj?.firstName
               ? record?.agentObj?.firstName + " "
@@ -1437,11 +1531,6 @@ const Leads = () => {
         </h2>
       ),
     },
-    // {
-    //   title: 'Last Reply',
-    //   dataIndex: 'lastreply',
-    //   sorter: (a, b) => a.lastreply.length - b.lastreply.length,
-    // },
     {
       title: "Priority",
       render: (text, record) => (
@@ -1461,6 +1550,43 @@ const Leads = () => {
             <div>
               {record?.status == "CONVERT" ? "CONFIRMED" : "NOT CONFIRMED"}
             </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Profit",
+      dataIndex: "profit",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {record?.profit > 0 ? (
+                <h4 style={{ color: "green" }}> {record?.profit} </h4>
+              ) : (
+                <h4 style={{ color: "red" }}>{record?.profit}</h4>
+              )}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Personal Details",
+      dataIndex: "aasd",
+      render: (text, record) => (
+        <div>
+          {record.status == "CONVERT" && role != rolesObj.ACCOUNT ? (
+            <a
+              className="btn add-btn"
+              onClick={() => handleUpdateClentDetails(record)}
+            >
+              <i className="fa fa-plus" /> Add Lead
+            </a>
+          ) : (
+            <div>Not converted yet</div>
           )}
         </div>
       ),
@@ -1550,14 +1676,7 @@ const Leads = () => {
         </div>
       ),
     },
-    // {
-    //   title: 'Lead Id',
-    //   dataIndex: 'Leadid',
-    //   render: (text, record) => (
-    //     <Link onClick={() => localStorage.setItem("minheight", "true")} to="/app/employees/Lead-view">#TKT-0001</Link>
-    //   ),
-    //   sorter: (a, b) => a.Leadid.length - b.Leadid.length,
-    // },
+
     {
       title: "Assigned Spoc",
       render: (text, record) => (
@@ -1692,9 +1811,49 @@ const Leads = () => {
           {role != rolesObj.ACCOUNT ? (
             <div className="dropdown action-label text-center">
               {handleReturndropDown(record)}
+              {/* <h4 style={{ color: "red" }}>
+                {+" " + record?.profit < 0 ? record?.profit : ""}
+              </h4> */}
             </div>
           ) : (
             <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Profit",
+      dataIndex: "profit",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {record?.profit > 0 ? (
+                <h4 style={{ color: "green" }}> {record?.profit} </h4>
+              ) : (
+                <h4 style={{ color: "red" }}>{record?.profit}</h4>
+              )}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Personal Details",
+      dataIndex: "aasd",
+      render: (text, record) => (
+        <div>
+          {record.status == "CONVERT" ? (
+            <a
+              className="btn add-btn"
+              onClick={() => handleUpdateClentDetails(record)}
+            >
+              <i className="fa fa-plus" /> Add Lead
+            </a>
+          ) : (
+            <div>Not converted yet</div>
           )}
         </div>
       ),
@@ -1792,11 +1951,7 @@ const Leads = () => {
         </h2>
       ),
     },
-    // {
-    //   title: 'Last Reply',
-    //   dataIndex: 'lastreply',
-    //   sorter: (a, b) => a.lastreply.length - b.lastreply.length,
-    // },
+
     {
       title: "Priority",
       render: (text, record) => (
@@ -1811,6 +1966,9 @@ const Leads = () => {
           {role != rolesObj.ACCOUNT ? (
             <div className="dropdown action-label text-center">
               {handleReturndropDown(record)}
+              {/* <h4 style={{ color: "red" }}>
+                {+" " + record?.profit < 0 ? record?.profit : ""}
+              </h4> */}
             </div>
           ) : (
             <div>{record?.status} </div>
@@ -1819,39 +1977,77 @@ const Leads = () => {
       ),
     },
     {
+      title: "Profit",
+      dataIndex: "profit",
+      render: (text, record) => (
+        <div>
+          {role != rolesObj.ACCOUNT ? (
+            <div className="dropdown action-label text-center">
+              {record?.profit > 0 ? (
+                <h4 style={{ color: "green" }}> {record?.profit} </h4>
+              ) : (
+                <h4 style={{ color: "red" }}>{record?.profit}</h4>
+              )}
+            </div>
+          ) : (
+            <div>{record?.status} </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      title: "Personal Details",
+      dataIndex: "aasd",
+      render: (text, record) => (
+        <div>
+          {record.status == "CONVERT" ? (
+            <a
+              className="btn add-btn"
+              onClick={() => handleUpdateClentDetails(record)}
+            >
+              <i className="fa fa-plus" /> Add Lead
+            </a>
+          ) : (
+            <div>Not converted yet</div>
+          )}
+        </div>
+      ),
+    },
+    {
       title: "Action",
       render: (text, record) => (
-        <div className="dropdown dropdown-action text-end">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="material-icons">more_vert</i>
-          </a>
+        <div>
+          <div className="dropdown dropdown-action text-end">
+            <a
+              href="#"
+              className="action-icon dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="material-icons">more_vert</i>
+            </a>
 
-          <div className="dropdown-menu dropdown-menu-right">
-            {role != rolesObj.ACCOUNT ? (
-              <div>
-                <Link
-                  className="dropdown-item"
-                  to={`/admin/lead/${record._id}`}
-                >
-                  <i className="fa fa-pencil m-r-5" /> View
-                </Link>
+            <div className="dropdown-menu dropdown-menu-right">
+              {role != rolesObj.ACCOUNT ? (
+                <div>
+                  <Link
+                    className="dropdown-item"
+                    to={`/admin/lead/${record._id}`}
+                  >
+                    <i className="fa fa-pencil m-r-5" /> View
+                  </Link>
 
-                <a
-                  className="dropdown-item"
-                  href="#"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_Lead"
-                  onClick={() => handleEdit(record)}
-                >
-                  <i className="fa fa-pencil m-r-5" /> Edit
-                </a>
+                  <a
+                    className="dropdown-item"
+                    href="#"
+                    // data-bs-toggle="modal"
+                    // data-bs-target="#add_Lead"
+                    onClick={() => handleEdit(record)}
+                  >
+                    <i className="fa fa-pencil m-r-5" /> Edit
+                  </a>
 
-                {/* <a
+                  {/* <a
               className="dropdown-item"
               href="#"
               data-bs-toggle="modal"
@@ -1860,54 +2056,25 @@ const Leads = () => {
             >
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a> */}
-              </div>
-            ) : (
-              <div>
-                <Link
-                  className="dropdown-item"
-                  to={`/admin/lead/${record._id}/ViewDetails`}
-                  onClick={() => handleEdit(record._id)}
-                >
-                  <i className="fa fa-pencil m-r-5" /> View
-                </Link>
-              </div>
-            )}
+                </div>
+              ) : (
+                <div>
+                  <Link
+                    className="dropdown-item"
+                    to={`/admin/lead/${record._id}/ViewDetails`}
+                    onClick={() => handleEdit(record._id)}
+                  >
+                    <i className="fa fa-pencil m-r-5" /> View
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ),
     },
   ];
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // if (note == "") {
-    //   toastError("note is mandatory ");
-    //   return;
-    // }
-
-    // let obj = {
-    //   note,
-    //   reminderDate,
-    //   leadId,
-    //   createdBy,
-    // };
-    // // console.log(obj, "obj a1folow");
-    // if (note != "" && note != undefined) {
-    //   if (noteResultobj?._id) {
-    //     obj.Id = noteId;
-    //     dispatch(updatenote(obj));
-    //     setShow(false);
-    //     setIsReadyOnlyNotes(false);
-    //   } else {
-    //     dispatch(addnote(obj));
-    //     setShow(false);
-    //     setIsReadyOnlyNotes(false);
-    //   }
-    // } else {
-    //   toastError("Note is mandatory ");
-    //   return;
-    // }
-  };
   const handleClientSelection = (id) => {
     // console.log(id, "id23");
     let tempIndex = clientArr.findIndex((el) => el?._id == id);
@@ -1993,7 +2160,51 @@ const Leads = () => {
                     </div>
                   </div>
                 </div> */}
-                <div className="card">
+                <Link
+                  className="card"
+                  onClick={() => {
+                    handleUpdateLeadsArray("OPEN", "REOPENED");
+                    setIsActiveFilter(true);
+                  }}
+                >
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between mb-3">
+                      <div>
+                        <span className="d-block">New Leads</span>
+                      </div>
+                      {/* <div>
+                        <span className="text-danger">-75%</span>
+                      </div> */}
+                    </div>
+                    <h3 className="mb-3">
+                      {
+                        leadsArr.filter((x) => {
+                          return (
+                            // x.status == "ON_HOLD" ||
+                            // x.status == "IN_PROGRESS" ||
+                            x.status == "OPEN" || x.status == "REOPENED"
+                          );
+                        }).length
+                      }
+                    </h3>
+                    <div className="progress mb-2" style={{ height: "5px" }}>
+                      <div
+                        className="progress-bar bg-primary"
+                        role="progressbar"
+                        style={{ width: "70%" }}
+                        aria-valuenow={40}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
+                  </div>
+                </Link>
+                <Link
+                  className="card"
+                  onClick={() => {
+                    handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
+                  }}
+                >
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
@@ -2025,8 +2236,13 @@ const Leads = () => {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="card">
+                </Link>
+                <Link
+                  className="card"
+                  onClick={() => {
+                    handleUpdateLeadsArray("OPEN", "REOPENED");
+                  }}
+                >
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
@@ -2054,39 +2270,14 @@ const Leads = () => {
                       />
                     </div>
                   </div>
-                </div>
-                <div className="card">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Pending Leads</span>
-                      </div>
-                      {/* <div>
-                        <span className="text-danger">-75%</span>
-                      </div> */}
-                    </div>
-                    <h3 className="mb-3">
-                      {
-                        leadsArr.filter((x) => {
-                          return (
-                            x.status == "ON_HOLD" || x.status == "IN_PROGRESS"
-                          );
-                        }).length
-                      }
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="card">
+                </Link>
+
+                <Link
+                  className="card"
+                  onClick={() => {
+                    handleUpdateLeadsArray("CANCELLED");
+                  }}
+                >
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
@@ -2114,7 +2305,7 @@ const Leads = () => {
                       />
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
           </div>
@@ -2352,7 +2543,7 @@ const Leads = () => {
       >
         <Modal.Header>
           <Modal.Title>
-            {leadObj && leadObj._id ? " Edit " : " Add "}Lead{" "}
+            {leadObj && leadObj._id ? " Edit " : " Add "}Lead
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -2380,32 +2571,102 @@ const Leads = () => {
                     Existing Client ({newClient ? 0 : clientArr.length})
                   </label>
                   {/* {console.log(clientArr, "clientArr123")} */}
-                  <Select
+                  <input
+                    type={"text"}
+                    onChange={(e) => {
+                      // console.log(e.target.value);
+                      setFilterClientByName(e.target.value);
+                    }}
+                  />
+                  {clientArr.length > 0 && (
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Phone</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {clientArr.map((client, i) => {
+                          return (
+                            <tr key={i}>
+                              <th scope="row">{i + 1}</th>
+                              <td
+                                onClick={() =>
+                                  handleClientSelection(client?._id)
+                                }
+                              >
+                                {client?.name}
+                              </td>
+                              <td
+                                onClick={() =>
+                                  handleClientSelection(client?._id)
+                                }
+                              >
+                                {client?.email}
+                              </td>
+                              <td
+                                onClick={() =>
+                                  handleClientSelection(client?._id)
+                                }
+                              >
+                                {client?.phone}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+
+                    // <div>
+                    //   {clientArr.map((client, i) => {
+                    //     return (
+                    //       <div
+                    //         key={i}
+                    //         style={{
+                    //           display: "flex",
+                    //           flexDirection: "column",
+                    //           border: "solid px grey",
+                    //           borderRadius: 10,
+                    //         }}
+                    //       >
+                    //         <p>{`name: ${client?.name}`} </p>
+                    //         <p>email: {client?.email}</p>
+                    //         <p>phone: {client?.phone} </p>
+                    //       </div>
+                    //     );
+                    //   })}
+                    // </div>
+                  )}
+
+                  {/* <Select
                     components={{
                       DropdownIndicator: () => null,
                       IndicatorSeparator: () => null,
                     }}
                     classNamePrefix="select"
-                    defaultValue={(e) => {
-                      newClient ? "" : e?.label;
-                    }}
                     isDisabled={newClient ? "" : isDisabled}
-                    // isLoading={isLoading}
-                    // isClearable={isClearable}
-                    // isRtl={isRtl}
                     isSearchable={newClient ? "" : isSearchable}
                     name="color"
                     className="select"
+                    onChange={(e) => {
+                      console.log(e.value, "e323s"); // setClientId(e.target.value);
+                      handleClientSelection(e?.value);
+                      setFilterClientByName(e.target.value);
+                    }}
+                    // defaultValue={(e) => {
+                    //   newClient ? "" : e?.label;
+                    // }}
+                    // isLoading={isLoading}
+                    // isClearable={isClearable}
+                    // isRtl={isRtl}
                     // value={name}
                     // defaultInputValue={(e) => {
                     //   console.log(e, "ewqw");
                     //   e?.label;
                     // }}
-
-                    onChange={(e) => {
-                      console.log(e?.value, "e3"); // setClientId(e.target.value);
-                      handleClientSelection(e?.value);
-                    }}
                     options={
                       newClient
                         ? ""
@@ -2419,7 +2680,7 @@ const Leads = () => {
                             };
                           })
                     }
-                  />
+                  /> */}
                   {/*                 
                 <select
                   className="select form-control"
@@ -2708,6 +2969,77 @@ const Leads = () => {
           </Button>
           <Button variant="primary" onClick={(e) => handleSubmitLead(e)}>
             {leadObj && leadObj._id ? " Edit " : " Add "}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+        size="lg"
+        show={showClientDetails}
+        // className="add_note"
+      >
+        <Modal.Header>
+          <Modal.Title>Add Credentials</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div className="col-md-12">
+              <div className="form-group">
+                <label>
+                  PassPort Number<span className="text-danger">*</span>{" "}
+                </label>
+                <input
+                  value={passwordNumber}
+                  onChange={(e) => setPassportNumber(e.target.value)}
+                  className="form-control"
+                  type="text"
+                />
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Expiry Date <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={passPortExpiryDate}
+                  onChange={(e) => setPassPortExpiryDates(e.target.value)}
+                  type="date"
+                  className="form-control"
+                />
+              </div>
+            </div>
+            {/* <div className="col-md-6">
+          <div className="form-group">
+            <label>
+              Email <span className="text-danger">*</span>
+            </label>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type={"text"}
+              className="form-control"
+            />
+          </div>
+        </div> */}
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowClientDetails(false);
+              clearFunc();
+            }}
+          >
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={(e) => handleSubmitDetailsClient(e)}
+          >
+            Add Client Details
           </Button>
         </Modal.Footer>
       </Modal>

@@ -240,7 +240,12 @@ function Notification() {
       title: "Received From",
       dataIndex: "ReceivedFrom",
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
-      render: (row, record) => <div>{record?.createdBy?.name}</div>,
+      render: (row, record) => (
+        <div>
+          {record?.createdBy?.name + " "}
+          {" " + record?.createdBy?.role}
+        </div>
+      ),
     },
     // {
     //   title: "Action",
