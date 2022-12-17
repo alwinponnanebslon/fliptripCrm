@@ -6,11 +6,7 @@ import { Avatar_02 } from "../../../Entryfile/imagepath";
 import Header from "../../../initialpage/Sidebar/header";
 import Sidebar from "../../../initialpage/Sidebar/sidebar";
 
-import {
-  getAllEmployees,
-  returnAllEmployees,
-  serCurrentEmployee,
-} from "../../../redux/features/employee/employeeSlice";
+import { getAllEmployees, returnAllEmployees, serCurrentEmployee } from "../../../redux/features/employee/employeeSlice";
 
 import { deleteEmployees, getEmployess } from "../../../Services/user.service";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
@@ -57,19 +53,13 @@ const AllEmployees = () => {
 
   const handleFilterByEmployeeId = (query) => {
     setEmployeeIdQuery(query);
-    let tempArr = employeeArr.filter((el) =>
-      `${el.employeeId}`.toLowerCase().includes(query.toLowerCase())
-    );
+    let tempArr = employeeArr.filter((el) => `${el.employeeId}`.toLowerCase().includes(query.toLowerCase()));
     setDisplayEmployeeArr([...tempArr]);
   };
 
   const handleFilterByEmployeeName = (query) => {
     setEmployeeNameQuery(query);
-    let tempArr = employeeArr.filter((el) =>
-      `${el.firstName} ${el.lastName}`
-        .toLowerCase()
-        .includes(query.toLowerCase())
-    );
+    let tempArr = employeeArr.filter((el) => `${el.firstName} ${el.lastName}`.toLowerCase().includes(query.toLowerCase()));
     setDisplayEmployeeArr([...tempArr]);
   };
 
@@ -174,23 +164,13 @@ const AllEmployees = () => {
           <div className="row filter-row">
             <div className="col-sm-6 col-md-3">
               <div className="form-group form-focus">
-                <input
-                  value={employeeIdQuery}
-                  onChange={(e) => handleFilterByEmployeeId(e.target.value)}
-                  type="text"
-                  className="form-control floating"
-                />
+                <input value={employeeIdQuery} onChange={(e) => handleFilterByEmployeeId(e.target.value)} type="text" className="form-control floating" />
                 <label className="focus-label">Employee ID</label>
               </div>
             </div>
             <div className="col-sm-6 col-md-3">
               <div className="form-group form-focus">
-                <input
-                  value={employeeNameQuery}
-                  onChange={(e) => handleFilterByEmployeeName(e.target.value)}
-                  type="text"
-                  className="form-control floating"
-                />
+                <input value={employeeNameQuery} onChange={(e) => handleFilterByEmployeeName(e.target.value)} type="text" className="form-control floating" />
                 <label className="focus-label">Employee Name</label>
               </div>
             </div>
@@ -216,27 +196,16 @@ const AllEmployees = () => {
               displayEmployeeArr.length > 0 &&
               displayEmployeeArr.map((el, index) => {
                 return (
-                  <div
-                    className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3"
-                    key={index}
-                  >
+                  <div className="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" key={index}>
                     <div className="profile-widget">
                       <div className="profile-img">
-                        <Link
-                          to={`/admin/employee-profile/${el._id}`}
-                          className="avatar"
-                        >
+                        <Link to={`/admin/employee-profile/${el._id}`} className="avatar">
                           <img src={Avatar_02} alt="" />
                         </Link>
                       </div>
                       {role == "ADMIN" && (
                         <div className="dropdown profile-action">
-                          <a
-                            href="#"
-                            className="action-icon dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
+                          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="material-icons">more_vert</i>
                           </a>
                           <div className="dropdown-menu dropdown-menu-right">
@@ -284,11 +253,7 @@ const AllEmployees = () => {
         <Editemployee show={show} setShow={setShow} />
         {/* /Edit Employee Modal */}
         {/* Delete Employee Modal */}
-        <div
-          className="modal custom-modal fade"
-          id="delete_employee"
-          role="dialog"
-        >
+        <div className="modal custom-modal fade" id="delete_employee" role="dialog">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body">
@@ -299,19 +264,12 @@ const AllEmployees = () => {
                 <div className="modal-btn delete-action">
                   <div className="row">
                     <div className="col-6">
-                      <a
-                        data-bs-dismiss="modal"
-                        onClick={() => handleEmployeeDelete()}
-                        className="btn btn-primary continue-btn"
-                      >
+                      <a data-bs-dismiss="modal" onClick={() => handleEmployeeDelete()} className="btn btn-primary continue-btn">
                         Delete
                       </a>
                     </div>
                     <div className="col-6">
-                      <a
-                        data-bs-dismiss="modal"
-                        className="btn btn-primary cancel-btn"
-                      >
+                      <a data-bs-dismiss="modal" className="btn btn-primary cancel-btn">
                         Cancel
                       </a>
                     </div>

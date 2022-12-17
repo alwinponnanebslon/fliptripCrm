@@ -5,29 +5,17 @@ import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import {
-  Avatar_02,
-  Avatar_05,
-  Avatar_09,
-  Avatar_10,
-  Avatar_16,
-} from "../../../Entryfile/imagepath";
+import { Avatar_02, Avatar_05, Avatar_09, Avatar_10, Avatar_16 } from "../../../Entryfile/imagepath";
 import moment from "moment";
 
-import {
-  serCurrentEmployee,
-  getEmployeeById,
-  userUpdateObj,
-} from "../../../redux/features/employee/employeeSlice";
+import { serCurrentEmployee, getEmployeeById, userUpdateObj } from "../../../redux/features/employee/employeeSlice";
 import { rolesObj } from "../../../utils/roles";
-import {
-  getEmployesById,
-  updateEmployee,
-} from "../../../Services/user.service";
+import { getEmployesById, updateEmployee } from "../../../Services/user.service";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
+import { generateFilePath } from "../../../utils/FileURL";
 
 const EmployeeProfile = () => {
   const employeeObj = useSelector((state) => state.employee.employeeObj);
@@ -40,6 +28,7 @@ const EmployeeProfile = () => {
   const [address, setAddress] = useState("");
   const [pinCode, setPinCode] = useState("");
   const [phone, setPhone] = useState("");
+  const [fileUrl, setFileUrl] = useState("");
   const [show, setShow] = useState(false);
   const [prevDocId, setPrevDocId] = useState("");
   // console.log(params,"sdfparerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr")
@@ -74,7 +63,7 @@ const EmployeeProfile = () => {
     try {
       let { data: res } = await getEmployesById(params.id);
       if (res.success) {
-        // console.log(res, "res");
+        console.log(res, "res employee");
         dispatch(serCurrentEmployee(res.data));
       }
     } catch (error) {
@@ -91,6 +80,9 @@ const EmployeeProfile = () => {
       phone,
       prevDocId,
     };
+    if (fileUrl != "") {
+      obj.photoBase64 = fileUrl;
+    }
 
     // dispatch(userUpdateObj(obj))
     let update = await updateEmployee(prevDocId, obj);
@@ -108,6 +100,27 @@ const EmployeeProfile = () => {
       });
     }
   });
+
+  const getBase64 = (file, cb) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result);
+    };
+    reader.onerror = function (error) {
+      // // console.log('Error: ', error)
+    };
+  };
+
+  const handleFileSelection = (event) => {
+    if (event.target.files[0]) {
+      getBase64(event.target.files[0], (result) => {
+        // // console.log(result, "result");
+        setFileUrl(result);
+      });
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -138,9 +151,15 @@ const EmployeeProfile = () => {
                 <div className="profile-view">
                   <div className="profile-img-wrap">
                     <div className="profile-img">
-                      <a href="#">
-                        <img alt="" src={Avatar_02} />
-                      </a>
+                      {employeeObj && employeeObj?.photoUrl && employeeObj?.photoUrl != "" ? (
+                        <a href="#">
+                          <img alt="" src={generateFilePath(employeeObj?.photoUrl)} />
+                        </a>
+                      ) : (
+                        <a href="#">
+                          <img alt="" src={Avatar_02} />
+                        </a>
+                      )}
                     </div>
                   </div>
                   <div className="profile-basic">
@@ -152,13 +171,8 @@ const EmployeeProfile = () => {
                           </h3>
                           <h6 className="text-muted">{employeeObj?.role}</h6>
                           {/* <small className="text-muted">Web Designer</small> */}
-                          <div className="staff-id">
-                            Employee ID : {employeeObj?.employeeId}
-                          </div>
-                          <div className="small doj text-muted">
-                            Date of Join :{" "}
-                            {new Date(employeeObj?.doj).toDateString()}
-                          </div>
+                          <div className="staff-id">Employee ID : {employeeObj?.employeeId}</div>
+                          <div className="small doj text-muted">Date of Join : {new Date(employeeObj?.doj).toDateString()}</div>
                           {/* <div className="staff-msg"><Link onClick={() => localStorage.setItem("minheight", "true")} className="btn btn-custom" to="/conversation/chat">Send Message</Link></div> */}
                         </div>
                       </div>
@@ -178,9 +192,7 @@ const EmployeeProfile = () => {
                           </li>
                           <li>
                             <div className="title">Birthday:</div>
-                            <div className="text">
-                              {new Date(employeeObj?.dob).toDateString()}
-                            </div>
+                            <div className="text">{new Date(employeeObj?.dob).toDateString()}</div>
                           </li>
                           {/* { employeeObj?.address} */}
                           {/* <li>
@@ -194,8 +206,7 @@ const EmployeeProfile = () => {
                             <li>
                               <div className="title">Reports to:</div>
                               <div className="text">
-                                {employeeObj?.leadObj?.firstName}{" "}
-                                {employeeObj?.leadObj?.lastName}
+                                {employeeObj?.leadObj?.firstName} {employeeObj?.leadObj?.lastName}
                               </div>
                             </li>
                           )}
@@ -277,27 +288,17 @@ const EmployeeProfile = () => {
       {/* /Page Content */}
       {/* Profile Modal */}
       <div id="profile_info" className="modal custom-modal fade" role="dialog">
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Profile Information</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
             {/* <div className="modal-body"> */}
             <Modal size="lg" show={show}>
-              <Modal.Header>
-                {/* <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title> */}
-              </Modal.Header>
+              <Modal.Header>{/* <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title> */}</Modal.Header>
               <Modal.Body>
                 <form>
                   <div className="row">
@@ -329,12 +330,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group">
                             <label>Last Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              value={lastName}
-                              onChange={(e) => setLastName(e.target.value)}
-                            />
+                            <input type="text" className="form-control" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                           </div>
                         </div>
                         <div className="col-md-6">
@@ -349,14 +345,20 @@ const EmployeeProfile = () => {
                                 onChange={(e) => setDob(e.target.value)}
                               />
                             </div>
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Employee Photo</label>
+                            <div className="col-sm-8">
+                              <input
+                                type="file"
+                                className="form-control"
+                                onChange={(e) => handleFileSelection(e)}
 
-                            {/* <div>
-                            <input
-                              className="form-control datetimepicker"
-                              type="date"
-                              // defaultValue="05/06/1985"
-                            />
-                          </div> */}
+                                // name="startDate"
+                              />
+                            </div>
                           </div>
                         </div>
                         {/* <div className="col-md-6">
@@ -495,24 +497,12 @@ const EmployeeProfile = () => {
       </div>
       {/* /Profile Modal */}
       {/* Personal Info Modal */}
-      <div
-        id="personal_info_modal"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+      <div id="personal_info_modal" className="modal custom-modal fade" role="dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Personal Information</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -529,10 +519,7 @@ const EmployeeProfile = () => {
                     <div className="form-group">
                       <label>Passport Expiry Date</label>
                       <div>
-                        <input
-                          className="form-control datetimepicker"
-                          type="date"
-                        />
+                        <input className="form-control datetimepicker" type="date" />
                       </div>
                     </div>
                   </div>
@@ -593,24 +580,12 @@ const EmployeeProfile = () => {
       </div>
       {/* /Personal Info Modal */}
       {/* Family Info Modal */}
-      <div
-        id="family_info_modal"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+      <div id="family_info_modal" className="modal custom-modal fade" role="dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title"> Family Informations</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -637,8 +612,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group">
                             <label>
-                              Relationship{" "}
-                              <span className="text-danger">*</span>
+                              Relationship <span className="text-danger">*</span>
                             </label>
                             <input className="form-control" type="text" />
                           </div>
@@ -646,8 +620,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group">
                             <label>
-                              Date of birth{" "}
-                              <span className="text-danger">*</span>
+                              Date of birth <span className="text-danger">*</span>
                             </label>
                             <input className="form-control" type="text" />
                           </div>
@@ -683,8 +656,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group">
                             <label>
-                              Relationship{" "}
-                              <span className="text-danger">*</span>
+                              Relationship <span className="text-danger">*</span>
                             </label>
                             <input className="form-control" type="text" />
                           </div>
@@ -692,8 +664,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group">
                             <label>
-                              Date of birth{" "}
-                              <span className="text-danger">*</span>
+                              Date of birth <span className="text-danger">*</span>
                             </label>
                             <input className="form-control" type="text" />
                           </div>
@@ -725,24 +696,12 @@ const EmployeeProfile = () => {
       </div>
       {/* /Family Info Modal */}
       {/* Emergency Contact Modal */}
-      <div
-        id="emergency_contact_modal"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+      <div id="emergency_contact_modal" className="modal custom-modal fade" role="dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Personal Information</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -832,24 +791,12 @@ const EmployeeProfile = () => {
       </div>
       {/* /Emergency Contact Modal */}
       {/* Education Modal */}
-      <div
-        id="education_info"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+      <div id="education_info" className="modal custom-modal fade" role="dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title"> Education Informations</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -867,32 +814,20 @@ const EmployeeProfile = () => {
                       <div className="row">
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Oxford University"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Oxford University" className="form-control floating" />
                             <label className="focus-label">Institution</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Computer Science"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Computer Science" className="form-control floating" />
                             <label className="focus-label">Subject</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
                             <div>
-                              <input
-                                type="date"
-                                defaultValue="01/06/2002"
-                                className="form-control floating datetimepicker"
-                              />
+                              <input type="date" defaultValue="01/06/2002" className="form-control floating datetimepicker" />
                             </div>
                             <label className="focus-label">Starting Date</label>
                           </div>
@@ -900,32 +835,20 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
                             <div>
-                              <input
-                                type="date"
-                                defaultValue="31/05/2006"
-                                className="form-control floating datetimepicker"
-                              />
+                              <input type="date" defaultValue="31/05/2006" className="form-control floating datetimepicker" />
                             </div>
                             <label className="focus-label">Complete Date</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="BE Computer Science"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="BE Computer Science" className="form-control floating" />
                             <label className="focus-label">Degree</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Grade A"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Grade A" className="form-control floating" />
                             <label className="focus-label">Grade</label>
                           </div>
                         </div>
@@ -943,32 +866,20 @@ const EmployeeProfile = () => {
                       <div className="row">
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Oxford University"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Oxford University" className="form-control floating" />
                             <label className="focus-label">Institution</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Computer Science"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Computer Science" className="form-control floating" />
                             <label className="focus-label">Subject</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
                             <div>
-                              <input
-                                type="date"
-                                defaultValue="01/06/2002"
-                                className="form-control floating datetimepicker"
-                              />
+                              <input type="date" defaultValue="01/06/2002" className="form-control floating datetimepicker" />
                             </div>
                             <label className="focus-label">Starting Date</label>
                           </div>
@@ -976,32 +887,20 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
                             <div>
-                              <input
-                                type="date"
-                                defaultValue="31/05/2006"
-                                className="form-control floating datetimepicker"
-                              />
+                              <input type="date" defaultValue="31/05/2006" className="form-control floating datetimepicker" />
                             </div>
                             <label className="focus-label">Complete Date</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="BE Computer Science"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="BE Computer Science" className="form-control floating" />
                             <label className="focus-label">Degree</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus focused">
-                            <input
-                              type="text"
-                              defaultValue="Grade A"
-                              className="form-control floating"
-                            />
+                            <input type="text" defaultValue="Grade A" className="form-control floating" />
                             <label className="focus-label">Grade</label>
                           </div>
                         </div>
@@ -1024,24 +923,12 @@ const EmployeeProfile = () => {
       </div>
       {/* /Education Modal */}
       {/* Experience Modal */}
-      <div
-        id="experience_info"
-        className="modal custom-modal fade"
-        role="dialog"
-      >
-        <div
-          className="modal-dialog modal-dialog-centered modal-lg"
-          role="document"
-        >
+      <div id="experience_info" className="modal custom-modal fade" role="dialog">
+        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Experience Informations</h5>
-              <button
-                type="button"
-                className="close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">×</span>
               </button>
             </div>
@@ -1059,42 +946,26 @@ const EmployeeProfile = () => {
                       <div className="row">
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="Digital Devlopment Inc"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="Digital Devlopment Inc" />
                             <label className="focus-label">Company Name</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="United States"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="United States" />
                             <label className="focus-label">Location</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="Web Developer"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="Web Developer" />
                             <label className="focus-label">Job Position</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
                             <div>
-                              <input
-                                type="date"
-                                className="form-control floating datetimepicker"
-                                defaultValue="01/07/2007"
-                              />
+                              <input type="date" className="form-control floating datetimepicker" defaultValue="01/07/2007" />
                             </div>
                             <label className="focus-label">Period From</label>
                           </div>
@@ -1102,11 +973,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group form-focus">
                             <div>
-                              <input
-                                type="date"
-                                className="form-control floating datetimepicker"
-                                defaultValue="08/06/2018"
-                              />
+                              <input type="date" className="form-control floating datetimepicker" defaultValue="08/06/2018" />
                             </div>
                             <label className="focus-label">Period To</label>
                           </div>
@@ -1125,42 +992,26 @@ const EmployeeProfile = () => {
                       <div className="row">
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="Digital Devlopment Inc"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="Digital Devlopment Inc" />
                             <label className="focus-label">Company Name</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="United States"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="United States" />
                             <label className="focus-label">Location</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
-                            <input
-                              type="text"
-                              className="form-control floating"
-                              defaultValue="Web Developer"
-                            />
+                            <input type="text" className="form-control floating" defaultValue="Web Developer" />
                             <label className="focus-label">Job Position</label>
                           </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group form-focus">
                             <div>
-                              <input
-                                type="date"
-                                className="form-control floating datetimepicker"
-                                defaultValue="01/07/2007"
-                              />
+                              <input type="date" className="form-control floating datetimepicker" defaultValue="01/07/2007" />
                             </div>
                             <label className="focus-label">Period From</label>
                           </div>
@@ -1168,11 +1019,7 @@ const EmployeeProfile = () => {
                         <div className="col-md-6">
                           <div className="form-group form-focus">
                             <div>
-                              <input
-                                type="date"
-                                className="form-control floating datetimepicker"
-                                defaultValue="08/06/2018"
-                              />
+                              <input type="date" className="form-control floating datetimepicker" defaultValue="08/06/2018" />
                             </div>
                             <label className="focus-label">Period To</label>
                           </div>

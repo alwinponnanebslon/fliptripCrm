@@ -54,6 +54,9 @@ const Addemployee = ({ show, setShow }) => {
   const userId = useSelector((state) => state.auth.user._id);
   const employeeObject = useSelector((state) => state.employee.employeeObj);
 
+  const [fileUrl, setFileUrl] = useState("");
+
+
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployess(userObj._id, reduxrole);
@@ -157,11 +160,31 @@ const Addemployee = ({ show, setShow }) => {
         // getAllEmployess();
         window.location.reload();
         ClearFunc();
-        dispatch(returnAllEmployees);
+        // dispatch(returnAllEmployees);
       }
     } catch (error) {
       console.error(error);
       toastError(error);
+    }
+  };
+
+  const getBase64 = (file, cb) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result);
+    };
+    reader.onerror = function (error) {
+      // // console.log('Error: ', error)
+    };
+  };
+
+  const handleFileSelection = (event) => {
+    if (event.target.files[0]) {
+      getBase64(event.target.files[0], (result) => {
+        // // console.log(result, "result");
+        setFileUrl(result);
+      });
     }
   };
 
@@ -243,6 +266,7 @@ const Addemployee = ({ show, setShow }) => {
         doj,
         dob,
         role,
+        fileUrl,
         emergencyContact,
       };
       if (role == rolesObj.SPOC) {
@@ -450,6 +474,20 @@ const Addemployee = ({ show, setShow }) => {
                         />
                       </div>
                     </div>
+                    <div className="col-md-6">
+                          <div className="form-group">
+                            <label>Employee Photo</label>
+                            <div className="col-sm-8">
+                              <input
+                                type="file"
+                                className="form-control"
+                                onChange={(e) => handleFileSelection(e)}
+
+                                // name="startDate"
+                              />
+                            </div>
+                          </div>
+                        </div>
 
                     {/* {console.log(prevDocUpdated, "prevDocUpdated34")} */}
                     {
