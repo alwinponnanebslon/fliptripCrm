@@ -119,6 +119,7 @@ const Leads = () => {
   const [passwordNumber, setPassportNumber] = useState("");
   const [passPortExpiryDate, setPassPortExpiryDates] = useState("");
   const [filterClientByName, setFilterClientByName] = useState("");
+  const [dob, setDob] = useState("");
 
   const agentSelect = useRef();
 
@@ -1145,6 +1146,7 @@ const Leads = () => {
     let obj = {
       passportNumber: passwordNumber,
       passportExpiry: passPortExpiryDate,
+      dob,
     };
     // console.log(obj, "obj123");
     // console.log(clientIdForUpdate, "clientIdForUpdate1234");
@@ -3010,19 +3012,19 @@ const Leads = () => {
                 />
               </div>
             </div>
-            {/* <div className="col-md-6">
-          <div className="form-group">
-            <label>
-              Email <span className="text-danger">*</span>
-            </label>
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type={"text"}
-              className="form-control"
-            />
-          </div>
-        </div> */}
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Date Of Birth <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                  type="date"
+                  className="form-control"
+                />
+              </div>
+            </div>
           </form>
         </Modal.Body>
         <Modal.Footer>
