@@ -5,26 +5,16 @@ import { Table } from "antd";
 import "antd/dist/antd.css";
 import { itemRender, onShowSizeChange } from "../../paginationfunction";
 import "../../antdstyle.css";
-import {
-  Avatar_02,
-  Avatar_05,
-  Avatar_11,
-  Avatar_12,
-  Avatar_09,
-  Avatar_10,
-  Avatar_13,
-} from "../../../Entryfile/imagepath";
+import { Avatar_02, Avatar_05, Avatar_11, Avatar_12, Avatar_09, Avatar_10, Avatar_13 } from "../../../Entryfile/imagepath";
 import Editemployee from "../../../_components/modelbox/Editemployee";
 import Addemployee from "../../../_components/modelbox/Addemployee";
 import Header from "../../../initialpage/Sidebar/header";
 import Sidebar from "../../../initialpage/Sidebar/sidebar";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllEmployees,
-  returnAllEmployees,
-} from "../../../redux/features/employee/employeeSlice";
+import { getAllEmployees, returnAllEmployees } from "../../../redux/features/employee/employeeSlice";
 import { deleteEmployees, getEmployess } from "../../../Services/user.service";
 import { rolesObj } from "../../../utils/roles";
+import { generateFilePath } from "../../../utils/FileURL";
 
 const Employeeslist = () => {
   const employees = useSelector(getAllEmployees);
@@ -94,19 +84,13 @@ const Employeeslist = () => {
 
   const handleFilterByEmployeeId = (query) => {
     setEmployeeIdQuery(query);
-    let tempArr = employeeArr.filter((el) =>
-      `${el.employeeId}`.toLowerCase().includes(query.toLowerCase())
-    );
+    let tempArr = employeeArr.filter((el) => `${el.employeeId}`.toLowerCase().includes(query.toLowerCase()));
     setDisplayEmployeeArr([...tempArr]);
   };
 
   const handleFilterByEmployeeName = (query) => {
     setEmployeeNameQuery(query);
-    let tempArr = employeeArr.filter((el) =>
-      `${el.firstName} ${el.lastName}`
-        .toLowerCase()
-        .includes(query.toLowerCase())
-    );
+    let tempArr = employeeArr.filter((el) => `${el.firstName} ${el.lastName}`.toLowerCase().includes(query.toLowerCase()));
     setDisplayEmployeeArr([...tempArr]);
   };
 
@@ -129,9 +113,15 @@ const Employeeslist = () => {
       title: "Name",
       dataIndex: "name",
       render: (text, record) => (
-        <h2 className="table-avatar">
+        <h2 className="table-avatar"> asfdlajsd;flja;sldjf
           <Link to={`/admin/employee-profile/${record._id}`} className="avatar">
+          {record?.firstName}
+            {record?.photoUrl && record?.photoUrl!=""  ?
+            <img alt="" src={generateFilePath(record?.photoUrl)} />
+            
+            :
             <img alt="" src={Avatar_02} />
+            }
           </Link>
           <Link to={`/admin/employee-profile/${record._id}`}>
             {record?.firstName} {record?.lastName}{" "}
@@ -178,28 +168,14 @@ const Employeeslist = () => {
       title: "Action",
       render: (text, record) => (
         <div className="dropdown dropdown-action text-end">
-          <a
-            href="#"
-            className="action-icon dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a href="#" className="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              data-bs-toggle="modal"
-              data-bs-target="#edit_employee"
-            >
+            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit_employee">
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
-            <a
-              className="dropdown-item"
-              data-bs-toggle="modal"
-              data-bs-target="#delete_employee"
-              onClick={() => setSelectedEmployee(record)}
-            >
+            <a className="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_employee" onClick={() => setSelectedEmployee(record)}>
               <i className="fa fa-trash-o m-r-5" /> Delete
             </a>
           </div>
@@ -231,25 +207,14 @@ const Employeeslist = () => {
                 </ul>
               </div>
               <div className="col-auto float-end ml-auto">
-                <a
-                  href="#"
-                  className="btn add-btn"
-                  data-bs-toggle="modal"
-                  data-bs-target="#add_employee"
-                >
+                <a href="#" className="btn add-btn" data-bs-toggle="modal" data-bs-target="#add_employee">
                   <i className="fa fa-plus" /> Add Employee
                 </a>
                 <div className="view-icons">
-                  <Link
-                    to="/app/employee/allemployees"
-                    className="grid-view btn btn-link"
-                  >
+                  <Link to="/app/employee/allemployees" className="grid-view btn btn-link">
                     <i className="fa fa-th" />
                   </Link>
-                  <Link
-                    to="/app/employee/employees-list"
-                    className="list-view btn btn-link active"
-                  >
+                  <Link to="/app/employee/employees-list" className="list-view btn btn-link active">
                     <i className="fa fa-bars" />
                   </Link>
                 </div>
@@ -261,23 +226,13 @@ const Employeeslist = () => {
           <div className="row filter-row">
             <div className="col-sm-6 col-md-3">
               <div className="form-group form-focus">
-                <input
-                  value={employeeIdQuery}
-                  onChange={(e) => handleFilterByEmployeeId(e.target.value)}
-                  type="text"
-                  className="form-control floating"
-                />
+                <input value={employeeIdQuery} onChange={(e) => handleFilterByEmployeeId(e.target.value)} type="text" className="form-control floating" />
                 <label className="focus-label">Employee ID</label>
               </div>
             </div>
             <div className="col-sm-6 col-md-3">
               <div className="form-group form-focus">
-                <input
-                  value={employeeNameQuery}
-                  onChange={(e) => handleFilterByEmployeeName(e.target.value)}
-                  type="text"
-                  className="form-control floating"
-                />
+                <input value={employeeNameQuery} onChange={(e) => handleFilterByEmployeeName(e.target.value)} type="text" className="form-control floating" />
                 <label className="focus-label">Employee Name</label>
               </div>
             </div>
@@ -303,8 +258,7 @@ const Employeeslist = () => {
                   className="table-striped"
                   pagination={{
                     total: displayEmployeeArr.length,
-                    showTotal: (total, range) =>
-                      `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                    showTotal: (total, range) => `Showing ${range[0]} to ${range[1]} of ${total} entries`,
                     showSizeChanger: true,
                     onShowSizeChange: onShowSizeChange,
                     itemRender: itemRender,
@@ -314,7 +268,7 @@ const Employeeslist = () => {
                   // bordered
                   dataSource={displayEmployeeArr}
                   rowKey={(record) => record.id}
-                // onChange={console.log("change")}
+                  // onChange={console.log("change")}
                 />
               </div>
             </div>
@@ -328,11 +282,7 @@ const Employeeslist = () => {
         <Editemployee />
         {/* /Edit Employee Modal */}
         {/* Delete Employee Modal */}
-        <div
-          className="modal custom-modal fade"
-          id="delete_employee"
-          role="dialog"
-        >
+        <div className="modal custom-modal fade" id="delete_employee" role="dialog">
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content">
               <div className="modal-body">
@@ -343,19 +293,12 @@ const Employeeslist = () => {
                 <div className="modal-btn delete-action">
                   <div className="row">
                     <div className="col-6">
-                      <a
-                        data-bs-dismiss="modal"
-                        onClick={() => handleEmployeeDelete()}
-                        className="btn btn-primary continue-btn"
-                      >
+                      <a data-bs-dismiss="modal" onClick={() => handleEmployeeDelete()} className="btn btn-primary continue-btn">
                         Delete
                       </a>
                     </div>
                     <div className="col-6">
-                      <a
-                        data-bs-dismiss="modal"
-                        className="btn btn-primary cancel-btn"
-                      >
+                      <a data-bs-dismiss="modal" className="btn btn-primary cancel-btn">
                         Cancel
                       </a>
                     </div>
