@@ -9535,3 +9535,37 @@ span.quote-cfee-label {
 a.btn.btn-blue {
   background-color: cadetblue;
 }
+
+.notification-custom-box h4.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 400;
+}
+
+.notification-custom-box h4.title span {
+  color: #9c4971;
+  font-weight: 600;
+}
+
+.notification-custom-box p.desp {
+  margin: 0;
+  color: gray;
+  font-size: 15px;
+  line-height: normal;
+}
+
+.notification-custom-box {
+  padding: 10px;
+}
+
+.notification-custom-box p.time {
+  color: #c96250;
+  font-size: 14px;
+  font-weight: 600;
+}
+textarea {
+  min-height: 60px;
+  overflow-y: auto;
+  word-wrap: break-word;
+}

@@ -37,6 +37,7 @@ export const getById = (id) => {
 };
 
 export const updatelead = (formData, id) => {
+  console.log(formData, id, "frm services");
   return axios.patch(`${serverUrl}/updateLead/${id}`, formData);
 };
 export const getLeadFilterByDate = (from, to, role, id) => {
@@ -48,4 +49,8 @@ export const getLeadFilterByDate = (from, to, role, id) => {
 export const getAllLeadOfTenDays = (id, role) => {
   // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadOfTenDays/${id}?role=${role}`);
+};
+export const getAllLeadSearchQuery = (query) => {
+  console.log(query, "query");
+  return axios.get(`${serverUrl}/getAllLeadBySearchQuery?${query}`);
 };

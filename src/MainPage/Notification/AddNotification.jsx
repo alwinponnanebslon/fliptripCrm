@@ -124,7 +124,7 @@ const AddNotification = ({
     setFollowTime("");
     setFollowupId("");
     setIsUpdate(false);
-    dispatch(setNotification({}));
+    // dispatch(setNotification({}));
     // setAllEmployees([]);
   };
   const handleSubmit = () => {
@@ -169,15 +169,6 @@ const AddNotification = ({
   };
 
   // console.log(followDate, "fooldate");
-
-  const handleClose = () => {
-    dispatch(setReminder(null));
-    setIsUpdate(false);
-    setFollowupId("");
-    setHeading("");
-    setDescription("");
-    setFollowDate("");
-  };
 
   return (
     <div id="add_Reminder" className="modal custom-modal fade" role="dialog">

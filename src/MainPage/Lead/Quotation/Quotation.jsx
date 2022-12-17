@@ -83,12 +83,18 @@ const Quotation = () => {
   };
 
   useEffect(() => {
-    console.log(quotationStateArr, "quotationStateArr231");
-    if (quotationStateArr && quotationStateArr.length > 0) {
+    // console.log(quotationStateArr, "quotationStateArr231");
+    if (quotationStateArr && quotationStateArr?.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
+    } else {
+      setIsConvert(false);
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
+
+  useEffect(() => {
+    console.log(isConvert, "isConvert");
+  }, [isConvert]);
 
   const handleEdit = (row) => {
     setShow(true);
@@ -358,6 +364,7 @@ const Quotation = () => {
               >
                 <i className="material-icons">more_vert</i>
               </a>
+
               <div className="dropdown-menu dropdown-menu-right">
                 <a
                   className="dropdown-item"
@@ -372,6 +379,12 @@ const Quotation = () => {
                   onClick={() => handleDelete(row._id)}
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
+                </a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleDownload(row)}
+                >
+                  <i className="fa fa-world m-r-5" /> Download
                 </a>
               </div>
             </>
@@ -443,7 +456,6 @@ const Quotation = () => {
             {isConvert == false && (
               <div className="col-auto float-end ml-auto">
                 <a
-                  href="#"
                   className="btn add-btn"
                   // data-bs-toggle="modal"
                   // data-bs-target="#add_quote"

@@ -59,8 +59,10 @@ export const clientUpdate = createAsyncThunk(
   "auth/clientUpdate",
   async (payload, thunkApi) => {
     try {
+      console.log(payload, "13payloadpayload21");
       let { obj, clientId } = payload;
-      // console.log(payload, "payloadpayload21");
+      console.log(payload, "payloadpayload21");
+    
       let { data: response } = await updateClient(obj, clientId);
       // console.log(response, "responsess2");
       // toastSuccess(response.message);

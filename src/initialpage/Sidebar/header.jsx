@@ -2,7 +2,10 @@
  * App Header
  */
 import React, { useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, useHistory } from "react-router-dom";
+// import { DashboardBox, DashboardTable } from "../../Utility/DashboardBox";
+import { DashboardBox, DashboardTable } from "../../utils/DashboardBox";
+import DataTable from "react-data-table-component";
 
 import {
   Avatar_02,
@@ -19,11 +22,9 @@ import { logoutUser } from "../../redux/features/auth/authSlice";
 
 import { useSelector } from "react-redux";
 
-import {
-  notificationGetForSpecificUser,
-  addNotification,
-  setNotification,
-} from "../../redux/features/notification/notificationSlice";
+import { notificationGetForSpecificUser } from "../../redux/features/notification/notificationSlice";
+import { getAllLeadSearchQuery } from "../../Services/lead.service";
+
 import {
   reminderGetForOneDay,
   reminderGet,
@@ -32,10 +33,12 @@ import { leadGet } from "../../redux/features/lead/leadSlice";
 // import { Bell, BookOpen, AlertTriangle } from 'react-feather';
 
 const Header = (props) => {
+  let history = useHistory();
   const role = useSelector((state) => state.auth.role);
   const user = useSelector((state) => state.auth.user);
   const userId = useSelector((state) => state.auth.user?._id);
 
+  const [query, setQuery] = useState("");
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
@@ -49,7 +52,7 @@ const Header = (props) => {
   const [messageCount, setMessageCount] = useState(dataArr.length);
   const [changeNotificationColor, setChangeNotificationColor] =
     useState("Gray");
-  // reminderArrData
+
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchDataArr, setSearchDataArr] = useState([]);
   const dispatch = useDispatch();
@@ -75,7 +78,7 @@ const Header = (props) => {
     dispatch(logoutUser());
   };
 
-  let pathname = location.pathname;
+  // let pathname = location.pathname;
   const handleInit = () => {
     // console.log("user123");
     let obj = {
@@ -84,7 +87,7 @@ const Header = (props) => {
     };
     dispatch(notificationGetForSpecificUser(userId));
     dispatch(reminderGetForOneDay(obj));
-    dispatch(reminderGet(userId));
+    // dispatch(reminderGet(userId));
   };
 
   useEffect(() => {
@@ -92,7 +95,7 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    // console.log(notificationResultArr, "notificationResultArr23");
+    console.log(notificationResultArr, "12notificationResultArr23");
     // console.log(userId, "userId343");
     let filter = notificationResultArr.filter((el) => {
       // console.log(el.userId, "el.user23");
@@ -102,71 +105,54 @@ const Header = (props) => {
     });
     // console.log(filter, "234");
     // console.log(userId, "u1serId343");
-    setDataArr(filter);
+    setDataArr(notificationResultArr);
+    // setDataArr(filter);
 
     // setDataArr(notificationResultArr);
   }, [notificationResultArr]);
 
   useEffect(() => {
-    // console.log(reminderArray, "reminderArray324");
+    console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
-  const handleSearchLead = (value) => {
-    // console.log(value, "vlue");
-    console.log(leadArr, "123vlue");
-    const filteredData = leadArr.filter((el) => {
-      if (value === "") {
-        return el.clientObj.name;
-      } else {
-        // return el.clientObj.name.toLowerCase().includes(value);
-        setShowSearchResult(true)
-        return el?.clientObj?.phone.toLowerCase().includes(value);
-      }
-    });
-    setSearchDataArr(filteredData);
+  // const handleSearchLead = (value) => {
+  //   // console.log(value, "vlue");
+  //   // console.log(leadArr, "123vlue");
 
-    return (
-      <ul>
-        {filteredData.map((item) => (
-          <li key={item._id}>{item.clientObj.name}</li>
-        ))}
-      </ul>
-    );
-    // for (let el of leadArr) {
-    //   if (el.clientObj) {
-    //     console.log(el, "el.cliet213  ");
-    //     if (value == "") {
-    //       return el;
-    //     } else {
-    //       return el.clientObj.name.includes(value);
-    //     }
+  //   const filteredData = leadArr.filter((el) => {
+  //     if (value === "") {
+  //       return el.clientObj.name;
+  //     } else {
+  //       // return el.clientObj.name.toLowerCase().includes(value);
+  //       setShowSearchResult(true);
+  //       return el?.clientObj?.phone.toLowerCase().includes(value);
+  //     }
+  //   });
+  //   setSearchDataArr(filteredData);
 
-    //     // el.clientObj.filter((ele) => {
-    //     //   if (value == "") {
-    //     //     return ele;
-    //     //   } else {
-    //     //     return ele.name.includes(value);
-    //     //   }
-    //     // });
-    //   }
+  // };
+  const handleSearchLead = async () => {
+    // console.log(query, "vlue");
+    // console.log(leadArr, "123vlue");
+
+    const filteredData = await getAllLeadSearchQuery(`name=${query}`);
+    // console.log(filteredData, "filteredData34 ");
+
+    if (filteredData && filteredData?.data && filteredData?.data?.data) {
+      setSearchDataArr(filteredData?.data?.data);
+      setShowSearchResult(true);
+    }
+    // const filteredData = await getAllLeadSearchQuery.filter((el) => {
+    // if (value === "") {
+    //   return el.clientObj.name;
+    // } else {
+    //   // return el.clientObj.name.toLowerCase().includes(value);
+    //   setShowSearchResult(true);
+    //   return el?.clientObj?.phone.toLowerCase().includes(value);
     // }
-
-    // leadArr.map((el) => {
-    //   console.log(el, "el2");
-    //   if (el.clientObj) {
-    //     el.clientObj.filter((ele) => {
-    //       console.log(ele, "ele1");
-    //       console.log(ele.name, "ele1");
-    //     });
-    //   }
-
-    //   if (value == "") {
-    //     return el;
-    //   } else {
-    //     return el.name.includes(value);
-    //   }
     // });
+    // setSearchDataArr(filteredData);
   };
   // console.log(dataArr, "data23")
   const handleClick = (index) => {
@@ -193,6 +179,100 @@ const Header = (props) => {
     props.onMenuClick();
     setIsNotificationRead(true);
   };
+
+  const category_columns = [
+    {
+      name: "S.NO.",
+      selector: (row, index) => index + 1,
+      sortable: true,
+      width: "7%",
+    },
+    {
+      name: "Subject",
+      selector: (row) => row?.subject,
+      width: "14%",
+    },
+    {
+      name: "Client Name",
+      selector: (row) => row?.clientObj?.name,
+      width: "10%",
+    },
+    {
+      name: "Client Phone",
+      selector: (row) => row?.clientObj?.phone,
+      width: "10%",
+    },
+    {
+      name: "Created At",
+      selector: (row) =>
+        new Date(row?.createdAt).toLocaleDateString() +
+        " at " +
+        new Date(row?.createdAt).toLocaleTimeString(),
+      width: "20%",
+    },
+    {
+      name: "Created By",
+      selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
+      width: "18%",
+    },
+
+    {
+      name: "View In Brief",
+      minWidth: "210px",
+      maxWidth: "211px",
+      cell: (row) => (
+        // <div className="col-auto float-end ml-auto">
+        //   <a
+        //     href={`/admin/lead/${row._id}`}
+        //     className="btn add-btn"
+        //     onClick={() => {
+        //       history.push(`/admin/lead/${row._id}`);
+        //       // href={`/admin/lead/${row._id}`}
+        //     }}
+        //   >
+        //     <i className="fa fa-view" />
+        //     click to view
+        //   </a>
+        // </div>
+
+        <button
+          onClick={() => {
+            history.push(`/admin/lead/${row._id}`);
+          }}
+        >
+          VIEW
+        </button>
+      ),
+      width: "5%",
+    },
+    {
+      name: (
+        <div className="col-auto float-end ml-auto">
+          <a
+            href="#"
+            className="btn add-btn"
+            onClick={() => {
+              setShowSearchResult(false);
+            }}
+          >
+            <i className="fa fa-close" />
+            Close Tab
+          </a>
+        </div>
+
+        // <button
+        //   onClick={() => {
+        //     setShowSearchResult(false);
+        //   }}
+        // >
+        //   {" "}
+        //   close tab
+        // </button>
+      ),
+
+      // selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
+    },
+  ];
 
   const mystyle = {
     // color: "white",
@@ -246,20 +326,33 @@ const Header = (props) => {
         {/* Search */}
         <li className="nav-item">
           <div className="top-nav-search">
-            <a href="" className="responsive-search">
+            <a href="#" className="responsive-search">
               <i className="fa fa-search" />
             </a>
-            <form>
+            <form
+              onSubmit={(e) => {
+                handleSearchLead();
+                e.preventDefault();
+              }}
+            >
               <input
                 className="form-control"
                 type="text"
-                placeholder="Search here1"
+                placeholder="Search Here"
                 onChange={(e) => {
-                  handleSearchLead(e.target.value);
+                  e.preventDefault();
+                  setQuery(e.target.value);
                 }}
+                value={query}
               />
-              <button className="btn" type="submit">
-                <i className="fa fa-search" />
+              <button className="btn" type="button">
+                <i
+                  className="fa fa-search"
+                  // type="text"
+                  onClick={() => {
+                    handleSearchLead();
+                  }}
+                />
               </button>
             </form>
           </div>
@@ -267,74 +360,9 @@ const Header = (props) => {
         {/* 
 
 */}
+
         {/* {searchDataArr && */}
-        {showSearchResult &&
-          <li className="nav-item dropdown">
-            
-            <div className="dropdown-menu notifications">
-              {console.log(searchDataArr, "123213")}
-              <div className="noti-content">
-                <ul className="notification-list">
-                  {searchDataArr &&
-                    searchDataArr.map((el, index) => {
-                      return (
-                        // <li className="notification-message" key={index}>
 
-                        <li className="notification-message" key={index}>
-                          <Link
-                            onClick={() =>
-                              localStorage.setItem("minheight", "true")
-                            }
-                            to="/admin/reminder"
-                          >
-                            {/* <div
-                            style={{ backgroundColor: changeNotificationColor }}
-                            index={index}
-                          > */}
-                            <div className="media ">
-                              <p className="noti-details d-flex">
-                                <h5>{" " + el?.clientObj?.name}</h5>
-                                &nbsp;
-                                {/* </div> */}
-                              </p>
-
-                              <p className="noti-details d-flex">
-                                <h5>
-                                  {el?.clientObj?.email}
-                                </h5>
-                                &nbsp;
-                              </p>
-
-                            </div>
-                            {/* 
-                          <div className="media">
-                            <p className="noti-details d-flex">
-                              <h5> follow date : </h5>{" "}
-                              {new Date(el?.followDate).toLocaleDateString()}
-                              &nbsp;
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5> follow Time : </h5> {el?.followTime}&nbsp;
-                            </p>
-                          </div> */}
-                          </Link>
-                        </li>
-                      );
-                    })}
-
-                </ul>
-              </div>
-              <div className="topnav-dropdown-footer">
-                <Link
-                  onClick={() => localStorage.setItem("minheight", "true")}
-                  to="/admin/notification"
-                >
-                  View all Notifications
-                </Link>
-              </div>
-            </div>
-          </li>
-        }
         {/* 
 
  */}
@@ -347,143 +375,10 @@ const Header = (props) => {
             {/* <i className="fa fa-bell-o" /> */}
             {/* <span className="badge badge-pill">{dataArr.length}</span> */}
           </a>
-          <div className="dropdown-menu notifications">
-            {/* <div className="topnav-dropdown-header"> */}
-            {/* <span className="notification-title">Notifications</span> */}
-            {/* <a href="" className="clear-noti">
-                Clear All
-              </a> */}
-            {/* </div> */}
-            {/* {console.log(dataArr, "123213")} */}
-            <div className="search-content">
-              <ul className="search-list">
-                {dataArr &&
-                  dataArr.map((el, index) => {
-                    return (
-                      // <li className="notification-message" key={index}>
-                      <li className="notification-message" key={index}>
-                        {/* <div className="float-end">
-                          <a
-                            className="btn btn-blue"
-                            readOnly={isNotificationRead ? true : false}
-                            onClick={(e) => {
-                              handleReadNotification(e.target.value);
-                            }}
-                          >
-                            <i /> mark as read
-                          </a>
-                        </div> */}
-                        <Link
-                          onClick={() =>
-                            localStorage.setItem("minheight", "true")
-                          }
-                          to="/admin/notification"
-                        >
-                          <div className="media">
-                            {/* <span className="avatar">
-                              <img alt="" src={Avatar_02} />
-                            </span> */}
-                            <div className="media">
-                              <p className="noti-details d-flex">
-                                <h5> Heading : </h5> {el?.heading}&nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5> Decription : </h5> {el?.description}&nbsp;
-                              </p>
-                              <p className="noti-details d-flex">
-                                <h5>Name : </h5> {el?.createdBy?.name}&nbsp;
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                {/* <div className="media-body">
-                              <p className="noti-details">
-                                <span className="noti-title">
-                                  {el?.heading}&nbsp;
-                                  {el?.description}
-                                </span>
-                                from &nbsp;
-                           
-                                <span className="noti-title">
-                                  {el?.createdBy?.name}
-                                </span>
-                              </p>
-                            </div> */}
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_03} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Tarah Shropshire</span>{" "}
-                          changed the task name{" "}
-                          <span className="noti-title">
-                            Appointment booking with payment gateway
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">6 mins ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
-
-
-                {/* <li className="notification-message">
-                  <Link
-                    onClick={() => localStorage.setItem("minheight", "true")}
-                    to="/app/administrator/activities"
-                  >
-                    <div className="media">
-                      <span className="avatar">
-                        <img alt="" src={Avatar_13} />
-                      </span>
-                      <div className="media-body">
-                        <p className="noti-details">
-                          <span className="noti-title">Bernardo Galaviz</span>{" "}
-                          added new task{" "}
-                          <span className="noti-title">
-                            Private chat module
-                          </span>
-                        </p>
-                        <p className="noti-time">
-                          <span className="notification-time">2 days ago</span>
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                </li> */}
-              </ul>
-            </div>
-            {/* <div className="topnav-dropdown-footer">
-              <Link
-                onClick={() => localStorage.setItem("minheight", "true")}
-                to="/admin/notification"
-              >
-                View all Notifications
-              </Link>
-            </div> */}
-          </div>
         </li>
 
-        {/* 
-
-
-
-
-
-
-
-*/}
+        {/*
+         */}
         <li className="nav-item dropdown">
           <a
             // href=""
@@ -491,7 +386,7 @@ const Header = (props) => {
             data-bs-toggle="dropdown"
           >
             <i className="fa fa-bell-o" />
-            <span className="badge badge-pill">{dataArr.length}</span>
+            <span className="badge badge-pill">{dataArr?.length}</span>
           </a>
           <div className="dropdown-menu notifications">
             <div className="topnav-dropdown-header">
@@ -500,16 +395,13 @@ const Header = (props) => {
                 Clear All
               </a> */}
             </div>
-            {/* {console.log(dataArr, "123213")} */}
             <div className="noti-content">
               <ul className="notification-list">
                 {dataArr &&
                   dataArr.map((el, index) => {
                     return (
-                      // <li className="notification-message" key={index}>
-
-                      <li key={index}>
-                        {/* <div className="float-end">
+                      <li className="notification-message" key={index}>
+                        {/* <div className="float">
                           <a
                             className="btn btn-blue"
                             readOnly={isNotificationRead ? true : false}
@@ -520,69 +412,66 @@ const Header = (props) => {
                             <i /> mark as read
                           </a>
                         </div> */}
-                        {/* <div className="notification-container">
-                          <div className=
-                            {
-                              el ?
-                                'notification notify show-count' :
-                                'notification notify'
-                            }
-                            data-count={messageCount}
-                            onClick={event => handleClick(event)}>
-                            <Bell color={'#282828'} size={30} />
-                          </div>
-                        </div> */}
-                        <Link
-                          onClick={() => {
-                            localStorage.setItem("minheight", "true");
-                            handleClick(index);
-                          }}
-                          to="#"
+
+                        <div
+                        // onClick={() => {
+                        //   localStorage.setItem("minheight", "true");
+                        //   handleClick(index);
+                        // }}
+                        // to="#"
                         // to="/admin/notification"
                         >
-                          {/* <div
-                            style={{ backgroundColor: changeNotificationColor }}
-                            index={index}
-                          > */}
-                          <div className="media ">
-                            <p className="noti-details d-flex">
-                              {/* <div > */}
-                              <h5> {el?.createdBy?.name + "  "} :</h5>
-                              <h5>{" " + el?.heading}</h5>
-                              &nbsp;
-                              {/* </div> */}
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5> {el?.description} </h5> &nbsp;
-                            </p>
+                          {/* {!el.previousNotification && ( */}
 
-                            <p className="noti-details d-flex">
-                              <h5>
-                                {new Date(el?.followDate).toLocaleDateString()}{" "}
-                                at {el?.followTime}
-                              </h5>
-                              &nbsp;
-                            </p>
+                          <div
+                            className="media notification-custom-box"
+                            key={index}
+                          >
+                            <h4 className="title">
+                              <span>{el?.createdBy?.name}:</span>
+                              {el?.heading}
+                            </h4>
 
-                            {/* </div> */}
+                            <p className="desp">{el?.description}</p>
+
+                            <p className="time">
+                              {new Date(el?.followDate).toLocaleDateString()}
+                              at {el?.followTime}
+                            </p>
                           </div>
-                        </Link>
+                          {/* // )} */}
+                          {/* {el?.previousNotification &&
+                            el?.previousNotification?.length > 0 && (
+                              <h3>Previous Notification</h3>
+                            )} */}
+                          {el?.previousNotification &&
+                            el?.previousNotification?.length > 0 &&
+                            el?.previousNotification.map((ele, index) => {
+                              return (
+                                <div
+                                  className="media notification-custom-box"
+                                  key={index}
+                                >
+                                  <h4 className="title">
+                                    <span>{ele?.createdBy?.name}:</span>
+                                    {ele?.heading}
+                                  </h4>
+
+                                  <p className="desp">{ele?.description}</p>
+
+                                  <p className="time">
+                                    {new Date(
+                                      ele?.followDate
+                                    ).toLocaleDateString()}{" "}
+                                    at {ele?.followTime}
+                                  </p>
+                                </div>
+                              );
+                            })}
+                        </div>
                       </li>
                     );
                   })}
-                {/* <div className="media-body">
-                              <p className="noti-details">
-                                <span className="noti-title">
-                                  {el?.heading}&nbsp;
-                                  {el?.description}
-                                </span>
-                                from &nbsp;
-                           
-                                <span className="noti-title">
-                                  {el?.createdBy?.name}
-                                </span>
-                              </p>
-                            </div> */}
 
                 {/* <li className="notification-message">
                   <Link
@@ -623,102 +512,162 @@ const Header = (props) => {
         {/* 
         
         */}
-        <li className="nav-item dropdown">
-          <a
-            href=""
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
-            {/* <i class="fa-solid fa-alarm-clock"></i> */}
-            {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
-            <i className="fa fa-clock-o" />
-            <span className="badge badge-pill">{reminderArrData.length}</span>
-          </a>
-          <div className="dropdown-menu notifications">
-            <div className="topnav-dropdown-header">
-              <span className="notification-title">Reminder</span>
-              {/* <a href="" className="clear-noti">
+        {role != "SUPERVISOR" && (
+          <li className="nav-item dropdown">
+            <a
+              href=""
+              className="dropdown-toggle nav-link"
+              data-bs-toggle="dropdown"
+            >
+              {/* <i class="fa-solid fa-alarm-clock"></i> */}
+              {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
+              <i className="fa fa-clock-o" />
+              <span className="badge badge-pill">
+                {/* {reminderArrData?.length > 0 ? reminderArrData?.length : 0} */}
+                {console.log(reminderArrData, "reminderArrData?.length")}
+                {reminderArrData?.length}
+              </span>
+            </a>
+            <div className="dropdown-menu notifications">
+              <div className="topnav-dropdown-header">
+                <span className="notification-title">Reminder</span>
+                {/* <a href="" className="clear-noti">
                 Clear All
               </a> */}
-            </div>
-            {/* {console.log(reminderArrData, "reminderArrData123213")} */}
-            <div className="noti-content">
-              <ul className="notification-list">
-                {reminderArrData &&
-                  reminderArrData.map((el, index) => {
-                    return (
-                      <li className="notification-message" key={index}>
-                        <Link
-                          onClick={() =>
-                            localStorage.setItem("minheight", "true")
-                          }
-                          to="/admin/reminder"
-                        >
-                          {/* <div
+              </div>
+              {/* {console.log(reminderArrData, "reminderArrData123213")} */}
+              <div className="noti-content">
+                <ul className="notification-list">
+                  {reminderArrData &&
+                    reminderArrData.map((el, index) => {
+                      // console.log(el, "ekll234242");
+                      return (
+                        <li className="notification-message" key={index}>
+                          <div
+                            onClick={() =>
+                              localStorage.setItem("minheight", "true")
+                            }
+                            to="/admin/reminder"
+                          >
+                            {/* <div
                             style={{ backgroundColor: changeNotificationColor }}
                             index={index}
                           > */}
-                          <div className="media ">
-                            <p className="noti-details d-flex">
-                              <h5>{" " + el?.heading}</h5>
-                              &nbsp;
-                              {/* </div> */}
-                            </p>
+                            {!el.futureReminder && (
+                              <div
+                                className="media notification-custom-box"
+                                key={index}
+                              >
+                                <h4 className="title">
+                                  <span>{el?.createdBy?.name}:</span>
+                                  {el?.heading}
+                                </h4>
 
-                            <p className="noti-details d-flex">
-                              <h5>
-                                {el.description
-                                  ? el?.description
-                                  : el?.otherReason}
-                              </h5>
-                              &nbsp;
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5>
-                                {el.followDate
-                                  ? new Date(
+                                <p className="desp">{el?.description}</p>
+
+                                <p className="time">
+                                  {new Date(
                                     el?.followDate
-                                  ).toLocaleDateString()
-                                  : new Date(
-                                    el?.leadStatusDate
-                                  ).toLocaleDateString()}
-                                at
-                                {el.followTime
-                                  ? el?.followTime
-                                  : el?.leadStatusTime}
-                                {/* {new Date(el?.followDate).toLocaleDateString()}{" "}
-                                at {el?.followTime} */}
-                              </h5>
-                              &nbsp;
-                            </p>
+                                  ).toLocaleDateString()}{" "}
+                                  at {el?.followTime}
+                                </p>
+                              </div>
+                              //
+                              //
+                              // <div className="media ">
+                              //   <p className="noti-details d-flex p-2">
+                              //     <h5>{" " + el?.heading}</h5>
+                              //     &nbsp;
+                              //     {/* </div> */}
+                              //   </p>
+
+                              //   <p className="noti-details d-flex p-2">
+                              //     <h5>
+                              //       {el.followDate
+                              //         ? new Date(
+                              //             el?.followDate
+                              //           ).toLocaleDateString()
+                              //         : new Date(
+                              //             el?.leadStatusDate
+                              //           ).toLocaleDateString()}
+                              //       at
+                              //       {el.followTime
+                              //         ? el?.followTime
+                              //         : el?.leadStatusTime}
+                              //       {/* {new Date(el?.followDate).toLocaleDateString()}{" "}
+                              //     at {el?.followTime} */}
+                              //     </h5>
+                              //     &nbsp;
+                              //   </p>
+                              // </div>
+                            )}
+                            {/* {el.futureReminder &&
+                            el?.futureReminder?.length > 0 && (
+                              <h3 className="text-danger ">
+                                Upcoming Reminder
+                              </h3>
+                            )} */}
+                            {/* {el.futureReminder &&
+                            el.futureReminder?.length > 0 &&
+                            el.futureReminder.map((ele, index) => {
+                              return (
+                                <>
+                                  <li
+                                    className="notification-message"
+                                    key={index}
+                                  >
+                                    <div className="media ">
+                                      <p className="noti-details d-flex p-2">
+                                        <h5>{" " + ele?.heading}</h5>
+                                        &nbsp;
+                                      </p>
+
+                                      <p className="noti-details d-flex p-2">
+                                        <h5>
+                                          {ele.description
+                                            ? ele?.description
+                                            : ele?.otherReason}
+                                        </h5>
+                                        &nbsp;
+                                      </p>
+                                      <p className="noti-details d-flex p-2">
+                                        <h5>
+                                          {ele.followDate
+                                            ? new Date(
+                                                ele?.followDate
+                                              ).toLocaleDateString()
+                                            : new Date(
+                                                ele?.leadStatusDate
+                                              ).toLocaleDateString()}
+                                          at
+                                          {ele.followTime
+                                            ? ele?.followTime
+                                            : ele?.leadStatusTime}
+                                        </h5>
+                                        &nbsp;
+                                      </p>
+                                    </div>
+                                  </li>
+                                </>
+                              );
+                            })} */}
                           </div>
-                          {/* 
-                          <div className="media">
-                            <p className="noti-details d-flex">
-                              <h5> follow date : </h5>{" "}
-                              {new Date(el?.followDate).toLocaleDateString()}
-                              &nbsp;
-                            </p>
-                            <p className="noti-details d-flex">
-                              <h5> follow Time : </h5> {el?.followTime}&nbsp;
-                            </p>
-                          </div> */}
-                        </Link>
-                      </li>
-                    );
-                  })}
-              </ul>
+                        </li>
+                      );
+                    })}
+                </ul>
+              </div>
+              <div className="topnav-dropdown-footer">
+                <Link
+                  onClick={() => localStorage.setItem("minheight", "true")}
+                  to="/admin/reminder"
+                >
+                  View all Reminders
+                </Link>
+              </div>
             </div>
-            <div className="topnav-dropdown-footer">
-              <Link
-                onClick={() => localStorage.setItem("minheight", "true")}
-                to="/admin/reminder"
-              >
-                View all Reminders
-              </Link>
-            </div>
-          </div>
-        </li>
+          </li>
+        )}
         {/* /Notifications */}
         {/* Message Notifications */}
 
@@ -753,6 +702,19 @@ const Header = (props) => {
       </ul>
       {/* /Header Menu */}
       {/* Mobile Menu */}
+      {showSearchResult && (
+        <div className="container">
+          <DashboardTable>
+            <DataTable
+              columns={category_columns}
+              data={
+                searchDataArr && searchDataArr.length > 0 ? searchDataArr : []
+              }
+              pagination
+            />
+          </DashboardTable>
+        </div>
+      )}
       <div className="dropdown mobile-user-menu">
         <a
           href="#"

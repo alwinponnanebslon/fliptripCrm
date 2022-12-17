@@ -43,8 +43,8 @@ function Notification() {
   const [notificationvalue, setNotificationvalue] = useState("");
 
   const handleInit = () => {
-    // dispatch(notificationGetForSpecificUser(`${userId}`));
-    dispatch(notificationGet());
+    dispatch(notificationGetForSpecificUser(`${userId}`));
+    // dispatch(notificationGet());
   };
 
   useEffect(() => {
@@ -52,7 +52,7 @@ function Notification() {
   }, []);
   //
   useEffect(() => {
-    // console.log(NotificationArray, "12323424 NotificationArray");
+    console.log(NotificationArray, "12323424 NotificationArray");
     let filter = NotificationArray.filter((el) => {
       // console.log(el.createdBy._id, "123");
       if (`${el?.createdBy?._id}` == `${userId}`) {
@@ -61,7 +61,8 @@ function Notification() {
     });
     console.log(filter, "123fiter23");
 
-    setNotificationArr(filter);
+    // setNotificationArr(filter);
+    setNotificationArr(NotificationArray);
     // setNotificationArr(NotificationArray);
   }, [NotificationArray]);
   //
@@ -105,7 +106,7 @@ function Notification() {
   };
 
   const filterNotificationArr = [
-    { label: "SEND", value: "SEND" },
+    // { label: "SEND", value: "SEND" },
     { label: "RECEIVED", value: "RECEIVED" },
   ];
 
@@ -125,7 +126,21 @@ function Notification() {
       title: "Follow Date",
       dataIndex: "userId",
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
-      render: (row, record) => <div>{record?.followDate}</div>,
+      render: (row, record) => (
+        <div>
+          {new Date(record?.followDate).getDate() == new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() + " " + " Today"
+            : new Date(record?.followDate).getDate() > new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              " Upcoming"
+            : new Date(record?.followDate).getDate() < new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              " Previous"
+            : ""}
+        </div>
+      ),
     },
     {
       title: "Send to ",
@@ -183,13 +198,54 @@ function Notification() {
       title: "Follow Date",
       dataIndex: "followDate",
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
-      render: (row, record) => <div>{record?.followDate}</div>,
+      render: (row, record) => (
+        <div>
+          {new Date(record?.followDate).getDate() == new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() + " " + " Today"
+            : new Date(record?.followDate).getDate() > new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              " Tomorrow"
+            : new Date(record?.followDate).getDate() < new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              " Previous"
+            : ""}
+        </div>
+      ),
     },
+
+    // {
+    //   title: "Reminder Date",
+    //   dataIndex: "followDate",
+    //   render: (row, record) => (
+    //     <div>
+    //       {new Date(record.followDate).getDate() == new Date().getDate()
+    //         ? new Date(record?.followDate).toLocaleDateString() +
+    //           " " +
+    //           "Today Reminder"
+    //         : new Date(record.followDate).getDate() > new Date().getDate()
+    //         ? new Date(record?.followDate).toLocaleDateString() +
+    //           " " +
+    //           " Tomorrow Reminder"
+    //         : new Date(record.followDate).getDate() < new Date().getDate()
+    //         ? new Date(record?.followDate).toLocaleDateString() +
+    //           " " +
+    //           "Previous Reminder"
+    //         : record.leadStatusDate}
+    //     </div>
+    //   ),
+    // },,
     {
       title: "Received From",
       dataIndex: "ReceivedFrom",
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
-      render: (row, record) => <div>{record?.createdBy?.name}</div>,
+      render: (row, record) => (
+        <div>
+          {record?.createdBy?.name + " "}
+          {" " + record?.createdBy?.role}
+        </div>
+      ),
     },
     // {
     //   title: "Action",
@@ -295,9 +351,10 @@ function Notification() {
                 }}
                 style={{ overflowX: "auto" }}
                 columns={
-                  notificationvalue == "SEND" || notificationvalue == ""
-                    ? tour_columns
-                    : tour_columnsReceived
+                  // notificationvalue == "SEND" || notificationvalue == ""
+                  //   ? tour_columns
+                  //   :
+                  tour_columnsReceived
                 }
                 // dataSource={notificationvalue=="SEND"?  notificationArr:}
                 dataSource={notificationArr}

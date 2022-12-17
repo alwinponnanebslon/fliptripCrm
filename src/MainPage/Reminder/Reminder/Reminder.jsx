@@ -116,7 +116,19 @@ export const GeneralReminder = () => {
       dataIndex: "followDate",
       render: (row, record) => (
         <div>
-          {record.followDate ? record?.followDate : record.leadStatusDate}
+          {new Date(record.followDate).getDate() == new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              "Today Reminder"
+            : new Date(record.followDate).getDate() > new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              " Upcoming Reminder"
+            : new Date(record.followDate).getDate() < new Date().getDate()
+            ? new Date(record?.followDate).toLocaleDateString() +
+              " " +
+              "Previous Reminder"
+            : record.leadStatusDate}
         </div>
       ),
     },

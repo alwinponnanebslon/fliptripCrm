@@ -12,8 +12,9 @@ import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
+import { useRef } from "react";
 const AddQuotation = ({ show, setShow }) => {
+  const descriptionRef = useRef();
   const { leadId } = useParams();
 
   const dispatch = useDispatch();
@@ -61,8 +62,8 @@ const AddQuotation = ({ show, setShow }) => {
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isUpateDoc, setIsUpateDoc] = useState(false);
-  const [flightName, setFlightName] = useState("");
-  const [flightCost, setFlightCost] = useState("");
+  // const [flightName, setFlightName] = useState("");
+  // const [cost, setCost] = useState("");
   const [IsHotelDetailsRequired, setIsHotelDetailsRequired] = useState(false);
   const [IsFlightDetailsRequired, setIsFlightDetailsRequired] = useState(false);
   const [isItineraryDetailsRequired, setIsItineraryDetailsRequired] =
@@ -87,7 +88,7 @@ const AddQuotation = ({ show, setShow }) => {
   const [flightList, setflightList] = useState([
     {
       flightName: "",
-      flightCost: 0,
+      cost: 0,
     },
   ]);
   useEffect(() => {
@@ -140,14 +141,15 @@ const AddQuotation = ({ show, setShow }) => {
         quotationObject?.numberOfGuest * quotationObject?.perPersonLandPrice
       );
       setIsItineraryDetailsRequired(
-        quotationObject?.itineraryDetails?.length > 0 ? true : false
+        quotationObject?.itineraryDetails.length > 0 ? true : false
       );
       setIsHotelDetailsRequired(
-        quotationObject?.hotelDetail?.length > 0 ? true : false
+        quotationObject?.hotelDetail.length > 0 ? true : false
       );
       setIsFlightDetailsRequired(
-        quotationObject?.flightlList?.length > 0 ? true : false
+        quotationObject?.flightList.length > 0 ? true : false
       );
+      setflightList(quotationObject?.flightList);
       setItineraryList(quotationObject?.itineraryDetails);
       setTravelList(quotationObject?.tourListArr);
       setHotelList(quotationObject?.hotelDetail);
@@ -165,9 +167,8 @@ const AddQuotation = ({ show, setShow }) => {
       setNumberOfInfants(quotationObject?.travelPassengerObj?.noOfInfants);
       setTourArr(quotationObject?.tourListArr);
       setIsUpateDoc(true);
-      // set
       // setFlightName(quotationObject?.flightName);
-      // setFlightCost(quotationObject?.flightCost);
+      // setFlightCost(quotationObject?.cost);
 
       // console.log(quotationObject.travelPassengerArr, "sadfsaf")
       // set(quotationObject.destinationName);
@@ -427,7 +428,7 @@ const AddQuotation = ({ show, setShow }) => {
       let currentObj = Object.freeze(list[index]);
       currentObj = {
         flightName: list[index].flightName,
-        flightCost: list[index].flightCost,
+        cost: list[index].cost,
       };
 
       currentObj[name] = value;
@@ -442,6 +443,16 @@ const AddQuotation = ({ show, setShow }) => {
       setflightList([...list]);
     }
   };
+  useEffect(() => {
+    let amount = 0;
+    if (flightList && flightList?.length > 0) {
+      for (let el of flightList) {
+        amount = parseInt(amount) + parseInt(el.cost);
+      }
+    }
+    setPerPersonAirportPrice(amount);
+    setTotalPersonAirportPrice(numberOfGuest * amount);
+  }, [flightList]);
 
   const handleremoveFlight = (index) => {
     const list = [...flightList];
@@ -456,7 +467,7 @@ const AddQuotation = ({ show, setShow }) => {
       ...tempFlightArr,
       {
         flightName: "",
-        flightCost: 0,
+        cost: 0,
       },
     ]);
   };
@@ -563,7 +574,7 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   const handleinputchangeItinerary = (e, index) => {
-    console.log(itineraryList, "itineraryList");
+    // console.log(itineraryList, "itineraryList");
     if (itineraryList && isUpateDoc == true) {
       console.log("iiioop");
       ("use strict");
@@ -693,7 +704,7 @@ const AddQuotation = ({ show, setShow }) => {
     setIsHotelDetailsRequired(false);
     setIsItineraryDetailsRequired(false);
     setItineraryList([{ day: "", itineraryName: "" }]);
-    setflightList([{ flightName: "", flightCost: 0 }]);
+    setflightList([{ flightName: "", cost: 0 }]);
   };
 
   const handleSubmit = (e) => {
@@ -741,7 +752,7 @@ const AddQuotation = ({ show, setShow }) => {
       if (flightList[0]?.flightName == "") {
         toastError("Flight Name is mandatory");
         return;
-      } else if (flightList[0]?.flightCost == "") {
+      } else if (flightList[0]?.cost == "") {
         toastError("Flight Cost is mandatory");
         return;
       }
@@ -754,6 +765,23 @@ const AddQuotation = ({ show, setShow }) => {
         toastError("Itinerary Heading  is mandatory");
         return;
       }
+    }
+    // setTotalPersonAirportPrice
+    // let result = flightList.map(({ cost }) => cost);
+    var vals = 0;
+    for (var item of flightList) {
+      vals = parseInt(vals) + parseInt(item.cost);
+    }
+    console.log(vals, "vals");
+    // console.log(result, "result23");
+    // let getFlightCost = result.reduce(
+    //   (accumulator, currentValue) => accumulator + currentValue,
+    //   0
+    // );
+    // console.log(getFlightCost, "getFlight213");
+    if (totalPersonAirPortPrice < vals) {
+      toastError("total flight cost cannot be less then flight price ");
+      return;
     }
     // if (adultCount == "") {
     //   toastError("Adult Count is mandatory");
@@ -881,7 +909,18 @@ const AddQuotation = ({ show, setShow }) => {
     numberOfInfants,
     numberOfGuest,
   ]);
+  function textAreaAdjust(e) {
+    let element = descriptionRef.current;
 
+    if (event.key === "Enter") {
+      element.style.height =
+        element.scrollHeight > element.clientHeight
+          ? element.scrollHeight + "px"
+          : "60px";
+    }
+
+    // element.style.height = 25 + element.scrollHeight + "px";
+  }
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
       <div
@@ -1345,6 +1384,7 @@ aria-label="Close"
                     checked={IsFlightDetailsRequired}
                     onChange={(e) => {
                       setIsFlightDetailsRequired(!IsFlightDetailsRequired);
+                      setIsAirport(!isAirport);
                     }}
                   />
                 </div>
@@ -1371,9 +1411,9 @@ aria-label="Close"
                               <label>Flight Cost </label>
                               <input
                                 type="number"
-                                name="flightCost"
+                                name="cost"
                                 className="form-control"
-                                value={flight?.flightCost}
+                                value={flight?.cost}
                                 onChange={(e) => handleinputchangeFlight(e, i)}
                               />
                             </div>
@@ -1503,7 +1543,12 @@ aria-label="Close"
                                 </div>
                                 <div className="form-group col-md-12">
                                   <label>Itinerary Description</label>
+
                                   <textarea
+                                    ref={descriptionRef}
+                                    onKeyUp={(e) => {
+                                      textAreaAdjust(e);
+                                    }}
                                     type="text"
                                     name="itineraryName"
                                     className="form-control"
@@ -1513,6 +1558,16 @@ aria-label="Close"
                                       handleinputchangeItinerary(e, i)
                                     }
                                   />
+                                  {/* <textarea
+                                    type="text"
+                                    name="itineraryName"
+                                    className="form-control"
+                                    value={itinerary.itineraryName}
+                                    placeholder="Enter Itinerary Description"
+                                    onChange={(e) =>
+                                      handleinputchangeItinerary(e, i)
+                                    }
+                                  /> */}
                                 </div>
                               </div>
                             );
@@ -1587,6 +1642,7 @@ aria-label="Close"
                             <td>{numberOfGuest}</td>
                             <td>
                               <input
+                                readOnly
                                 type="text"
                                 value={[perPersonAirPortPrice]}
                                 onChange={(e) => {
