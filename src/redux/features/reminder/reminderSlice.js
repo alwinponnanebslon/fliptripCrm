@@ -110,7 +110,7 @@ export const reminderGetForOneDay = createAsyncThunk(
         payload.role
       );
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const reminders = response.data;
         return reminders;
       }

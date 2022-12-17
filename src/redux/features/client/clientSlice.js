@@ -65,7 +65,7 @@ export const clientUpdate = createAsyncThunk(
     
       let { data: response } = await updateClient(obj, clientId);
       // console.log(response, "responsess2");
-      toastSuccess(response.message);
+      // toastSuccess(response.message);
       thunkApi.dispatch(clientGet());
       return response;
     } catch (error) {

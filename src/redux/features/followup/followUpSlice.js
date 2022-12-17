@@ -23,7 +23,7 @@ export const followUpGet = createAsyncThunk(
     try {
       let { data: response } = await getfollowUpApi(query);
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const followUps = response.data;
         return followUps;
       }
@@ -42,7 +42,7 @@ export const followUpGetByStatus = createAsyncThunk(
         `status=${payload?.statusValued}&leadId=${payload?.leadId}`
       );
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const followUps = response.data;
         return followUps;
       }
@@ -61,7 +61,7 @@ export const followUpGetByMonth = createAsyncThunk(
         `month=${payload?.monthValued}&leadId=${payload?.leadId}`
       );
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const followUps = response.data;
         return followUps;
       }
@@ -80,7 +80,7 @@ export const followUpGetFilterByDate = createAsyncThunk(
         `date=${payload?.handleDateFilter}&leadId=${payload?.leadId}`
       );
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const followUps = response.data;
         return followUps;
       }
