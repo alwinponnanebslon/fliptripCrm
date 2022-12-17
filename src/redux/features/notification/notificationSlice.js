@@ -24,7 +24,7 @@ export const notificationGet = createAsyncThunk(
       // console.log(query, "query213");
       let { data: response } = await getNotificationApi(query);
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const notifications = response.data;
         return notifications;
       }
@@ -43,7 +43,7 @@ export const notificationGetForSpecificUser = createAsyncThunk(
       // console.log(response, "notifications34");
       // console.log(response, "121");
       if (response) {
-        toastSuccess(response.message);
+        // toastSuccess(response.message);
         const notifications = response.data;
         return notifications;
       }

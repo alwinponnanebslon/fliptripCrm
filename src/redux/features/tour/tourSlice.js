@@ -21,7 +21,7 @@ export const tourGet = createAsyncThunk("tour/tourGet", async (query) => {
   try {
     let { data: response } = await getToursApi(query);
     if (response) {
-      toastSuccess(response.message);
+      // toastSuccess(response.message);
       const tours = response.data;
       return tours;
     }
@@ -34,7 +34,7 @@ export const activeTourGet = createAsyncThunk("tour/tourGet", async (query) => {
   try {
     let { data: response } = await getActiveToursApi(query);
     if (response) {
-      toastSuccess(response.message);
+      // toastSuccess(response.message);
       const tours = response.data;
       return tours;
     }
