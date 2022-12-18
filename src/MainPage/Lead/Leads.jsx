@@ -120,6 +120,12 @@ const Leads = () => {
   const [passPortExpiryDate, setPassPortExpiryDates] = useState("");
   const [filterClientByName, setFilterClientByName] = useState("");
   const [dob, setDob] = useState("");
+  const [anniversaryDate, setAnniversaryDate] = useState("");
+  const [fileName, setFileName] = useState("");
+
+  const [penCardImg, setPenCardImg] = useState("");
+  const [passPortFrontImg, setPassPortFrontImg] = useState("");
+  const [passPortBackImg, setPassPortBackImg] = useState("");
 
   const agentSelect = useRef();
 
@@ -191,8 +197,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-        ? "rgba(255,155,68,0.5)"
-        : "white",
+          ? "rgba(255,155,68,0.5)"
+          : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -379,13 +385,82 @@ const Leads = () => {
   };
 
   const handleFileSelection = (event) => {
+
+    // console.log(event.target[name], "221wddddwwww111 ")
+    // console.log(event.target.files, "22eeeee1111 ")
     if (event.target.files[0]) {
+      // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
-        // // console.log(result, "result");
+        // console.log(event.target.files[0],"1111")
+        // console.log(result, "result2222"); console.log(fileName, "filename23");
         setFileUrl(result);
       });
     }
   };
+  const handleFileSelectionPenCard = (event) => {
+    if (event.target.files[0]) {
+      // console.log(event.target.files[0], "1111 ")
+      getBase64(event.target.files[0], (result) => {
+        // console.log(event.target.files[0],"1111")
+        // if (fileName == "penCardImg") {
+        //   console.log("fileinside")
+        setPenCardImg(result)
+        // } else if (fileName == "passPortFrontImg") {
+        //   setPassPortFrontImg(result)
+        // } else if (fileName == "passPortBackImg") {
+        //   setPassPortBackImg(result)
+        // } else {
+
+        //   setFileUrl(result);
+        // }
+      });
+    }
+  };
+  
+  const handleFileSelectionPassPortFront = (event) => {
+    if (event.target.files[0]) {
+      // console.log(event.target.files[0], "1111 ")
+      getBase64(event.target.files[0], (result) => {
+        // console.log(event.target.files[0],"1111")
+        // // console.log(result, "result2222"); console.log(fileName, "filename23");
+        // if (fileName == "penCardImg") {
+        //   console.log("fileinside")
+        //   setPenCardImg(result)
+        // } else if (fileName == "passPortFrontImg") {
+        setPassPortFrontImg(result)
+        // } else if (fileName == "passPortBackImg") {
+        //   setPassPortBackImg(result)
+        // } else {
+
+        //   setFileUrl(result);
+        // }
+      });
+    }
+  };
+
+  const handleFileSelectionPassPortBack = (event) => {
+    if (event.target.files[0]) {
+      // console.log(event.target.files[0], "1111 ")
+      getBase64(event.target.files[0], (result) => {
+        // console.log(event.target.files[0],"1111")
+        // console.log(result, "result2222"); console.log(fileName, "filename23");
+        // if (fileName == "penCardImg") {
+        //   console.log("fileinside")
+        //   setPenCardImg(result)
+        // } else if (fileName == "passPortFrontImg") {
+        //   setPassPortFrontImg(result)
+        // } else if (fileName == "passPortBackImg") {
+        setPassPortBackImg(result)
+        // } else {
+
+        //   setFileUrl(result);
+        // }
+      });
+    }
+  };
+
+
+
 
   const handleFilterWithAgentName = (query) => {
     // // console.log(query, "query3");
@@ -865,7 +940,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -978,7 +1053,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1000,7 +1075,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1024,7 +1099,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1126,9 +1201,8 @@ const Leads = () => {
     }
   };
   const handleUpdateClentDetails = (record) => {
-    // setClientIdForUpdateDoc(record.)
     setShowClientDetails(true);
-    console.log(record, "Record23");
+    // console.log(record, "Record23");
     setClientIdForUpdate(record?.clientObj?._id);
   };
 
@@ -1143,10 +1217,30 @@ const Leads = () => {
       toastError("Passport Expiry date is mandatory");
       return;
     }
+    if (anniversaryDate == "") {
+      toastError("Anniversary date is mandatory");
+      return;
+    }
+    if (penCardImg == "") {
+      toastError("Pen Card Image is mandatory");
+      return;
+    }
+    if (passPortFrontImg == "") {
+      toastError("PassPort Front Image is mandatory");
+      return;
+    }
+    if (passPortBackImg == "") {
+      toastError("PassPort Back Image date is mandatory");
+      return;
+    }
     let obj = {
       passportNumber: passwordNumber,
       passportExpiry: passPortExpiryDate,
       dob,
+      anniversaryDate,
+      penCardImg,
+      passPortFrontImg,
+      passPortBackImg,
     };
     // console.log(obj, "obj123");
     // console.log(clientIdForUpdate, "clientIdForUpdate1234");
@@ -1431,11 +1525,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1585,7 +1677,7 @@ const Leads = () => {
               className="btn add-btn"
               onClick={() => handleUpdateClentDetails(record)}
             >
-              <i className="fa fa-plus" /> Add Lead
+              <i className="fa fa-plus" /> Personal Details
             </a>
           ) : (
             <div>Not converted yet</div>
@@ -1691,11 +1783,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -2489,18 +2579,18 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                    ? columns_TeamLeader
-                    : role == "SPOC"
-                    ? columns_SPOC
-                    : role == "SUPERVISOR"
-                    ? columns_SUPERVISOR
-                    : []
+                      ? columns_TeamLeader
+                      : role == "SPOC"
+                        ? columns_SPOC
+                        : role == "SUPERVISOR"
+                          ? columns_SUPERVISOR
+                          : []
                 }
                 // columns={columns}
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-                // onChange={console.log("change")}
+              // onChange={console.log("change")}
               />
             </div>
           </div>
@@ -2541,7 +2631,7 @@ const Leads = () => {
       <Modal
         size="lg"
         show={show}
-        // className="add_note"
+      // className="add_note"
       >
         <Modal.Header>
           <Modal.Title>
@@ -2714,7 +2804,7 @@ const Leads = () => {
                 </div>
               )}
 
-              <div className="form-group col-md-6">
+              {/* <div className="form-group col-md-6">
                 <label className="col-form-label">New Client</label>
                 <input
                   type="checkbox"
@@ -2725,7 +2815,7 @@ const Leads = () => {
                     setNewClient(!newClient);
                   }}
                 ></input>
-              </div>
+              </div> */}
             </div>
             <div className="col-md-6">
               <div className="form-group">
@@ -2978,10 +3068,10 @@ const Leads = () => {
       <Modal
         size="lg"
         show={showClientDetails}
-        // className="add_note"
+      // className="add_note"
       >
         <Modal.Header>
-          <Modal.Title>Add Credentials</Modal.Title>
+          <Modal.Title>Personal Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
@@ -3024,6 +3114,56 @@ const Leads = () => {
                   className="form-control"
                 />
               </div>
+            </div>
+            <div className="col-md-6">
+              <div className="form-group">
+                <label>
+                  Anniversary Date <span className="text-danger">*</span>
+                </label>
+                <input
+                  value={anniversaryDate}
+                  onChange={(e) => setAnniversaryDate(e.target.value)}
+                  type="date"
+                  className="form-control"
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Pen Card Image  <span className="text-danger">*</span></label>
+              <input
+                onChange={(e) => {
+                  // setFileName("penCardImg")
+                  handleFileSelectionPenCard(e)
+                }}
+                className="form-control"
+                type="file"
+                name="pencardImg"
+              />
+            </div>
+            <div className="form-group">
+              <label>Pass port Front Image  <span className="text-danger">*</span></label>
+              <input
+                onChange={(e) => {
+                  // setFileName("passPortFrontImg")
+                  handleFileSelectionPassPortFront(e)
+                }}
+                className="form-control"
+                type="file"
+                name="passPortFrontImg"
+              />
+            </div>
+            <div className="form-group">
+              <label>Pass port back image <span className="text-danger">*</span></label>
+              <input
+                // onChange={(e) => handleFileSelectionPassportBack(e)}
+                onChange={(e) => {
+                  // setFileName("passPortBackImg")
+                  handleFileSelectionPassPortBack(e)
+                }}
+                className="form-control"
+                type="file"
+                name="passPortback"
+              />
             </div>
           </form>
         </Modal.Body>

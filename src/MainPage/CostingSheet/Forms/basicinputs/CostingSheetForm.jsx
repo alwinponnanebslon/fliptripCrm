@@ -73,12 +73,13 @@ const ViewCostingSheetForm = () => {
 
   const userObj = useSelector((state) => state.auth.user);
   const [createdBy, setCreatedBy] = useState({});
+  const [tcs, setTcs] = useState(0);
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
 
   useEffect(() => {
-    console.log(currentLead, "123currentLead");
+    // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
 
@@ -110,13 +111,13 @@ const ViewCostingSheetForm = () => {
     if (quotationObj && quotationObj?._id && isUpdatePrevDoc == false) {
       // setTotalCost(+quotationObj?.paymentObj?.total + +additionalLandPrices);
       // setTotalCost(quotationObj?.paymentObj?.total);
-      // setTotalCost(parseInt(quotationObj?.paymentObj?.total));
+      setTotalCost(parseInt(quotationObj?.paymentObj?.total));
       // setLandCost(quotationObj?.paymentObj?.landPrice);
       // setflightCost(quotationObj?.paymentObj?.flightPrice);
       setLocationName(quotationObj?.destinationName);
       setLeadName(quotationObj?.leadObj?.clientObj?.name);
       // setFlightList(quotationObj?.flightList);
-      setLeadsId(leadId);
+      // setLeadsId(leadId);
       // setPrevDocId(quotationObj?._id);
       // setinputList([...quotationObj?.hotelDetail]);
       setQuotationId(quotationObj?._id);
@@ -125,7 +126,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "costingSheetResultObj23");
+    // console.log(costingSheetResultObj, "costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj?._id) {
       setLeadName(costingSheetResultObj?.leadName);
       setLocationName(costingSheetResultObj?.locationName);
@@ -174,6 +175,7 @@ const ViewCostingSheetForm = () => {
   //   // window.sessionStorage.setItem("obj", JSON.stringify(""));
   //   // }
   // }, [location.pathname]);
+
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployessLinkedWithLeadId(leadId);
@@ -191,9 +193,11 @@ const ViewCostingSheetForm = () => {
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
+
   useEffect(() => {
     // console.log(connectEmplyeeWithThisLead, "connectEmplyeeWithThisLead314");
   }, [connectEmplyeeWithThisLead]);
+
   const handleinputchange = (e, index) => {
     //hotel
     let { name, value, checked } = e.target;
@@ -288,6 +292,7 @@ const ViewCostingSheetForm = () => {
     setinputList([...tempList]);
   };
 
+
   useEffect(() => {
     let temp = 0;
     for (let ele of inputList) {
@@ -303,14 +308,16 @@ const ViewCostingSheetForm = () => {
       }
     }
     setTotalExpense(temp);
-    setProfit(totalCost - (+landCost + +flightCost));
-  }, [flightList, totalCost, landCost, totalExpense, profit, flightCost]);
+    setProfit(totalCost - (+landCost + +flightCost + +tcs));
+  }, [flightList, totalCost, landCost, totalExpense, profit, flightCost, tcs]);
+
 
   const handleremove = (index) => {
     const list = [...inputList];
     list.splice(index, 1);
     setinputList(list);
   };
+
 
   const handleaddclick = () => {
     setinputList([
@@ -379,7 +386,7 @@ const ViewCostingSheetForm = () => {
             totalAmount = totalAmount + parseInt(el.cost);
           }
         }
-        console.log(totalAmount, "1", value, "@", flightCost, "23");
+        // console.log(totalAmount, "1", value, "@", flightCost, "23");
         // if (parseInt(totalAmount) + parseInt(value) > parseInt(flightCost)) {
         //   toastError("Flight price cannot be greater than total Flight cost");
         //   return;
@@ -516,7 +523,13 @@ const ViewCostingSheetForm = () => {
       toastError("Location Name is mandatory");
       return;
     }
-
+    if (landCost == "") {
+      toastError("Land Cost is mandatory");
+      return;
+    } else if (flightCost == "") {
+      toastError("Flight Cost is mandatory");
+      return;
+    }
     let obj = {
       leadName,
       leadsId,
@@ -530,6 +543,7 @@ const ViewCostingSheetForm = () => {
       id: prevDocId,
       additionalLandName,
       additionalLandPrices,
+      tcs,
     };
     // console.log(obj, "obj1");
 
@@ -578,6 +592,7 @@ const ViewCostingSheetForm = () => {
     setLandPrices(value);
     setTotalCost(+totalCost + +value);
   };
+
   function textAreaAdjust(e) {
     let element = descriptionRef.current;
 
@@ -610,7 +625,7 @@ const ViewCostingSheetForm = () => {
                 onChange={(e) => setLeadName(e.target.value)}
               />
             </div>
-            <div className="col-12  col-md-8 mb-3">
+            {/* <div className="col-12  col-md-8 mb-3">
               <label className="blue-1 fs-12">
                 Lead Id<span className="text-danger">*</span>
               </label>
@@ -621,7 +636,7 @@ const ViewCostingSheetForm = () => {
                 value={leadsId}
                 onChange={(e) => setLeadsId(e.target.value)}
               />
-            </div>
+            </div> */}
             <div className="col-12  col-md-8 mb-3">
               <label className="blue-1 fs-12">
                 Location Name<span className="text-danger">*</span>
@@ -795,15 +810,26 @@ const ViewCostingSheetForm = () => {
                     return (
                       <div className="row mb-3" key={i}>
                         <div class="form-group col-md-4">
-                          <label>Flight Name</label>
-                          <input
+                          <label>Flight </label>
+                          <textarea
+                            ref={descriptionRef}
+                            onKeyUp={(e) => {
+                              textAreaAdjust(e);
+                            }}
+                            type="text"
+                            name="flightName"
+                            value={x.flightName}
+                            class="form-control"
+                            onChange={(e) => handleinputchangeFlight(e, i)}
+                          />
+                          {/* <input
                             type="text"
                             name="flightName"
                             class="form-control"
                             value={x.flightName}
                             placeholder="Enter Flight Name"
                             onChange={(e) => handleinputchangeFlight(e, i)}
-                          />
+                          /> */}
                         </div>
                         <div class="form-group col-md-4">
                           <label>Cost </label>
@@ -852,6 +878,22 @@ const ViewCostingSheetForm = () => {
             <div className="content">
               <div className="col-12 col-md-4 mb-3">
                 <label className="blue-1 fs-12">
+                  Total Cost
+                  {/* <span className="text-danger">*</span> */}
+                </label>
+                <input
+                  disabled={true}
+                  // readOnly
+                  type="number"
+                  className="form-control"
+                  value={totalCost}
+                  onChange={(e) => {
+                    setTotalCost(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="col-12 col-md-4 mb-3">
+                <label className="blue-1 fs-12">
                   Total Land Cost<span className="text-danger">*</span>
                 </label>
                 <input
@@ -878,19 +920,18 @@ const ViewCostingSheetForm = () => {
               </div>
               <div className="col-12 col-md-4 mb-3">
                 <label className="blue-1 fs-12">
-                  Total Cost<span className="text-danger">*</span>
+                  TCS<span className="text-danger">*</span>
                 </label>
                 <input
                   // disabled={true}
                   // readOnly
                   type="number"
                   className="form-control"
-                  value={totalCost}
-                  onChange={(e) => {
-                    setTotalCost(e.target.value);
-                  }}
+                  value={tcs}
+                  onChange={(e) => setTcs(e.target.value)}
                 />
               </div>
+
             </div>
             <div className="col-12 col-md-4 mb-3">
               <label className="blue-1 fs-12">
