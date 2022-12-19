@@ -7,8 +7,8 @@ export const createLead = (obj, role) => {
 };
 
 export const getLeadsByRole = (id, role) => {
-  console.log(role, "role");
-  console.log(id, "roleid");
+  // console.log(role, "role");
+  // console.log(id, "roleid");
   return axios.get(`${serverUrl}/getByRole/${id}?role=${role}`);
 };
 
@@ -50,7 +50,28 @@ export const getAllLeadOfTenDays = (id, role) => {
   // // console.log(query, "query");
   return axios.get(`${serverUrl}/getAllLeadOfTenDays/${id}?role=${role}`);
 };
-export const getAllLeadSearchQuery = (query) => {
-  console.log(query, "query");
-  return axios.get(`${serverUrl}/getAllLeadBySearchQuery?${query}`);
+export const getAllLeadSearchQuery = (id, role, query) => {
+  console.log(query, "quer2y");
+  return axios.get(
+    `${serverUrl}/getAllLeadBySearchQuery/${id}?&role=${role}&name=${query}`
+  );
+};
+
+// export const getAllLeadSearchQuery = (query) => {
+//   console.log(query, "query");
+//   return axios.get(`${serverUrl}/getAllLeadBySearchQuery?${query}`);
+// };
+// export const getAllLeadSearchFilter = (id, role, query) => {
+//   // console.log(query, "query123");
+//   // return axios.get(`${serverUrl}/getByRole/${id}?role=${role}`);
+//   return axios.get(
+//     `${serverUrl}/getAllLeadBySearchFilter/${id}?from=${role}&${query}`
+//   );
+// };
+
+export const getAllLeadSearchFilter = (from, to, role, id, query) => {
+  // console.log(from, to, role, id, "12query");
+  return axios.get(
+    `${serverUrl}/getAllLeadBySearchFilter/${id}?from=${from}&to=${to}&role=${role}&leadStatus=${query}`
+  );
 };

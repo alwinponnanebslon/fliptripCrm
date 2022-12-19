@@ -15,6 +15,9 @@ import {
   clientUpdate,
   clientDelete,
 } from "../../redux/features/client/clientSlice";
+import { getClientFilterByDate } from "../../Services/client.service.js";
+
+import { toastError, toastSuccess } from "../../utils/toastUtils";
 
 import AddClient from "./AddClient";
 
@@ -31,7 +34,7 @@ const Clients = () => {
       });
     }
   });
-
+  const userAuthorise = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const clientResultArr = useSelector((state) => state?.client.clientArr);
   const [clientMainArr, setClientMainArr] = useState([]);
@@ -42,6 +45,9 @@ const Clients = () => {
   const [clientName, setClientName] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [clientNameQuery, setClientNameQuery] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+
   useEffect(() => {
     handleInit();
   }, []);
@@ -49,7 +55,7 @@ const Clients = () => {
   const handleInit = () => {
     dispatch(clientGet(userId));
   };
-  //  dispatch(leadGetById(leadId));
+
   useEffect(() => {
     // console.log(clientResultArr, "clientResultArr241");
     setClientMainArr(clientResultArr);
@@ -146,6 +152,37 @@ const Clients = () => {
     setClientMainArr([...tempArr]);
   };
 
+  const handleFilterDateFrom = async (query) => {
+    setDateFrom(new Date(query).toISOString());
+  };
+
+  const handleFilterDateFromAndTo = async () => {
+    if (dateTo != "" && dateFrom != "") {
+      if (Date.parse(dateFrom) > Date.parse(dateTo)) {
+        toastError("In valid date");
+      } else {
+        let getfilterLead = await getClientFilterByDate(
+          dateFrom,
+          dateTo,
+          role,
+          userAuthorise?.user?._id
+        );
+        // console.log(getfilterLead.data.data, "getfilterLeadw4");
+        // setDisplayLeadsArr(getfilterLead.data.data);
+        // setLeadsArr(getfilterLead.data.data);
+        setClientMainArr(getfilterLead.data.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleFilterDateFromAndTo();
+  }, [dateFrom, dateTo]);
+
+  const handleFilterDateTo = async (query) => {
+    setDateTo(new Date(query).toISOString());
+  };
+
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -213,6 +250,32 @@ const Clients = () => {
                 className="form-control floating"
               />
               <label className="focus-label">Client Name-</label>
+            </div>
+          </div>
+          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div className="form-group form-focus">
+              <input
+                type="date"
+                // value={employeeNameQuery}
+                onChange={(e) => {
+                  handleFilterDateFrom(e.target.value);
+                }}
+                className="form-control "
+              />
+              <label className="focus-label">From </label>
+            </div>
+          </div>
+          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div className="form-group form-focus">
+              <input
+                // value={employeeNameQuery}
+                onChange={(e) => {
+                  handleFilterDateTo(e.target.value);
+                }}
+                type="date"
+                className="form-control "
+              />
+              <label className="focus-label">To </label>
             </div>
           </div>
           {/* <div className="col-sm-6 col-md-3">

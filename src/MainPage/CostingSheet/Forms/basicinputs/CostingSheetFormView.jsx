@@ -22,7 +22,7 @@ const ViewCostingSheetForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-  console.log(leadId, "leadId2143");
+  // console.log(leadId, "leadId2143");
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheetObj
   );
@@ -120,7 +120,7 @@ const ViewCostingSheetForm = () => {
   }, [quotationObj]);
 
   useEffect(() => {
-    console.log(costingSheetResultObj, "123costingSheetResultObj23");
+    // console.log(costingSheetResultObj, "123costingSheetResultObj23");
     if (costingSheetResultObj && costingSheetResultObj._id) {
       setLeadName(costingSheetResultObj.leadName);
       setLocationName(costingSheetResultObj.locationName);

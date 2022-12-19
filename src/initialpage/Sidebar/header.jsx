@@ -2,11 +2,10 @@
  * App Header
  */
 import React, { useEffect, useState } from "react";
-import { Link, withRouter, useHistory } from "react-router-dom";
+import { Link, withRouter, useHistory, useParams } from "react-router-dom";
 // import { DashboardBox, DashboardTable } from "../../Utility/DashboardBox";
 import { DashboardBox, DashboardTable } from "../../utils/DashboardBox";
 import DataTable from "react-data-table-component";
-
 import {
   Avatar_02,
   Avatar_03,
@@ -56,7 +55,9 @@ const Header = (props) => {
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchDataArr, setSearchDataArr] = useState([]);
   const dispatch = useDispatch();
-
+  // const params = useParams();
+  // const leadId = params.leadId;
+  // console.log(leadId, "leadId2143");
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
@@ -95,7 +96,7 @@ const Header = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(notificationResultArr, "12notificationResultArr23");
+    // console.log(notificationResultArr, "12notificationResultArr23");
     // console.log(userId, "userId343");
     let filter = notificationResultArr.filter((el) => {
       // console.log(el.userId, "el.user23");
@@ -112,7 +113,7 @@ const Header = (props) => {
   }, [notificationResultArr]);
 
   useEffect(() => {
-    console.log(reminderArray, "reminderArray324");
+    // console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
@@ -133,12 +134,8 @@ const Header = (props) => {
 
   // };
   const handleSearchLead = async () => {
-    // console.log(query, "vlue");
-    // console.log(leadArr, "123vlue");
-
-    const filteredData = await getAllLeadSearchQuery(`name=${query}`);
-    // console.log(filteredData, "filteredData34 ");
-
+    // const filteredData = await getAllLeadSearchQuery(`name=${query}`);
+    const filteredData = await getAllLeadSearchQuery(userId, role, `${query}`);
     if (filteredData && filteredData?.data && filteredData?.data?.data) {
       setSearchDataArr(filteredData?.data?.data);
       setShowSearchResult(true);
@@ -213,65 +210,40 @@ const Header = (props) => {
     {
       name: "Created By",
       selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
-      width: "18%",
+      width: "20%",
     },
 
     {
-      name: "View In Brief",
-      minWidth: "210px",
-      maxWidth: "211px",
+      name: "View Lead",
+      minWidth: "190px",
+      maxWidth: "181px",
       cell: (row) => (
-        // <div className="col-auto float-end ml-auto">
-        //   <a
-        //     href={`/admin/lead/${row._id}`}
-        //     className="btn add-btn"
-        //     onClick={() => {
-        //       history.push(`/admin/lead/${row._id}`);
-        //       // href={`/admin/lead/${row._id}`}
-        //     }}
-        //   >
-        //     <i className="fa fa-view" />
-        //     click to view
-        //   </a>
-        // </div>
-
         <button
           onClick={() => {
             history.push(`/admin/lead/${row._id}`);
           }}
         >
-          VIEW
+          <h6 style={{ color: "blue" }}>VIEW</h6>
         </button>
       ),
-      width: "5%",
+      width: "15%",
     },
-    {
-      name: (
-        <div className="col-auto float-end ml-auto">
-          <a
-            href="#"
-            className="btn add-btn"
-            onClick={() => {
-              setShowSearchResult(false);
-            }}
-          >
-            <i className="fa fa-close" />
-            Close Tab
-          </a>
-        </div>
-
-        // <button
-        //   onClick={() => {
-        //     setShowSearchResult(false);
-        //   }}
-        // >
-        //   {" "}
-        //   close tab
-        // </button>
-      ),
-
-      // selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
-    },
+    // {
+    //   name: (
+    //     <div className="col-auto float-end ml-auto">
+    //       <a
+    //         href="#"
+    //         className="btn add-btn"
+    //         onClick={() => {
+    //           setShowSearchResult(false);
+    //         }}
+    //       >
+    //         <i className="fa fa-close" />
+    //         Close Tab
+    //       </a>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const mystyle = {
@@ -422,23 +394,73 @@ const Header = (props) => {
                         // to="/admin/notification"
                         >
                           {/* {!el.previousNotification && ( */}
-
-                          <div
-                            className="media notification-custom-box"
-                            key={index}
+                          {/* <button
+                            onClick={() => {
+                              history.push(`/admin/lead/${row._id}`);
+                            }}
                           >
-                            <h4 className="title">
-                              <span>{el?.createdBy?.name}:</span>
-                              {el?.heading}
-                            </h4>
+                            <h6 style={{ color: "blue" }}>VIEW</h6>
+                          </button> */}
 
-                            <p className="desp">{el?.description}</p>
+                          {/* {el?.leadId ? (
+                            <Link
+                              aria-disabled
+                              onClick={() => {
+                                history.push(`/admin/lead/${leadId}`);
+                              }}
+                            >
+                              click to view
+                            </Link>
+                          ) : (
+                            ""
+                          )} */}
+                          {el?.leadId?.length > 3 ? (
+                            <Link
+                            // to={`/admin/lead/${leadId}`}
+                            >
+                              <div
+                                className="media notification-custom-box"
+                                key={index}
+                                onClick={() => {
+                                  history.push(`/admin/lead/${el?.leadId}`);
+                                }}
+                              >
+                                <h4 className="title">
+                                  <span>
+                                    {el?.createdBy?.name + " "}
+                                    {"[" + el?.createdBy?.role + "]"} :
+                                  </span>
+                                  {el?.heading}
+                                </h4>
 
-                            <p className="time">
-                              {new Date(el?.followDate).toLocaleDateString()}
-                              at {el?.followTime}
-                            </p>
-                          </div>
+                                <p className="desp">{el?.description}</p>
+
+                                <p className="time">
+                                  {new Date(
+                                    el?.followDate
+                                  ).toLocaleDateString()}
+                                  at {el?.followTime}
+                                </p>
+                              </div>
+                            </Link>
+                          ) : (
+                            <div
+                              className="media notification-custom-box"
+                              key={index}
+                            >
+                              <h4 className="title">
+                                <span>{el?.createdBy?.name}:</span>
+                                {el?.heading}
+                              </h4>
+
+                              <p className="desp">{el?.description}</p>
+
+                              <p className="time">
+                                {new Date(el?.followDate).toLocaleDateString()}
+                                at {el?.followTime}
+                              </p>
+                            </div>
+                          )}
                           {/* // )} */}
                           {/* {el?.previousNotification &&
                             el?.previousNotification?.length > 0 && (
@@ -713,6 +735,18 @@ const Header = (props) => {
               pagination
             />
           </DashboardTable>
+          <div className="col-auto float-end ml-auto">
+            <a
+              href="#"
+              className="btn add-btn"
+              onClick={() => {
+                setShowSearchResult(false);
+              }}
+            >
+              <i className="fa fa-close" />
+              Close Tab
+            </a>
+          </div>
         </div>
       )}
       <div className="dropdown mobile-user-menu">

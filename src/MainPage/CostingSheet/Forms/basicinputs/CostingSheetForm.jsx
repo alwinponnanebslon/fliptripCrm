@@ -27,7 +27,7 @@ const ViewCostingSheetForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-  // console.log(leadId, "leadId1");
+  console.log(leadId, "leadId1");
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheets
   );
@@ -70,10 +70,12 @@ const ViewCostingSheetForm = () => {
   const currentLead = useSelector((state) => state.lead.lead);
   const [leadObj, setLeadObj] = useState(null);
   const descriptionRef = useRef();
+  const descriptionRef2 = useRef();
 
   const userObj = useSelector((state) => state.auth.user);
   const [createdBy, setCreatedBy] = useState({});
   const [tcs, setTcs] = useState(0);
+
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
@@ -117,7 +119,7 @@ const ViewCostingSheetForm = () => {
       setLocationName(quotationObj?.destinationName);
       setLeadName(quotationObj?.leadObj?.clientObj?.name);
       // setFlightList(quotationObj?.flightList);
-      // setLeadsId(leadId);
+      setLeadsId(leadId);
       // setPrevDocId(quotationObj?._id);
       // setinputList([...quotationObj?.hotelDetail]);
       setQuotationId(quotationObj?._id);
@@ -292,7 +294,6 @@ const ViewCostingSheetForm = () => {
     setinputList([...tempList]);
   };
 
-
   useEffect(() => {
     let temp = 0;
     for (let ele of inputList) {
@@ -311,13 +312,11 @@ const ViewCostingSheetForm = () => {
     setProfit(totalCost - (+landCost + +flightCost + +tcs));
   }, [flightList, totalCost, landCost, totalExpense, profit, flightCost, tcs]);
 
-
   const handleremove = (index) => {
     const list = [...inputList];
     list.splice(index, 1);
     setinputList(list);
   };
-
 
   const handleaddclick = () => {
     setinputList([
@@ -548,13 +547,10 @@ const ViewCostingSheetForm = () => {
     // console.log(obj, "obj1");
 
     if (isUpdatePrevDoc) {
-      // console.log("update");
-
       let object = {
+        leadId,
         heading: leadObj?.subject,
         description: leadObj?.subject + " has been changed",
-        // userId: leadObj?.adminObj?._id,
-        // leadId: employeeId,
         followDate: new Date().toLocaleDateString(),
         createdBy: { ...createdBy, role },
         followTime: new Date().toLocaleTimeString(),
@@ -595,6 +591,18 @@ const ViewCostingSheetForm = () => {
 
   function textAreaAdjust(e) {
     let element = descriptionRef.current;
+
+    if (event.key === "Enter") {
+      element.style.height =
+        element.scrollHeight > element.clientHeight
+          ? element.scrollHeight + "px"
+          : "60px";
+    }
+
+    // element.style.height = 25 + element.scrollHeight + "px";
+  }
+  function textAreaAdjust2(e) {
+    let element = descriptionRef2.current;
 
     if (event.key === "Enter") {
       element.style.height =
@@ -656,12 +664,12 @@ const ViewCostingSheetForm = () => {
               <div className="col-12 col-md-4 mb-3">
                 <label> Land description </label>
                 <textarea
-                  ref={descriptionRef}
+                  ref={descriptionRef2}
                   onKeyUp={(e) => {
-                    textAreaAdjust(e);
+                    textAreaAdjust2(e);
                   }}
                   type="text"
-                  name="cost"
+                  name="additionalLandName"
                   value={additionalLandName}
                   class="form-control"
                   onChange={(e) => setAdditionalLandName(e.target.value)}
@@ -931,7 +939,6 @@ const ViewCostingSheetForm = () => {
                   onChange={(e) => setTcs(e.target.value)}
                 />
               </div>
-
             </div>
             <div className="col-12 col-md-4 mb-3">
               <label className="blue-1 fs-12">

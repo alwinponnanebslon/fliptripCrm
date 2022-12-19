@@ -56,7 +56,6 @@ const Addemployee = ({ show, setShow }) => {
 
   const [fileUrl, setFileUrl] = useState("");
 
-
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployess(userObj._id, reduxrole);
@@ -68,6 +67,7 @@ const Addemployee = ({ show, setShow }) => {
       toastError(error);
     }
   };
+
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
@@ -134,40 +134,6 @@ const Addemployee = ({ show, setShow }) => {
     setPrevDocUpdated(false);
   };
 
-  const handleEmployeeEdit = async (e) => {
-    e.preventDefault();
-    try {
-      let obj = {
-        firstName,
-        lastName,
-        employeeId,
-        doj,
-        phone,
-        dob,
-
-        emergencyContact,
-      };
-      // if (role == rolesObj.SPOC) {
-      //   obj.leadId = leadId;
-      // }
-      // console.log(obj, "obj23");
-      let { data: res } = await updateEmployeeToDb(docId, obj);
-
-      if (res.success) {
-        // dispatch(addEmployee(obj))
-        toastSuccess(res.message);
-        handleGetAllEmployees();
-        // getAllEmployess();
-        window.location.reload();
-        ClearFunc();
-        // dispatch(returnAllEmployees);
-      }
-    } catch (error) {
-      console.error(error);
-      toastError(error);
-    }
-  };
-
   const getBase64 = (file, cb) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -180,6 +146,7 @@ const Addemployee = ({ show, setShow }) => {
   };
 
   const handleFileSelection = (event) => {
+    console.log("wqewqeqe");
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
         // // console.log(result, "result");
@@ -283,6 +250,40 @@ const Addemployee = ({ show, setShow }) => {
         setShow(false);
         ClearFunc();
         // // console.log(obj)
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
+
+  const handleEmployeeEdit = async (e) => {
+    e.preventDefault();
+    try {
+      let obj = {
+        firstName,
+        lastName,
+        employeeId,
+        doj,
+        phone,
+        dob,
+        fileUrl,
+        emergencyContact,
+      };
+      // if (role == rolesObj.SPOC) {
+      //   obj.leadId = leadId;
+      // }
+      console.log(obj, "obj23");
+      let { data: res } = await updateEmployeeToDb(docId, obj);
+
+      if (res.success) {
+        // dispatch(addEmployee(obj))
+        toastSuccess(res.message);
+        // handleGetAllEmployees();
+        // getAllEmployess();
+        // window.location.reload();
+        // ClearFunc();
+        // dispatch(returnAllEmployees);
       }
     } catch (error) {
       console.error(error);
@@ -475,19 +476,19 @@ const Addemployee = ({ show, setShow }) => {
                       </div>
                     </div>
                     <div className="col-md-6">
-                          <div className="form-group">
-                            <label>Employee Photo</label>
-                            <div className="col-sm-8">
-                              <input
-                                type="file"
-                                className="form-control"
-                                onChange={(e) => handleFileSelection(e)}
+                      <div className="form-group">
+                        <label>Employee Photo</label>
+                        <div className="col-sm-8">
+                          <input
+                            type="file"
+                            className="form-control"
+                            onChange={(e) => handleFileSelection(e)}
 
-                                // name="startDate"
-                              />
-                            </div>
-                          </div>
+                            // name="startDate"
+                          />
                         </div>
+                      </div>
+                    </div>
 
                     {/* {console.log(prevDocUpdated, "prevDocUpdated34")} */}
                     {

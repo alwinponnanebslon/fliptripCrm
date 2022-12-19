@@ -59,6 +59,7 @@ import { date } from "yup";
 import { shouldForwardProp } from "@mui/system";
 import Notes from "../Lead/Notes/Notes";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
+import { getAllLeadSearchFilter } from "../../Services/lead.service";
 import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheetForm";
 
 const Leads = () => {
@@ -126,6 +127,8 @@ const Leads = () => {
   const [penCardImg, setPenCardImg] = useState("");
   const [passPortFrontImg, setPassPortFrontImg] = useState("");
   const [passPortBackImg, setPassPortBackImg] = useState("");
+  const [leadArrFilterStatus, setLeadArrFilterStatus] = useState("");
+  const [teamLeadFilterId, setTeamLeadFilterId] = useState("");
 
   const agentSelect = useRef();
 
@@ -151,8 +154,7 @@ const Leads = () => {
 
   const handleGetClient = async () => {
     let get1 = await getFilter(`name=${filterClientByName}`);
-    // console.log(clientArr)
-    console.log(get1.data.data, "getettte");
+
     setClientArr(get1.data.data);
   };
 
@@ -161,12 +163,10 @@ const Leads = () => {
   }, [filterClientByName]);
 
   useEffect(() => {
-    // getAllClients();
     dispatch(quotationGet());
   }, []);
 
   useEffect(() => {
-    // console.log("23", quotationArray, "quotation21");
     if (quotationArray.length > 0) {
       setQuotationArrData(quotationArray);
     }
@@ -197,8 +197,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-          ? "rgba(255,155,68,0.5)"
-          : "white",
+        ? "rgba(255,155,68,0.5)"
+        : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -308,17 +308,6 @@ const Leads = () => {
       setSpocId(leadObj?.spocId);
       setDescription(leadObj?.description);
     }
-    // else {
-    //   setSubject("");
-    //   setClientId("");
-    //   setPhone("");
-    //   setName("");
-    //   setEmail("");
-    //   setPriority("");
-    //   setAgentId("");
-    //   setSpocId("");
-    //   setDescription("");
-    // }
   }, [leadObj, leadUpdateId]);
 
   useEffect(() => {
@@ -385,55 +374,24 @@ const Leads = () => {
   };
 
   const handleFileSelection = (event) => {
-
-    // console.log(event.target[name], "221wddddwwww111 ")
-    // console.log(event.target.files, "22eeeee1111 ")
     if (event.target.files[0]) {
-      // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
-        // console.log(event.target.files[0],"1111")
-        // console.log(result, "result2222"); console.log(fileName, "filename23");
         setFileUrl(result);
       });
     }
   };
   const handleFileSelectionPenCard = (event) => {
     if (event.target.files[0]) {
-      // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
-        // console.log(event.target.files[0],"1111")
-        // if (fileName == "penCardImg") {
-        //   console.log("fileinside")
-        setPenCardImg(result)
-        // } else if (fileName == "passPortFrontImg") {
-        //   setPassPortFrontImg(result)
-        // } else if (fileName == "passPortBackImg") {
-        //   setPassPortBackImg(result)
-        // } else {
-
-        //   setFileUrl(result);
-        // }
+        setPenCardImg(result);
       });
     }
   };
-  
+
   const handleFileSelectionPassPortFront = (event) => {
     if (event.target.files[0]) {
-      // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
-        // console.log(event.target.files[0],"1111")
-        // // console.log(result, "result2222"); console.log(fileName, "filename23");
-        // if (fileName == "penCardImg") {
-        //   console.log("fileinside")
-        //   setPenCardImg(result)
-        // } else if (fileName == "passPortFrontImg") {
-        setPassPortFrontImg(result)
-        // } else if (fileName == "passPortBackImg") {
-        //   setPassPortBackImg(result)
-        // } else {
-
-        //   setFileUrl(result);
-        // }
+        setPassPortFrontImg(result);
       });
     }
   };
@@ -442,39 +400,28 @@ const Leads = () => {
     if (event.target.files[0]) {
       // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
-        // console.log(event.target.files[0],"1111")
-        // console.log(result, "result2222"); console.log(fileName, "filename23");
-        // if (fileName == "penCardImg") {
-        //   console.log("fileinside")
-        //   setPenCardImg(result)
-        // } else if (fileName == "passPortFrontImg") {
-        //   setPassPortFrontImg(result)
-        // } else if (fileName == "passPortBackImg") {
-        setPassPortBackImg(result)
-        // } else {
-
-        //   setFileUrl(result);
-        // }
+        setPassPortBackImg(result);
       });
     }
   };
 
-
-
-
   const handleFilterWithAgentName = (query) => {
-    // // console.log(query, "query3");
+    // console.log(query, "query3");
     setEmployeeNameQuery(query);
-    let tempArr = leadsArr.filter(
-      (el) =>
-        `${el?.agentObj?.firstName} ${el?.agentObj?.lastName}`
-          .toLowerCase()
-          .includes(`${query}`.toLowerCase()) ||
-        `${el?.leadObj?.firstName} ${el?.leadObj?.lastName}`
-          .toLowerCase()
-          .includes(`${query}`.toLowerCase())
-    );
-    setDisplayLeadsArr([...tempArr]);
+    // console.log(employeeNameQuery, "123query3");
+    if (leadArrFilterStatus != "") {
+    } else {
+      let tempArr = leadsArr.filter(
+        (el) =>
+          `${el?.agentObj?.firstName} ${el?.agentObj?.lastName}`
+            .toLowerCase()
+            .includes(`${query}`.toLowerCase()) ||
+          `${el?.leadObj?.firstName} ${el?.leadObj?.lastName}`
+            .toLowerCase()
+            .includes(`${query}`.toLowerCase())
+      );
+      setDisplayLeadsArr([...tempArr]);
+    }
   };
 
   const handleFilterByPriority = (query) => {
@@ -501,18 +448,47 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
+  const handleClientByAllFilter = async (value1, value2, value3) => {
+    // console.log(value1, value2, "value1, value2");(userObj?._id, role)
+    let getFilterByTeam = await getAllLeadSearchFilter(
+      userObj?._id,
+      role,
+      `leadStatus=${value1}&teamLeadId=${value2}`
+    );
+    if (getFilterByTeam?.data?.data?.length > 0) {
+      setDisplayLeadsArr(getFilterByTeam?.data?.data);
+    }
+    // console.log(getFilterByTeam?.data?.data, "123123");
+  };
+
+  useEffect(() => {
+    handleClientByAllFilter(leadArrFilterStatus, teamLeadFilterId);
+  }, [teamLeadFilterId]);
 
   const handleFilterByTeamLead = (query) => {
-    // console.log(query, "1query23");
-    // console.log(leadsArr, "1leadsArr3");
     setRoleQuery(query.value);
-    if (query.value != "") {
-      let tempArr = leadsArr.filter(
-        (el) => el?.agentId == query.value || el?.leadObj?._id == query.value
-      );
-      setDisplayLeadsArr([...tempArr]);
+    if (leadArrFilterStatus != "") {
+      setTeamLeadFilterId(query.value);
+      // let getFilterByTeam = await getAllLeadSearchFilter(`leadStatus=${leadArrFilterStatus}&teamLead=${query.value} `)
+      // getAllLeadSearchFilter
+      // handleUpdateLeadsArray(query.value)
+      // // let tempArr = leadsArr.filter(
+      //  let displayLeadsArr=
+      // let tempArr = displayLeadsArr.filter(
+      //   (el) => el?.agentId == query.value || el?.leadObj?._id == query.value
+      // );
+      // console.log(tempArr, "12312321");
+      // setDisplayLeadsArr([...tempArr]);
     } else {
-      setDisplayLeadsArr([...leadsArr]);
+      // console.log("else23232332");
+      if (query.value != "") {
+        let tempArr = leadsArr.filter(
+          (el) => el?.agentId == query.value || el?.leadObj?._id == query.value
+        );
+        setDisplayLeadsArr([...tempArr]);
+      } else {
+        setDisplayLeadsArr([...leadsArr]);
+      }
     }
   };
 
@@ -521,25 +497,50 @@ const Leads = () => {
   };
 
   const handleFilterDateFromAndTo = async () => {
+    if (leadArrFilterStatus != "") {
+    } else {
+      if (dateTo != "" && dateFrom != "") {
+        if (Date.parse(dateFrom) > Date.parse(dateTo)) {
+          toastError("In valid date");
+        } else {
+          let getfilterLead = await getLeadFilterByDate(
+            dateFrom,
+            dateTo,
+            role,
+            userAuthorise?.user?._id
+          );
+          console.log(getfilterLead.data.data, "getfilterLeadw4");
+          setDisplayLeadsArr(getfilterLead.data.data);
+          setLeadsArr(getfilterLead.data.data);
+        }
+      }
+    }
+  };
+  const handleFilterDateFromAndToAndStatus = async () => {
     if (dateTo != "" && dateFrom != "") {
       if (Date.parse(dateFrom) > Date.parse(dateTo)) {
         toastError("In valid date");
       } else {
-        let getfilterLead = await getLeadFilterByDate(
+        let getfilterLead = await getAllLeadSearchFilter(
           dateFrom,
           dateTo,
           role,
-          userAuthorise?.user?._id
+          userAuthorise?.user?._id,
+          leadArrFilterStatus
         );
         // console.log(getfilterLead.data.data, "getfilterLeadw4");
         setDisplayLeadsArr(getfilterLead.data.data);
-        setLeadsArr(getfilterLead.data.data);
+        // setLeadsArr(getfilterLead.data.data);
       }
     }
   };
 
   useEffect(() => {
-    handleFilterDateFromAndTo();
+    if (leadArrFilterStatus != "") {
+      handleFilterDateFromAndToAndStatus();
+    } else {
+      handleFilterDateFromAndTo();
+    }
   }, [dateFrom, dateTo]);
 
   useEffect(() => {
@@ -576,20 +577,18 @@ const Leads = () => {
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
-  const handleUpdateLeadsArray = (value1, value2) => {
+  const handleUpdateLeadsArray = (value1, value2, value3) => {
     // handleUpdateLeadsArray("OPEN", "REOPENED");
     // handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
-    //  handleUpdateLeadsArray("OPEN", "REOPENED");
-    //      handleUpdateLeadsArray("CANCELLED");
-    // console.log("1789");
+
     let tempArr = leadsArr;
-    // console.log(userAuthorise, "1te");
     // console.log(tempArr, "1tempArr2");
     // console.log(tempArr, "atemp23");
-    if (value1 == "OPEN" && value2 == "REOPENED") {
+    if (value1 == "OPEN") {
       let temp = tempArr.filter(
-        (el) => `${el.status}` == value1 || `${el.status}` == value2
+        (el) => `${el.status}` == value1 //|| `${el.status}` == value2
       );
+
       setDisplayLeadsArr(temp);
       // setLeadsArr(temp);
     } else if (value1 == "CONVERT" && value2 == "CONVERT_BY_SPOC") {
@@ -602,7 +601,31 @@ const Leads = () => {
       let temp = tempArr.filter((el) => `${el.status}` == value1);
       setDisplayLeadsArr(temp);
       // setLeadsArr(temp);
+    } else if (
+      value1 == "ON_HOLD" ||
+      value1 == "REOPENED" ||
+      value1 == "IN_PROGRESS"
+    ) {
+      let temp = tempArr.filter(
+        (el) =>
+          `${el.status}` == value1 ||
+          `${el.status}` == value2 ||
+          `${el.status}` == value3
+      );
+      // if (leadArrFilterStatus != "") {
+      //   // let tempArr = leadsArr.filter(
+
+      //   let tempArr = displayLeadsArr.filter(
+      //     (el) => el?.agentId == query.value || el?.leadObj?._id == query.value
+      //   );
+      //   console.log(tempArr, "12312321");
+      //   setDisplayLeadsArr([...tempArr]);
+      // }else{
+
+      setDisplayLeadsArr(temp);
+      // }
     }
+
     // } else if (userAuthorise.role == "TEAMLEAD") {
     //   let temp = tempArr.filter(
     //     (el) =>
@@ -744,12 +767,6 @@ const Leads = () => {
       handleGetAllLeads();
     }
   };
-
-  // useEffect(() => {
-  //   if (showNotes == true) {
-  //     updateStatusOfLead(id, obj);
-  //   }
-  // }, [showNotes]);
 
   const handleLeadStatusUpdate = async (id, value, status) => {
     try {
@@ -940,7 +957,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1053,7 +1070,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1075,7 +1092,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1099,7 +1116,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1200,6 +1217,10 @@ const Leads = () => {
       );
     }
   };
+  useEffect(() => {
+    console.log(leadArrFilterStatus, "leadArrFilterStatus");
+  }, [leadArrFilterStatus]);
+
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
     // console.log(record, "Record23");
@@ -1230,7 +1251,7 @@ const Leads = () => {
       return;
     }
     if (passPortBackImg == "") {
-      toastError("PassPort Back Image date is mandatory");
+      toastError("PassPort Back Image is mandatory");
       return;
     }
     let obj = {
@@ -1525,9 +1546,11 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -1783,9 +1806,11 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -2225,7 +2250,7 @@ const Leads = () => {
         </div>
         {/* /Page Header */}
 
-        {role != rolesObj.ACCOUNT && (
+        {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
           <div className="row">
             <div className="col-md-12">
               <div className="card-group m-b-30">
@@ -2253,8 +2278,10 @@ const Leads = () => {
                   </div>
                 </div> */}
                 <Link
+                  to="/admin/leads"
                   className="card"
                   onClick={() => {
+                    setLeadArrFilterStatus("OPEN");
                     handleUpdateLeadsArray("OPEN", "REOPENED");
                     setIsActiveFilter(true);
                   }}
@@ -2274,7 +2301,7 @@ const Leads = () => {
                           return (
                             // x.status == "ON_HOLD" ||
                             // x.status == "IN_PROGRESS" ||
-                            x.status == "OPEN" || x.status == "REOPENED"
+                            x.status == "OPEN" //|| x.status == "REOPENED"
                           );
                         }).length
                       }
@@ -2292,8 +2319,10 @@ const Leads = () => {
                   </div>
                 </Link>
                 <Link
+                  to="/admin/leads"
                   className="card"
                   onClick={() => {
+                    setLeadArrFilterStatus("CONVERT");
                     handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
                   }}
                 >
@@ -2330,24 +2359,31 @@ const Leads = () => {
                   </div>
                 </Link>
                 <Link
+                  to="/admin/leads"
                   className="card"
                   onClick={() => {
-                    handleUpdateLeadsArray("OPEN", "REOPENED");
+                    setLeadArrFilterStatus("REOPENED");
+                    handleUpdateLeadsArray(
+                      "ON_HOLD",
+                      "REOPENED",
+                      "IN_PROGRESS"
+                    );
                   }}
                 >
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
-                        <span className="d-block">Open Leads</span>
+                        <span className="d-block">Working Leads</span>
                       </div>
-                      {/* <div>
-                        <span className="text-danger">-2.8%</span>
-                      </div> */}
                     </div>
                     <h3 className="mb-3">
                       {
                         leadsArr.filter((x) => {
-                          return x.status == "OPEN" || x.status == "REOPENED";
+                          return (
+                            x.status == "ON_HOLD" ||
+                            x.status == "REOPENED" ||
+                            x.status == "IN_PROGRESS"
+                          );
                         }).length
                       }
                     </h3>
@@ -2365,8 +2401,10 @@ const Leads = () => {
                 </Link>
 
                 <Link
+                  to="/admin/leads"
                   className="card"
                   onClick={() => {
+                    setLeadArrFilterStatus("CANCELLED");
                     handleUpdateLeadsArray("CANCELLED");
                   }}
                 >
@@ -2408,7 +2446,8 @@ const Leads = () => {
         <div div className="row filter-row">
           {role != rolesObj.SPOC &&
             role != rolesObj.TEAMLEAD &&
-            role != rolesObj.ACCOUNT && (
+            role != rolesObj.ACCOUNT &&
+            leadArrFilterStatus == "" && (
               <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
                 <div className="form-group form-focus select-focus">
                   {/* <select className="select form-control" >
@@ -2456,21 +2495,25 @@ const Leads = () => {
                 </div>
               </div>
             )} */}
-          {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && (
-            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-              <div className="form-group form-focus">
-                <input
-                  value={employeeNameQuery}
-                  onChange={(e) => {
-                    handleFilterWithAgentName(e.target.value);
-                  }}
-                  type="text"
-                  className="form-control floating"
-                />
-                <label className="focus-label">Employee Name</label>
+
+          {role != rolesObj.SPOC &&
+            role != rolesObj.ACCOUNT &&
+            leadArrFilterStatus == "" && (
+              <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+                <div className="form-group form-focus">
+                  <input
+                    value={employeeNameQuery}
+                    onChange={(e) => {
+                      handleFilterWithAgentName(e.target.value);
+                    }}
+                    type="text"
+                    className="form-control floating"
+                  />
+                  <label className="focus-label">Employee Name</label>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
           {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus select-focus">
               <select className="select floating">
@@ -2482,30 +2525,32 @@ const Leads = () => {
               <label className="focus-label">Status</label>
             </div>
           </div> */}
-          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-            <div className="form-group form-focus select-focus">
-              {/* <select className="select form-control" >
+          {leadArrFilterStatus == "" && (
+            <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+              <div className="form-group form-focus select-focus">
+                {/* <select className="select form-control" >
                 <option value="">Select Priority</option>
                 <option value="High">High</option>
                 <option value="Medium">Medium</option>
                 <option value="Low">Low</option>
               </select> */}
-              <Select
-                onChange={handleFilterByPriority}
-                menuPortalTarget={document.body}
-                styles={customStyles}
-                options={options}
-              />
-              {/* handleFilterByPriority */}
-              {/* <select className="select floating">
+                <Select
+                  onChange={handleFilterByPriority}
+                  menuPortalTarget={document.body}
+                  styles={customStyles}
+                  options={options}
+                />
+                {/* handleFilterByPriority */}
+                {/* <select className="select floating">
                 <option> -- Select -- </option>
                 <option> High </option>
                 <option> Low </option>
                 <option> Medium </option>
               </select> */}
-              <label className="focus-label">Priority</label>
+                <label className="focus-label">Priority</label>
+              </div>
             </div>
-          </div>
+          )}
           {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
           {/* <div> */}
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
@@ -2579,18 +2624,18 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                      ? columns_TeamLeader
-                      : role == "SPOC"
-                        ? columns_SPOC
-                        : role == "SUPERVISOR"
-                          ? columns_SUPERVISOR
-                          : []
+                    ? columns_TeamLeader
+                    : role == "SPOC"
+                    ? columns_SPOC
+                    : role == "SUPERVISOR"
+                    ? columns_SUPERVISOR
+                    : []
                 }
                 // columns={columns}
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-              // onChange={console.log("change")}
+                // onChange={console.log("change")}
               />
             </div>
           </div>
@@ -2631,7 +2676,7 @@ const Leads = () => {
       <Modal
         size="lg"
         show={show}
-      // className="add_note"
+        // className="add_note"
       >
         <Modal.Header>
           <Modal.Title>
@@ -3068,7 +3113,7 @@ const Leads = () => {
       <Modal
         size="lg"
         show={showClientDetails}
-      // className="add_note"
+        // className="add_note"
       >
         <Modal.Header>
           <Modal.Title>Personal Details</Modal.Title>
@@ -3129,11 +3174,13 @@ const Leads = () => {
               </div>
             </div>
             <div className="form-group">
-              <label>Pen Card Image  <span className="text-danger">*</span></label>
+              <label>
+                Pen Card Image <span className="text-danger">*</span>
+              </label>
               <input
                 onChange={(e) => {
                   // setFileName("penCardImg")
-                  handleFileSelectionPenCard(e)
+                  handleFileSelectionPenCard(e);
                 }}
                 className="form-control"
                 type="file"
@@ -3141,11 +3188,13 @@ const Leads = () => {
               />
             </div>
             <div className="form-group">
-              <label>Pass port Front Image  <span className="text-danger">*</span></label>
+              <label>
+                Pass port Front Image <span className="text-danger">*</span>
+              </label>
               <input
                 onChange={(e) => {
                   // setFileName("passPortFrontImg")
-                  handleFileSelectionPassPortFront(e)
+                  handleFileSelectionPassPortFront(e);
                 }}
                 className="form-control"
                 type="file"
@@ -3153,12 +3202,14 @@ const Leads = () => {
               />
             </div>
             <div className="form-group">
-              <label>Pass port back image <span className="text-danger">*</span></label>
+              <label>
+                Pass port back image <span className="text-danger">*</span>
+              </label>
               <input
                 // onChange={(e) => handleFileSelectionPassportBack(e)}
                 onChange={(e) => {
                   // setFileName("passPortBackImg")
-                  handleFileSelectionPassPortBack(e)
+                  handleFileSelectionPassPortBack(e);
                 }}
                 className="form-control"
                 type="file"

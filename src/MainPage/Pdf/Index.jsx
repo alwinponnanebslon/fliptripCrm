@@ -379,7 +379,7 @@ function Index() {
                   {QuotationObj?.flightList &&
                     QuotationObj?.flightList?.length > 0 &&
                     QuotationObj?.flightList[
-                    QuotationObj?.flightList.length - 1
+                      QuotationObj?.flightList.length - 1
                     ] && (
                       <div className="destination">
                         <h6>
@@ -702,7 +702,7 @@ function Index() {
                         </th>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -720,7 +720,7 @@ function Index() {
                         <td>FLIGHT</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -1038,7 +1038,12 @@ function Index() {
           </div>
         </div>
       </section>
-
+      {console.log(QuotationObj, "QuotationObj234")}
+      {/* <section className="client-img mb-80">
+        <div className="container">
+          <img src={images.clients} className="w-100 img-contain" alt="" />
+        </div>
+      </section> */}
       {/* <section className="client-img mb-80">
         <div className="container">
           <img src={images.clients} className="w-100 img-contain" alt="" />

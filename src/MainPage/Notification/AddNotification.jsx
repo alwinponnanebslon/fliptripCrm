@@ -143,7 +143,6 @@ const AddNotification = ({
         heading,
         description,
         userId: employeeId,
-        leadId: employeeId,
         followDate,
         createdBy: { ...createdBy, role },
         followTime,

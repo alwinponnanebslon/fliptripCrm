@@ -23,3 +23,9 @@ export const updateClient = (formData, id) => {
 export const getFilter = (query) => {
   return axios.get(`${serverUrl}/filter?${query}`);
 };
+export const getClientFilterByDate = (from, to, role, id) => {
+  // console.log(from, to, role, id, "12query");
+  return axios.get(
+    `${serverUrl}/getClientFilterByDates/${id}?from=${from}&to=${to}&role=${role}`
+  );
+};
