@@ -1223,7 +1223,7 @@ const Leads = () => {
 
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
-    // console.log(record, "Record23");
+    console.log(record, "Record23");
     setClientIdForUpdate(record?.clientObj?._id);
   };
 
@@ -1264,7 +1264,7 @@ const Leads = () => {
       passPortBackImg,
     };
     // console.log(obj, "obj123");
-    // console.log(clientIdForUpdate, "clientIdForUpdate1234");
+    console.log(clientIdForUpdate, "clientIdForUpdate1234");
     let { data: res } = await updateClient(obj, clientIdForUpdate);
     if (res?.success) {
       toastSuccess(res.message);
@@ -1967,7 +1967,7 @@ const Leads = () => {
               className="btn add-btn"
               onClick={() => handleUpdateClentDetails(record)}
             >
-              <i className="fa fa-plus" /> Add Lead
+              <i className="fa fa-plus" /> Personal Details
             </a>
           ) : (
             <div>Not converted yet</div>
@@ -2122,7 +2122,7 @@ const Leads = () => {
               className="btn add-btn"
               onClick={() => handleUpdateClentDetails(record)}
             >
-              <i className="fa fa-plus" /> Add Lead
+              <i className="fa fa-plus" /> Personal Details
             </a>
           ) : (
             <div>Not converted yet</div>

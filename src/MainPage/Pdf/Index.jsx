@@ -3,8 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { images } from "./Utility/Images";
 import moment from "moment";
+// import ImLocation from "react-icons/im";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+// import { generateFilePath } from "../../../utils/FileURL";
+import { generateFilePath } from "../../utils/FileURL";
+import { Image } from "antd";
+
 function Index() {
   const toursResultArr = useSelector((state) => state.tour.tours);
   const role = useSelector((state) => state.auth.role);
@@ -18,9 +23,9 @@ function Index() {
   const [datesArr, setDatesArr] = useState([]);
   useEffect(() => {
     // alert("asd");
-    console.log(quotationObj, "quotationObj");
+    // console.log(quotationObj, "quotationObj");
     if (quotationObj) {
-      console.log(quotationObj, "quotationObj");
+      // console.log(quotationObj, "quotationObj");
       setQuotationObj(quotationObj);
     }
   }, [quotationObj]);
@@ -80,7 +85,12 @@ function Index() {
                     <li>
                       <h5>
                         TRIP ID :{" "}
-                        <span className="pink fw-bold">{QuotationObj._id}</span>
+                        {/* <span className="pink fw-bold">{QuotationObj._id}</span> */}
+                        <span className="pink fw-bold">
+                          {QuotationObj?.leadObj?.uniqueTripId
+                            ? QuotationObj?.leadObj?.uniqueTripId
+                            : QuotationObj?._id}
+                        </span>
                       </h5>
                     </li>
                     <li>As quoted on</li>
@@ -665,7 +675,11 @@ function Index() {
                 <div className="box">
                   <h4 className="purple bg-white">
                     Hi {QuotationObj?.leadObj?.clientObj?.name} (TRIP ID{" "}
-                    {QuotationObj?._id})
+                    {/* {QuotationObj?._id} */}
+                    {QuotationObj?.leadObj?.uniqueTripId
+                      ? QuotationObj?.leadObj?.uniqueTripId
+                      : QuotationObj?._id}
+                    )
                   </h4>
                   <ul className="list-circle">
                     <li>
@@ -1039,16 +1053,163 @@ function Index() {
         </div>
       </section>
       {console.log(QuotationObj, "QuotationObj234")}
-      {/* <section className="client-img mb-80">
-        <div className="container">
-          <img src={images.clients} className="w-100 img-contain" alt="" />
+
+      {/* 
+      // 
+      
+      
+      
+      */}
+
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col-lg-3">
+            <div className="foter_img text-center">
+              <img
+                style={{
+                  borderRadius: "55px",
+                  height: "120px",
+                  width: "120px",
+                }}
+                alt=""
+                src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                mb-22
+              />
+              <h4 className="name_info">
+                {QuotationObj?.agentObj?.firstName + " "}
+                {QuotationObj?.agentObj?.lastName}
+              </h4>
+              <h5 className="categofy_info">Seiner Sales Execitue</h5>
+              <h6 className="info_num">{QuotationObj?.agentObj?.phone?QuotationObj?.agentObj?.phone :"+91 9310 985 146"}</h6>
+
+              {/* <h4 className="name_info">
+                {QuotationObj?.agentObj?.firstName + " "}
+                {QuotationObj?.agentObj?.lastName}
+              </h4> */}
+              {/* <h5>{QuotationObj?.agentObj?.role}</h5>
+              <h6>{QuotationObj?.agentObj?.phone}</h6>
+              <h6>{QuotationObj?.agentObj?.email}</h6> */}
+            </div>
+          </div>
+          <div className="col-lg-5">
+            <div className="text-center">
+              <img src={images.thankyou3} alt="" className="img-fluid" />
+            </div>
+          </div>
+          <div className="col-lg-4">
+            <div className="info_list">
+              <div className="right_info">
+                <ul>
+                  <li>
+                    <a
+                      href="https://api.whatsapp.com/send?phone=9310985146"
+                      target={"_blank"}
+                    >
+                      {" "}
+                      +91 9310 985 146{" "}
+                      <span>
+                        {" "}
+                        <img src={images.whatsapp} alt="" />{" "}
+                      </span>{" "}
+                    </a>
+                  </li>
+                  {/* <li>
+                  <a href="tel:9310985146">
+                    {" "}
+                    +91 9310 985 146 <img src={images.whatsapp} alt="" />{" "}
+                  </a>
+                </li> */}
+                  <li>
+                    <a
+                      href="mailto:sales15.nitsaholidays@gmail.com"
+                      target={"_blank"}
+                    >
+                      sales15.nitsaholidays@gmail.com{" "}
+                      <span>
+                        <img src={images.gmail} alt="" />{" "}
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    {" "}
+                    <a
+                      href="https://goo.gl/maps/nv3JerjMBZokNV7F7"
+                      target={"_blank"}
+                    >
+                      Northex Tower, 806, ITL, A-09, Netaji Subhash Place, Pitam
+                      Pura, New Delhi, Delhi 110034, India{" "}
+                    </a>
+                    <span>
+                      <img
+                        src={images.location}
+                        className="img-fluid"
+                        style={{ width: "50px" }}
+                      />
+                    </span>
+                  </li>
+                </ul>
+              </div>
+              <div className="socal_link">
+                <ul>
+                  <li>
+                    <a
+                      href="https://www.facebook.com/FlipTripHolidays"
+                      target={"_blank"}
+                    >
+                      <i class="fa fa-facebook-square" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://twitter.com/Fliptrip_h" target={"_blank"}>
+                      <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.instagram.com/fliptrip_holidays/"
+                      target={"_blank"}
+                    >
+                      <i class="fa fa-instagram" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://www.youtube.com/channel/UCV_qHw1tK_x3e-IOMfrMhtw"
+                      target={"_blank"}
+                    >
+                      <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-      </section> */}
-      {/* <section className="client-img mb-80">
+      </div>
+
+      <div className="purple-bg topftre py-3 px-4 my-5">
         <div className="container">
-          <img src={images.clients} className="w-100 img-contain" alt="" />
+          <div className="row">
+            <div className="col-lg-12 text-center">
+              <p className="mb-0 text-white">
+                <a
+                  href="https://goo.gl/maps/nv3JerjMBZokNV7F7"
+                  target={"_blank"}
+                >
+                  Northex Tower, 806, ITL, A-09, Netaji Subhash Place, Pitam
+                  Pura, New Delhi, Delhi 110034, India{" "}
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
-      </section> */}
+      </div>
+      {/* 
+      
+      
+      
+      
+      */}
     </main>
   );
 }

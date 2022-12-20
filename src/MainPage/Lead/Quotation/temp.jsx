@@ -2864,4 +2864,97 @@ const handleinputchangeHotel = (e, index) => {
 //     </Button>
 //   </Modal.Footer>
 // </Modal>
-  
+//
+//
+
+//
+// {/* <section className="flight-table">
+//   <div className="flex-container ">
+//     {/* <div className="flex-container"> */}
+//     <li className="text">
+//       <ul className="thankyou pe-0">
+//         {/* <li className="fw-semibold gap-2"> */}
+//         {/* THANK YOU */}
+//         <img src={images.thankyou3} alt="" />
+//         {/* </li> */}
+//         {/* <li className="fw-semibold gap-2">
+//         sales15.nitsaholidays@gmail.com
+//         <img src={images.gmail} alt="" />
+//       </li> */}
+//       </ul>
+//     </li>
+//     {/* </div> */}
+//     {/* </div> */}
+//     {/* <div> */}
+//     {/* <li className="text"> */}
+//     {/* <ul className="whatsapp-gmail pe-0"> */}
+//     <li className="fw-semibold gap-2">
+//       +91 9310 985 146
+//       <img src={images.whatsapp} alt="" />
+//     </li>
+//     <li className="fw-semibold gap-2">
+//       sales15.nitsaholidays@gmail.com
+//       <img src={images.gmail} alt="" />
+//     </li>
+//     {/* </ul> */}
+//     {/* </li> */}
+//   </div>
+//   <ul className="amount mb-0">
+//     <li>
+//       <h4>COMPANY ADDRESS</h4>
+//       {/* <h4 className="pink fw-semibold m-0">₹ {QuotationObj?.amount}</h4> */}
+//     </li>
+//   </ul>
+// </section>
+//api.whatsapp.com/send?phone=919289370407
+
+https: <div className="container">
+  <div className="col-12">
+    <div className="flight-table">
+      <ul className="amount mb-0">
+        <li>
+          <a href="#" className="amount gap-1">
+            <img
+              style={{
+                borderRadius: "55px",
+                height: "170px",
+                width: "130px",
+              }}
+              alt=""
+              src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+              mb-22
+            />
+          </a>
+          <h4>
+            {QuotationObj?.agentObj?.firstName + " "}
+            {QuotationObj?.agentObj?.lastName}
+          </h4>
+          <h4>{QuotationObj?.agentObj?.role}</h4>
+          <h4>{QuotationObj?.agentObj?.phone}</h4>
+          <h4>{QuotationObj?.agentObj?.email}</h4>
+        </li>
+        <li className="flex-container">
+          <ul className="thankyou pe-1">
+            <img src={images.thankyou3} alt="" />
+          </ul>
+        </li>
+        <div class="flex-container">
+          {/* <li className="fw-semibold gap-2"> */}
+          <li className="text-end">
+            {/* +91 9310 985 146 */}
+            {QuotationObj?.agentObj?.phone}
+            <img src={images.whatsapp} alt="" />
+          </li>
+          <li className=" gap-2">
+            sales15.nitsaholidays@gmail.com
+            <img src={images.gmail} alt="" />
+          </li>
+          <li className=" gap-2 mt-4">
+            <img src={images.logo} alt="" className="main-logo" />
+          </li>
+        </div>
+      </ul>
+    </div>
+  </div>
+  <div className="flex-container">COMPANY ADDRESS</div>
+</div>;

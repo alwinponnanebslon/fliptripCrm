@@ -20,7 +20,11 @@ import hotel_left from "../../../assets/images/hotel-left.png";
 // import rahman from "../../../assets/images/rahman.jfif";
 import gmail from "../../../assets/images/icon/gmail.png";
 import phone from "../../../assets/images/icon/phone.png";
+// import thankyou from "../../../assets/images/icon/thankyou.PNG";
+// import thankyou2 from "../../../assets/images/icon/thankyou2.PNG";
+import thankyou3 from "../../../assets/images/icon/thankyou3.png";
 
+// import img_avatar from "../../../assets/images/img_avatar.png";
 export const images = {
   top_left,
   logo,
@@ -44,4 +48,8 @@ export const images = {
   travelling,
   icici,
   clients,
+  // thankyou,
+  // thankyou2,
+  // img_avatar,
+  thankyou3,
 };

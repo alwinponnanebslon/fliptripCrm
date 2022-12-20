@@ -13,6 +13,8 @@ import moment from "moment";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useRef } from "react";
+import TextareaAutosize from "react-textarea-autosize";
+
 const AddQuotation = ({ show, setShow }) => {
   const descriptionRef = useRef();
   const { leadId } = useParams();
@@ -1544,11 +1546,11 @@ aria-label="Close"
                                 <div className="form-group col-md-12">
                                   <label>Itinerary Description</label>
 
-                                  <textarea
-                                    ref={descriptionRef}
-                                    onKeyUp={(e) => {
-                                      textAreaAdjust(e);
-                                    }}
+                                  <TextareaAutosize
+                                    // ref={descriptionRef}
+                                    // onKeyUp={(e) => {
+                                    //   textAreaAdjust(e);
+                                    // }}
                                     type="text"
                                     name="itineraryName"
                                     className="form-control"

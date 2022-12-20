@@ -52,14 +52,14 @@ function Notification() {
   }, []);
   //
   useEffect(() => {
-    console.log(NotificationArray, "12323424 NotificationArray");
+    // console.log(NotificationArray, "12323424 NotificationArray");
     let filter = NotificationArray.filter((el) => {
       // console.log(el.createdBy._id, "123");
       if (`${el?.createdBy?._id}` == `${userId}`) {
         return el;
       }
     });
-    console.log(filter, "123fiter23");
+    // console.log(filter, "123fiter23");
 
     // setNotificationArr(filter);
     setNotificationArr(NotificationArray);
@@ -205,7 +205,7 @@ function Notification() {
             : new Date(record?.followDate).getDate() > new Date().getDate()
             ? new Date(record?.followDate).toLocaleDateString() +
               " " +
-              " Tomorrow"
+              " Upcoming"
             : new Date(record?.followDate).getDate() < new Date().getDate()
             ? new Date(record?.followDate).toLocaleDateString() +
               " " +

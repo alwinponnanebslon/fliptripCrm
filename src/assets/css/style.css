@@ -9569,3 +9569,73 @@ textarea {
   overflow-y: auto;
   word-wrap: break-word;
 }
+.flex-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.name_info {
+  font-size: 27px;
+  margin: 5px 0;
+  font-weight: 600;
+  color: #000;
+}
+.categofy_info {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+}
+.info_num {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+}
+.right_info ul {
+  padding: 0;
+  margin: 0;
+}
+.right_info li {
+  text-align: right;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+  justify-content: end;
+}
+.right_info li span {
+  margin-left: 12px;
+}
+.right_info li a {
+  color: #000 !important;
+  text-decoration: none;
+}
+.topftre p a {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+.info_list .socal_link ul {
+  padding: 0;
+  margin: 0;
+}
+
+.info_list {
+  text-align: end;
+}
+.info_list .socal_link li {
+  display: inline-block;
+  margin-right: 12px;
+}
+.socal_link li a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #7f81c7;
+  border-radius: 50px;
+  text-align: center;
+  line-height: 40px;
+}
+.socal_link li a i {
+  font-size: 17px;
+}
+.socal_link li a {
+  color: #7f81c7 !important;
+}

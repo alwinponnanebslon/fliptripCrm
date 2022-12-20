@@ -127,13 +127,14 @@ const AddNotification = ({
     dispatch(setNotification({}));
     // setAllEmployees([]);
   };
+  
   const handleSubmit = () => {
     // console.log(heading, "heading23");
     if (heading == "" || heading == undefined) {
       toastError("Heading is mandatory ");
       return;
     } else if (employeeId == "" || employeeId == undefined) {
-      toastError("kindly add whom you send this notification ");
+      toastError("kindly add whom you send this notification");
     } else if (followTime == "") {
       toastError("Follow time is mandatory ");
       return;

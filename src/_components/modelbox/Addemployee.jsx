@@ -281,7 +281,7 @@ const Addemployee = ({ show, setShow }) => {
         toastSuccess(res.message);
         // handleGetAllEmployees();
         // getAllEmployess();
-        // window.location.reload();
+        window.location.reload();
         // ClearFunc();
         // dispatch(returnAllEmployees);
       }
