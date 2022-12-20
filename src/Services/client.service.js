@@ -2,6 +2,7 @@ import axios from "axios";
 import { url } from "./url.service";
 let serverUrl = `${url}/client`;
 // import { TOURAdd, get } from "../../../../redux/features/tour/tourSlice";
+
 export const AddClient = (obj) => {
   // console.log(obj, "obj axios");
   // // console.log(serverUrl, "serverUrl");
@@ -9,6 +10,7 @@ export const AddClient = (obj) => {
 };
 
 export const get = (query) => {
+  console.log("23333333")
   return axios.get(`${serverUrl}/?${query}`);
 };
 

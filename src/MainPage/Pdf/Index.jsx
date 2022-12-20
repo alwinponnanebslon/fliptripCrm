@@ -25,7 +25,7 @@ function Index() {
     // alert("asd");
     // console.log(quotationObj, "quotationObj");
     if (quotationObj) {
-      // console.log(quotationObj, "quotationObj");
+      console.log(quotationObj, "213quotationObj");
       setQuotationObj(quotationObj);
     }
   }, [quotationObj]);
@@ -103,6 +103,7 @@ function Index() {
                     </li>
                   </ul>
                 </div>
+                {console.log(QuotationObj, "12132131")}
                 <div className="right-middle">
                   <div className="destination">
                     <h2 className="text-white">
@@ -177,22 +178,26 @@ function Index() {
         <div className="container">
           <h1 className="fw-bold text-center mb-5">Summary</h1>
           <ul>
-            <li>
-              <div className="box">
-                <div className="icon">
-                  <img src={images.hotel} alt="" />
+            {QuotationObj?.hotelDetail?.length > 0 &&
+              <li>
+                <div className="box">
+                  <div className="icon">
+                    <img src={images.hotel} alt="" />
+                  </div>
+                  <h4>Hotel</h4>
                 </div>
-                <h4>Hotel</h4>
-              </div>
-            </li>
-            <li>
-              <div className="box">
-                <div className="icon">
-                  <img src={images.flight} alt="" />
+              </li>
+            }
+            {QuotationObj?.flightList?.length > 0 &&
+              <li>
+                <div className="box">
+                  <div className="icon">
+                    <img src={images.flight} alt="" />
+                  </div>
+                  <h4>Flights</h4>
                 </div>
-                <h4>Flights</h4>
-              </div>
-            </li>
+              </li>
+            }
             <li>
               <div className="box">
                 <div className="icon">
@@ -209,14 +214,16 @@ function Index() {
                 <h4>Transfers</h4>
               </div>
             </li>
-            <li>
-              <div className="box">
-                <div className="icon">
-                  <img src={images.visa} alt="" />
+            {QuotationObj?.visaRequired == true &&
+              <li>
+                <div className="box">
+                  <div className="icon">
+                    <img src={images.visa} alt="" />
+                  </div>
+                  <h4>Visa</h4>
                 </div>
-                <h4>Visa</h4>
-              </div>
-            </li>
+              </li>
+            }
           </ul>
         </div>
       </section>
@@ -403,7 +410,7 @@ function Index() {
                   {QuotationObj?.flightList &&
                     QuotationObj?.flightList?.length > 0 &&
                     QuotationObj?.flightList[
-                      QuotationObj?.flightList.length - 1
+                    QuotationObj?.flightList.length - 1
                     ] && (
                       <div className="destination">
                         <h6>
@@ -733,7 +740,7 @@ function Index() {
                         </th>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                            0 &&
+                          0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -751,7 +758,7 @@ function Index() {
                         <td>FLIGHT</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                            0 &&
+                          0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -1122,7 +1129,8 @@ function Index() {
                 {QuotationObj?.agentObj?.firstName + " "}
                 {QuotationObj?.agentObj?.lastName}
               </h4>
-              <h5 className="categofy_info">Seiner Sales Execitue</h5>
+              <h5 className="categofy_info">
+                {QuotationObj?.agentObj?.designation ? QuotationObj?.agentObj?.designation : "Sales Executive"} </h5>
               <h6 className="info_num">
                 {QuotationObj?.agentObj?.phone
                   ? QuotationObj?.agentObj?.phone
@@ -1141,6 +1149,7 @@ function Index() {
           <div className="col-lg-5">
             <div className="text-center">
               <img src={images.thankyou3} alt="" className="img-fluid" />
+              {/* <img src={images.logo} alt="" className="img-fluid" /> */}
             </div>
           </div>
           <div className="col-lg-4">
@@ -1149,10 +1158,11 @@ function Index() {
                 <ul>
                   <li>
                     <a
-                      href="https://api.whatsapp.com/send?phone=9310985146"
+                      href={`https://api.whatsapp.com/send?phone=${QuotationObj?.agentObj?.phone}`}
                       target={"_blank"}
                     >
-                      +91 9310 985 146{" "}
+                      {/* +91 9310 985 146{" "} */}
+                      {QuotationObj?.agentObj?.phone ? QuotationObj?.agentObj?.phone : ""}
                       <span>
                         <img src={images.whatsapp} alt="" />{" "}
                       </span>{" "}
@@ -1166,10 +1176,11 @@ function Index() {
                 </li> */}
                   <li>
                     <a
-                      href="mailto:sales15.nitsaholidays@gmail.com"
+                      href={`mailto:${QuotationObj?.agentObj?.email}`}
                       target={"_blank"}
                     >
-                      sales15.nitsaholidays@gmail.com{" "}
+                      {/* sales15.nitsaholidays@gmail.com{" "} */}
+                      {QuotationObj?.agentObj?.email ? QuotationObj?.agentObj?.email : ""}
                       <span>
                         <img src={images.gmail} alt="" />{" "}
                       </span>
@@ -1241,8 +1252,11 @@ function Index() {
                   target={"_blank"}
                 >
                   Northex Tower, 806, ITL, A-09, Netaji Subhash Place, Pitam
-                  Pura, New Delhi, Delhi 110034, India{" "}
+                  Pura, New Delhi, Delhi 110034, India
                 </a>
+              </p>
+              <p className="mb-0 text-white">
+                +91 99993 16587, +91 99993 16597
               </p>
             </div>
           </div>

@@ -34,7 +34,7 @@ const LeadView = () => {
     // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
-  const handleCheckCostingSheet =async () => {
+  const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
 
   };
@@ -44,7 +44,7 @@ const LeadView = () => {
     // handleCheckCostingSheetExist(leadId);
   }, []);
 
-  useEffect(() => {}, [currentLead]);
+  useEffect(() => { }, [currentLead]);
 
   useEffect(() => {
     // handleInit();
