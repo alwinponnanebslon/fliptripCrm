@@ -137,10 +137,15 @@ function Index() {
                         ).toDateString()}
                     </li>
                   </ul>
-                  <p className="desp">
+                  {/* <p className="desp">
                     We are not making any holding on below mentioned as of now.
                     Flight prices are subject to availability at the time of
                     booking
+                  </p> */}
+                  <p className="desp">
+                    Prices of Flights and hotels are subject to availability
+                    {/* Flight prices are subject to availability at the time of */}
+                    {/* booking */}
                   </p>
                   <button className="btn pink-bg text-white btn-lg px-4">
                     ₹ {QuotationObj?.amount}
@@ -149,11 +154,17 @@ function Index() {
                 <ul className="right-bottom whatsapp-gmail">
                   <li>
                     <img src={images.whatsapp} alt="" />
-                    +91 9310 985 146
+                    {/* +91 9310 985 146 */}
+                    {QuotationObj?.agentObj?.phone
+                      ? QuotationObj?.agentObj?.phone
+                      : "+91 9310 985 146"}
                   </li>
                   <li>
                     <img src={images.gmail} alt="" />
-                    sales15.nitsaholidays@gmail.com
+                    {/* sales15.nitsaholidays@gmail.com */}
+                    {QuotationObj?.agentObj?.email
+                      ? QuotationObj?.agentObj?.email
+                      : " sales15.nitsaholidays@gmail.com "}
                   </li>
                 </ul>
               </div>
@@ -273,15 +284,18 @@ function Index() {
       </section>
 
       <div className="desp purple-bg py-2 px-4 my-5">
-        <p className="text-white m-0 text-center">
+        {/* <p className="text-white m-0 text-center">
           We are not making any holding on above as of now. Flight prices are
           also subject to availability at the time of booking.
-        </p>
+        </p> */}
         <p className="text-white m-0 text-center">
+          Prices of Flights and hotels are subject to availability{" "}
+        </p>
+        {/* <p className="text-white m-0 text-center">
           As quoted on {new Date(QuotationObj?.createdAt).toDateString()}{" "}
           {new Date(QuotationObj?.createdAt).getHours()}:
           {new Date(QuotationObj?.createdAt).getMinutes()}
-        </p>
+        </p> */}
       </div>
 
       <section className="inclusions">
@@ -487,6 +501,9 @@ function Index() {
         )}
       <div className="desp purple-bg py-2 px-4 my-5">
         <p className="text-white m-0 text-center">
+          Prices of Flights and hotels are subject to availability{" "}
+        </p>
+        {/* <p className="text-white m-0 text-center">
           We are not making any holding on above as of now. Flight prices are
           also subject to availability at the time of booking.
         </p>
@@ -494,7 +511,7 @@ function Index() {
           As quoted on {new Date(QuotationObj?.createdAt).toDateString()}{" "}
           {new Date(QuotationObj?.createdAt).getHours()}:
           {new Date(QuotationObj?.createdAt).getMinutes()}
-        </p>
+        </p> */}
       </div>
       {QuotationObj &&
         QuotationObj?.itineraryDetails &&
@@ -668,15 +685,15 @@ function Index() {
         )}
       <section className="how-to-book">
         <div className="container">
-          <h1 className="fw-bold text-center mb-5 heading">How To Book</h1>
+          {/* <h1 className="fw-bold text-center mb-5 heading">How To Book</h1> */}
           <div className="row">
-            <div className="col-12">
+            {/* <div className="col-12">
               <div className="inclusions">
                 <div className="box">
                   <h4 className="purple bg-white">
-                    Hi {QuotationObj?.leadObj?.clientObj?.name} (TRIP ID{" "}
-                    {/* {QuotationObj?._id} */}
-                    {QuotationObj?.leadObj?.uniqueTripId
+                    Hi {QuotationObj?.leadObj?.clientObj?.name} (TRIP ID{" "} */}
+            {/* {QuotationObj?._id} */}
+            {/* {QuotationObj?.leadObj?.uniqueTripId
                       ? QuotationObj?.leadObj?.uniqueTripId
                       : QuotationObj?._id}
                     )
@@ -697,14 +714,14 @@ function Index() {
                       Saturday. You can alternately send me an email and I shall
                       respond as soon as possible.
                     </li>
-                  </ul>
-                  {/* <b className="pink"
+                  </ul> */}
+            {/* <b className="pink"
                   >*Note : All cost are calculated using currency USD and has the
                     rate 79.00
                   </b> */}
-                </div>
+            {/* </div>
               </div>
-            </div>
+            </div> */}
             {QuotationObj?.paymentObj?.paymentReceviedArr.length > 0 && (
               <div className="col-12">
                 <div className="flight-table">
@@ -770,11 +787,18 @@ function Index() {
                       <ul className="whatsapp-gmail pe-0">
                         <li className="fw-semibold gap-2">
                           <img src={images.whatsapp} alt="" />
-                          +91 9310 985 146
+                          {QuotationObj?.agentObj?.phone
+                            ? QuotationObj?.agentObj?.phone
+                            : "+91 9310 985 146"}
+
+                          {/* +91 9310 985 146 */}
                         </li>
                         <li className="fw-semibold gap-2">
                           <img src={images.gmail} alt="" />
-                          sales15.nitsaholidays@gmail.com
+                          {/* sales15.nitsaholidays@gmail.com */}
+                          {QuotationObj?.agentObj?.email
+                            ? QuotationObj?.agentObj?.email
+                            : " sales15.nitsaholidays@gmail.com "}
                         </li>
                       </ul>
                     </li>
@@ -788,14 +812,13 @@ function Index() {
 
       <div className="desp purple-bg py-2 px-4 my-5">
         <p className="text-white m-0 text-center">
-          We are not making any holding on above as of now. Flight prices are
-          also subject to availability at the time of booking.
+          Prices of Flights and hotels are subject to availability{" "}
         </p>
-        <p className="text-white m-0 text-center">
+        {/* <p className="text-white m-0 text-center">
           As quoted on {new Date(QuotationObj?.createdAt).toDateString()}{" "}
           {new Date(QuotationObj?.createdAt).getHours()}:
           {new Date(QuotationObj?.createdAt).getMinutes()}
-        </p>
+        </p> */}
       </div>
 
       <section className="payment-detail mb-80">
@@ -810,7 +833,8 @@ function Index() {
                     <div className="col-12 col-md-7">
                       <ul className="list-circle">
                         <li>
-                          Payment acceptance Mode: IMPS/NEFT Bank transfer
+                          Payment acceptance Mode: IMPS/NEFT Bank transfer &
+                          Netbanking through Payment link
                         </li>
                         <li>
                           Payment are also accepted through debit card, Credit
@@ -818,11 +842,20 @@ function Index() {
                           % extra will be levied.
                         </li>
                         <li>
+                          Emi options available through third Parties Suppliers.
+                          Get in touch with us for more information
+                        </li>
+                        {/* <li>
+                          <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
+                            <img src={images.paytm} alt="" />{" "}
+                          </a>
+                        </li> */}
+                        {/* <li>
                           Travel loan with EMI Payment option is also available
                           for which third party istitutions will be provided and
                           processing fees and interest charges will be
                           applicable depending upon your CIBIL profile.
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                     <div className="col-12 col-md-5">
@@ -833,25 +866,35 @@ function Index() {
                         <ul className="list-circle">
                           <li>
                             Bank Name:{" "}
-                            <span className="fw-semibold">ICICI</span>
+                            <span className="fw-semibold">Yes Bank</span>
                           </li>
-                          <li>
+                          {/* <li>
                             A/c Name:{" "}
                             <span className="fw-semibold">Earth Travels</span>
-                          </li>
+                          </li> */}
                           <li>
                             A/c Num:{" "}
-                            <span className="fw-semibold">0724 0500 0852</span>
+                            {/* <span className="fw-semibold">0724 0500 0852</span> */}
+                            <span className="fw-semibold">
+                              0184 6190 0001 430
+                            </span>
                           </li>
                           <li>
                             IFSC Code:{" "}
-                            <span className="fw-semibold">ICIC0000724</span>
+                            {/* <span className="fw-semibold">ICIC0000724</span> */}
+                            <span className="fw-semibold">YESB0000184</span>
                           </li>
                           <li>
                             Branch:
                             <span className="fw-semibold">
-                              Pushpanjali Enclave, Pitampura
+                              {/* Pushpanjali Enclave, Pitampura */}
+                              Yes Bank Ltd, Pitam Pura Branch
                             </span>
+                          </li>
+                          <li>
+                            <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
+                              <img src={images.paytm} alt="" />{" "}
+                            </a>
                           </li>
                         </ul>
                       </div>
@@ -1080,7 +1123,11 @@ function Index() {
                 {QuotationObj?.agentObj?.lastName}
               </h4>
               <h5 className="categofy_info">Seiner Sales Execitue</h5>
-              <h6 className="info_num">{QuotationObj?.agentObj?.phone?QuotationObj?.agentObj?.phone :"+91 9310 985 146"}</h6>
+              <h6 className="info_num">
+                {QuotationObj?.agentObj?.phone
+                  ? QuotationObj?.agentObj?.phone
+                  : "+91 9310 985 146"}
+              </h6>
 
               {/* <h4 className="name_info">
                 {QuotationObj?.agentObj?.firstName + " "}
@@ -1105,10 +1152,8 @@ function Index() {
                       href="https://api.whatsapp.com/send?phone=9310985146"
                       target={"_blank"}
                     >
-                      {" "}
                       +91 9310 985 146{" "}
                       <span>
-                        {" "}
                         <img src={images.whatsapp} alt="" />{" "}
                       </span>{" "}
                     </a>
@@ -1130,8 +1175,7 @@ function Index() {
                       </span>
                     </a>
                   </li>
-                  <li>
-                    {" "}
+                  {/* <li>
                     <a
                       href="https://goo.gl/maps/nv3JerjMBZokNV7F7"
                       target={"_blank"}
@@ -1146,7 +1190,7 @@ function Index() {
                         style={{ width: "50px" }}
                       />
                     </span>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
               <div className="socal_link">

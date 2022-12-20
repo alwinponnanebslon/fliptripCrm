@@ -23,6 +23,8 @@ import phone from "../../../assets/images/icon/phone.png";
 // import thankyou from "../../../assets/images/icon/thankyou.PNG";
 // import thankyou2 from "../../../assets/images/icon/thankyou2.PNG";
 import thankyou3 from "../../../assets/images/icon/thankyou3.png";
+import gpay from "../../../assets/images/icon/gpay.png";
+import paytm from "../../../assets/images/icon/paytm.png";
 
 // import img_avatar from "../../../assets/images/img_avatar.png";
 export const images = {
@@ -48,6 +50,8 @@ export const images = {
   travelling,
   icici,
   clients,
+  gpay,
+  paytm,
   // thankyou,
   // thankyou2,
   // img_avatar,
