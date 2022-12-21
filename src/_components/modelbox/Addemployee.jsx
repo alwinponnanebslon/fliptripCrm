@@ -12,6 +12,7 @@ import {
   serCurrentEmployee,
 } from "../../redux/features/employee/employeeSlice";
 import { getAllEmployees } from "../../redux/features/employee/employeeSlice";
+
 import {
   addEmployeeToDb,
   getEmployess,
@@ -48,6 +49,7 @@ const Addemployee = ({ show, setShow }) => {
   const [employeeObj, setEmployeeObj] = useState({});
   const [prevDocUpdated, setPrevDocUpdated] = useState(false);
   const [docId, setDocId] = useState("");
+  const [designation, setDesignation] = useState("");
 
   const reduxrole = useSelector((state) => state.auth.role);
   const userObj = useSelector((state) => state.auth.user);
@@ -222,6 +224,10 @@ const Addemployee = ({ show, setShow }) => {
         toast.error("Date of birth is mandatory");
         return;
       }
+      if (designation == "") {
+        toast.error("Designation is mandatory");
+        return;
+      }
       let obj = {
         firstName,
         lastName,
@@ -235,11 +241,12 @@ const Addemployee = ({ show, setShow }) => {
         role,
         fileUrl,
         emergencyContact,
+        designation,
       };
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-      // console.log(obj, "obj123132");
+      console.log(obj, "obj123132");
       let { data: res } = await addEmployeeToDb(obj);
 
       if (res.success) {
@@ -269,6 +276,7 @@ const Addemployee = ({ show, setShow }) => {
         dob,
         fileUrl,
         emergencyContact,
+        designation,
       };
       // if (role == rolesObj.SPOC) {
       //   obj.leadId = leadId;
@@ -359,6 +367,36 @@ const Addemployee = ({ show, setShow }) => {
                         />
                       </div>
                     </div>
+                    {reduxrole == "ADMIN" && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">
+                            Designation <span className="text-danger">*</span>
+                          </label>
+                          <input
+                            value={designation}
+                            onChange={(e) => setDesignation(e.target.value)}
+                            className="form-control"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {reduxrole == "TEAMLEAD" && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">
+                            Designation<span className="text-danger">*</span>
+                          </label>
+                          <input
+                            value={designation}
+                            onChange={(e) => setDesignation(e.target.value)}
+                            className="form-control"
+                            type="text"
+                          />
+                        </div>
+                      </div>
+                    )}
                     {!prevDocUpdated && (
                       <div className="col-sm-6">
                         <div className="form-group">

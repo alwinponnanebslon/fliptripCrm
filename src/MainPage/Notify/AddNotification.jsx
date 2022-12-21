@@ -87,7 +87,7 @@ const AddNotification = ({
   }, [userObj]);
 
   useEffect(() => {
-    console.log(notificationObj, "notificationObj23");
+    // console.log(notificationObj, "notificationObj23");
     if (notificationObj && notificationObj._id) {
       setIsUpdate(true);
       setEmployeeId(notificationObj?._id);
