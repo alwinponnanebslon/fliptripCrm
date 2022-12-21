@@ -82,7 +82,7 @@ const Loginpage = (props) => {
           <div className="account-box">
             <div className="account-wrapper">
               <h3 className="account-title">Login</h3>
-              <p className="account-subtitle">Access to our dashboardz</p>
+              <p className="account-subtitle">Access to our dashboard</p>
               {/* Account Form */}
               <div>
                 <form onSubmit={handleSubmit(onSubmit)}>
