@@ -178,7 +178,7 @@ function Index() {
         <div className="container">
           <h1 className="fw-bold text-center mb-5">Summary</h1>
           <ul>
-            {QuotationObj?.hotelDetail?.length > 0 &&
+            {QuotationObj?.hotelDetail?.length > 0 && (
               <li>
                 <div className="box">
                   <div className="icon">
@@ -187,8 +187,8 @@ function Index() {
                   <h4>Hotel</h4>
                 </div>
               </li>
-            }
-            {QuotationObj?.flightList?.length > 0 &&
+            )}
+            {QuotationObj?.flightList?.length > 0 && (
               <li>
                 <div className="box">
                   <div className="icon">
@@ -197,7 +197,7 @@ function Index() {
                   <h4>Flights</h4>
                 </div>
               </li>
-            }
+            )}
             <li>
               <div className="box">
                 <div className="icon">
@@ -214,7 +214,7 @@ function Index() {
                 <h4>Transfers</h4>
               </div>
             </li>
-            {QuotationObj?.visaRequired == true &&
+            {QuotationObj?.visaRequired == true && (
               <li>
                 <div className="box">
                   <div className="icon">
@@ -223,7 +223,7 @@ function Index() {
                   <h4>Visa</h4>
                 </div>
               </li>
-            }
+            )}
           </ul>
         </div>
       </section>
@@ -410,7 +410,7 @@ function Index() {
                   {QuotationObj?.flightList &&
                     QuotationObj?.flightList?.length > 0 &&
                     QuotationObj?.flightList[
-                    QuotationObj?.flightList.length - 1
+                      QuotationObj?.flightList.length - 1
                     ] && (
                       <div className="destination">
                         <h6>
@@ -740,7 +740,7 @@ function Index() {
                         </th>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -758,7 +758,7 @@ function Index() {
                         <td>FLIGHT</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -900,7 +900,12 @@ function Index() {
                           </li>
                           <li>
                             <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
-                              <img src={images.paytm} alt="" />{" "}
+                              Paytm : <img src={images.paytm} alt="" />{" "}
+                            </a>
+                          </li>
+                          <li>
+                            <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
+                              Google pay : <img src={images.gpay} alt="" />{" "}
                             </a>
                           </li>
                         </ul>
@@ -1130,7 +1135,10 @@ function Index() {
                 {QuotationObj?.agentObj?.lastName}
               </h4>
               <h5 className="categofy_info">
-                {QuotationObj?.agentObj?.designation ? QuotationObj?.agentObj?.designation : "Sales Executive"} </h5>
+                {QuotationObj?.agentObj?.designation
+                  ? QuotationObj?.agentObj?.designation
+                  : "Sales Executive"}{" "}
+              </h5>
               <h6 className="info_num">
                 {QuotationObj?.agentObj?.phone
                   ? QuotationObj?.agentObj?.phone
@@ -1148,8 +1156,13 @@ function Index() {
           </div>
           <div className="col-lg-5">
             <div className="text-center">
-              <img src={images.thankyou3} alt="" className="img-fluid" />
-              {/* <img src={images.logo} alt="" className="img-fluid" /> */}
+              {/* <img src={images.thankyou3} alt="" className="img-fluid" /> */}
+              <img
+                style={{ height: "170px", width: "200px" }}
+                src={images.logo}
+                alt=""
+                className="img-fluid"
+              />
             </div>
           </div>
           <div className="col-lg-4">
@@ -1162,7 +1175,9 @@ function Index() {
                       target={"_blank"}
                     >
                       {/* +91 9310 985 146{" "} */}
-                      {QuotationObj?.agentObj?.phone ? QuotationObj?.agentObj?.phone : ""}
+                      {QuotationObj?.agentObj?.phone
+                        ? QuotationObj?.agentObj?.phone
+                        : ""}
                       <span>
                         <img src={images.whatsapp} alt="" />{" "}
                       </span>{" "}
@@ -1180,7 +1195,9 @@ function Index() {
                       target={"_blank"}
                     >
                       {/* sales15.nitsaholidays@gmail.com{" "} */}
-                      {QuotationObj?.agentObj?.email ? QuotationObj?.agentObj?.email : ""}
+                      {QuotationObj?.agentObj?.email
+                        ? QuotationObj?.agentObj?.email
+                        : ""}
                       <span>
                         <img src={images.gmail} alt="" />{" "}
                       </span>
