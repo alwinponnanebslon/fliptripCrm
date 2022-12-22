@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AddPaymentApi,
-  get,
+  getPaymentsApi,
   deletePaymentApi,
   updatePaymentApi,
   getPaymentByQuotationApi,
@@ -21,7 +21,7 @@ export const paymentGet = createAsyncThunk(
   "auth/paymentGet",
   async (payload) => {
     try {
-      let { data: response } = await get(payload);
+      let { data: response } = await getPaymentsApi(payload);
       return response;
     } catch (error) {
       toastError(error);

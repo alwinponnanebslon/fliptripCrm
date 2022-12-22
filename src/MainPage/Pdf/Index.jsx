@@ -531,7 +531,7 @@ function Index() {
                   QuotationObj?.itineraryDetails.length > 0 &&
                   QuotationObj?.itineraryDetails.map((el, index) => {
                     return (
-                      <div className="col-12">
+                      <div className="col-12" key={index}>
                         <div className="day">
                           <h4>
                             <img src={images.location} alt="" />

@@ -887,10 +887,10 @@ const LeadSidebar = (props) => {
             <div className="container-fluid add_detail_frm">
               <div className="row">
                 <div className="col-lg-12 text-end mb-4">
-                  {leadStatusReason.map((el, key) => {
+                  {leadStatusReason.map((el, index) => {
                     return (
                       <button
-                        key={key}
+                        key={index}
                         className="btn-cancle col-lg-12 mb-3"
                         // onChange={()=>{setNotesData(el.heading)}}
                         onClick={(e) => {

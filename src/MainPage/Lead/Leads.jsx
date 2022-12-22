@@ -337,8 +337,6 @@ const Leads = () => {
     }
   }, [agents]);
 
-
-
   useEffect(() => {
     if (teamLeads && teamLeads.length > 0) {
       let tempArr = teamLeads.map((el) => {
@@ -352,14 +350,9 @@ const Leads = () => {
     }
   }, [agents]);
 
-
-
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
-
-
-
 
   const getBase64 = (file, cb) => {
     let reader = new FileReader();
@@ -367,8 +360,7 @@ const Leads = () => {
     reader.onload = function () {
       cb(reader.result);
     };
-    reader.onerror = function (error) {
-    };
+    reader.onerror = function (error) {};
   };
 
   const handleFileSelection = (event) => {
@@ -512,10 +504,6 @@ const Leads = () => {
     }
   };
 
-
-
-
-
   const handleFilterDateFromAndToAndStatus = async () => {
     if (dateTo != "" && dateFrom != "") {
       if (Date.parse(dateFrom) > Date.parse(dateTo)) {
@@ -541,12 +529,10 @@ const Leads = () => {
     }
   }, [dateFrom, dateTo]);
 
-  useEffect(() => {//////////////////////////////////////////////
+  useEffect(() => {
+    //////////////////////////////////////////////
     handleSetAgentId();
   }, [userAuthorise]);
-
-
-
 
   const handleSetAgentId = async () => {
     // console.log(userAuthorise, "userAuthorise21");
@@ -556,16 +542,9 @@ const Leads = () => {
     }
   };
 
-
-
-
   const handleFilterDateTo = async (query) => {
     setDateTo(new Date(query).toISOString());
   };
-
-
-
-
 
   const clearFunc = () => {
     setSubject("");
@@ -583,11 +562,6 @@ const Leads = () => {
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
-
-
-
-
-
 
   const handleUpdateLeadsArray = (value1, value2, value3) => {
     // handleUpdateLeadsArray("OPEN", "REOPENED");
@@ -673,8 +647,8 @@ const Leads = () => {
         return;
       }
       if (`${email}` == "") {
-        toastError("Email cannot be empty");
-        return;
+        // toastError("Email cannot be empty");
+        // return;
       } else {
         clientObj.email = email;
       }
@@ -686,10 +660,10 @@ const Leads = () => {
         clientObj.name = name;
       }
 
-      if (`${agentId}` == "") {
-        toastError("Agent cannot be empty");
-        return;
-      }
+      // if (`${agentId}` == "") {
+      //   toastError("Agent cannot be empty");
+      //   return;
+      // }
       if (`${description}` == "") {
         toastError("Description cannot be empty");
         return;
@@ -862,15 +836,11 @@ const Leads = () => {
     setSpocId(e);
   };
 
-
-
   const handleDestinationChange = (e) => {
     setAgentId(e.value);
     // setDestinationId(e.value);
   };
 
-
-  
   const handleTeamLeadChange = (e) => {
     // let tempArr = teamLeads.map((el) => {
     //   let obj = {
@@ -2438,11 +2408,17 @@ const Leads = () => {
                     menuPortalTarget={document.body}
                     styles={customStyles}
                     options={teamLeads.map((el, i) => {
-                      return {
-                        ...el,
-                        value: el._id,
-                        label: el.firstName + " " + el.lastName,
-                      };
+                      return (
+                        <option key={i} value={el?.value}>
+                          {el?.firstName + el?.lastName}
+                        </option>
+                      );
+
+                      // return {
+                      //   ...el,
+                      //   value: el._id,
+                      //   label: el.firstName + " " + el.lastName,
+                      // };
                     })}
                   />
 
@@ -2790,7 +2766,8 @@ const Leads = () => {
             <div className="col-md-6">
               <div className="form-group">
                 <label>
-                  Email <span className="text-danger">*</span>
+                  Email
+                  {/* <span className="text-danger">*</span> */}
                 </label>
                 <input
                   value={email}
@@ -2844,7 +2821,7 @@ const Leads = () => {
                   <div className="form-group">
                     <label>
                       Assign to Team Lead ({teamLeadsArr.length}){" "}
-                      <span className="text-danger">*</span>
+                      {/* <span className="text-danger">*</span> */}
                     </label>
 
                     <select
@@ -2887,7 +2864,7 @@ const Leads = () => {
                   <label>
                     Assign to Spoc (
                     {agentsArr && agentsArr.length > 0 ? agentsArr.length : 0})
-                    <span className="text-danger">*</span>
+                    {/* <span className="text-danger">*</span> */}
                   </label>
                   <select
                     className="select form-control"

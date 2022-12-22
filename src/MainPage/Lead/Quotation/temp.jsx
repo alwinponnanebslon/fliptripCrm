@@ -2645,90 +2645,90 @@
 //
 // /
 // =====================================
-const handleinputchangeHotel = (e, index) => {
-  const { name, value } = e.target;
-  ("use strict");
-  // // console.log(name, "name");
-  let list = [...hotelList];
-  let currentObj = Object.freeze(tempList[index]);
-  currentObj = {
-    hotelName: list[index].hotelName,
-    roomType: list[index].roomType,
-    numberOfNight: list[index].numberOfNight,
-    checkIn: list[index].checkIn,
-    checkOut: list[index].checkOut,
-    rating: list[index].rating,
-    hotelAddress: list[index].hotelAddress,
-    // name: tempList[index].name,
-    // startDate: tempList[index].startDate,
-    // endDate: tempList[index].endDate,
-  };
+// const handleinputchangeHotel = (e, index) => {
+//   const { name, value } = e.target;
+//   ("use strict");
+//   // // console.log(name, "name");
+//   let list = [...hotelList];
+//   let currentObj = Object.freeze(tempList[index]);
+//   currentObj = {
+//     hotelName: list[index].hotelName,
+//     roomType: list[index].roomType,
+//     numberOfNight: list[index].numberOfNight,
+//     checkIn: list[index].checkIn,
+//     checkOut: list[index].checkOut,
+//     rating: list[index].rating,
+//     hotelAddress: list[index].hotelAddress,
+//     // name: tempList[index].name,
+//     // startDate: tempList[index].startDate,
+//     // endDate: tempList[index].endDate,
+//   };
 
-  if (name == "rating") {
-    if (value > 6 || value < 1) {
-      toastError("invalid rating, kindly provide valid rating");
-      return;
-    }
-  }
+//   if (name == "rating") {
+//     if (value > 6 || value < 1) {
+//       toastError("invalid rating, kindly provide valid rating");
+//       return;
+//     }
+//   }
 
-  if (name == "numberOfNight") {
-    if (value < "0" && value) {
-      toastError(`Number of nights cannot be less than 0`);
-      return;
-    }
-    let checkInDate = new Date(list[index]["checkIn"]);
-    let checkOutDate = new Date();
-    checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-    list[index]["checkOut"] = checkOutDate;
-  }
+//   if (name == "numberOfNight") {
+//     if (value < "0" && value) {
+//       toastError(`Number of nights cannot be less than 0`);
+//       return;
+//     }
+//     let checkInDate = new Date(list[index]["checkIn"]);
+//     let checkOutDate = new Date();
+//     checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+//     list[index]["checkOut"] = checkOutDate;
+//   }
 
-  if (name == "checkIn") {
-    let checkInDate = new Date(value);
-    let checkOutDate = new Date(value);
-    if (!list[index]["numberOfNight"] || list[index]["numberOfNight"] == "0") {
-      toastError("please enter number of nights");
-      return;
-    }
-    checkOutDate.setDate(
-      checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
-    );
-    list[index][name] = checkInDate;
-    // console.log("checkedIn", checkInDate, "checkInDate")
-    list[index]["checkOut"] = checkOutDate;
-  }
+//   if (name == "checkIn") {
+//     let checkInDate = new Date(value);
+//     let checkOutDate = new Date(value);
+//     if (!list[index]["numberOfNight"] || list[index]["numberOfNight"] == "0") {
+//       toastError("please enter number of nights");
+//       return;
+//     }
+//     checkOutDate.setDate(
+//       checkInDate.getDate() + parseInt(list[index]["numberOfNight"])
+//     );
+//     list[index][name] = checkInDate;
+//     // console.log("checkedIn", checkInDate, "checkInDate")
+//     list[index]["checkOut"] = checkOutDate;
+//   }
 
-  // console.log(list, "list");
-  for (let el of list) {
-    // console.log(el, "el");
-    if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
-      toastError("check-Out wil be less than checkin ");
-      return;
-    }
-  }
-  list[index][name] = value;
+//   // console.log(list, "list");
+//   for (let el of list) {
+//     // console.log(el, "el");
+//     if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
+//       toastError("check-Out wil be less than checkin ");
+//       return;
+//     }
+//   }
+//   list[index][name] = value;
 
-  if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
-    toastError("Please enter duration of tour");
-    return;
-  }
-  if (
-    list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
-    parseInt(durationOfTour)
-  ) {
-    toastError("Total number of nights cannot be more than duration of tour");
-    return;
-  }
-  currentObj[name] = value;
-  list[index] = currentObj;
-  setHotelList([...list]);
-  // setHotelList([...list]);
-};
+//   if (!durationOfTour || durationOfTour == "" || durationOfTour == "0") {
+//     toastError("Please enter duration of tour");
+//     return;
+//   }
+//   if (
+//     list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
+//     parseInt(durationOfTour)
+//   ) {
+//     toastError("Total number of nights cannot be more than duration of tour");
+//     return;
+//   }
+//   currentObj[name] = value;
+//   list[index] = currentObj;
+//   setHotelList([...list]);
+//   // setHotelList([...list]);
+// };
 
 //
 //
 //
 
-<select
+{/* <select */}
   // options={allEmployees.map((el) => {
   //   return {
   //     ...el,
@@ -2744,26 +2744,26 @@ const handleinputchangeHotel = (e, index) => {
   //   };
   // })}
   // value={employeeObj}
-  value={employeeId}
-  onChange={(e) => {
-    setEmployeeId(e.value);
-    setEmployeeObj(e);
-  }}
+  // value={employeeId}
+  // onChange={(e) => {
+  //   setEmployeeId(e.value);
+  //   setEmployeeObj(e);
+  // }}
   // className={styles.selectStyle}
->
-  {" "}
-  <option value="">Please Select </option>
-  {allEmployees &&
-    allEmployees.length > 0 &&
-    allEmployees.map((el, index) => {
-      return (
-        <option
-          key={index}
-          value={el._id}
-        >{`${el.firstName} ${el.lastName} [${el.role} ]`}</option>
-      );
-    })}{" "}
-</select>;
+// >
+//   {" "}
+//   <option value="">Please Select </option>
+//   {allEmployees &&
+//     allEmployees.length > 0 &&
+//     allEmployees.map((el, index) => {
+//       return (
+//         <option
+//           key={index}
+//           value={el._id}
+//         >{`${el.firstName} ${el.lastName} [${el.role} ]`}</option>
+//       );
+//     })}{" "}
+// </select>;
 
 //
 //
@@ -2908,53 +2908,53 @@ const handleinputchangeHotel = (e, index) => {
 // </section>
 //api.whatsapp.com/send?phone=919289370407
 
-https: <div className="container">
-  <div className="col-12">
-    <div className="flight-table">
-      <ul className="amount mb-0">
-        <li>
-          <a href="#" className="amount gap-1">
-            <img
-              style={{
-                borderRadius: "55px",
-                height: "170px",
-                width: "130px",
-              }}
-              alt=""
-              src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
-              mb-22
-            />
-          </a>
-          <h4>
-            {QuotationObj?.agentObj?.firstName + " "}
-            {QuotationObj?.agentObj?.lastName}
-          </h4>
-          <h4>{QuotationObj?.agentObj?.role}</h4>
-          <h4>{QuotationObj?.agentObj?.phone}</h4>
-          <h4>{QuotationObj?.agentObj?.email}</h4>
-        </li>
-        <li className="flex-container">
-          <ul className="thankyou pe-1">
-            <img src={images.thankyou3} alt="" />
-          </ul>
-        </li>
-        <div class="flex-container">
-          {/* <li className="fw-semibold gap-2"> */}
-          <li className="text-end">
-            {/* +91 9310 985 146 */}
-            {QuotationObj?.agentObj?.phone}
-            <img src={images.whatsapp} alt="" />
-          </li>
-          <li className=" gap-2">
-            sales15.nitsaholidays@gmail.com
-            <img src={images.gmail} alt="" />
-          </li>
-          <li className=" gap-2 mt-4">
-            <img src={images.logo} alt="" className="main-logo" />
-          </li>
-        </div>
-      </ul>
-    </div>
-  </div>
-  <div className="flex-container">COMPANY ADDRESS</div>
-</div>;
+// https: <div className="container">
+//   <div className="col-12">
+//     <div className="flight-table">
+//       <ul className="amount mb-0">
+//         <li>
+//           <a href="#" className="amount gap-1">
+//             <img
+//               style={{
+//                 borderRadius: "55px",
+//                 height: "170px",
+//                 width: "130px",
+//               }}
+//               alt=""
+//               src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+//               mb-22
+//             />
+//           </a>
+//           <h4>
+//             {QuotationObj?.agentObj?.firstName + " "}
+//             {QuotationObj?.agentObj?.lastName}
+//           </h4>
+//           <h4>{QuotationObj?.agentObj?.role}</h4>
+//           <h4>{QuotationObj?.agentObj?.phone}</h4>
+//           <h4>{QuotationObj?.agentObj?.email}</h4>
+//         </li>
+//         <li className="flex-container">
+//           <ul className="thankyou pe-1">
+//             <img src={images.thankyou3} alt="" />
+//           </ul>
+//         </li>
+//         <div class="flex-container">
+//           {/* <li className="fw-semibold gap-2"> */}
+//           <li className="text-end">
+//             {/* +91 9310 985 146 */}
+//             {QuotationObj?.agentObj?.phone}
+//             <img src={images.whatsapp} alt="" />
+//           </li>
+//           <li className=" gap-2">
+//             sales15.nitsaholidays@gmail.com
+//             <img src={images.gmail} alt="" />
+//           </li>
+//           <li className=" gap-2 mt-4">
+//             <img src={images.logo} alt="" className="main-logo" />
+//           </li>
+//         </div>
+//       </ul>
+//     </div>
+//   </div>
+//   <div className="flex-container">COMPANY ADDRESS</div>
+// </div>;

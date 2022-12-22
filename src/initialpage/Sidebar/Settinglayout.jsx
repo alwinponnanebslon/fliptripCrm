@@ -24,8 +24,8 @@ const SettingsLayout = (props) => {
 			  <div className={`main-wrapper ${menu ? 'slide-nav': ''}`}> 
 			  <Header onMenuClick={(value) => toggleMobileMenu()} />
 				<div>
-					{settingservice && settingservice.map((route,key)=>
-						<Route key={key} path={`${match.url}/${route.path}`} component={route.component} />
+					{settingservice && settingservice.map((route,i)=>
+						<Route key={i} path={`${match.url}/${route.path}`} component={route.component} />
 					)}
 				</div>				
 				<SettingsSidebar/>

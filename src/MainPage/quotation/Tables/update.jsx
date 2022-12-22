@@ -3,7 +3,7 @@ import {
   quotationAdd,
   get,
   deleteQuotation,
-  quotationUpdateObj,
+  quotationUpdate,
 } from "../../../redux/features/quotation/quotationSlice";
 import { toastSuccess, toastError } from "../../../utils/toastUtils";
 
@@ -229,7 +229,7 @@ const Basicinputs = () => {
       tax,
       itineraryList,
     };
-    dispatch(quotationUpdateObj(obj, selectedQuotationId));
+    dispatch(quotationUpdate(obj, selectedQuotationId));
     // console.log(obj, selectedQuotationId, "send Obj9");
   };
   const options = [
@@ -593,7 +593,7 @@ const Basicinputs = () => {
                       isMulti
                       options={
                         tourValueArr && tourValueArr.length > 0
-                          ? tourValueArr.map((el) => ({
+                          ? tourValueArr.map((el) => ({ 
                               ...el,
                               label: el.tourName,
                               value: el._id,

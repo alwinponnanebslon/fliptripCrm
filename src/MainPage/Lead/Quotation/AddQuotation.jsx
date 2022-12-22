@@ -949,11 +949,21 @@ aria-label="Close"
               <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {/* <form onSubmit={handleSubmit}> */}
               <form>
-                {/* <form action="#"> */}
-
                 <div className="row">
+                  <div className="text-end">
+                    <Button
+                      style={{ width: "152px", height: "42px" }}
+                      variant="secondary"
+                      onClick={() => {
+                        setShow(false);
+                        // window.location.reload();
+                        clearFunc();
+                      }}
+                    >
+                      Close Form
+                    </Button>
+                  </div>
                   <div className=" form-group col-md-12">
                     <label className="col-form-label ">
                       Destination Name <span className="text-danger">*</span>
@@ -1682,13 +1692,6 @@ aria-label="Close"
                         <tr>
                           <td></td>
                           <td></td>
-                          <td></td>
-                          <td></td>
-                        </tr>
-
-                        <tr>
-                          <td></td>
-                          <td></td>
                           <td>Total</td>
                           <td>{amount}</td>
                         </tr>
@@ -1706,17 +1709,6 @@ aria-label="Close"
                     {isUpdateTour ? "Update" : "Save"}{" "}
                   </button>
                 </div> */}
-                {/*
-              <div className="col-12">
-                <button
-                  data-bs-dismiss="modal"
-                  className="btn add-btn"
-                  onClick={handlePerfomaInvoiceSubmit}
-                >
-                  {" "}
-                  Save{" "}
-                </button>
-              </div> */}
               </form>
             </Modal.Body>
 
