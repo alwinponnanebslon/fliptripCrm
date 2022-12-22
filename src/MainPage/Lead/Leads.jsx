@@ -348,6 +348,7 @@ const Leads = () => {
       });
       setTeamLeadsArr([...tempArr]);
     }
+
     if (agents && agents.length > 0) {
       let tempArr = [];
       if (leadId != "") {
@@ -523,7 +524,7 @@ const Leads = () => {
             role,
             userAuthorise?.user?._id
           );
-          console.log(getfilterLead.data.data, "getfilterLeadw4");
+          // console.log(getfilterLead.data.data, "getfilterLeadw4");
           setDisplayLeadsArr(getfilterLead.data.data);
           setLeadsArr(getfilterLead.data.data);
         }
@@ -2918,11 +2919,9 @@ const Leads = () => {
                         // console.log(spoc, i, "2132");
                         // spoc .leadId == leadId;
                         return (
-                          <>
-                            <option key={i} value={spoc.value}>
-                              {spoc.label}
-                            </option>
-                          </>
+                          <option key={i} value={spoc.value}>
+                            {spoc.label}
+                          </option>
                         );
                       })}
                     {role == rolesObj.SUPERVISOR &&
@@ -2931,11 +2930,9 @@ const Leads = () => {
                         // console.log(spoc, i, "2132");
                         // spoc .leadId == leadId;
                         return (
-                          <>
-                            <option key={i} value={spoc.value}>
-                              {spoc.label}
-                            </option>
-                          </>
+                          <option key={i} value={spoc.value}>
+                            {spoc.label}
+                          </option>
                         );
                       })}
                   </select>

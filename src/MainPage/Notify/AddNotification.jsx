@@ -233,23 +233,23 @@ const AddNotification = ({
                   <div className="col-md-10">
                     <Select
                       options={allEmployees.map((el,i) => { 
-                        return (
-                          <option key={i} value={el?._id}>
-                            {el?.firstName + el?.lastName}
-                          </option>
-                        );
-                        // return {
-                        //   ...el,
-                        //   value: el._id,
-                        //   label:
-                        //     el.firstName +
-                        //     " " +
-                        //     "[" +
-                        //     el.role +
-                        //     "]" +
-                        //     " " +
-                        //     el.employeeId,
-                        // };
+                        // return (
+                        //   <option key={i} value={el?._id}>
+                        //     {el?.firstName + el?.lastName}
+                        //   </option>
+                        // );
+                        return {
+                          ...el,
+                          value: el._id,
+                          label:
+                            el.firstName +
+                            " " +
+                            "[" +
+                            el.role +
+                            "]" +
+                            " " +
+                            el.employeeId,
+                        };
                       })}
                       placeholder="Select from options"
                       // defaultInputValue={employeeId}

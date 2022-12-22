@@ -319,17 +319,17 @@ function Notification() {
 
         <div className="form-group form-focus">
           <Select
-            options={filterNotificationArr.map((el,i) => {
-              return (
-                <option key={i} value={el?.value}>
-                  {el?.label}
-                </option>
-              );
+            options={filterNotificationArr.map((el) => {
+              // return (
+              //   <option key={i} value={el?.value}>
+              //     {el?.label}
+              //   </option>
+              // );
 
-              // return {
-              //   value: el.value,
-              //   label: el.label,
-              // };
+              return {
+                value: el.value,
+                label: el.label,
+              };
             })}
             placeholder="Select from options"
             defaultInputValue={notificationvalue}
