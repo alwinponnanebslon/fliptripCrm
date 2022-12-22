@@ -45,6 +45,7 @@ const AllEmployees = () => {
   //     // setDisplayEmployeeArr(employees)
   //   }
   // }, [employees, isDelete]);
+  
   useEffect(() => {
     if (employees && employees.length > 0) {
       setEmployeeArr(employees);

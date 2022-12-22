@@ -48,7 +48,8 @@ const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
   const [leadId, setLeadId] = useState("");
   const dispatch = useDispatch();
   const [teamLeadsArr, setTeamLeadsArr] = useState([]);
-  const employees = useSelector(getAllEmployees);
+  // const employees = useSelector(getAllEmployees);
+  const employees = useSelector((state) => state.employee.employeesArr);
   const [employeeObj, setEmployeeObj] = useState({});
   const [prevDocUpdated, setPrevDocUpdated] = useState(false);
   const [docId, setDocId] = useState("");
@@ -133,7 +134,7 @@ const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
     setEmergencyContact("");
     // setLeadId("");
     // setTeamLeadsArr("");
-    setEmployeeObj({});
+    // setEmployeeObj({});
     dispatch(serCurrentEmployee({}));
     // setDocId("");
     setPrevDocUpdated(false);
@@ -169,16 +170,16 @@ const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
       if (password.trim().length < 5) {
         toast.error("Password length should minumum 5");
         return;
-      } 
+      }
       // if (confirmPassword.trim().length < 5) {
       //   toast.error("Confirm Password confirm should be same");
       //   return;
-      // } 
+      // }
       if (password != confirmPassword) {
         toast.error("Password and confirm password cannot be different");
         return;
       }
- if (confirmPassword == "") {
+      if (confirmPassword == "") {
         toast.error("Confirm Password cannot be empty");
         return;
       }
@@ -918,7 +919,7 @@ const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
                     <button
                       className="btn btn-primary submit-btn"
                       onClick={(e) => {
-                        handleUpdateForUserPassword(e); 
+                        handleUpdateForUserPassword(e);
                       }}
                       data-bs-dismiss="modal"
                     >
@@ -931,8 +932,8 @@ const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    setUserPassword(false); 
-                    ClearFunc()
+                    setUserPassword(false);
+                    ClearFunc();
                   }}
                 >
                   Close

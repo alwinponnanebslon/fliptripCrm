@@ -65,10 +65,11 @@ import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheet
 
 const Leads = () => {
   const dispatch = useDispatch();
-  const agents = useSelector(getAllAgents); //spoc
+  const agents = useSelector((state) => state.employee.employeesArr); //spoc
   const history = useHistory();
   // console.log(agents, "agents234");
-  const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
+  // const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
+  const teamLeads = useSelector((state) => state.employee.employeesArr);
   // // console.log(agents, "12agents");
   // console.log(teamLeads, "12ateamLeads");
   // const destinations = useSelector((state) => state.tour.tours);
