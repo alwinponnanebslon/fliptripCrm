@@ -27,7 +27,7 @@ const ViewCostingSheetForm = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-  console.log(leadId, "leadId1");
+  // console.log(leadId, "leadId1");
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheets
   );

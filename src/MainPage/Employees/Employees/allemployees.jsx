@@ -21,6 +21,7 @@ const AllEmployees = () => {
   const [employeeIdQuery, setEmployeeIdQuery] = useState("");
   const [employeeNameQuery, setEmployeeNameQuery] = useState("");
   const [displayEmployeeArr, setDisplayEmployeeArr] = useState([]);
+  const [userPassword, setUserPassword] = useState(false);
   const [isUpdateUser, setIsUpdateUser] = useState(false);
   const [show, setShow] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
@@ -51,11 +52,20 @@ const AllEmployees = () => {
     }
   });
 
+
+
+
+
+
   const handleFilterByEmployeeId = (query) => {
     setEmployeeIdQuery(query);
     let tempArr = employeeArr.filter((el) => `${el.employeeId}`.toLowerCase().includes(query.toLowerCase()));
     setDisplayEmployeeArr([...tempArr]);
   };
+
+
+
+
 
   const handleFilterByEmployeeName = (query) => {
     setEmployeeNameQuery(query);
@@ -63,12 +73,16 @@ const AllEmployees = () => {
     setDisplayEmployeeArr([...tempArr]);
   };
 
+
+
+
+
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployess(userObj._id, role);
       if (res.success) {
         dispatch(returnAllEmployees(res.data));
-        console.log(res?.data, "res2");
+        // console.log(res?.data, "res2");
         // setEmployeeArr(res.data);
         // setDisplayEmployeeArr(employeeArr);
       }
@@ -78,10 +92,12 @@ const AllEmployees = () => {
     }
   };
 
+
+
+
   const handleEmployeeDelete = async () => {
     try {
       let { data: res } = await deleteEmployees(selectedEmployee._id);
-      console.log(res, "resdel");
       if (res.success) {
         toastSuccess(res.message);
         handleGetAllEmployees();
@@ -93,6 +109,10 @@ const AllEmployees = () => {
       toastError(error);
     }
   };
+
+
+
+
   // Editemployee
   const handleEdit = (row) => {
     // console.log(row, "1row updat/e"); //whole object
@@ -102,7 +122,14 @@ const AllEmployees = () => {
     dispatch(serCurrentEmployee(row));
     setShow(true);
   };
+  const handleEditPassword = (row) => {
+    // handleEditPassword.log(row, "1row updat/e"); //whole object
+    setUserPassword(true)
 
+    dispatch(serCurrentEmployee(row));
+    // setShow(true);
+  };
+  
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
@@ -222,6 +249,16 @@ const AllEmployees = () => {
                             <a
                               className="dropdown-item"
                               href="#"
+                              // data-bs-toggle="modal"
+                              // data-bs-target="#add_employee"
+                              // onClick={() => handleEdit(row)}
+                              onClick={() => handleEditPassword(el)}
+                            >
+                              <i className="fa fa-pencil m-r-5" /> Edit Password
+                            </a>
+                            <a
+                              className="dropdown-item"
+                              href="#"
                               data-bs-toggle="modal"
                               data-bs-target="#delete_employee"
                               onClick={() => {
@@ -246,8 +283,10 @@ const AllEmployees = () => {
           </div>
         </div>
         {/* /Page Content */}
-        {/* Add Employee Modal */}
-        <Addemployee show={show} setShow={setShow} />
+        {/* Add Employee Modal */} 
+        
+
+        <Addemployee show={show} setShow={setShow} userPassword={userPassword} setUserPassword ={setUserPassword}/>
         {/* /Add Employee Modal */}
         {/* Edit Employee Modal */}
         <Editemployee show={show} setShow={setShow} />

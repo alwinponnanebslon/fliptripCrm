@@ -265,6 +265,10 @@ const AdminDashboard = () => {
     }
   }, [currentReminder]);
 
+
+
+
+  
   const handleGetAllLeads = async () => {
     try {
       let { data: res } = await getLeadsByRole(userObj?._id, role);
@@ -388,9 +392,18 @@ const AdminDashboard = () => {
   });
   // }, []);
 
+
+
+
+
+
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
   };
+
+
+
+
 
   const handleFilterDateFromAndTo = async () => {
     if (dateTo != "" && dateFrom != "") {

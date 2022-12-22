@@ -45,6 +45,7 @@ import {
 } from "../../Services/lead.service";
 
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
+
 import { tourGet } from "../../redux/features/tour/tourSlice";
 import {
   clientGet,
@@ -54,9 +55,9 @@ import {
 } from "../../redux/features/client/clientSlice";
 import LeadView from "./LeadView";
 import { get, updateClient, getFilter } from "../../Services/client.service";
-import LeadDetails from "./LeadDetails";
-import { date } from "yup";
-import { shouldForwardProp } from "@mui/system";
+// import LeadDetails from "./LeadDetails";
+// import { date } from "yup";
+// import { shouldForwardProp } from "@mui/system";
 import Notes from "../Lead/Notes/Notes";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import { getAllLeadSearchFilter } from "../../Services/lead.service";
@@ -70,7 +71,7 @@ const Leads = () => {
   const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
   // // console.log(agents, "12agents");
   // console.log(teamLeads, "12ateamLeads");
-  const destinations = useSelector((state) => state.tour.tours);
+  // const destinations = useSelector((state) => state.tour.tours);
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
 
   const [clientId, setClientId] = useState("");
@@ -108,7 +109,6 @@ const Leads = () => {
   const [dateTo, setDateTo] = useState("");
   const [isStatusOfLead, setIsStatusOfLead] = useState(false);
   const [show, setShow] = useState(false);
-  const [isNotesSend, setIsNotesSend] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
   const [newClient, setNewClient] = useState(false);
   const [quotationArrData, setQuotationArrData] = useState([]);
@@ -203,7 +203,6 @@ const Leads = () => {
       zIndex: 5,
     }),
     control: () => ({
-      // none of react-select's styles are passed to <Control />
       display: "flex",
       flexDirection: "row",
       backgroundColor: "white",
@@ -217,7 +216,6 @@ const Leads = () => {
     try {
       let { data: res } = await getEmployess(userObj?._id, role);
       if (res.success) {
-        // console.log(res, "res");
         dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
@@ -232,7 +230,6 @@ const Leads = () => {
       // console.log(res, "Res12");
       if (res.success) {
         let tempArr = res.data;
-        // console.log(userAuthorise, "1te");
         // console.log(tempArr, "1tempArr2");
         if (userAuthorise.role == "SPOC") {
           let temp = tempArr.filter(
@@ -311,11 +308,6 @@ const Leads = () => {
   }, [leadObj, leadUpdateId]);
 
   useEffect(() => {
-    // // console.log(
-    //   clientsArr,
-    //   "clientasdsadas---------------------------------------------+++++++++++++++++++++"
-    // );
-    // console.log(agents, "agetn2");
     if (agents && agents.length > 0) {
       let tempArr = [];
       if (leadId != "") {
@@ -345,6 +337,8 @@ const Leads = () => {
     }
   }, [agents]);
 
+
+
   useEffect(() => {
     if (teamLeads && teamLeads.length > 0) {
       let tempArr = teamLeads.map((el) => {
@@ -358,9 +352,14 @@ const Leads = () => {
     }
   }, [agents]);
 
+
+
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
+
+
+
 
   const getBase64 = (file, cb) => {
     let reader = new FileReader();
@@ -369,7 +368,6 @@ const Leads = () => {
       cb(reader.result);
     };
     reader.onerror = function (error) {
-      // // console.log('Error: ', error)
     };
   };
 
@@ -398,7 +396,6 @@ const Leads = () => {
 
   const handleFileSelectionPassPortBack = (event) => {
     if (event.target.files[0]) {
-      // console.log(event.target.files[0], "1111 ")
       getBase64(event.target.files[0], (result) => {
         setPassPortBackImg(result);
       });
@@ -408,7 +405,6 @@ const Leads = () => {
   const handleFilterWithAgentName = (query) => {
     // console.log(query, "query3");
     setEmployeeNameQuery(query);
-    // console.log(employeeNameQuery, "123query3");
     if (leadArrFilterStatus != "") {
     } else {
       let tempArr = leadsArr.filter(
@@ -458,7 +454,6 @@ const Leads = () => {
     if (getFilterByTeam?.data?.data?.length > 0) {
       setDisplayLeadsArr(getFilterByTeam?.data?.data);
     }
-    // console.log(getFilterByTeam?.data?.data, "123123");
   };
 
   useEffect(() => {
@@ -516,6 +511,11 @@ const Leads = () => {
       }
     }
   };
+
+
+
+
+
   const handleFilterDateFromAndToAndStatus = async () => {
     if (dateTo != "" && dateFrom != "") {
       if (Date.parse(dateFrom) > Date.parse(dateTo)) {
@@ -528,9 +528,7 @@ const Leads = () => {
           userAuthorise?.user?._id,
           leadArrFilterStatus
         );
-        // console.log(getfilterLead.data.data, "getfilterLeadw4");
         setDisplayLeadsArr(getfilterLead.data.data);
-        // setLeadsArr(getfilterLead.data.data);
       }
     }
   };
@@ -543,9 +541,12 @@ const Leads = () => {
     }
   }, [dateFrom, dateTo]);
 
-  useEffect(() => {
+  useEffect(() => {//////////////////////////////////////////////
     handleSetAgentId();
   }, [userAuthorise]);
+
+
+
 
   const handleSetAgentId = async () => {
     // console.log(userAuthorise, "userAuthorise21");
@@ -555,12 +556,17 @@ const Leads = () => {
     }
   };
 
+
+
+
   const handleFilterDateTo = async (query) => {
     setDateTo(new Date(query).toISOString());
-    // query = new Date(query).toISOString();
-    // let getfilterLead = await getLeadFilterByDate(query);
-    // console.log(getfilterLead.data, "1querytotototo");
   };
+
+
+
+
+
   const clearFunc = () => {
     setSubject("");
     setClientId("");
@@ -577,12 +583,16 @@ const Leads = () => {
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
   };
+
+
+
+
+
+
   const handleUpdateLeadsArray = (value1, value2, value3) => {
     // handleUpdateLeadsArray("OPEN", "REOPENED");
-    // handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
 
     let tempArr = leadsArr;
-    // console.log(tempArr, "1tempArr2");
     // console.log(tempArr, "atemp23");
     if (value1 == "OPEN") {
       let temp = tempArr.filter(
@@ -590,7 +600,6 @@ const Leads = () => {
       );
 
       setDisplayLeadsArr(temp);
-      // setLeadsArr(temp);
     } else if (value1 == "CONVERT" && value2 == "CONVERT_BY_SPOC") {
       let temp = tempArr.filter(
         (el) => `${el.status}` == value1 || `${el.status}` == value2
@@ -734,7 +743,6 @@ const Leads = () => {
       }
     } catch (err) {
       toastError(err);
-      // console.error(err);
     }
   };
 
@@ -785,7 +793,6 @@ const Leads = () => {
                     status: value,
                   };
                   let existQuotation = quotationArrData.filter((el) => {
-                    // console.log(el.status, "123");
                     return el.leadId == id && el.status == "Convert";
                   });
                   // console.log(existQuotation, "existQuotation21");
@@ -793,11 +800,7 @@ const Leads = () => {
                   if (existQuotation.length > 0) {
                     setShowNotes(true);
                     setIsStatusOfLead(true);
-                    // handleChangeStatusOf(id,obj)
-                    // if (showNotes) {
                     updateStatusOfLead(id, obj);
-                    // }
-                    // isStatusofLEAD = true;
                     history.push(`/admin/lead/${id}/?${true}`);
                     setQuotationApproved(false);
                   } else {
@@ -859,12 +862,15 @@ const Leads = () => {
     setSpocId(e);
   };
 
+
+
   const handleDestinationChange = (e) => {
     setAgentId(e.value);
-
     // setDestinationId(e.value);
   };
 
+
+  
   const handleTeamLeadChange = (e) => {
     // let tempArr = teamLeads.map((el) => {
     //   let obj = {
@@ -890,7 +896,6 @@ const Leads = () => {
     // console.log(arr, "Arr23s123");
     setAgentsArr(arr);
     setLeadId(e);
-    // setAgentId("");
   };
 
   const options = [
@@ -945,8 +950,6 @@ const Leads = () => {
   };
 
   const handleReturndropDown = (record) => {
-    // console.log(record?.status, "role");
-    // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.convert , "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.convert")
     if (role == "ADMIN") {
       return (
         <>
@@ -1217,9 +1220,9 @@ const Leads = () => {
       );
     }
   };
-  useEffect(() => {
-    console.log(leadArrFilterStatus, "leadArrFilterStatus");
-  }, [leadArrFilterStatus]);
+  // useEffect(() => {
+  //   console.log(leadArrFilterStatus, "leadArrFilterStatus");
+  // }, [leadArrFilterStatus]);
 
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
@@ -1264,7 +1267,7 @@ const Leads = () => {
       passPortBackImg,
     };
     // console.log(obj, "obj123");
-    console.log(clientIdForUpdate, "clientIdForUpdate1234");
+    // console.log (clientIdForUpdate, "clientIdForUpdate1234");
     let { data: res } = await updateClient(obj, clientIdForUpdate);
     if (res?.success) {
       toastSuccess(res.message);
@@ -2048,7 +2051,6 @@ const Leads = () => {
     },
   ];
   const columns_SPOC = [
-    // { title: "Lead Subject", dataIndex: "subject" },
     {
       title: "Guest Name",
       // dataIndex: "clientName",
@@ -2083,9 +2085,6 @@ const Leads = () => {
           {role != rolesObj.ACCOUNT ? (
             <div className="dropdown action-label text-center">
               {handleReturndropDown(record)}
-              {/* <h4 style={{ color: "red" }}>
-                {+" " + record?.profit < 0 ? record?.profit : ""}
-              </h4> */}
             </div>
           ) : (
             <div>{record?.status} </div>
@@ -2157,8 +2156,6 @@ const Leads = () => {
                   <a
                     className="dropdown-item"
                     href="#"
-                    // data-bs-toggle="modal"
-                    // data-bs-target="#add_Lead"
                     onClick={() => handleEdit(record)}
                   >
                     <i className="fa fa-pencil m-r-5" /> Edit
@@ -2204,11 +2201,6 @@ const Leads = () => {
       setclientObj(obj);
     }
   };
-  const [isClearable, setIsClearable] = useState(true);
-  const [isSearchable, setIsSearchable] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isRtl, setIsRtl] = useState(false);
 
   return (
     <div className="page-wrapper">
@@ -2230,18 +2222,9 @@ const Leads = () => {
                 <li className="breadcrumb-item active">Leads</li>
               </ul>
             </div>
-            {/* {console.log(role, "123role23")} */}
-            {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
             {role != rolesObj.ACCOUNT && (
               <div className="col-auto float-end ml-auto">
-                <a
-                  // href="#"
-                  className="btn add-btn"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_Lead"
-
-                  onClick={() => setShow(true)}
-                >
+                <a className="btn add-btn" onClick={() => setShow(true)}>
                   <i className="fa fa-plus" /> Add Lead
                 </a>
               </div>
@@ -2299,8 +2282,6 @@ const Leads = () => {
                       {
                         leadsArr.filter((x) => {
                           return (
-                            // x.status == "ON_HOLD" ||
-                            // x.status == "IN_PROGRESS" ||
                             x.status == "OPEN" //|| x.status == "REOPENED"
                           );
                         }).length
@@ -2413,9 +2394,6 @@ const Leads = () => {
                       <div>
                         <span className="d-block">Cancel Leads</span>
                       </div>
-                      {/* <div>
-                        <span className="text-danger">-75%</span>
-                      </div> */}
                     </div>
                     <h3 className="mb-3">
                       {
@@ -2442,7 +2420,6 @@ const Leads = () => {
         )}
         {/* Search Filter */}
 
-        {/*  */}
         <div div className="row filter-row">
           {role != rolesObj.SPOC &&
             role != rolesObj.TEAMLEAD &&
@@ -2540,7 +2517,6 @@ const Leads = () => {
                   styles={customStyles}
                   options={options}
                 />
-                {/* handleFilterByPriority */}
                 {/* <select className="select floating">
                 <option> -- Select -- </option>
                 <option> High </option>
@@ -2551,8 +2527,6 @@ const Leads = () => {
               </div>
             </div>
           )}
-          {/* {role != rolesObj.SPOC && role != rolesObj.ACCOUNT && ( */}
-          {/* <div> */}
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus">
               <input
@@ -2569,7 +2543,6 @@ const Leads = () => {
           <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
             <div className="form-group form-focus">
               <input
-                // value={employeeNameQuery}
                 onChange={(e) => {
                   handleFilterDateTo(e.target.value);
                 }}
@@ -2579,32 +2552,7 @@ const Leads = () => {
               <label className="focus-label">To </label>
             </div>
           </div>
-          {/* </div> */}
-          {/* )} */}
-
-          {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-            <div className="form-group form-focus select-focus">
-              <div>
-                <input className="form-control floating datetimepicker" type="date" />
-              </div>
-              <label className="focus-label">From</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-            <div className="form-group form-focus select-focus">
-              <div>
-                <input className="form-control floating datetimepicker" type="date" />
-              </div>
-              <label className="focus-label">To</label>
-            </div>
-          </div>
-          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-            <a href="#" className="btn btn-success btn-block w-100"> Search </a>
-          </div> */}
         </div>
-        {/* /Search Filter */}
-        {/* {// console.log("temam,", role)} */}
-        {/* {console.log(displayLeadsArr, "role323", role, "rol2")} */}
 
         <div className="row">
           <div className="col-md-12">
@@ -2635,25 +2583,13 @@ const Leads = () => {
                 // bordered
                 dataSource={displayLeadsArr}
                 rowKey={(record, index) => index}
-                // onChange={console.log("change")}
               />
             </div>
           </div>
         </div>
       </div>
       {/* /Page Content */}
-      {/* Add Lead Modal */}
-      {/* <div id="add_Lead" className="modal custom-modal" role="dialog"> */}
-      {/* <div className="col-auto float-end ml-auto"> */}
-      {/* <a
-            href="#"
-            className="btn add-btn"
-            data-bs-toggle="modal"
-            data-bs-target="#view_Lead1"
-          >
-            <i className="fa fa-plus" />
-          </a> */}
-      {/* </div> */}
+
       {/* <div
           className="modal-dialog modal-dialog-centered modal-lg"
           role="document"
@@ -2673,18 +2609,13 @@ const Leads = () => {
               </button>
             </div> */}
       {/* <div className="modal-body"> */}
-      <Modal
-        size="lg"
-        show={show}
-        // className="add_note"
-      >
+      <Modal size="lg" show={show}>
         <Modal.Header>
           <Modal.Title>
             {leadObj && leadObj._id ? " Edit " : " Add "}Lead
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <form onSubmit={handleSubmit}> */}
           <form>
             <div className="col-md-12">
               <div className="form-group">
@@ -2707,11 +2638,9 @@ const Leads = () => {
                   <label>
                     Existing Client ({newClient ? 0 : clientArr.length})
                   </label>
-                  {/* {console.log(clientArr, "clientArr123")} */}
                   <input
                     type={"text"}
                     onChange={(e) => {
-                      // console.log(e.target.value);
                       setFilterClientByName(e.target.value);
                     }}
                   />
@@ -2756,26 +2685,6 @@ const Leads = () => {
                         })}
                       </tbody>
                     </table>
-
-                    // <div>
-                    //   {clientArr.map((client, i) => {
-                    //     return (
-                    //       <div
-                    //         key={i}
-                    //         style={{
-                    //           display: "flex",
-                    //           flexDirection: "column",
-                    //           border: "solid px grey",
-                    //           borderRadius: 10,
-                    //         }}
-                    //       >
-                    //         <p>{`name: ${client?.name}`} </p>
-                    //         <p>email: {client?.email}</p>
-                    //         <p>phone: {client?.phone} </p>
-                    //       </div>
-                    //     );
-                    //   })}
-                    // </div>
                   )}
 
                   {/* <Select
@@ -2848,19 +2757,6 @@ const Leads = () => {
                 </select> */}
                 </div>
               )}
-
-              {/* <div className="form-group col-md-6">
-                <label className="col-form-label">New Client</label>
-                <input
-                  type="checkbox"
-                  style={{ marginLeft: 10 }}
-                  value={newClient}
-                  checked={newClient}
-                  onChange={(e) => {
-                    setNewClient(!newClient);
-                  }}
-                ></input>
-              </div> */}
             </div>
             <div className="col-md-6">
               <div className="form-group">
@@ -2924,7 +2820,6 @@ const Leads = () => {
               /> */}
               </div>
             </div>
-            {/* {console.log("234789047890")} */}
             {/* <Select
                           options={teamLeadsArr.map((el) => {
                             return { ...el, value: el._id, label: el.name };
@@ -2941,10 +2836,7 @@ const Leads = () => {
                           {" "}
                           <option value=""> --- Select Team Lead</option>
                         </Select> */}
-            {/* {leadObj && leadObj._id ? (
-              " "
-            ) : (
-              <div> */}
+
             {role != rolesObj.TEAMLEAD &&
               role != rolesObj.SPOC &&
               role != rolesObj.ACCOUNT && (
@@ -2962,8 +2854,6 @@ const Leads = () => {
                         handleTeamLeadChange(e.target.value);
                       }}
                     >
-                      {/* {console.log(teamLeadsArr, "teamLeadsArr23")}
-                          {console.log(leadId, "tleadId23")} */}
                       <option value=""> --- Select Team Lead</option>
                       {teamLeadsArr &&
                         teamLeadsArr.map((agent, i) => {
@@ -2999,7 +2889,6 @@ const Leads = () => {
                     {agentsArr && agentsArr.length > 0 ? agentsArr.length : 0})
                     <span className="text-danger">*</span>
                   </label>
-                  {/* {console.log(agentsArr, "agentsArr123")} */}
                   <select
                     className="select form-control"
                     value={agentId}
@@ -3011,12 +2900,9 @@ const Leads = () => {
                     {role == rolesObj.TEAMLEAD &&
                       agentsArr &&
                       agentsArr.map((spoc, i) => {
-                        // console.log(spoc, i, "2132");
-                        // spoc.leadId == leadId;
                         return (
                           <>
                             <option key={i} value={spoc.value}>
-                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
                               {spoc.label}
                             </option>
                           </>
@@ -3030,7 +2916,6 @@ const Leads = () => {
                         return (
                           <>
                             <option key={i} value={spoc.value}>
-                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
                               {spoc.label}
                             </option>
                           </>
@@ -3044,24 +2929,15 @@ const Leads = () => {
                         return (
                           <>
                             <option key={i} value={spoc.value}>
-                              {/* {spoc.leadId == leadId ? spoc.label : ""} */}
                               {spoc.label}
                             </option>
                           </>
                         );
                       })}
-
-                    {/* {agentsArr &&
-                          agentsArr.filter((spoc) => {
-                            spoc.leadId == leadId;
-
-                          })} */}
                   </select>
                 </div>
               </div>
             )}
-            {/* </div>
-            )} */}
 
             <div className="form-group">
               <label>
@@ -3110,11 +2986,7 @@ const Leads = () => {
         </Modal.Footer>
       </Modal>
 
-      <Modal
-        size="lg"
-        show={showClientDetails}
-        // className="add_note"
-      >
+      <Modal size="lg" show={showClientDetails}>
         <Modal.Header>
           <Modal.Title>Personal Details</Modal.Title>
         </Modal.Header>
@@ -3179,7 +3051,6 @@ const Leads = () => {
               </label>
               <input
                 onChange={(e) => {
-                  // setFileName("penCardImg")
                   handleFileSelectionPenCard(e);
                 }}
                 className="form-control"
@@ -3187,13 +3058,13 @@ const Leads = () => {
                 name="pencardImg"
               />
             </div>
+
             <div className="form-group">
               <label>
                 Pass port Front Image <span className="text-danger">*</span>
               </label>
               <input
                 onChange={(e) => {
-                  // setFileName("passPortFrontImg")
                   handleFileSelectionPassPortFront(e);
                 }}
                 className="form-control"
@@ -3201,6 +3072,7 @@ const Leads = () => {
                 name="passPortFrontImg"
               />
             </div>
+
             <div className="form-group">
               <label>
                 Pass port back image <span className="text-danger">*</span>
@@ -3326,8 +3198,6 @@ const Leads = () => {
           {/* <Notes show1={showNotes} setShow1={setShowNotes} /> */}
         </div>
       </div>
-
-      {/* Update Agent Modal */}
     </div>
   );
 };

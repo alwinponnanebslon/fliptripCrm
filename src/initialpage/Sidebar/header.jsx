@@ -3,7 +3,6 @@
  */
 import React, { useEffect, useState } from "react";
 import { Link, withRouter, useHistory, useParams } from "react-router-dom";
-// import { DashboardBox, DashboardTable } from "../../Utility/DashboardBox";
 import { DashboardBox, DashboardTable } from "../../utils/DashboardBox";
 import DataTable from "react-data-table-component";
 import {
@@ -41,6 +40,7 @@ const Header = (props) => {
   const notificationResultArr = useSelector(
     (state) => state.notification.notifications
   );
+
   const reminderArray = useSelector((state) => state.reminder.reminders);
   const leadArray = useSelector((state) => state.lead.leadArr);
   const [dataArr, setDataArr] = useState([]);
@@ -57,7 +57,6 @@ const Header = (props) => {
   const dispatch = useDispatch();
   // const params = useParams();
   // const leadId = params.leadId;
-  // console.log(leadId, "leadId2143");
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
@@ -66,7 +65,6 @@ const Header = (props) => {
     dispatch(leadGet());
   }, []);
   useEffect(() => {
-    // console.log(leadArray, "leadArray123");
     setLeadArr(leadArray);
     // dispatch(leadGet());
   }, [leadArray]);
@@ -534,6 +532,7 @@ const Header = (props) => {
         {/* 
         
         */}
+
         {role != "SUPERVISOR" && (
           <li className="nav-item dropdown">
             <a
@@ -545,7 +544,6 @@ const Header = (props) => {
               {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
               <i className="fa fa-clock-o" />
               <span className="badge badge-pill">
-                {/* {reminderArrData?.length > 0 ? reminderArrData?.length : 0} */}
                 {console.log(reminderArrData, "reminderArrData?.length")}
                 {reminderArrData?.length}
               </span>
@@ -557,12 +555,11 @@ const Header = (props) => {
                 Clear All
               </a> */}
               </div>
-              {/* {console.log(reminderArrData, "reminderArrData123213")} */}
+              {console.log(reminderArrData, "reminderArrData123213")}
               <div className="noti-content">
                 <ul className="notification-list">
                   {reminderArrData &&
                     reminderArrData.map((el, index) => {
-                      // console.log(el, "ekll234242");
                       return (
                         <li className="notification-message" key={index}>
                           <div

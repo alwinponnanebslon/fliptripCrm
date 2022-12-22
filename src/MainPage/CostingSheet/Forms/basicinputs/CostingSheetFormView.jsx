@@ -68,7 +68,7 @@ const ViewCostingSheetForm = () => {
   }, [tempLocation]);
 
   const handleInit = () => {
-    console.log(leadId, "12leadId23");
+    // console.log(leadId, "12leadId23");
     dispatch(costingSheetGet(`leadId=${leadId}`));
   };
 

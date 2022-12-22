@@ -18,6 +18,7 @@ import {
   getEmployess,
   updateEmployeeToDb,
   getAllEmployess,
+  updateEmployeePasswordToDb,
 } from "../../Services/user.service";
 import { rolesObj } from "../../utils/roles";
 import { toastError, toastSuccess } from "../../utils/toastUtils";
@@ -28,7 +29,9 @@ import styles from "./selectStyles.module.css";
 //   returnAllEmployees,
 // } from "../../../redux/features/employee/employeeSlice";
 
-const Addemployee = ({ show, setShow }) => {
+const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
+  console.log(userPassword, "userPAsword12");
+  // console.log(userPassword, "userPAswor23d12");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -102,8 +105,8 @@ const Addemployee = ({ show, setShow }) => {
       setLastName(employeeObj?.lastName);
       setEmail(employeeObj?.email);
       setPhone(employeeObj?.phone);
-      setPassword(employeeObj?.password);
-      setConfirmPassword(employeeObj?.confirmPassword);
+      // setPassword(employeeObj?.password);
+      // setConfirmPassword(employeeObj?.confirmPassword);
       setEmployeeId(employeeObj?.employeeId);
       setDoj(moment(employeeObj?.doj).format("YYYY-MM-DD"));
       setDob(moment(employeeObj?.dob).format("YYYY-MM-DD"));
@@ -156,6 +159,49 @@ const Addemployee = ({ show, setShow }) => {
       });
     }
   };
+  const handleUpdateForUserPassword = async (e) => {
+    e.preventDefault();
+    try {
+      if (password.trim().length == 0) {
+        toast.error("Password  cannot be empty");
+        return;
+      }
+      if (password.trim().length < 5) {
+        toast.error("Password length should minumum 5");
+        return;
+      } 
+      // if (confirmPassword.trim().length < 5) {
+      //   toast.error("Confirm Password confirm should be same");
+      //   return;
+      // } 
+      if (password != confirmPassword) {
+        toast.error("Password and confirm password cannot be different");
+        return;
+      }
+ if (confirmPassword == "") {
+        toast.error("Confirm Password cannot be empty");
+        return;
+      }
+      let obj = {
+        password,
+        confirmPassword,
+      };
+
+      let { data: res } = await updateEmployeePasswordToDb(docId, obj);
+
+      if (res.success) {
+        // dispatch(addEmployee(obj))
+        toastSuccess(res?.message);
+        handleGetAllEmployees();
+        window.location.reload();
+        setUserPassword(false);
+        ClearFunc();
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
 
   const handleEmployeeCreate = async (e) => {
     e.preventDefault();
@@ -196,10 +242,10 @@ const Addemployee = ({ show, setShow }) => {
         toast.error("Password and confirm password cannot be different");
         return;
       }
-      if (employeeId == "") {
-        toast.error("EmployeeId cannot be empty");
-        return;
-      }
+      // if (employeeId == "") {
+      //   toast.error("EmployeeId cannot be empty");
+      //   return;
+      // }
       if (password == "") {
         toast.error("Password cannot be empty");
         return;
@@ -212,10 +258,10 @@ const Addemployee = ({ show, setShow }) => {
         toast.error("Role cannot be empty");
         return;
       }
-      if (role == rolesObj.SPOC && leadId == "") {
-        toast.error("Team Lead cannot be empty");
-        return;
-      }
+      // if (role == rolesObj.SPOC && leadId == "") {
+      //   toast.error("Team Lead cannot be empty");
+      //   return;
+      // }
       if (doj == "") {
         toast.error("Date of joining is mandatory");
         return;
@@ -246,7 +292,7 @@ const Addemployee = ({ show, setShow }) => {
       if (role == rolesObj.SPOC) {
         obj.leadId = leadId;
       }
-      console.log(obj, "obj123132");
+      // console.log(obj, "obj123132");
       let { data: res } = await addEmployeeToDb(obj);
 
       if (res.success) {
@@ -281,7 +327,7 @@ const Addemployee = ({ show, setShow }) => {
       // if (role == rolesObj.SPOC) {
       //   obj.leadId = leadId;
       // }
-      console.log(obj, "obj23");
+      // console.log(obj, "obj23");
       let { data: res } = await updateEmployeeToDb(docId, obj);
 
       if (res.success) {
@@ -440,10 +486,10 @@ const Addemployee = ({ show, setShow }) => {
                         </div>
                       </div>
                     )}
-                    <div className="col-sm-6">
+                    {/* <div className="col-sm-6">
                       <div className="form-group">
                         <label className="col-form-label">
-                          Employee ID <span className="text-danger">*</span>
+                          Employee ID 
                         </label>
                         <input
                           value={employeeId}
@@ -452,7 +498,7 @@ const Addemployee = ({ show, setShow }) => {
                           className="form-control"
                         />
                       </div>
-                    </div>
+                    </div> */}
                     <div className="col-sm-6">
                       <div className="form-group">
                         <label className="col-form-label">
@@ -831,7 +877,68 @@ const Addemployee = ({ show, setShow }) => {
                 {/* <Button variant="primary">Save changes</Button> */}
               </Modal.Footer>
             </Modal>
-            {/* </div> */}
+            {/* {console.log(userPassword, "userPassword1231")} */}
+            <Modal size="lg" show={userPassword} className="add_employee">
+              <Modal.Header>
+                <Modal.Title>Update Employee Password</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <form>
+                  <div className="row">
+                    {reduxrole == "ADMIN" && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">Password</label>
+                          <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="form-control"
+                            type="password"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {reduxrole == "ADMIN" && (
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label className="col-form-label">
+                            Confirm Password
+                          </label>
+                          <input
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="form-control"
+                            type="password"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="submit-section">
+                    <button
+                      className="btn btn-primary submit-btn"
+                      onClick={(e) => {
+                        handleUpdateForUserPassword(e); 
+                      }}
+                      data-bs-dismiss="modal"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setUserPassword(false); 
+                    ClearFunc()
+                  }}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </div>

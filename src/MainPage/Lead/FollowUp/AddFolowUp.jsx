@@ -127,7 +127,7 @@ const AddFolowUp = () => {
                     value={followDate}
                     onChange={(e) => {
                       setFollowDate(e.target.value);
-                      console.log(e.target.value, "insie");
+                      // console.log(e.target.value, "insie");
                     }}
                     // onChange={(e) =>
                     //   setFollowDate(

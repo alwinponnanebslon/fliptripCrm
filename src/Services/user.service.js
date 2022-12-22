@@ -53,9 +53,12 @@ export const handleCheckValidUserDashboard = async (formData) => {
 };
 export const getEmployessLinkedWithLeadId = async (id) => {
   // console.log(formData);
-  return await axios.get(
-    `${serverUrl}/getEmployessLinkedWithThisLeadId/${id}`
-  );
+  return await axios.get(`${serverUrl}/getEmployessLinkedWithThisLeadId/${id}`);
+};
+export const updateEmployeePasswordToDb = async (id, obj) => {
+  // console.log(formData);
+  return await axios.patch(`${serverUrl}/updateEmployeePassword/${id}`, obj);
+  // return await axios.post(`${serverUrl}/`, obj);
 };
 // export const getReminderApi = (id) => {
 //   // console.log(id, "0po90p");
