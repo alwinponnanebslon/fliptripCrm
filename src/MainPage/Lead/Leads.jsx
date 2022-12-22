@@ -307,7 +307,47 @@ const Leads = () => {
     }
   }, [leadObj, leadUpdateId]);
 
+  // useEffect(() => {
+  //   if (agents && agents.length > 0) {
+  //     let tempArr = [];
+  //     if (leadId != "") {
+  //       tempArr = agents.map((el) => {
+  //         let obj = {};
+  //         if (el.leadId == leadId) {
+  //           obj = {
+  //             label: `${el.firstName} ${el.lastName}`,
+  //             value: el?._id,
+  //             leadId: el?.leadId,
+  //           };
+  //         }
+  //         return obj;
+  //       });
+  //     } else {
+  //       tempArr = agents.map((el) => {
+  //         let obj = {
+  //           label: `${el.firstName} ${el.lastName}`,
+  //           value: el?._id,
+  //           leadId: el?.leadId,
+  //         };
+  //         return obj;
+  //       });
+  //     }
+  //     // console.log(tempArr, "12tempArr12");
+  //     setAgentsArr([...tempArr]);
+  //   }
+  // }, [agents]);
+
   useEffect(() => {
+    if (teamLeads && teamLeads.length > 0) {
+      let tempArr = teamLeads.map((el) => {
+        let obj = {
+          label: `${el.firstName} ${el.lastName}`,
+          value: el?._id,
+        };
+        return obj;
+      });
+      setTeamLeadsArr([...tempArr]);
+    }
     if (agents && agents.length > 0) {
       let tempArr = [];
       if (leadId != "") {
@@ -334,19 +374,6 @@ const Leads = () => {
       }
       // console.log(tempArr, "12tempArr12");
       setAgentsArr([...tempArr]);
-    }
-  }, [agents]);
-
-  useEffect(() => {
-    if (teamLeads && teamLeads.length > 0) {
-      let tempArr = teamLeads.map((el) => {
-        let obj = {
-          label: `${el.firstName} ${el.lastName}`,
-          value: el?._id,
-        };
-        return obj;
-      });
-      setTeamLeadsArr([...tempArr]);
     }
   }, [agents]);
 
