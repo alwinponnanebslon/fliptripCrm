@@ -575,17 +575,17 @@ const Leads = () => {
   };
 
   const clearFunc = () => {
-    setSubject("");
-    setClientId("");
-    setPhone("");
-    setName("");
-    setEmail("");
-    setPriority("");
-    // setAgentId("");
-    setSpocId("");
-    setDescription("");
-    // setLeadObj({});
-    setLeadUpdateId("");
+    // setSubject("");
+    // setClientId("");
+    // setPhone("");
+    // setName("");
+    // setEmail("");
+    // setPriority("");
+    // // setAgentId("");
+    // setSpocId("");
+    // setDescription("");
+    // // setLeadObj({});
+    // setLeadUpdateId("");
     // setAgentsArr([]);
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
