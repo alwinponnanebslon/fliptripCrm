@@ -584,7 +584,7 @@ const Leads = () => {
     // setAgentId("");
     setSpocId("");
     setDescription("");
-    setLeadObj({});
+    // setLeadObj({});
     setLeadUpdateId("");
     // setAgentsArr([]);
     // setLeadsArr([]);
