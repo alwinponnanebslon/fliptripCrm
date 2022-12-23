@@ -109,7 +109,7 @@ const Quotation = () => {
 
     dispatch(setQuotationObj(row));
     dispatch(setTour(row));
-    history.push("/pdf");
+    history.push("/pdf");     
   };
 
   const handleDelete = (id) => {

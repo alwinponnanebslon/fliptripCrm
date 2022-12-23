@@ -59,6 +59,7 @@ const LeadSidebar = (props) => {
   const [otherReason, setOtherReason] = useState("");
   const [sendDataToDb, setSendDataToDb] = useState(false);
   const [notesData, setNotesData] = useState("");
+  const [clientPositionColor, setClientPositionColor] = useState(false);
 
   // const ParamsPathName = location.pathname.split("/").length;
 
@@ -889,11 +890,15 @@ const LeadSidebar = (props) => {
                 <div className="col-lg-12 text-end mb-4">
                   {leadStatusReason.map((el, index) => {
                     return (
-                      <button
-                        key={index}
-                        className="btn-cancle col-lg-12 mb-3"
+                      <button 
+                        key={index} 
+                        variant="primary"
+                        className={`btn-cancle clientPosition=${clientPositionColor} col-lg-12 mt-3`}
+
+                        // className="btn-cancle col-lg-12 mb-3"
                         // onChange={()=>{setNotesData(el.heading)}}
-                        onClick={(e) => {
+                        onClick={(e) => { 
+                          // setClientPositionColor(true)
                           setNotesData(el.heading);
                         }}
                       >

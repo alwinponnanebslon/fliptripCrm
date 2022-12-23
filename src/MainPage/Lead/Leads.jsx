@@ -71,8 +71,6 @@ const Leads = () => {
   // const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
   const teamLeads = useSelector((state) => state.employee.employeesArr);
   // // console.log(agents, "12agents");
-  // console.log(teamLeads, "12ateamLeads");
-  // const destinations = useSelector((state) => state.tour.tours);
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
 
   const [clientId, setClientId] = useState("");
@@ -154,6 +152,7 @@ const Leads = () => {
   }, [newClient]);
 
   const handleGetClient = async () => {
+    console.log(filterClientByName)
     let get1 = await getFilter(`name=${filterClientByName}`);
 
     setClientArr(get1.data.data);
@@ -337,10 +336,14 @@ const Leads = () => {
   //     setAgentsArr([...tempArr]);
   //   }
   // }, [agents]);
-
   useEffect(() => {
+    console.log(teamLeads, "teamslead23");
+    console.log(teamLeads.length, "teamslead2333");
     if (teamLeads && teamLeads.length > 0) {
-      let tempArr = teamLeads.map((el) => {
+      let arr = teamLeads.filter((e) => e.role == "TEAMLEAD");
+      console.group(arr, "arr231231");
+      // let tempArr = teamLeads.map((el) => {
+      let tempArr = arr.map((el) => {
         let obj = {
           label: `${el.firstName} ${el.lastName}`,
           value: el?._id,
@@ -349,6 +352,19 @@ const Leads = () => {
       });
       setTeamLeadsArr([...tempArr]);
     }
+  }, [teamLeads]);
+
+  useEffect(() => {
+    // if (teamLeads && teamLeads.length > 0) {
+    //   let tempArr = teamLeads.map((el) => {
+    //     let obj = {
+    //       label: `${el.firstName} ${el.lastName}`,
+    //       value: el?._id,
+    //     };
+    //     return obj;
+    //   });
+    //   setTeamLeadsArr([...tempArr]);
+    // }
 
     if (agents && agents.length > 0) {
       let tempArr = [];
@@ -2418,7 +2434,7 @@ const Leads = () => {
           </div>
         )}
         {/* Search Filter */}
-
+        {console.log(teamLeadsArr, "teamLeads213")}
         <div div className="row filter-row">
           {role != rolesObj.SPOC &&
             role != rolesObj.TEAMLEAD &&
@@ -2436,13 +2452,17 @@ const Leads = () => {
                     onChange={handleFilterByTeamLead}
                     menuPortalTarget={document.body}
                     styles={customStyles}
-                    options={teamLeads.map((el, i) => {
-                      return (
-                        <option key={i} value={el?.value}>
-                          {el?.firstName + el?.lastName}
-                        </option>
-                      );
-
+                    options={teamLeadsArr.map((el, i) => {
+                      // return (
+                      //   <option key={i} value={el?.value}>
+                      //     {el?.firstName + el?.lastName}
+                      //   </option>
+                      // );
+                      return {
+                        ...el,
+                        value: el.value,
+                        label: el.label,
+                      };
                       // return {
                       //   ...el,
                       //   value: el._id,
@@ -2616,8 +2636,19 @@ const Leads = () => {
       {/* <div className="modal-body"> */}
       <Modal size="lg" show={show}>
         <Modal.Header>
-          <Modal.Title>
-            {leadObj && leadObj._id ? " Edit " : " Add "}Lead
+          <Modal.Title className="d-flex justify-content-between w-75">
+            {leadObj && leadObj._id ? " Edit " : " Add "}Lead{" "}
+            <div >
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShow(false);
+                  clearFunc();
+                }}
+              >
+                Close
+              </Button>
+            </div>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
