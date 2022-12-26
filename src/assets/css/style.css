@@ -9648,3 +9648,7 @@ textarea {
 .clientPostion {
   background: aliceblue;
 }
+
+tr.ant-table-row:last-child .dropdown-menu {
+  inset: auto 0 0pc !important;
+}

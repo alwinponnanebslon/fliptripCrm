@@ -66,7 +66,7 @@ function Index() {
   };
 
   return (
-    <main id="main">
+    <main id="mainPdfContainer">
       <section className="top-banner mb-80">
         <div className="container">
           <div className="row align-items-center">

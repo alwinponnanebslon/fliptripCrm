@@ -8,7 +8,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
+// import Pdf from "../MainPage/Pdf/Index";
+import Pdfile from "../../../MainPage/Pdf/Index";
+import { jsPDF } from "jspdf";
+import { PDFDownloadLink, Document, Page } from "@react-pdf/renderer";
+import ReactToPdf from "react-to-pdf";
+import ReactDOM from "react-dom";
 import {
   tourGet,
   updateTour,
@@ -25,9 +30,11 @@ import {
   quotationFilterGet,
   quotationFilterByStatusGet,
 } from "../../../redux/features/quotation/quotationSlice";
-
+import html2canvas from "html2canvas";
 import AddQuotation from "./AddQuotation";
 import PopUp from "./PopUp";
+
+const ref = React.createRef();
 
 const Quotation = () => {
   const role = useSelector((state) => state.auth.role);
@@ -81,7 +88,9 @@ const Quotation = () => {
       toastError(error);
     }
   };
-
+  const MyDoc = () => {
+    return <Pdfile />;
+  };
   useEffect(() => {
     // console.log(quotationStateArr, "quotationStateArr231");
     if (quotationStateArr && quotationStateArr?.length > 0) {
@@ -103,13 +112,40 @@ const Quotation = () => {
     dispatch(setTour(row));
   };
 
+  // const handleDownload = (row, toPdf, e) => {
   const handleDownload = (row) => {
-    // console.log(row, "row update"); //whole object
+    // const input = ;
     localStorage.setItem("quotationPdf", JSON.stringify(row));
 
     dispatch(setQuotationObj(row));
     dispatch(setTour(row));
-    history.push("/pdf");     
+
+    setTimeout(() => {
+      const input = document.getElementById("mainPdfContainer");
+
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF({
+          orientation: "portrait",
+          unit: "px",
+          format: [
+            ref.current?.clientHeight * window.devicePixelRatio,
+            ref.current?.clientWidth * window.devicePixelRatio,
+          ],
+          putOnlyUsedFonts: true,
+          floatPrecision: "smart",
+          hotfixes: ["px_scaling"],
+        });
+        pdf.addImage(imgData, "PNG", 0, 0);
+        pdf.save(`downloadFileName.pdf`);
+      });
+      // if (toPdf) {
+      //   toPdf(e);
+      // }
+    }, 300);
+
+    // console.log(row, "row update"); //whole object
+    // history.push("/pdf");
   };
 
   const handleDelete = (id) => {
@@ -181,7 +217,6 @@ const Quotation = () => {
   const handleSatus = (row, status) => {
     console.log(row, status, "3423");
     if (status == "Convert" && row && row._id) {
-      // console.log(row, status, "1231werwers3243");
       submitQuotation(row, status);
     }
     if (status == "Created" || status == "Pending") {
@@ -206,7 +241,6 @@ const Quotation = () => {
     e.preventDefault();
     if (price == "") {
       toastError("Quote price is mandatory");
-      // throw "tour name is mandatory";
     }
 
     let obj = { name, description };
@@ -228,6 +262,15 @@ const Quotation = () => {
       // }
     }
   };
+  const optionsOfPDF = {
+    orientation: "portrait",
+    unit: "px",
+    format: [84, 15],
+    putOnlyUsedFonts: true,
+    floatPrecision: "smart",
+    hotfixes: ["px_scaling"],
+  };
+
   const tour_columns = [
     {
       title: "Created On",
@@ -343,7 +386,24 @@ const Quotation = () => {
               >
                 <i className="material-icons">more_vert</i>
               </a>
-              <div className="dropdown-menu dropdown-menu-right">
+
+              {/* <div className="dropdown-menu dropdown-menu-right">
+                <ReactToPdf
+                  targetRef={ref}
+                  filename="div-blue.pdf"
+                  options={optionsOfPDF}
+                  // x={0.5}
+                  // y={0.5}
+                  // scale={0.8}
+                >
+                  {({ toPdf }) => <button onClick={toPdf}>Generate pdf</button>}
+                </ReactToPdf>
+                <div
+                  style={{ width: 500, height: 500, background: "blue" }}
+                  ref={ref}
+                />
+              </div> */}
+              {/* <div className="dropdown-menu dropdown-menu-right">
                 <a
                   className="dropdown-item"
                   // data-bs-toggle="modal"
@@ -352,7 +412,13 @@ const Quotation = () => {
                 >
                   <i className="fa fa-pencil m-r-5" /> Download
                 </a>
-              </div>
+              </div> */}
+                <span
+                  className="dropdown-item"
+                  onClick={() => handleDownload(row)}
+                >
+                  <i className="fa fa-trash-o m-r-5" /> Download
+                </span>
             </>
           ) : (
             <>
@@ -366,12 +432,7 @@ const Quotation = () => {
               </a>
 
               <div className="dropdown-menu dropdown-menu-right">
-                <a
-                  className="dropdown-item"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_quote"
-                  onClick={() => handleEdit(row)}
-                >
+                <a className="dropdown-item" onClick={() => handleEdit(row)}>
                   <i className="fa fa-pencil m-r-5" /> Edit
                 </a>
                 <a
@@ -380,12 +441,78 @@ const Quotation = () => {
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
                 </a>
+                <span
+                  className="dropdown-item"
+                  onClick={() => handleDownload(row)}
+                >
+                  <i className="fa fa-trash-o m-r-5" /> Download
+                </span>
+
+                {/* {ref.current?.clientHeight && (
+                  <ReactToPdf
+                    targetRef={ref}
+                    filename="div-blue.pdf"
+                    options={{
+                      orientation: "portrait",
+                      unit: ref.current?.clientHeight ? "px" : "in",
+                      format: [
+                        ref.current?.clientHeight
+                          ? ref.current?.clientHeight
+                          : 90,
+                        ref.current?.clientWidth
+                          ? ref.current?.clientWidth
+                          : 20,
+                      ],
+                      putOnlyUsedFonts: true,
+                      floatPrecision: "smart",
+                      hotfixes: ["px_scaling"],
+                    }}
+                    // x={0.5}
+                    // y={0.5}
+                    // scale={0.8}
+                  >
+                    {({ toPdf }) => (
+                      <button
+                        onClick={(e) => {
+                          handleDownload(row, toPdf, e);
+                        }}
+                      >
+                        Generate pdf
+                      </button>
+                    )}
+                  </ReactToPdf>
+                )} */}
+
+                {/* <div
+                  style={{ width: 50, height: 50, background: "blue" }}
+                  ref={ref}
+                /> */}
+
+                {/* <div>
+                  <Pdf targetRef={ref} filename="pdf-example.pdf">
+                    {({ toPdf }) => (
+                      <button onClick={handleDownload(row)}>
+                        Generate Pdf
+                      </button>
+                    )}
+                  </Pdf>
+              
+                </div> */}
+                {/* <div>
+                  <PDFDownloadLink document={Pdfile} fileName="somename.pdf" >
+                    {({ blob, url, loading, error }) =>
+                      loading ? "Loading document..." : "Download now!"
+                    }
+                  </PDFDownloadLink>
+                </div> */}
+                {/* 
                 <a
                   className="dropdown-item"
                   onClick={() => handleDownload(row)}
                 >
+                
                   <i className="fa fa-world m-r-5" /> Download
-                </a>
+                </a> */}
               </div>
             </>
           )}
@@ -393,13 +520,6 @@ const Quotation = () => {
       ),
     },
   ];
-
-  // const options = [
-  //   { value: "Goa", label: "Goa" },
-  //   { value: "Europe", label: "Europe" },
-  //   { value: "Bali", label: "Bali" },
-  //   { value: "Switzerland", label: "Switzerland" },
-  // ];
 
   const options1 = [
     { value: "0", label: "January" },
@@ -420,61 +540,55 @@ const Quotation = () => {
     { value: "pending", label: "pending" },
     { value: "created", label: "created" },
   ];
-  // const options3 = [
-  //   { value: "Honey gupta", label: "Honey gupta" },
-  //   { value: "Me", label: "Me" },
-  //   { value: "Mohit Bawa", label: "Mohit Bawa" },
-  //   { value: "Deepika", label: "Deepika" },
-  // ];
-  // const box=show
 
   useEffect(() => {
     setShow(show);
   }, [show]);
 
   return (
-    <div className="page-wrapper">
-      <Helmet>
-        <title>Create Qoute</title>
-        <meta name="description" content="Login page" />
-      </Helmet>
-      <div className="container-fluid p-0">
-        <div className="page-header caret_qotepage">
-          <div className="row align-items-center">
-            <div className="col">
-              <h3 className="page-title">
-                <i className="la la-file" /> Create Quote
-              </h3>
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to="/admin/dashboard">Dashboard</Link>
-                </li>
-                <li className="breadcrumb-item active">Create Quote</li>
-              </ul>
-            </div>
-
-            {isConvert == false && (
-              <div className="col-auto float-end ml-auto">
-                <a
-                  className="btn add-btn"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_quote"
-                  onClick={() => {
-                    setShow(true);
-                  }}
-                >
-                  <i
-                    className="fa fa-plus"
-                    // onClick={() => {
-                    //   setShow(true);
-                    // }}
-                  />
-                  Add Quote
-                </a>
+    <>
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Create Qoute</title>
+          <meta name="description" content="Login page" />
+        </Helmet>
+        <div className="container-fluid p-0">
+          <div className="page-header caret_qotepage">
+            <div className="row align-items-center">
+              <div className="col">
+                <h3 className="page-title">
+                  <i className="la la-file" /> Create Quote
+                </h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link to="/admin/dashboard">Dashboard</Link>
+                  </li>
+                  <li className="breadcrumb-item active">Create Quote</li>
+                </ul>
               </div>
-            )}
-          </div>
-          {/* <div className="list_group_qoute pt-5">
+
+              {isConvert == false && (
+                <div className="col-auto float-end ml-auto">
+                  <a
+                    className="btn add-btn"
+                    // data-bs-toggle="modal"
+                    // data-bs-target="#add_quote"
+                    onClick={() => {
+                      setShow(true);
+                    }}
+                  >
+                    <i
+                      className="fa fa-plus"
+                      // onClick={() => {
+                      //   setShow(true);
+                      // }}
+                    />
+                    Add Quote
+                  </a>
+                </div>
+              )}
+            </div>
+            {/* <div className="list_group_qoute pt-5">
             <div className="row">
               <div className="col-lg-12">
                 <div className="list_qoute">
@@ -490,66 +604,74 @@ const Quotation = () => {
               </div>
             </div>
           </div> */}
-        </div>
-        <div className="drp-area">
-          <div className="row">
-            {/* <div className="col-lg-2">
+          </div>
+          <div className="drp-area">
+            <div className="row">
+              {/* <div className="col-lg-2">
               <Select options={options} placeholder="Destinations " />
             </div> */}
-            <div className="col-lg-2">
-              <Select
-                options={options1}
-                placeholder="Month of Travel"
-                // value={Obj}
-                onChange={(e) => {
-                  // console.log(e, "asd");
-                  setMonthValued(e.value);
-                  // setCitiesObj(e);
-                }}
-              />
-            </div>
-            <div className="col-lg-2 z-12">
-              <Select
-                options={options2}
-                placeholder="Status Type"
-                onChange={(e) => {
-                  // console.log(e, "asd");
-                  setStatusValued(e.value);
-                  // setCitiesObj(e);
-                }}
-              />
-            </div>
-            {/* 
+              <div className="col-lg-2">
+                <Select
+                  options={options1}
+                  placeholder="Month of Travel"
+                  // value={Obj}
+                  onChange={(e) => {
+                    // console.log(e, "asd");
+                    setMonthValued(e.value);
+                    // setCitiesObj(e);
+                  }}
+                />
+              </div>
+              <div className="col-lg-2 z-12">
+                <Select
+                  options={options2}
+                  placeholder="Status Type"
+                  onChange={(e) => {
+                    // console.log(e, "asd");
+                    setStatusValued(e.value);
+                    // setCitiesObj(e);
+                  }}
+                />
+              </div>
+              {/* 
             <div className="col-lg-2">
               <Select options={options3} placeholder="Agent" />
             </div> */}
+            </div>
           </div>
-        </div>
-        {/* {console.log(quotationMainArr, "quotationMainArr234")} */}
+          {/* {console.log(quotationMainArr, "quotationMainArr234")} */}
 
-        <div className="row">
-          <div className="col-md-12">
-            <div className="table-responsive">
-              <Table
-                className="table-striped"
-                pagination={{
-                  total: quotationMainArr.length,
-                  showTotal: (total, range) =>
-                    `Showing ${range[0]} to ${range[1]} of ${total} entries`,
-                  // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
-                }}
-                style={{ overflowX: "auto" }}
-                columns={tour_columns}
-                // bordered
-                dataSource={quotationMainArr}
-                rowKey={(record) => record.id}
-              />
+          <div className="row">
+            <div className="col-md-12">
+              <div className="table-responsive">
+                <Table
+                  className="table-striped"
+                  pagination={{
+                    total: quotationMainArr.length,
+                    showTotal: (total, range) =>
+                      `Showing ${range[0]} to ${range[1]} of ${total} entries`,
+                    // showSizeChanger: true, onShowSizeChange: onShowSizeChange, itemRender: itemRender
+                  }}
+                  style={{ overflowX: "auto" }}
+                  columns={tour_columns}
+                  // bordered
+                  dataSource={quotationMainArr}
+                  rowKey={(record) => record.id}
+                />
+              </div>
             </div>
           </div>
         </div>
+        <AddQuotation show={show} setShow={setShow} />
+        {/* <div style={{ opacity: 0, height: 0 }}> */}
+        {/* </div> */}
       </div>
-      <AddQuotation show={show} setShow={setShow} />
-    </div>
+      <div style={{ opacity: 0, pointerEvents: "none", zIndex: -5, height: 0 }}>
+        <div ref={ref}>
+          <Pdfile />
+        </div>
+      </div>
+    </>
   );
 };
 
