@@ -142,7 +142,7 @@ const Quotation = () => {
       // if (toPdf) {
       //   toPdf(e);
       // }
-    }, 200);
+    }, 300);
 
     // console.log(row, "row update"); //whole object
     // history.push("/pdf");
