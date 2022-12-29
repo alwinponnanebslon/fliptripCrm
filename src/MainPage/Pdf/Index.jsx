@@ -17,6 +17,7 @@ function Index() {
   const quotationObj = useSelector((state) => state.quotation.quotationObj);
 
   const [QuotationObj, setQuotationObj] = useState({});
+
   useEffect(() => {
     // alert("asd");
     // console.log(quotationObj, "quotationObj");
@@ -92,7 +93,7 @@ function Index() {
                     <li>As quoted on</li>
                     <li>
                       <h5 className="mb-0">
-                        {new Date(QuotationObj?.createdAt).toDateString()}
+                        {new Date(QuotationObj?.createdAt).toDateString()},
                         {new Date(QuotationObj?.createdAt).getHours()}:
                         {new Date(QuotationObj?.createdAt).getMinutes()}
                       </h5>
@@ -224,7 +225,7 @@ function Index() {
           </ul>
         </div>
       </section>
-
+      {/* {QuotationObj?.perPersonAirPortPrice > 0 || QuotationObj?.perPersonLandPrice > 0 && */}
       <section className="flight-table">
         <div className="container">
           <table className="table table-borderless align-middle">
@@ -242,22 +243,24 @@ function Index() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>FLIGHT</td>
-                <td>{QuotationObj?.perPersonAirPortPrice}</td>
-                <td>
-                  {parseInt(QuotationObj?.perPersonAirPortPrice) *
-                    parseInt(QuotationObj?.numberOfGuest)}
-                </td>
-              </tr>
-              <tr>
-                <td>LAND</td>
-                <td>{QuotationObj?.perPersonLandPrice}</td>
-                <td>
-                  {parseInt(QuotationObj?.perPersonLandPrice) *
-                    parseInt(QuotationObj?.numberOfGuest)}
-                </td>
-              </tr>
+              {QuotationObj?.perPersonAirPortPrice > 0 &&
+                <tr>
+                  <td>FLIGHT</td>
+                  <td>{QuotationObj?.perPersonAirPortPrice}</td>
+                  <td>
+                    {parseInt(QuotationObj?.perPersonAirPortPrice) *
+                      parseInt(QuotationObj?.numberOfGuest)}
+                  </td>
+                </tr>}
+              {QuotationObj?.perPersonLandPrice > 0 &&
+                <tr>
+                  <td>LAND</td>
+                  <td>{QuotationObj?.perPersonLandPrice}</td>
+                  <td>
+                    {parseInt(QuotationObj?.perPersonLandPrice) *
+                      parseInt(QuotationObj?.numberOfGuest)}
+                  </td>
+                </tr>}
             </tbody>
             <tfoot>
               <tr>
@@ -290,7 +293,7 @@ function Index() {
           </ul>
         </div>
       </section>
-
+      {/* } */}
       <div className="desp purple-bg py-2 px-4 my-5">
         {/* <p className="text-white m-0 text-center">
           We are not making any holding on above as of now. Flight prices are
@@ -411,7 +414,7 @@ function Index() {
                   {QuotationObj?.flightList &&
                     QuotationObj?.flightList?.length > 0 &&
                     QuotationObj?.flightList[
-                      QuotationObj?.flightList.length - 1
+                    QuotationObj?.flightList.length - 1
                     ] && (
                       <div className="destination">
                         <h6>
@@ -741,7 +744,7 @@ function Index() {
                         </th>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                            0 &&
+                          0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -759,7 +762,7 @@ function Index() {
                         <td>FLIGHT</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                            0 &&
+                          0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -901,12 +904,14 @@ function Index() {
                           </li>
                           <li>
                             <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
-                              Paytm : <img src={images.paytm} alt="" />{" "}
+                              {/* Paytm : <img src={images.paytm} alt="" />{" "} */}
+                              Paytm : 9999 316587{" "}
                             </a>
                           </li>
                           <li>
                             <a href={`tel:${QuotationObj?.agentObj?.phone}`}>
-                              Google pay : <img src={images.gpay} alt="" />{" "}
+                              {/* Google pay : <img src={images.gpay} alt="" />{" "} */}
+                              Google pay : 9999 316597{" "}
                             </a>
                           </li>
                         </ul>

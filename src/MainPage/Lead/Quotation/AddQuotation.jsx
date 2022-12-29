@@ -127,7 +127,7 @@ const AddQuotation = ({ show, setShow }) => {
       // console.log(quotationObject, "qoationboj----------");
       setQuotationId(quotationObject?._id);
       setDestinationName(quotationObject?.destinationName);
-      setDays(parseInt(quotationObject?.durationOfTour)+parseInt(1) )
+      setDays(parseInt(quotationObject?.durationOfTour) + parseInt(1))
       setDurationOfTour(quotationObject?.durationOfTour);
       setNumberOfGuest(quotationObject?.numberOfGuest);
       setVisaRequired(quotationObject?.visa);
@@ -421,9 +421,9 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   const handleinputchangeFlight = (e, index) => {
-    let { name, value } = e.target; 
-    if(name=='cost'){
-      if(value<=0){
+    let { name, value } = e.target;
+    if (name == 'cost') {
+      if (value <= 0) {
         toastError("Flight cost cannot be zero")
         return
       }
@@ -634,7 +634,7 @@ const AddQuotation = ({ show, setShow }) => {
   const handleAddClickTour = () => {
     setTravelList([...travelList, { name: "", startDate: "", endDate: "" }]);
   };
- 
+
 
 
   const handleLeadValueChange = (e) => {
@@ -689,7 +689,9 @@ const AddQuotation = ({ show, setShow }) => {
     setTravelList([...tempList]);
   };
 
-  const clearFunc = () => { 
+  const clearFunc = () => {
+    setPerPersonLandPrice(0)
+    setTotalPersonLandPrice(0)
     setDestinationName("");
     setDays(0)
     setDurationOfTour(1);
@@ -870,9 +872,9 @@ const AddQuotation = ({ show, setShow }) => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -884,9 +886,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -898,9 +900,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -912,9 +914,9 @@ const AddQuotation = ({ show, setShow }) => {
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -926,7 +928,7 @@ const AddQuotation = ({ show, setShow }) => {
     }
   };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -1100,9 +1102,8 @@ aria-label="Close"
                     <label className="col-form-label ">
                       Duration Of Tour <span className="text-danger">*</span>
                       (in Nights) (
-                      {`${durationOfTour ? durationOfTour : 0}N/${
-                        days ? days : 0
-                      }D`}
+                      {`${durationOfTour ? durationOfTour : 0}N/${days ? days : 0
+                        }D`}
                       )
                     </label>
                     <input
@@ -1123,7 +1124,7 @@ aria-label="Close"
                       className="form-control"
                       value={numberOfGuest}
                       onChange={(e) => handleSetNumberOfGuest(e.target.value)}
-                      // onChange={(e) => setNumberOfGuest(e.target.value)}
+                    // onChange={(e) => setNumberOfGuest(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1395,10 +1396,10 @@ aria-label="Close"
                               )}
                             </div>
                             {durationOfTour &&
-                            hotelList.reduce(
-                              (acc, el) => acc + parseInt(el.numberOfNight),
-                              0
-                            ) < durationOfTour ? (
+                              hotelList.reduce(
+                                (acc, el) => acc + parseInt(el.numberOfNight),
+                                0
+                              ) < durationOfTour ? (
                               <div className="col-md-12">
                                 {/* {hotelList.length - 1 === i && ( */}
                                 <button
