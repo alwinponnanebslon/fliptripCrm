@@ -13,19 +13,15 @@ import { Image } from "antd";
 function Index() {
   const toursResultArr = useSelector((state) => state.tour.tours);
   const role = useSelector((state) => state.auth.role);
-  const userId = useSelector((state) => state.auth.user._id);
-  const dispatch = useDispatch();
-  let history = useHistory();
 
   const quotationObj = useSelector((state) => state.quotation.quotationObj);
 
   const [QuotationObj, setQuotationObj] = useState({});
-  const [datesArr, setDatesArr] = useState([]);
   useEffect(() => {
     // alert("asd");
     // console.log(quotationObj, "quotationObj");
     if (quotationObj) {
-      console.log(quotationObj, "213quotationObj");
+      // console.log(quotationObj, "213quotationObj");
       setQuotationObj(quotationObj);
     }
   }, [quotationObj]);
@@ -84,7 +80,7 @@ function Index() {
                   <ul>
                     <li>
                       <h5>
-                        TRIP ID :{" "}
+                        TRIP ID :
                         {/* <span className="pink fw-bold">{QuotationObj._id}</span> */}
                         <span className="pink fw-bold">
                           {QuotationObj?.leadObj?.uniqueTripId
@@ -96,14 +92,13 @@ function Index() {
                     <li>As quoted on</li>
                     <li>
                       <h5 className="mb-0">
-                        {new Date(QuotationObj?.createdAt).toDateString()}{" "}
+                        {new Date(QuotationObj?.createdAt).toDateString()}
                         {new Date(QuotationObj?.createdAt).getHours()}:
                         {new Date(QuotationObj?.createdAt).getMinutes()}
                       </h5>
                     </li>
                   </ul>
                 </div>
-                {console.log(QuotationObj, "12132131")}
                 <div className="right-middle">
                   <div className="destination">
                     <h2 className="text-white">
@@ -126,8 +121,8 @@ function Index() {
                   </ul>
                   <ul className="detail list-circle">
                     <li>
-                      {QuotationObj?.durationOfTour} N{" "}
-                      {parseInt(QuotationObj?.durationOfTour) - 1} D
+                      {QuotationObj?.durationOfTour} N
+                      {parseInt(QuotationObj?.durationOfTour) + 1} D
                     </li>
                     <li>{QuotationObj?.numberOfGuest} Passengers</li>
                     <li>
@@ -149,7 +144,9 @@ function Index() {
                     {/* booking */}
                   </p>
                   <button className="btn pink-bg text-white btn-lg px-4">
-                    ₹ {QuotationObj?.amount}
+                    ₹ {QuotationObj?.amount?.toLocaleString("en-IN")}
+                    {/* ₹ {QuotationObj?.amount?.replace(/(\d)(?=(\d\d)+\d$)/g, "$1,")} */}
+                    {/* ₹ {QuotationObj?.amount} */}
                   </button>
                 </div>
                 <ul className="right-bottom whatsapp-gmail">
@@ -279,7 +276,11 @@ function Index() {
           <ul className="amount mb-0">
             <li>
               <h4>Total cost including taxes and above</h4>
-              <h4 className="pink fw-semibold m-0">₹ {QuotationObj?.amount}</h4>
+              <h4 className="pink fw-semibold m-0">
+                ₹ {QuotationObj?.amount?.toLocaleString("en-IN")}
+                {/* ₹ {QuotationObj?.amount} */}
+                {/* ₹ {QuotationObj?.amount?.replace(/(\d)(?=(\d\d)+\d$)/g, "$1,")} */}
+              </h4>
             </li>
             <li>
               <button className="btn pink-bg text-white btn-lg px-4">
@@ -296,7 +297,7 @@ function Index() {
           also subject to availability at the time of booking.
         </p> */}
         <p className="text-white m-0 text-center">
-          Prices of Flights and hotels are subject to availability{" "}
+          Prices of Flights and hotels are subject to availability
         </p>
         {/* <p className="text-white m-0 text-center">
           As quoted on {new Date(QuotationObj?.createdAt).toDateString()}{" "}
@@ -1107,7 +1108,6 @@ function Index() {
           </div>
         </div>
       </section>
-      {console.log(QuotationObj, "QuotationObj234")}
 
       {/* 
       // 

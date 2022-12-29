@@ -83,7 +83,7 @@ const AddQuotation = ({ show, setShow }) => {
       numberOfNight: 0,
       checkIn: "",
       checkOut: "",
-      rating: 2,
+      rating: 0,
       hotelAddress: "", // hotelAddress: "",
     },
   ]);
@@ -99,7 +99,6 @@ const AddQuotation = ({ show, setShow }) => {
     dispatch(activeTourGet());
     dispatch(clientGet());
     // dispatch(leadGetById(leadId));
-    // console.log("teave", travelList.length)
   }, []);
 
   useEffect(() => {
@@ -125,9 +124,10 @@ const AddQuotation = ({ show, setShow }) => {
 
   useEffect(() => {
     if (quotationObject && quotationObject._id) {
-      console.log(quotationObject, "qoationboj----------");
+      // console.log(quotationObject, "qoationboj----------");
       setQuotationId(quotationObject?._id);
       setDestinationName(quotationObject?.destinationName);
+      setDays(parseInt(quotationObject?.durationOfTour)+parseInt(1) )
       setDurationOfTour(quotationObject?.durationOfTour);
       setNumberOfGuest(quotationObject?.numberOfGuest);
       setVisaRequired(quotationObject?.visa);
@@ -290,8 +290,8 @@ const AddQuotation = ({ show, setShow }) => {
       };
 
       if (name == "rating") {
-        if (value > 6 || value < 1) {
-          toastError("invalid rating, kindly provide valid rating");
+        if (value > 6 || value < 0) {
+          toastError("Not valid Rating, kindly provide valid Rating");
           return;
         }
       }
@@ -394,7 +394,6 @@ const AddQuotation = ({ show, setShow }) => {
 
       // console.log(list, "list");
       for (let el of list) {
-        // console.log(el, "el");
         if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
           toastError("check-Out wil be less than checkin ");
           return;
@@ -422,7 +421,13 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   const handleinputchangeFlight = (e, index) => {
-    let { name, value } = e.target;
+    let { name, value } = e.target; 
+    if(name=='cost'){
+      if(value<=0){
+        toastError("Flight cost cannot be zero")
+        return
+      }
+    }
     if (quotationObject && quotationObject._id) {
       ("use strict");
       // // console.log(name, "name");
@@ -445,6 +450,9 @@ const AddQuotation = ({ show, setShow }) => {
       setflightList([...list]);
     }
   };
+
+
+
   useEffect(() => {
     let amount = 0;
     if (flightList && flightList?.length > 0) {
@@ -556,7 +564,7 @@ const AddQuotation = ({ show, setShow }) => {
         numberOfNight: 0,
         checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
-        rating: 2,
+        rating: 0,
         hotelAddress: "", //  hotelAddress: "",
         bookingSource: "",
       },
@@ -576,7 +584,6 @@ const AddQuotation = ({ show, setShow }) => {
   };
 
   const handleinputchangeItinerary = (e, index) => {
-    // console.log(itineraryList, "itineraryList");
     if (itineraryList && isUpateDoc == true) {
       console.log("iiioop");
       ("use strict");
@@ -627,25 +634,39 @@ const AddQuotation = ({ show, setShow }) => {
   const handleAddClickTour = () => {
     setTravelList([...travelList, { name: "", startDate: "", endDate: "" }]);
   };
-  //tour
-  // useEffect(() => {
-  //   dispatch(leadGet());
-  // }, []);
+ 
 
-  const leadValueArr = useSelector((state) => state.lead.leadArr);
-  // console.log(leadValueArr, "leadValueArr");
 
   const handleLeadValueChange = (e) => {
     setSelectedLeadIdArr(e);
   };
 
+  const handleSetNumberOfGuest = (value) => {
+    if (value < 0) {
+      toastError(`Number of Guest cannot be less than 0`);
+      return;
+    }
+    setNumberOfGuest(value);
+  };
+
   const handleEnterNumberOfDays = (value) => {
+    if (value < 0 && value) {
+      toastError(`Duration of tour cannot be less than 0`);
+      return;
+    }
     setDurationOfTour(value);
     setDays(parseInt(value) + 1);
     let itenaryArr = [];
     for (let i = 0; i < parseInt(value) + 1; i++) {
       itenaryArr.push({ day: i + 1, itineraryName: "", itineraryHeading: "" });
     }
+
+    // if (name == "numberOfNight") {
+    //   if (value < "0" && value) {
+    //     toastError(`Number of nights cannot be less than 0`);
+    //     return;
+    //   }
+
     // if (isItineraryDetailsRequired) {
     setItineraryList([...itenaryArr]);
     // }
@@ -668,8 +689,9 @@ const AddQuotation = ({ show, setShow }) => {
     setTravelList([...tempList]);
   };
 
-  const clearFunc = () => {
+  const clearFunc = () => { 
     setDestinationName("");
+    setDays(0)
     setDurationOfTour(1);
     setNumberOfGuest(1);
     setNoOfTravellerArray([
@@ -698,7 +720,7 @@ const AddQuotation = ({ show, setShow }) => {
         numberOfNight: 0,
         checkIn: "",
         checkOut: "",
-        rating: 2,
+        rating: 0,
         hotelAddress: "", // hotelAddress: "",
       },
     ]);
@@ -1031,7 +1053,7 @@ aria-label="Close"
                               <div className="col-md-4">
                                 <label className="col-form-label ">
                                   {/* Expiration Date */}
-                                  Tour End Date
+                                  Tour End Date<span className="text-danger">*</span>
                                 </label>
                                 <div className="col-sm-8">
                                   <input
@@ -1076,7 +1098,7 @@ aria-label="Close"
 
                   <div className=" form-group col-md-6">
                     <label className="col-form-label ">
-                      Duration Of Tour <span className="text-danger">*</span>{" "}
+                      Duration Of Tour <span className="text-danger">*</span>
                       (in Nights) (
                       {`${durationOfTour ? durationOfTour : 0}N/${
                         days ? days : 0
@@ -1100,7 +1122,8 @@ aria-label="Close"
                       type="number"
                       className="form-control"
                       value={numberOfGuest}
-                      onChange={(e) => setNumberOfGuest(e.target.value)}
+                      onChange={(e) => handleSetNumberOfGuest(e.target.value)}
+                      // onChange={(e) => setNumberOfGuest(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1273,6 +1296,16 @@ aria-label="Close"
                               />
                             </div>
                             <div className="form-group col-md-4">
+                              <label> Rating</label>
+                              <input
+                                type="number"
+                                name="rating"
+                                value={`${hotel.rating}`}
+                                className="form-control"
+                                onChange={(e) => handleinputchangeHotel(e, i)}
+                              />
+                            </div>
+                            {/* <div className="form-group col-md-4">
                               <label>Rating</label>
                               <select
                                 className="form-control"
@@ -1280,12 +1313,13 @@ aria-label="Close"
                                 value={parseInt(hotel.rating)}
                                 onChange={(e) => handleinputchangeHotel(e, i)}
                               >
+                                <option value={1}>1</option>
                                 <option value={2}>2</option>
                                 <option value={3}>3</option>
                                 <option value={4}>4</option>
                                 <option value={5}>5</option>
                               </select>
-                            </div>
+                            </div> */}
 
                             <div className="form-group col-md-4">
                               <label> Check In </label>

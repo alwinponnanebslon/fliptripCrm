@@ -2,12 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useHistory } from "react-router-dom";
 import {
-  Avatar_11,
-  Avatar_09,
   Avatar_02,
-  Avatar_10,
-  Avatar_05,
-  Avatar_08,
 } from "../../Entryfile/imagepath";
 import EditLead from "../../_components/modelbox/EditLead";
 import { Table } from "antd";
@@ -46,31 +41,30 @@ import {
 
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 
-import { tourGet } from "../../redux/features/tour/tourSlice";
 import {
-  clientGet,
   setclientObj,
-  setObj,
-  clientUpdate,
 } from "../../redux/features/client/clientSlice";
-import LeadView from "./LeadView";
 import { get, updateClient, getFilter } from "../../Services/client.service";
-// import LeadDetails from "./LeadDetails";
-// import { date } from "yup";
-// import { shouldForwardProp } from "@mui/system";
-import Notes from "../Lead/Notes/Notes";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import { getAllLeadSearchFilter } from "../../Services/lead.service";
 import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheetForm";
+
+
+
+
 
 const Leads = () => {
   const dispatch = useDispatch();
   const agents = useSelector((state) => state.employee.employeesArr); //spoc
   const history = useHistory();
-  // console.log(agents, "agents234");
   // const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
+
+
+
   const teamLeads = useSelector((state) => state.employee.employeesArr);
   // // console.log(agents, "12agents");
+  
+  
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
 
   const [clientId, setClientId] = useState("");
@@ -83,7 +77,11 @@ const Leads = () => {
   const userAuthorise = useSelector((state) => state.auth);
 
   const [clientArr, setClientArr] = useState([]);
-  // console.log(userAuthorise, "role223");
+
+
+
+
+
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
   const [leadsArr, setLeadsArr] = useState([]);
@@ -104,6 +102,11 @@ const Leads = () => {
   const [priorityQuery, setPriorityQuery] = useState("");
   const [roleQuery, setRoleQuery] = useState("");
   ///////////////////////////////////////////
+
+
+
+
+
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [isStatusOfLead, setIsStatusOfLead] = useState(false);
@@ -121,13 +124,17 @@ const Leads = () => {
   const [filterClientByName, setFilterClientByName] = useState("");
   const [dob, setDob] = useState("");
   const [anniversaryDate, setAnniversaryDate] = useState("");
-  const [fileName, setFileName] = useState("");
 
   const [penCardImg, setPenCardImg] = useState("");
   const [passPortFrontImg, setPassPortFrontImg] = useState("");
   const [passPortBackImg, setPassPortBackImg] = useState("");
   const [leadArrFilterStatus, setLeadArrFilterStatus] = useState("");
   const [teamLeadFilterId, setTeamLeadFilterId] = useState("");
+
+
+
+
+
 
   const agentSelect = useRef();
 
@@ -260,7 +267,6 @@ const Leads = () => {
         // dispatch(returnAllEmployees(res.data))
       }
     } catch (error) {
-      // console.error(error);
       toastError(error);
     }
   };
@@ -337,8 +343,7 @@ const Leads = () => {
   //   }
   // }, [agents]);
   useEffect(() => {
-    console.log(teamLeads, "teamslead23");
-    console.log(teamLeads.length, "teamslead2333");
+    // console.log(teamLeads, "teamslead23");
     if (teamLeads && teamLeads.length > 0) {
       let arr = teamLeads.filter((e) => e.role == "TEAMLEAD");
       console.group(arr, "arr231231");
@@ -592,17 +597,17 @@ const Leads = () => {
   };
 
   const clearFunc = () => {
-    // setSubject("");
+    setSubject("");
     // setClientId("");
-    // setPhone("");
-    // setName("");
-    // setEmail("");
-    // setPriority("");
-    // // setAgentId("");
+    setPhone("");
+    setName("");
+    setEmail("");
+    setPriority("");
+    // setAgentId("");
     // setSpocId("");
-    // setDescription("");
-    // // setLeadObj({});
-    // setLeadUpdateId("");
+    setDescription("");
+    // setLeadObj({});
+    setLeadUpdateId("");
     // setAgentsArr([]);
     // setLeadsArr([]);
     // setTeamLeadsArr([]);
@@ -2434,7 +2439,7 @@ const Leads = () => {
           </div>
         )}
         {/* Search Filter */}
-        {console.log(teamLeadsArr, "teamLeads213")}
+        {/* {console.log(teamLeadsArr, "teamLeads213")} */}
         <div div className="row filter-row">
           {role != rolesObj.SPOC &&
             role != rolesObj.TEAMLEAD &&
@@ -2637,7 +2642,7 @@ const Leads = () => {
       <Modal size="lg" show={show}>
         <Modal.Header>
           <Modal.Title className="d-flex justify-content-between w-75">
-            {leadObj && leadObj._id ? " Edit " : " Add "}Lead{" "}
+            {leadObj && leadObj._id ? " Edit " : " Add "}Lead
             <div >
               <Button
                 variant="secondary"
@@ -2827,7 +2832,6 @@ const Leads = () => {
               <div className="form-group">
                 <label>
                   Email
-                  {/* <span className="text-danger">*</span> */}
                 </label>
                 <input
                   value={email}
@@ -2851,10 +2855,7 @@ const Leads = () => {
                   <option value="Medium"> Medium</option>
                   <option value="Low">Low</option>
                 </select>
-                {/* <Select
-                        onChange={handlePriorityChange}
-                        options={options}
-              /> */}
+              
               </div>
             </div>
             {/* <Select
@@ -2881,7 +2882,6 @@ const Leads = () => {
                   <div className="form-group">
                     <label>
                       Assign to Team Lead ({teamLeadsArr.length}){" "}
-                      {/* <span className="text-danger">*</span> */}
                     </label>
 
                     <select

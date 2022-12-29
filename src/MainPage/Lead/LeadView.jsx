@@ -36,15 +36,14 @@ const LeadView = () => {
   }, [currentLead]);
   const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
-
   };
   useEffect(() => {
     dispatch(leadGetById(leadId));
-    handleCheckCostingSheet()
+    handleCheckCostingSheet();
     // handleCheckCostingSheetExist(leadId);
   }, []);
 
-  useEffect(() => { }, [currentLead]);
+  useEffect(() => {}, [currentLead]);
 
   useEffect(() => {
     // handleInit();
@@ -88,7 +87,9 @@ const LeadView = () => {
                         {leadObj?.status}
                       </span>
                       <span className="m-l-15 text-muted">Client: </span>
-                      <a href="#">{leadObj?.clientObj?.name}</a>
+                      <a href="#">
+                        {leadObj?.clientObj?.name} {leadObj?.clientObj?.phone}
+                      </a>
                       <span className="m-l-15 text-muted">Created: </span>
                       <span>{new Date(leadObj?.createdAt).toDateString()}</span>
                       <span className="m-l-15 text-muted">Created by:</span>
@@ -108,6 +109,7 @@ const LeadView = () => {
                           {!leadObj?.createdBy?.name && "ADMIN"}
                         </Link>
                       </span>
+                      {/* <span> Phone : </span> */}
                     </div>
                   </div>
                   <a
@@ -131,6 +133,8 @@ const LeadView = () => {
                                 <span className="h5 card-title ">
                                   {leadObj?.subject}
                                 </span>
+
+                                {console.log(leadObj, "lad")}
                                 <div className="float-end Lead-priority">
                                   <span>Priority: {leadObj?.priority}</span>
 

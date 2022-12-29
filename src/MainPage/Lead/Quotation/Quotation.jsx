@@ -137,12 +137,12 @@ const Quotation = () => {
           hotfixes: ["px_scaling"],
         });
         pdf.addImage(imgData, "PNG", 0, 0);
-        pdf.save(`downloadFileName.pdf`);
+        pdf.save(`downloadQuotation.pdf`);
       });
       // if (toPdf) {
       //   toPdf(e);
       // }
-    }, 300);
+    }, 200);
 
     // console.log(row, "row update"); //whole object
     // history.push("/pdf");
@@ -448,71 +448,12 @@ const Quotation = () => {
                   <i className="fa fa-trash-o m-r-5" /> Download
                 </span>
 
-                {/* {ref.current?.clientHeight && (
-                  <ReactToPdf
-                    targetRef={ref}
-                    filename="div-blue.pdf"
-                    options={{
-                      orientation: "portrait",
-                      unit: ref.current?.clientHeight ? "px" : "in",
-                      format: [
-                        ref.current?.clientHeight
-                          ? ref.current?.clientHeight
-                          : 90,
-                        ref.current?.clientWidth
-                          ? ref.current?.clientWidth
-                          : 20,
-                      ],
-                      putOnlyUsedFonts: true,
-                      floatPrecision: "smart",
-                      hotfixes: ["px_scaling"],
-                    }}
-                    // x={0.5}
-                    // y={0.5}
-                    // scale={0.8}
-                  >
-                    {({ toPdf }) => (
-                      <button
-                        onClick={(e) => {
-                          handleDownload(row, toPdf, e);
-                        }}
-                      >
-                        Generate pdf
-                      </button>
-                    )}
-                  </ReactToPdf>
-                )} */}
+          
+             
 
-                {/* <div
-                  style={{ width: 50, height: 50, background: "blue" }}
-                  ref={ref}
-                /> */}
-
-                {/* <div>
-                  <Pdf targetRef={ref} filename="pdf-example.pdf">
-                    {({ toPdf }) => (
-                      <button onClick={handleDownload(row)}>
-                        Generate Pdf
-                      </button>
-                    )}
-                  </Pdf>
               
-                </div> */}
-                {/* <div>
-                  <PDFDownloadLink document={Pdfile} fileName="somename.pdf" >
-                    {({ blob, url, loading, error }) =>
-                      loading ? "Loading document..." : "Download now!"
-                    }
-                  </PDFDownloadLink>
-                </div> */}
-                {/* 
-                <a
-                  className="dropdown-item"
-                  onClick={() => handleDownload(row)}
-                >
-                
-                  <i className="fa fa-world m-r-5" /> Download
-                </a> */}
+             
+              
               </div>
             </>
           )}
@@ -549,7 +490,7 @@ const Quotation = () => {
     <>
       <div className="page-wrapper">
         <Helmet>
-          <title>Create Qoute</title>
+          <title>Create Quote</title>
           <meta name="description" content="Login page" />
         </Helmet>
         <div className="container-fluid p-0">
