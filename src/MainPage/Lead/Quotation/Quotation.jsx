@@ -120,7 +120,7 @@ const Quotation = () => {
   };
 
   const handleDownload = async (row) => {
-    console.log(row, "rowrowrow");
+    // console.log(row, "rowrowrow");
     // const input = ;
     // localStorage.setItem("quotationPdf", JSON.stringify(row));
     setQuotationObj(row);
@@ -331,14 +331,15 @@ const Quotation = () => {
       dataIndex: "createdAt",
       render: (row, record) => (
         <div>
-          {new Date(record.createdAt).toDateString()} at (
-          {new Date(record.createdAt).getHours()}:
-          {new Date(record.createdAt).getMinutes()})
+          {new Date(record.createdAt).toDateString()} 
+          {/* at ( {new Date(record.createdAt).getHours()}:
+          {new Date(record.createdAt).getMinutes()} */}
+          
         </div>
       ),
     },
     {
-      title: "Name",
+      title: "Destination Name",
       dataIndex: "destinationName",
       sorter: (a, b) => a.destinationName.length - b.destinationName.length,
     },
@@ -390,7 +391,6 @@ const Quotation = () => {
               >
                 <i
                   className={
-                    // record.status === "Approved"
                     record.status === "Convert"
                       ? "fa fa-dot-circle-o text-success"
                       : "fa fa-dot-circle-o text-danger"
@@ -426,6 +426,22 @@ const Quotation = () => {
         </div>
       ),
     },
+    {
+      title: "Download Pdf",
+      render: (row, record) => (
+        <div className="col-auto float-end ml-auto">
+          <a
+            className="btn add-btn"
+            onClick={() => handleDownload(row)
+            }
+          >
+
+            Download
+          </a>
+        </div>
+      ),
+    },
+
     {
       title: "Action",
       render: (row, record) => (
@@ -495,12 +511,12 @@ const Quotation = () => {
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
                 </a>
-                <span
+                {/* <span
                   className="dropdown-item"
                   onClick={() => handleDownload(row)}
                 >
                   <i className="fa fa-trash-o m-r-5" /> Download
-                </span>
+                </span> */}
               </div>
             </>
           )}
@@ -602,9 +618,9 @@ const Quotation = () => {
                   >
                     <i
                       className="fa fa-plus"
-                      // onClick={() => {
-                      //   setShow(true);
-                      // }}
+                    // onClick={() => {
+                    //   setShow(true);
+                    // }}
                     />
                     Add Quote
                   </a>
@@ -1052,7 +1068,7 @@ const Quotation = () => {
                         {QuotationObj?.flightList &&
                           QuotationObj?.flightList?.length > 0 &&
                           QuotationObj?.flightList[
-                            QuotationObj?.flightList.length - 1
+                          QuotationObj?.flightList.length - 1
                           ] && (
                             <div className="destination">
                               <h6>

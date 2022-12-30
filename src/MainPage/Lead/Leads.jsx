@@ -63,8 +63,8 @@ const Leads = () => {
 
   const teamLeads = useSelector((state) => state.employee.employeesArr);
   // // console.log(agents, "12agents");
-  
-  
+
+
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
 
   const [clientId, setClientId] = useState("");
@@ -204,8 +204,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-        ? "rgba(255,155,68,0.5)"
-        : "white",
+          ? "rgba(255,155,68,0.5)"
+          : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -410,7 +410,7 @@ const Leads = () => {
     reader.onload = function () {
       cb(reader.result);
     };
-    reader.onerror = function (error) {};
+    reader.onerror = function (error) { };
   };
 
   const handleFileSelection = (event) => {
@@ -714,10 +714,10 @@ const Leads = () => {
       //   toastError("Agent cannot be empty");
       //   return;
       // }
-      if (`${description}` == "") {
-        toastError("Description cannot be empty");
-        return;
-      }
+      // if (`${description}` == "") {
+      //   toastError("Description cannot be empty");
+      //   return;
+      // }
 
       let obj = {
         subject,
@@ -980,7 +980,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1093,7 +1093,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1115,7 +1115,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-            record?.status == leadStatus.cancelled ? (
+              record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1139,7 +1139,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-            record?.status == leadStatus.reopened ? (
+              record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1240,9 +1240,7 @@ const Leads = () => {
       );
     }
   };
-  // useEffect(() => {
-  //   console.log(leadArrFilterStatus, "leadArrFilterStatus");
-  // }, [leadArrFilterStatus]);
+
 
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
@@ -1294,6 +1292,9 @@ const Leads = () => {
       setShowClientDetails(false);
     }
   };
+
+
+
   // const handleReturndropDown = (record) => {
   //   // // console.log(record?.status, "role");
   //   // // console.log(role == "ADMIN" || role == rolesObj.SPOC && record?.status == leadStatus.convert, "role != ADMIN || role == rolesObj.SPOC && record?.status != leadStatus.convert")
@@ -1481,11 +1482,21 @@ const Leads = () => {
       ),
     },
     {
-      title: "Assigned Team Lead",
+      title: "Trip Id",
       render: (text, record) => (
         <h2 className="table-avatar">
           <div>
-            {record?.leadObj?.firstName} {record?.leadObj?.lastName}
+            {record?.uniqueTripId}
+          </div>
+        </h2>
+      ),
+    },
+    {
+      title: "Lead Subject",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.subject}
           </div>
         </h2>
       ),
@@ -1569,11 +1580,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1610,58 +1619,68 @@ const Leads = () => {
         </h2>
       ),
     },
-
     {
-      title: "Assigned Team Lead",
+      title: "Trip Id",
       render: (text, record) => (
-        // role != rolesObj.ACCOUNT && (
         <h2 className="table-avatar">
-          {record.leadObj ? (
-            <>
-              <Link
-                to={`/admin/employee-profile/${record?.leadObj?._id}`}
-                className="avatar"
-              >
-                <img alt="" src={record?.image} />
-              </Link>
-              <Link
-                to={`/admin/employee-profile/${record?.leadObj?._id}`}
-              >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
-            </>
-          ) : (
-            <>
-              <div
-                onClick={() => setSelectedLeadId(record._id)}
-                className="avatar"
-              >
-                <img
-                  alt=""
-                  onClick={() => setSelectedLeadId(record._id)}
-                  src={record?.image}
-                />
-              </div>
-              <div
-                data-bs-toggle="modal"
-                onClick={() => setSelectedLeadId(record._id)}
-                data-bs-target="#update_agent"
-              >
-                NA
-              </div>
-              {/* update_agent */}
-            </>
-          )}
-          {/* {role == rolesObj.ACCOUNT && (
-            <div>
-              {record?.leadObj?.firstName
-                ? `${record?.leadObj?.firstName}`
-                : " N / A " + record?.leadObj?.lastName
-                ? record?.leadObj?.lastName
-                : " "}
-            </div>
-          )} */}
+          <div>
+            {record?.uniqueTripId}
+          </div>
         </h2>
       ),
     },
+    {
+      title: "Lead Subject",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.subject}
+          </div>
+        </h2>
+      ),
+    },
+
+
+    // {
+    //   title: "Assigned Team Lead",
+    //   render: (text, record) => (
+    //     <h2 className="table-avatar">
+    //       {record.leadObj ? (
+    //         <>
+    //           <Link
+    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
+    //             className="avatar"
+    //           >
+    //             <img alt="" src={record?.image} />
+    //           </Link>
+    //           <Link
+    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
+    //           >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
+    //         </>
+    //       ) : (
+    //         <>
+    //           <div
+    //             onClick={() => setSelectedLeadId(record._id)}
+    //             className="avatar"
+    //           >
+    //             <img
+    //               alt=""
+    //               onClick={() => setSelectedLeadId(record._id)}
+    //               src={record?.image}
+    //             />
+    //           </div>
+    //           <div
+    //             data-bs-toggle="modal"
+    //             onClick={() => setSelectedLeadId(record._id)}
+    //             data-bs-target="#update_agent"
+    //           >
+    //             NA
+    //           </div>
+    //         </>
+    //       )}
+    //     </h2>
+    //   ),
+    // },
 
     {
       title: "Created Date",
@@ -1757,8 +1776,6 @@ const Leads = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_Lead"
                   onClick={() => handleEdit(record)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit
@@ -1829,11 +1846,9 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
-                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-              } ${
-                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-              }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+                }`}</Link>
             </>
           ) : (
             <>
@@ -1870,59 +1885,27 @@ const Leads = () => {
         </h2>
       ),
     },
-
-    // {
-    //   title: "Assigned Team Lead",
-    //   render: (text, record) => (
-    //     // role != rolesObj.ACCOUNT && (
-    //     <h2 className="table-avatar">
-    //       {record.leadObj ? (
-    //         <>
-    //           {/* {// console.log(record, "record2")} */}
-    //           <Link
-    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
-    //             className="avatar"
-    //           >
-    //             <img alt="" src={record?.image} />
-    //           </Link>
-    //           <Link
-    //             to={`/admin/employee-profile/${record?.leadObj?._id}`}
-    //           >{`${record?.leadObj?.firstName} ${record?.leadObj?.lastName}`}</Link>
-    //         </>
-    //       ) : (
-    //         <>
-    //           <div
-    //             onClick={() => setSelectedLeadId(record._id)}
-    //             className="avatar"
-    //           >
-    //             <img
-    //               alt=""
-    //               onClick={() => setSelectedLeadId(record._id)}
-    //               src={record?.image}
-    //             />
-    //           </div>
-    //           <div
-    //             data-bs-toggle="modal"
-    //             onClick={() => setSelectedLeadId(record._id)}
-    //             data-bs-target="#update_agent"
-    //           >
-    //             NA
-    //           </div>
-    //           {/* update_agent */}
-    //         </>
-    //       )}
-    //       {/* {role == rolesObj.ACCOUNT && (
-    //         <div>
-    //           {record?.leadObj?.firstName
-    //             ? `${record?.leadObj?.firstName}`
-    //             : " N / A " + record?.leadObj?.lastName
-    //             ? record?.leadObj?.lastName
-    //             : " "}
-    //         </div>
-    //       )} */}
-    //     </h2>
-    //   ),
-    // },
+    {
+      title: "Trip Id",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.uniqueTripId}
+          </div>
+        </h2>
+      ),
+    },
+    {
+      title: "Lead Subject",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.subject}
+          </div>
+        </h2>
+      ),
+    },
+    
 
     {
       title: "Created Date",
@@ -2080,6 +2063,26 @@ const Leads = () => {
             {record.clientName}
           </Link>
         </div>
+      ),
+    },
+    {
+      title: "Trip Id",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.uniqueTripId}
+          </div>
+        </h2>
+      ),
+    },
+    {
+      title: "Lead Subject",
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>
+            {record?.subject}
+          </div>
+        </h2>
       ),
     },
     {
@@ -2521,17 +2524,7 @@ const Leads = () => {
               </div>
             )}
 
-          {/* <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
-            <div className="form-group form-focus select-focus">
-              <select className="select floating">
-                <option> -- Select -- </option>
-                <option> Pending </option>
-                <option> Approved </option>
-                <option> Returned </option>
-              </select>
-              <label className="focus-label">Status</label>
-            </div>
-          </div> */}
+
           {leadArrFilterStatus == "" && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus select-focus">
@@ -2583,7 +2576,7 @@ const Leads = () => {
             </div>
           </div>
         </div>
-
+        {console.log(displayLeadsArr, "displayLeadsArrdisplayLeadsArr")}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
@@ -2602,12 +2595,12 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                    ? columns_TeamLeader
-                    : role == "SPOC"
-                    ? columns_SPOC
-                    : role == "SUPERVISOR"
-                    ? columns_SUPERVISOR
-                    : []
+                      ? columns_TeamLeader
+                      : role == "SPOC"
+                        ? columns_SPOC
+                        : role == "SUPERVISOR"
+                          ? columns_SUPERVISOR
+                          : []
                 }
                 // columns={columns}
                 // bordered
@@ -2855,7 +2848,7 @@ const Leads = () => {
                   <option value="Medium"> Medium</option>
                   <option value="Low">Low</option>
                 </select>
-              
+
               </div>
             </div>
             {/* <Select
@@ -2974,7 +2967,7 @@ const Leads = () => {
 
             <div className="form-group">
               <label>
-                Description <span className="text-danger">*</span>
+                Description
               </label>
               <textarea
                 value={description}

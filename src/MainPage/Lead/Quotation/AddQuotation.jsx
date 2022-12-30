@@ -67,6 +67,8 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     { name: "", startDate: "", endDate: "" },
   ]);
 
+
+
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isUpateDoc, setIsUpateDoc] = useState(false);
@@ -101,6 +103,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       cost: 0,
     },
   ]);
+  const [isInclusionRequired, setIsInclusionRequired] = useState(false)
+  const [inclusionData, setInclusionData] = useState("")
+
+
+
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
     // dispatch(tourGet());
@@ -108,6 +115,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     dispatch(clientGet());
     // dispatch(leadGetById(leadId));
   }, []);
+
 
   useEffect(() => {
     if (show == true) {
@@ -118,6 +126,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     }
   }, [show]);
 
+
   useEffect(() => {
     if (quotationStateObj) {
       // console.log(quotationStateObj, "quotationStateObj213");
@@ -125,15 +134,18 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     }
   }, [quotationStateObj]);
 
+
   useEffect(() => {
     if (clients) {
       setClientsArr(clients);
     }
   }, [clients]);
 
+
   useEffect(() => {
     if (quotationObject1 && quotationObject1._id) {
       // console.log(quotationObject, "qoationboj----------");
+      setInclusionData(quotationObject1?.inclusionData)
       setQuotationId(quotationObject1?._id);
       setDestinationName(quotationObject1?.destinationName);
       setDays(parseInt(quotationObject1?.durationOfTour) + parseInt(1));
@@ -283,7 +295,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
 
   const handleinputchangeHotel = (e, index) => {
     let { name, value } = e.target;
-    if (quotationObject && quotationObject._id) {
+    if (quotationObject1 && quotationObject1._id) {
       ("use strict");
       // console.log(name, "name");
       let list = [...hotelList];
@@ -471,11 +483,13 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setTotalPersonAirportPrice(numberOfGuest * amount);
   }, [flightList]);
 
+
   const handleremoveFlight = (index) => {
     const list = [...flightList];
     list.splice(index, 1);
     setflightList(list);
   };
+
 
   const handleaddclickFlight = () => {
     let tempFlightArr = [...flightList];
@@ -488,6 +502,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       },
     ]);
   };
+
   // const handleinputchangeHotel = (e, index) => {
   //   const list = [...hotelList];
 
@@ -714,6 +729,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setIsAirport(false);
     setIsLand(false);
     setNumberofAdults(0);
+    setInclusionData("")
     setNumberOfChildrenWithBed(0);
     setNumberOfChildrenWithoutBed(0);
     setNumberOfInfants(0);
@@ -811,7 +827,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     for (var item of flightList) {
       vals = parseInt(vals) + parseInt(item.cost);
     }
-    console.log(vals, "vals");
+    // console.log(vals, "vals");
     // console.log(result, "result23");
     // let getFlightCost = result.reduce(
     //   (accumulator, currentValue) => accumulator + currentValue,
@@ -846,6 +862,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       perPersonLandPrice,
       amount,
       termAndCondition,
+       inclusionData
     };
 
     if (IsHotelDetailsRequired) {
@@ -885,9 +902,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -899,9 +916,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -913,9 +930,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -927,9 +944,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -941,7 +958,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     }
   };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -1114,9 +1131,8 @@ aria-label="Close"
                     <label className="col-form-label ">
                       Duration Of Tour <span className="text-danger">*</span>
                       (in Nights) (
-                      {`${durationOfTour ? durationOfTour : 0}N/${
-                        days ? days : 0
-                      }D`}
+                      {`${durationOfTour ? durationOfTour : 0}N/${days ? days : 0
+                        }D`}
                       )
                     </label>
                     <input
@@ -1137,7 +1153,7 @@ aria-label="Close"
                       className="form-control"
                       value={numberOfGuest}
                       onChange={(e) => handleSetNumberOfGuest(e.target.value)}
-                      // onChange={(e) => setNumberOfGuest(e.target.value)}
+                    // onChange={(e) => setNumberOfGuest(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1413,10 +1429,10 @@ aria-label="Close"
                               )}
                             </div>
                             {durationOfTour &&
-                            hotelList.reduce(
-                              (acc, el) => acc + parseInt(el.numberOfNight),
-                              0
-                            ) < durationOfTour ? (
+                              hotelList.reduce(
+                                (acc, el) => acc + parseInt(el.numberOfNight),
+                                0
+                              ) < durationOfTour ? (
                               <div className="col-md-12">
                                 {/* {hotelList.length - 1 === i && ( */}
                                 <button
@@ -1659,82 +1675,39 @@ aria-label="Close"
                 
                 */}
 
-<div className="form-group col-md-6 mt-5">
+                <div className="form-group col-md-6 mt-5">
                   <label className="text-danger ">
-                    inclusion Required
+                    Inclusion Required
                   </label>
                   <input
                     type="checkbox"
-                    name="isItineraryDetailsRequired"
+                    name="isInclusionRequired"
                     style={{ marginLeft: 10 }}
-                    value={isItineraryDetailsRequired}
-                    checked={isItineraryDetailsRequired}
+                    value={isInclusionRequired}
+                    checked={isInclusionRequired}
                     onChange={() => {
-                      setIsItineraryDetailsRequired(
-                        !isItineraryDetailsRequired
+                      setIsInclusionRequired(
+                        !isInclusionRequired
                       );
                     }}
                   />
                 </div>
-                {isItineraryDetailsRequired && (
+                {isInclusionRequired && (
                   <div className="content">
                     <div className="row">
                       <div className="col-sm-12">
-                        <h3 className="mt-3 mb-4">Itinerary Details</h3>
-                        {itineraryList &&
-                          itineraryList.map((itinerary, i) => {
-                            return (
-                              <div className="row mb-3" key={i}>
-                                <div className="form-group col-md-1">
-                                  <label>Day </label>
-                                  <div style={{ paddingTop: 10 }}>
-                                    {itinerary.day}
-                                  </div>
-                                </div>
-                                <div className="form-group col-md-5">
-                                  <label>Itinerary Heading</label>
-                                  <input
-                                    type="text"
-                                    name="itineraryHeading"
-                                    className="form-control"
-                                    value={itinerary.itineraryHeading}
-                                    placeholder="Enter Itinerary Heading"
-                                    onChange={(e) =>
-                                      handleinputchangeItinerary(e, i)
-                                    }
-                                  />
-                                </div>
-                                <div className="form-group col-md-12">
-                                  <label>Itinerary Description</label>
-
-                                  <TextareaAutosize
-                                    // ref={descriptionRef}
-                                    // onKeyUp={(e) => {
-                                    //   textAreaAdjust(e);
-                                    // }}
-                                    type="text"
-                                    name="itineraryName"
-                                    className="form-control"
-                                    value={itinerary.itineraryName}
-                                    placeholder="Enter Itinerary Description"
-                                    onChange={(e) =>
-                                      handleinputchangeItinerary(e, i)
-                                    }
-                                  />
-                                  {/* <textarea
-                                    type="text"
-                                    name="itineraryName"
-                                    className="form-control"
-                                    value={itinerary.itineraryName}
-                                    placeholder="Enter Itinerary Description"
-                                    onChange={(e) =>
-                                      handleinputchangeItinerary(e, i)
-                                    }
-                                  /> */}
-                                </div>
-                              </div>
-                            );
-                          })}
+                        <div className="form-group col-md-12">
+                          <label> Description</label>
+                          <TextareaAutosize
+                            type="text"
+                            name="inclusion"
+                            className="form-control"
+                            value={inclusionData}
+                            onChange={(e) =>
+                              setInclusionData(e.target.value)
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
