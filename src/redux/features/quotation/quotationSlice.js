@@ -22,9 +22,9 @@ export const quotationGet = createAsyncThunk(
   "auth/quotationGet",
   async (payload) => {
     try {
-      console.log(payload, "12");
+      // console.log(payload, "12");
       let { data: response } = await get(payload);
-      console.log(response, "12342");
+      // console.log(response, "12342");
       return response;
     } catch (error) {
       toastError(error);
@@ -77,8 +77,8 @@ export const quotationAdd = createAsyncThunk(
   }
 );
 
-export const setQuotationObj = createAsyncThunk(
-  "auth/setQuotationObj",
+export const setQuotationObject = createAsyncThunk(
+  "auth/setQuotationObject",
   async (payload) => {
     try {
       return payload;
@@ -237,7 +237,7 @@ const quotationSlice = createSlice({
       state.isAuthorized = false;
       // toastError(action.data.message);
     },
-    [setQuotationObj.fulfilled]: (state, { payload }) => {
+    [setQuotationObject.fulfilled]: (state, { payload }) => {
       state.quotationObj = payload;
     },
 

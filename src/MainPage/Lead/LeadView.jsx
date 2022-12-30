@@ -8,35 +8,46 @@ import {
   Avatar_02,
   Avatar_10,
   Avatar_05,
-  PlaceHolder,
-  User,
-  Attachment,
+
 } from "../../Entryfile/imagepath";
 import EditLead from "../../_components/modelbox/EditLead";
 import { leadGetById } from "../../redux/features/lead/leadSlice";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import { useDispatch, useSelector } from "react-redux";
-// import {} from "react-router-dom";
 import { generateFilePath } from "../../utils/FileURL";
 import Notes from "../Lead/Notes/Notes";
+import Quotation from "./Quotation/Quotation";
+
+
 
 const LeadView = () => {
   const dispatch = useDispatch();
   const { leadId } = useParams();
   const params = useLocation();
-  // console.log(params, "12313aparams12");
   const currentLead = useSelector((state) => state.lead.lead);
+
+
+
+
+
   const [leadObj, setLeadObj] = useState(null);
   const role = useSelector((state) => state.auth.role);
   const [show, setShow] = useState(false);
+
 
   useEffect(() => {
     // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
+
+
+
   const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
   };
+
+
+
   useEffect(() => {
     dispatch(leadGetById(leadId));
     handleCheckCostingSheet();
@@ -44,6 +55,7 @@ const LeadView = () => {
   }, []);
 
   useEffect(() => {}, [currentLead]);
+
 
   useEffect(() => {
     // handleInit();
@@ -72,7 +84,7 @@ const LeadView = () => {
         <meta name="description" content="Login page" />
       </Helmet>
       {/* {role != "ACCOUNT" && ( */}
-      <div id="view_Lead1" className="chat-main-row">
+      <div id="view_Lead1" className="chat-main-row" >
         {/* <div id="view_Lead1" className="modal custom-modal fade" role="dialog"> */}
         {/* <div id="view_Lead1" className="modal custom-modal fade" role="dialog"> */}
         <div className="chat-main-wrapper">
@@ -97,7 +109,7 @@ const LeadView = () => {
                       <span>
                         <Link to="/app/profile/employee-profile">
                           {/* {leadObj?.createdBy?.firstName} */}
-                          {leadObj?.createdBy?.name +
+                          {leadObj?.createdBy.name?leadObj?.createdBy.name:"" + 
                             " [ " +
                             leadObj?.createdBy?.role +
                             " ]"}
@@ -106,7 +118,7 @@ const LeadView = () => {
                           {/* {!leadObj?.createdBy?.lastName &&
                             !leadObj?.createdBy?.firstName &&
                             "ADMIN"} */}
-                          {!leadObj?.createdBy?.name && "ADMIN"}
+                          {/* {!leadObj?.createdBy?.name && "ADMIN"} */}
                         </Link>
                       </span>
                       {/* <span> Phone : </span> */}
@@ -134,7 +146,7 @@ const LeadView = () => {
                                   {leadObj?.subject}
                                 </span>
 
-                                {console.log(leadObj, "lad")}
+                                {/* {console.log(leadObj, "lad")} */}
                                 <div className="float-end Lead-priority">
                                   <span>Priority: {leadObj?.priority}</span>
 
@@ -313,7 +325,6 @@ const LeadView = () => {
                             </div>
                           </div>
                         )}
-                        {/* {console.log(leadObj, "lead")} */}
                         {leadObj?.agentObj ? (
                           <div className="chat chat-left">
                             <div className="chat-avatar">
@@ -360,7 +371,7 @@ const LeadView = () => {
           </div>
         </div>
       </div>
-      {/* // )} */}
+    
       {/* Edit Lead Modal */}
       <EditLead />
       {/* /Edit Lead Modal */}
@@ -424,32 +435,7 @@ const LeadView = () => {
               </div>
               <div>
                 <ul className="chat-user-list">
-                  <li>
-                    <a href="#">
-                      <div className="media">
-                        <span className="avatar">
-                          <img src={Avatar_09} alt="" />
-                        </span>
-                        <div className="media-body align-self-center text-nowrap">
-                          <div className="user-name">Richard Miles</div>
-                          <span className="designation">Web Developer</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="media">
-                        <span className="avatar">
-                          <img src={Avatar_10} alt="" />
-                        </span>
-                        <div className="media-body align-self-center text-nowrap">
-                          <div className="user-name">John Smith</div>
-                          <span className="designation">Android Developer</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
+
                   <li>
                     <a href="#">
                       <div className="media">
@@ -509,32 +495,6 @@ const LeadView = () => {
                     <a href="#">
                       <div className="media">
                         <span className="avatar">
-                          <img src={Avatar_10} alt="" />
-                        </span>
-                        <div className="media-body media-middle text-nowrap">
-                          <div className="user-name">Jeffery Lalor</div>
-                          <span className="designation">Team Leader</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="media">
-                        <span className="avatar">
-                          <img src={Avatar_08} alt="" />
-                        </span>
-                        <div className="media-body media-middle text-nowrap">
-                          <div className="user-name">Catherine Manseau</div>
-                          <span className="designation">Android Developer</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div className="media">
-                        <span className="avatar">
                           <img src={Avatar_11} alt="" />
                         </span>
                         <div className="media-body media-middle text-nowrap">
@@ -556,7 +516,6 @@ const LeadView = () => {
         </div>
         <Notes show1={show} setShow1={setShow} />
       </div>
-      {/* /Task Followers Modal */}
     </div>
   );
 };

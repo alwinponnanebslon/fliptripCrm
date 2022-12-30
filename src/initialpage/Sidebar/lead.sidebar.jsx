@@ -6,24 +6,14 @@ import { admin, rolesObj } from "../../utils/roles";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Notes from "../../MainPage/Lead/Notes/Notes";
-// import Accordion from "react-bootstrap/Accordion";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import {
-  addReminder,
-  updateReminder,
-  setReminder,
-} from "../../redux/features/reminder/reminderSlice";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionItemHeading,
-  AccordionItemButton,
-  AccordionItemPanel,
-} from "react-accessible-accordion";
+import { addReminder } from "../../redux/features/reminder/reminderSlice";
+import { addnote } from "../../redux/features/note/noteSlice";
 
 import "react-accessible-accordion/dist/fancy-example.css";
 import { toastError } from "../../utils/toastUtils";
+
 const LeadSidebar = (props) => {
   const userObj = useSelector((state) => state.auth.user);
   const [createdBy, setCreatedBy] = useState(null);
@@ -111,6 +101,10 @@ const LeadSidebar = (props) => {
     setPathName(location.pathname);
   }, [location]);
 
+
+
+
+  
   const params = useParams();
   const leadId = params.leadId;
   // console.log(params.leadId, "lead Id ");
@@ -119,42 +113,48 @@ const LeadSidebar = (props) => {
     setSendDataToDb(false);
     setIsOtherReason(false);
   };
+
+
+
+
   useEffect(() => {
     if (notesData == "Other Reason") {
       setIsOtherReason(true);
     }
   }, [notesData]);
 
-  const handleSubmitStatusOfLead = (e) => {
-    // console.log(e, "e.");
-    let obj = {
-      leadStatusDate,
-      leadStatusTime,
-      heading: notesData,
-      otherReason,
-    };
 
+
+
+  const handleSubmitStatusOfLead = (e) => { 
+
+    let obj = {
+      reminderDate: leadStatusDate,
+      leadStatusTime,
+      note: notesData,
+      otherReason,
+      createdBy: { ...userObj, role: role },
+    };
+    obj.createdBy.role = role;
     obj.leadId = leadId;
-    obj.createdBy = createdBy;
+    // obj.createdBy = createdBy;
+
+
     if (notesData == "Other Reason") {
-      // setIsOtherReason(true);
       // obj.otherReason = otherReason;
       if (obj.otherReason.length <= 0) {
         toastError("Other Reason is mandatory");
         return;
       } else {
-        // setSendDataToDb(true);
+        obj.note = otherReason;
         setShowLeadStatusModal(false);
-        dispatch(addReminder(obj));
+        // dispatch(addReminder(obj));
+        dispatch(addnote(obj));
         clearFunc();
       }
-      // if (sendDataToDb) {
-      // setShowLeadStatusModal(false);
-      // dispatch(addReminder(obj));
-      // clearFunc();
-      // }
     } else {
-      dispatch(addReminder(obj));
+      // dispatch(addReminder(obj));
+      dispatch(addnote(obj));
       setShowLeadStatusModal(false);
     }
     console.log(obj, "object  get");
@@ -890,14 +890,13 @@ const LeadSidebar = (props) => {
                 <div className="col-lg-12 text-end mb-4">
                   {leadStatusReason.map((el, index) => {
                     return (
-                      <button 
-                        key={index} 
+                      <button
+                        key={index}
                         variant="primary"
                         className={`btn-cancle clientPosition=${clientPositionColor} col-lg-12 mt-3`}
-
                         // className="btn-cancle col-lg-12 mb-3"
                         // onChange={()=>{setNotesData(el.heading)}}
-                        onClick={(e) => { 
+                        onClick={(e) => {
                           // setClientPositionColor(true)
                           setNotesData(el.heading);
                         }}

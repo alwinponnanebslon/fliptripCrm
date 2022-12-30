@@ -136,7 +136,7 @@ const Notes = ({ show1, setShow1 }) => {
                 <div className="alignright mb8">
                   <span className=" flexfull">
                     {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
-                    {noteItem?.createdBy?.name + " "}
+                    {noteItem?.createdBy?.name ?noteItem?.createdBy?.name:"" + " "}
                     {"[" + noteItem?.createdBy?.role + "]"}
                   </span>
                 </div>

@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { images } from "./Utility/Images";
 import moment from "moment";
-// import ImLocation from "react-icons/im";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-// import { generateFilePath } from "../../../utils/FileURL";
 import { generateFilePath } from "../../utils/FileURL";
 import { Image } from "antd";
 
@@ -171,7 +167,52 @@ function Index() {
           </div>
         </div>
       </section>
-
+      {/* {  console} */}
+      {/* 
+      
+      
+      */}
+      <section className="payment-detail mb-80">
+        <div className="container">
+          <h1 className="fw-bold text-center mb-5 heading">Destination</h1>
+          {QuotationObj &&
+            QuotationObj?.tourListArr &&
+            QuotationObj?.tourListArr.length > 0 &&
+            QuotationObj?.tourListArr.map((el, i) => {
+              let str = el?.destinationObj?.description.split(/[.;]/g);
+              return (
+                <div className="row" key={i}>
+                  <div className="col-12">
+                    <div className="inclusions">
+                      <div className="box mb-0">
+                        <h4 className="purple bg-white">
+                          {el.name} Description
+                        </h4>
+                        <div className="row">
+                          <div className="col-12 ">
+                            <ul className="list-circle">
+                              {str.map((le, i) => {
+                                // console.log(le,"llel")
+                                return <li key={i}>{le}.</li>;
+                              })}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </section>
+      {/* 
+      
+      
+      
+      
+      
+      */}
       <section className="summary mb-80">
         <div className="container">
           <h1 className="fw-bold text-center mb-5">Summary</h1>
@@ -243,7 +284,7 @@ function Index() {
               </tr>
             </thead>
             <tbody>
-              {QuotationObj?.perPersonAirPortPrice > 0 &&
+              {QuotationObj?.perPersonAirPortPrice > 0 && (
                 <tr>
                   <td>FLIGHT</td>
                   <td>{QuotationObj?.perPersonAirPortPrice}</td>
@@ -251,8 +292,9 @@ function Index() {
                     {parseInt(QuotationObj?.perPersonAirPortPrice) *
                       parseInt(QuotationObj?.numberOfGuest)}
                   </td>
-                </tr>}
-              {QuotationObj?.perPersonLandPrice > 0 &&
+                </tr>
+              )}
+              {QuotationObj?.perPersonLandPrice > 0 && (
                 <tr>
                   <td>LAND</td>
                   <td>{QuotationObj?.perPersonLandPrice}</td>
@@ -260,7 +302,8 @@ function Index() {
                     {parseInt(QuotationObj?.perPersonLandPrice) *
                       parseInt(QuotationObj?.numberOfGuest)}
                   </td>
-                </tr>}
+                </tr>
+              )}
             </tbody>
             <tfoot>
               <tr>
@@ -375,10 +418,12 @@ function Index() {
                   </ul>
                 </div>
               </div>
-            )}
+            ) }   
           </div>
         </div>
-      </section>
+      </section> 
+
+
       {QuotationObj &&
         QuotationObj?.flightList &&
         QuotationObj?.flightList?.length > 0 && (
@@ -414,7 +459,7 @@ function Index() {
                   {QuotationObj?.flightList &&
                     QuotationObj?.flightList?.length > 0 &&
                     QuotationObj?.flightList[
-                    QuotationObj?.flightList.length - 1
+                      QuotationObj?.flightList.length - 1
                     ] && (
                       <div className="destination">
                         <h6>
@@ -453,7 +498,15 @@ function Index() {
                                 <h4>{el?.hotelName} / 1 Rooms</h4>
                                 <h5>
                                   {el?.hotelAddress}
-                                  <p>({el?.numberOfNight} Night Stay)</p>
+                                  <p>
+                                    ({el?.numberOfNight} Night Stay){" "}
+                                    {el?.rating ? `Rating : ${el?.rating}` : ""}{" "}
+                                  </p>
+                                  {/* {el?.rating && (
+                                    <p>
+                                      (Rating : {el.rating ? el.rating : ""} )
+                                    </p>
+                                  )} */}
                                 </h5>
                               </div>
                             </li>
@@ -512,7 +565,7 @@ function Index() {
         )}
       <div className="desp purple-bg py-2 px-4 my-5">
         <p className="text-white m-0 text-center">
-          Prices of Flights and hotels are subject to availability{" "}
+          Prices of Flights and hotels are subject to availability
         </p>
         {/* <p className="text-white m-0 text-center">
           We are not making any holding on above as of now. Flight prices are
@@ -545,11 +598,20 @@ function Index() {
                             in {QuotationObj?.destinationName}
                           </p>
                         </div>
+                        {/* {QuotationObj?.agentObj?.photoUrl}asdasdasd */}
                         <div className="box">
                           <ul className="inner-box">
                             <li>
                               <div className="left">
-                                <img src={images.travelling} alt="" />
+                                {/* <img src={images.travelling} alt="" /> */}
+                                <img
+                                  src={generateFilePath(
+                                    QuotationObj?.agentObj?.photoUrl
+                                  )}
+                                  alt=""
+                                  style={{ width: 100 }}
+                                  className="img-fluid"
+                                />
                               </div>
                               <div className="right">
                                 <h4>{el?.itineraryHeading}</h4>
@@ -744,11 +806,15 @@ function Index() {
                         </th>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
-                                <th scope="col" className="fw-normal">
+                                <th
+                                  scope="col"
+                                  className="fw-normal"
+                                  key={index}
+                                >
                                   {index + 1}
                                   <sup>st</sup> Installment
                                 </th>
@@ -762,7 +828,7 @@ function Index() {
                         <td>FLIGHT</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
-                          0 &&
+                            0 &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.map(
                             (el, index) => {
                               return (
@@ -1120,21 +1186,31 @@ function Index() {
       
       
       */}
-
+      {/* {console.log(QuotationObj, "QuotationObj?.agentObj")} */}
       <div className="container">
         <div className="row align-items-center">
           <div className="col-lg-3">
             <div className="foter_img text-center">
-              <img
-                style={{
-                  borderRadius: "55px",
-                  height: "120px",
-                  width: "120px",
-                }}
-                alt=""
+              <div>
+                <img
+                  style={{
+                    borderRadius: "55px",
+                    height: "120px",
+                    width: "120px",
+                    backgroundColor: "red",
+                  }}
+                  alt={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                  src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                />
+              </div>
+              {generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+              {/* {QuotationObj?.agentObj?.photoUrl} */}
+              {/* <img
                 src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
-                mb-22
-              />
+                alt=""
+                // style={{ width: 100 }}
+                className="img-fluid"
+              /> */}
               <h4 className="name_info">
                 {QuotationObj?.agentObj?.firstName + " "}
                 {QuotationObj?.agentObj?.lastName}
@@ -1185,7 +1261,17 @@ function Index() {
                         : ""}
                       <span>
                         <img src={images.whatsapp} alt="" />{" "}
-                      </span>{" "}
+                      </span>
+                      <img
+                        style={{
+                          borderRadius: "55px",
+                          height: "120px",
+                          width: "120px",
+                          backgroundColor: "red",
+                        }}
+                        alt={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                        src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                      />
                     </a>
                   </li>
                   {/* <li>
