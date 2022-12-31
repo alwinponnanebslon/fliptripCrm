@@ -418,11 +418,10 @@ function Index() {
                   </ul>
                 </div>
               </div>
-            ) }   
+            )}
           </div>
         </div>
-      </section> 
-
+      </section>
 
       {QuotationObj &&
         QuotationObj?.flightList &&
@@ -531,9 +530,6 @@ function Index() {
                                 <h4>Staying Dates</h4>
                                 <ul className="list-circle">
                                   {getDates(el.checkIn, el.checkOut)}
-                                  {/* <li>31-May-2022,</li>
-                            <li>01-Jun-2022,</li>
-                            <li>02-Jun-2022,</li> */}
                                 </ul>
                               </div>
                             </li>
@@ -598,7 +594,6 @@ function Index() {
                             in {QuotationObj?.destinationName}
                           </p>
                         </div>
-                        {/* {QuotationObj?.agentObj?.photoUrl}asdasdasd */}
                         <div className="box">
                           <ul className="inner-box">
                             <li>
@@ -889,7 +884,7 @@ function Index() {
 
       <div className="desp purple-bg py-2 px-4 my-5">
         <p className="text-white m-0 text-center">
-          Prices of Flights and hotels are subject to availability{" "}
+          Prices of Flights and hotels are subject to availability
         </p>
         {/* <p className="text-white m-0 text-center">
           As quoted on {new Date(QuotationObj?.createdAt).toDateString()}{" "}
@@ -1203,7 +1198,7 @@ function Index() {
                   src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
                 />
               </div>
-              {generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+              {/* {generateFilePath(QuotationObj?.agentObj?.photoUrl)} */}
               {/* {QuotationObj?.agentObj?.photoUrl} */}
               {/* <img
                 src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
@@ -1212,13 +1207,17 @@ function Index() {
                 className="img-fluid"
               /> */}
               <h4 className="name_info">
-                {QuotationObj?.agentObj?.firstName + " "}
-                {QuotationObj?.agentObj?.lastName}
+                {QuotationObj.agentObj.firstName!=undefined
+                  ? QuotationObj?.agentObj?.firstName
+                  : "" + " "}
+                {QuotationObj.agentObj.lastName!=undefined
+                  ? QuotationObj?.agentObj?.lastName
+                  : ""}
               </h4>
               <h5 className="categofy_info">
-                {QuotationObj?.agentObj?.designation
+                {QuotationObj.agentObj.designation
                   ? QuotationObj?.agentObj?.designation
-                  : "Sales Executive"}{" "}
+                  : "Sales Executive"}
               </h5>
               <h6 className="info_num">
                 {QuotationObj?.agentObj?.phone

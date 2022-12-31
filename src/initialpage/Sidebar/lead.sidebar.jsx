@@ -85,17 +85,22 @@ const LeadSidebar = (props) => {
     setCreatedBy(userObj);
   }, [userObj]);
 
+
   const toggleSidebar = (value) => {
     // // console.log(value);
     setSideMenu(value);
   };
 
+
   const toggleLvelTwo = (value) => {
     setLevel2Menu(value);
   };
+  
+  
   const toggleLevelThree = (value) => {
     setLevel3Menu(value);
   };
+
 
   useEffect(() => {
     setPathName(location.pathname);
@@ -157,7 +162,7 @@ const LeadSidebar = (props) => {
       dispatch(addnote(obj));
       setShowLeadStatusModal(false);
     }
-    console.log(obj, "object  get");
+    // console.log(obj, "object  get");
   };
 
   return (
@@ -684,7 +689,7 @@ const LeadSidebar = (props) => {
                         toggleSidebar(isSideMenu == "notes" ? "" : "notes")
                       }
                     >
-                      <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
+                      <i className="fa fa-sticky-note-o" /> <span> 12NOTES</span>{" "}
                       <span className="menu-arrow" />
                     </a>
                     {isSideMenu == "notes" ? (
@@ -767,12 +772,14 @@ const LeadSidebar = (props) => {
                       className={isSideMenu == "notes" ? "subdrop" : ""}
                       onClick={() =>
                         toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                        // toggleSidebar(isSideMenu)// == "notes" ? "" : "notes")
                       }
                     >
                       <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
                       <span className="menu-arrow" />
                     </a>
                     {isSideMenu == "notes" ? (
+                    // {isSideMenu  ? (
                       <ul>
                         <li>
                           <Notes />
@@ -875,7 +882,7 @@ const LeadSidebar = (props) => {
         )} */}
         {/*--------------------------------------------- modal area------------------------ */}
         {/*--------------------------------------------- modal area------------------------ */}
-        {console.log(notesData, "setNotesData")}
+        {/* {console.log(notesData, "setNotesData")} */}
         <Modal
           show={showLeadStatusModal}
           onHide={handleClose}
@@ -1012,16 +1019,7 @@ const LeadSidebar = (props) => {
                     <input type="text" name="" className="form-control" />
                   </div>
                 </div>
-                <div className="col-lg-3 col-sm-6 col-md-6">
-                  <div className="form-group">
-                    <label>Issued Date DD/MM/YY</label>
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      className="form-control"
-                    />
-                  </div>
-                </div>
+             c 
                 <div className="col-lg-3 col-sm-6 col-md-6">
                   <div className="form-group">
                     <label>Expiry Date DD/MM/YY</label>

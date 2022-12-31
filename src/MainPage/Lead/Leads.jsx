@@ -10,7 +10,7 @@ import "antd/dist/antd.css";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { itemRender, onShowSizeChange } from "../paginationfunction";
-
+import moment from "moment";
 import "../antdstyle.css";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -1686,7 +1686,8 @@ const Leads = () => {
       title: "Created Date",
       render: (text, record) => (
         <h2 className="table-avatar">
-          {new Date(record?.createdAt).toDateString()}
+          {/* {new Date(record?.createdAt).toLocaleDateString()} */}
+          {moment(record?.createdAt).format("DD/MM/YYYY")}
         </h2>
       ),
     },
