@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { generateFilePath } from "../../utils/FileURL";
 import Notes from "../Lead/Notes/Notes";
 import Quotation from "./Quotation/Quotation";
-
+import moment from "moment";
 
 
 const LeadView = () => {
@@ -83,9 +83,12 @@ const LeadView = () => {
         <title>Leads - CRM created by Fliptrip Holidays</title>
         <meta name="description" content="Login page" />
       </Helmet>
-      {/* {role != "ACCOUNT" && ( */}
+
+
+
+
+
       <div id="view_Lead1" className="chat-main-row" >
-        {/* <div id="view_Lead1" className="modal custom-modal fade" role="dialog"> */}
         {/* <div id="view_Lead1" className="modal custom-modal fade" role="dialog"> */}
         <div className="chat-main-wrapper">
           <div className="col-lg-8 message-view task-view">
@@ -103,12 +106,12 @@ const LeadView = () => {
                         {leadObj?.clientObj?.name} {leadObj?.clientObj?.phone}
                       </a>
                       <span className="m-l-15 text-muted">Created: </span>
-                      <span>{new Date(leadObj?.createdAt).toDateString()}</span>
+                       {/* <span>{new Date(leadObj?.createdAt).toDateString()}</span> */}
+                       <span> {moment(leadObj?.createdAt).format("DD/MM/YYYY")}</span>
+
                       <span className="m-l-15 text-muted">Created by:</span>
-                      {/* {console.log(leadObj, "leadObj234")} */}
                       <span>
                         <Link to="/app/profile/employee-profile">
-                          {/* {leadObj?.createdBy?.firstName} */}
                           {leadObj?.createdBy.name?leadObj?.createdBy.name:"" + 
                             " [ " +
                             leadObj?.createdBy?.role +

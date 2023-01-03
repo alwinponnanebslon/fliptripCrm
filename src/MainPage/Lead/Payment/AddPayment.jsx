@@ -7,11 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { quotationGet } from "../../../redux/features/quotation/quotationSlice";
 import { toastError } from "../../../utils/toastUtils";
 import { confirmAlert } from "react-confirm-alert";
+
+
 import {
   paymentAdd,
   paymentGetByQuotation,
   paymentUpdate,
 } from "../../../redux/features/payment/paymentSlice";
+
+
 import {
   addPaymentInvoice,
   deletePaymentInvoice,
@@ -19,6 +23,7 @@ import {
   setPaymentInvoice,
   updatePaymentInvoice,
 } from "../../../redux/features/paymentInvoice/paymentInvoiceSlice";
+
 
 export const AddPayment = () => {
   let history = useHistory();
@@ -32,10 +37,14 @@ export const AddPayment = () => {
   const payMentInvoiceArr = useSelector(
     (state) => state.paymentInvoice.paymentInvoices
   );
+  
+  
   const quotationPaymentObj = useSelector((state) => state.payment.paymentObj);
   const perfomaInvoiceObj = useSelector(
     (state) => state.paymentInvoice.paymentInvoiceObj
   );
+
+
   const [quotationArr, setQuotationArr] = useState([]);
   const { leadId } = useParams();
   const [selectedQuotation, setSelectedQuotation] = useState({});
@@ -60,6 +69,8 @@ export const AddPayment = () => {
     },
   ]);
 
+
+
   const [perfomaInvoiceArr, setPerfomaInvoiceArr] = useState([]);
 
   const [invoiceNo, setInvoiceNo] = useState("");
@@ -76,6 +87,7 @@ export const AddPayment = () => {
       revivedOn: new Date(),
     },
   ]);
+  
   const [handleEditInputInTcs, setHandleEditInputInTcs] = useState(false);
 
   useEffect(() => {
@@ -341,27 +353,19 @@ export const AddPayment = () => {
     if (invoiceNo == "") {
       toastError("invoiceNo  is mandatory");
       return;
-      // throw "tour name is mandatory";
     }
-
     if (invoiceDescription == "") {
       toastError("invoiceDescription  is mandatory");
       return;
-      // throw "tour name is mandatory";
     }
-
     if (invoiceAmount == "") {
       toastError("invoiceAmount  is mandatory");
       return;
-      // throw "tour name is mandatory";
     }
-
     if (invoiceDate == "") {
       toastError("invoiceDate  is mandatory");
       return;
-      // throw "tour name is mandatory";
     }
-
     let obj = {
       leadId,
       quotationId,

@@ -339,7 +339,6 @@ const AdminDashboard = () => {
       let { data: res } = await getAllSalesOfTenDays(
         `leadId=${userAuthorise.user?._id}`
       );
-      // console.log(res.data, "gew34");
       // { y: "2006", "Total Sales": 50, "Total Revenue": 90 },
       let allLeadArr = res.data;
       let tempArray = [];
@@ -369,7 +368,6 @@ const AdminDashboard = () => {
   let onHoldArr = [];
   let declinedArr = [];
 
-  // useEffect(() => {
   let temp = [...leadsArr];
 
   temp.map((x) => {
@@ -390,7 +388,6 @@ const AdminDashboard = () => {
       declinedArr.push(x);
     }
   });
-  // }, []);
 
 
 
@@ -410,16 +407,14 @@ const AdminDashboard = () => {
       if (Date.parse(dateFrom) > Date.parse(dateTo)) {
         toastError("In valid date");
       } else {
-        // let getfilterLead = await getLeadFilterByDate(
         let { data: res } = await getLeadFilterByDate(
           dateFrom,
           dateTo,
           role,
           userAuthorise?.user?._id
         );
-        // console.log(res.data, "g1");
         setDisplayLeadsArr(res.data);
-        setLeadsArr(res.data); ////////////////////////
+        setLeadsArr(res.data); 
         // let allLeadArr = res.data;
         // let tempArray = [];
         // for (let el of allLeadArr) {
