@@ -56,8 +56,8 @@ const Notes = ({ show1, setShow1 }) => {
       setShow(true);
     }
   }, []);
+  
   useEffect(() => {
-    // console.log(notesResultArr, "notesResultArr34");
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
 
@@ -69,10 +69,17 @@ const Notes = ({ show1, setShow1 }) => {
   const handleDelete = (id) => {
     dispatch(deletenote({ id, leadId }));
   };
-const clearFunc=()=>{
+
+
+
+
+  const clearFunc=()=>{
   setNote("")
   setReminderDate(new Date( ))
 }
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(note,"hnalde sunmit ")
@@ -124,7 +131,9 @@ const clearFunc=()=>{
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
+      console.log("0987")
       handleSubmit(event);
+      
       // console.log('enter press here!22222222222222222 ')
     }
   }
@@ -140,9 +149,7 @@ const clearFunc=()=>{
   // }
 
 
-  // useEffect(() => {
-  //   document.addEventListener('keydown', detectkeydown, true)
-  // }, [])
+
 
 
 
@@ -155,14 +162,15 @@ const clearFunc=()=>{
           setShow(!show);
         }}
       >
-        {/* add Notes */}
+        add Notes
 
       </h4>
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
             <div className="form-group">
-            <TextareaAutosize
+            {/* <TextareaAutosize */}
+            <input
                 value={note}
                 onChange={(e) => {
                   console.log(e.target.value,"12")
@@ -172,7 +180,7 @@ const clearFunc=()=>{
                 //   handleKeyPress(e)
                 //  }}
 
-                // onKeyPress={(e)=>handleKeyPress(e)}
+                onKeyDown={(e)=>handleKeyPress(e)}
                 className="form-control"
                 cols="1000"
                 rows="100"
@@ -195,7 +203,7 @@ const clearFunc=()=>{
             </div>
           </div>
 
-          {/* {showButtonVisibility && */}
+          {showButtonVisibility &&
             <Button
               type="submit"
               className="btn-submit"
@@ -211,7 +219,7 @@ const clearFunc=()=>{
             >
               Submit
             </Button>
-            {/* } */}
+            } 
         </div>
       </div>
 

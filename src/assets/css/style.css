@@ -9652,3 +9652,12 @@ textarea {
 tr.ant-table-row:last-child .dropdown-menu {
   inset: auto 0 0pc !important;
 }
+.active07 {
+  /* width: "50%";
+                           flex-wrap: "wrap";
+                           word-break: "break-all";
+                          margin: "10px 200px";
+                           padding: "15px 15px";
+                           border-radius: "15px 15px 15px 0px"; */
+  background-color: #6fda4f;
+}

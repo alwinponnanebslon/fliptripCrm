@@ -50,7 +50,7 @@ const LeadSidebar = (props) => {
   const [otherReason, setOtherReason] = useState("");
   const [sendDataToDb, setSendDataToDb] = useState(false);
   const [notesData, setNotesData] = useState("");
-  const [clientPositionColor, setClientPositionColor] = useState(false);
+  const [clientPositionColor, setClientPositionColor] = useState("");
   // const ParamsPathName = location.pathname.split("/").length;
 
   const [leadStatusReason, setLeadStatusReason] = useState([
@@ -58,26 +58,31 @@ const LeadSidebar = (props) => {
       heading: "Call Not Picked",
       followDate: new Date().toLocaleDateString(),
       followTime: new Date().toLocaleTimeString(),
+      active: false,
     },
     {
       heading: "Call Not Answer",
       followDate: new Date().toLocaleDateString(), //  date: new Date().toDateString(),
       followTime: new Date().toLocaleTimeString(),
+      active: false,
     },
     {
       heading: "Call Back Later",
       followDate: new Date().toLocaleDateString(),
       followTime: new Date().toLocaleTimeString(),
+      active: false,
     },
     {
       heading: "Not Interested",
       followDate: new Date().toLocaleDateString(),
       followTime: new Date().toLocaleTimeString(),
+      active: false,
     },
     {
       heading: "Other Reason",
       followDate: new Date().toLocaleDateString(),
       followTime: new Date().toLocaleTimeString(),
+      active: false,
     },
   ]);
 
@@ -85,30 +90,22 @@ const LeadSidebar = (props) => {
     setCreatedBy(userObj);
   }, [userObj]);
 
-
   const toggleSidebar = (value) => {
     // // console.log(value);
     setSideMenu(value);
   };
 
-
   const toggleLvelTwo = (value) => {
     setLevel2Menu(value);
   };
-
 
   const toggleLevelThree = (value) => {
     setLevel3Menu(value);
   };
 
-
   useEffect(() => {
     setPathName(location.pathname);
   }, [location]);
-
-
-
-
 
   const params = useParams();
   const leadId = params.leadId;
@@ -119,23 +116,16 @@ const LeadSidebar = (props) => {
     setIsOtherReason(false);
   };
 
-
-
-
   useEffect(() => {
     if (notesData == "Other Reason") {
       setIsOtherReason(true);
     }
   }, [notesData]);
 
-
-
-
   const handleSubmitStatusOfLead = (e) => {
-
     let obj = {
       reminderDate: leadStatusDate,
-     reminderTime: leadStatusTime,
+      reminderTime: leadStatusTime,
       note: notesData,
       otherReason,
       createdBy: { ...userObj, role: role },
@@ -163,6 +153,17 @@ const LeadSidebar = (props) => {
     }
     clearFunc();
     // console.log(obj, "object  get");
+  };
+
+  const handleClickButton = (i) => {
+    console.log(i, "123123");
+
+    let check = leadStatusReason.map((el, index) => {
+      i == index ? (el.active = true) : (el.active = false);
+      return el;
+    });
+    console.log(check, "ckheck1");
+    setLeadStatusReason([...check]);
   };
 
   return (
@@ -689,7 +690,7 @@ const LeadSidebar = (props) => {
                         toggleSidebar(isSideMenu == "notes" ? "" : "notes")
                       }
                     >
-                      <i className="fa fa-sticky-note-o" /> <span> NOTES-</span>{" "}
+                      <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
                       {/* <span className="menu-arrow" /> */}
                     </a>
                     {/* {isSideMenu == "notes" ? ( */}
@@ -759,14 +760,14 @@ const LeadSidebar = (props) => {
                   </Link>
                 </li>
 
-
                 {role != "SUPERVISOR" && (
                   <li className="submenu">
                     <a
                       href="#"
                       className={isSideMenu == "notes" ? "subdrop" : ""}
-                      onClick={() =>
-                        toggleSidebar(isSideMenu == "notes" ? "" : "notes")
+                      onClick={
+                        () =>
+                          toggleSidebar(isSideMenu == "notes" ? "" : "notes")
                         // toggleSidebar(isSideMenu)// == "notes" ? "" : "notes")
                       }
                     >
@@ -798,8 +799,8 @@ const LeadSidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                        ? "active"
-                        : ""
+                      ? "active"
+                      : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -890,21 +891,24 @@ const LeadSidebar = (props) => {
                       <button
                         key={index}
                         variant="primary"
-                        className={`btn-cancle clientPosition=${clientPositionColor} col-lg-12 mt-3`}
+                        className={` btn-cancle  ${
+                          el.active ? "active07" : ""
+                        } col-lg-12 mt-3`}
                         onClick={(e) => {
                           setNotesData(el.heading);
+                          handleClickButton(index);
                         }}
-                        style={{
-                          alignSelf: el.heading ? "flex-end" : "flex-start",
-                          textAlign: el.heading ? "right" : "left",
-                          width: "50%",
-                          flexWrap: "wrap",
-                          wordBreak: "break-all",
-                          margin: "10px 0px",
-                          padding: "15px 15px",
-                          borderRadius: el.heading ? "15px 15px 0px 15px" : "15px 15px 15px 0px",
-                          backgroundColor: el.heading ? "rgba(132, 163, 163,1)" : "rgba(166, 173, 173,0.3)"
-                        }}
+                        // style={{
+                        //   alignSelf: el.heading ? "flex-end" : "flex-start",
+                        //   textAlign: el.heading ? "right" : "left",
+                        //   width: "50%",
+                        //   flexWrap: "wrap",
+                        //   wordBreak: "break-all",
+                        //   margin: "10px 200px",
+                        //   padding: "15px 15px",
+                        //   borderRadius: el.heading ? "15px 15px 0px 15px" : "15px 15px 15px 0px",
+                        //   backgroundColor: el.heading ? "rgba(132, 163, 163,1)" : "rgba(166, 173, 173,0.3)"
+                        // }}
                       >
                         {el.heading}
                       </button>
@@ -965,7 +969,6 @@ const LeadSidebar = (props) => {
             >
               Submit-
             </Button>
-
           </Modal.Footer>
         </Modal>
 
@@ -990,7 +993,7 @@ const LeadSidebar = (props) => {
                 <div className="col-lg-3 col-sm-4">
                   <div className="form-group">
                     <label>
-                      age <span>*</span>{" "}
+                      age <span>*</span>
                     </label>
                     <input type="text" name="name" className="form-control" />
                   </div>
@@ -1003,7 +1006,6 @@ const LeadSidebar = (props) => {
                     <input type="text" name="" className="form-control" />
                   </div>
                 </div>
-                c
                 <div className="col-lg-3 col-sm-6 col-md-6">
                   <div className="form-group">
                     <label>Expiry Date DD/MM/YY</label>
@@ -1021,7 +1023,6 @@ const LeadSidebar = (props) => {
                   </div>
                 </div>
               </div>
-
 
               <div className="row mt-1">
                 <div className="col-lg-5">
@@ -1055,7 +1056,6 @@ const LeadSidebar = (props) => {
             </div>
           </Modal.Body>
         </Modal>
-
 
         {/* sedasdfasdfdddddddddddddddddddddddddddddddddddddd */}
         <Modal show={show1} onHide={handleClose1} className="add_note">

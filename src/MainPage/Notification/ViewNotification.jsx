@@ -29,14 +29,9 @@ function Notification() {
     (state) => state.notification.notifications
   );
 
-  // const [description, setDescription] = useState("");
-  // const [tourId, setTourId] = useState("");
-
-  // const [followUpCheck, setFollowUpCheck] = useState([]);
   const { leadId } = useParams();
   const [showNotification, setShowNotification] = useState(false);
 
-  // const [name, setName] = useState("");
   const [notificationArr, setNotificationArr] = useState([]);
 
   const [filterNotificationObj, setfiterNotificationObj] = useState([]);

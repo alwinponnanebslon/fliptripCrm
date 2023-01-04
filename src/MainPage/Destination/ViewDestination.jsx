@@ -18,6 +18,7 @@ import {
   setTour,
   addTour,
 } from "../../redux/features/tour/tourSlice";
+import { generateFilePath } from "../../utils/FileURL";
 
 const ViewDestination = () => {
   const dispatch = useDispatch();
@@ -30,8 +31,8 @@ const ViewDestination = () => {
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [show, setShow] = useState(false);
   const [destinationNameQuery, setDestinationNameQuery] = useState("");
-  const [mainImage , setMainImage] = useState("");
-  const [itenaryImage , setItenaryImage] = useState("");
+  const [mainImage, setMainImage] = useState("");
+  const [itenaryImage, setItenaryImage] = useState("");
 
   useEffect(() => {
     handleInit();
@@ -74,7 +75,7 @@ const ViewDestination = () => {
 
     dispatch(updateTour(obj));
   };
-  
+
   const getBase64 = (file, cb) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -87,7 +88,7 @@ const ViewDestination = () => {
   };
 
   const handleFileSelection = (event) => {
-    console.log("wqewqeqe");
+    // console.log("wqewqeqe");
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
         // // console.log(result, "result");
@@ -97,7 +98,7 @@ const ViewDestination = () => {
   };
 
   const handleItenaryFileSelection = (event) => {
-    console.log("wqewqeqe");
+    // console.log("wqewqeqe");
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
         // // console.log(result, "result");
@@ -107,7 +108,7 @@ const ViewDestination = () => {
   };
 
   useEffect(() => {
-    if(tourResultObj && tourResultObj._id) {
+    if (tourResultObj && tourResultObj._id) {
       setTourId(tourResultObj?._id);
       setName(tourResultObj?.name);
       setDescription(tourResultObj?.description);
@@ -214,12 +215,7 @@ const ViewDestination = () => {
             <i className="material-icons">more_vert</i>
           </a>
           <div className="dropdown-menu dropdown-menu-right">
-            <a
-              className="dropdown-item"
-              // data-bs-toggle="modal"
-              // data-bs-target="#add_destination"
-              onClick={() => handleEdit(row)}
-            >
+            <a className="dropdown-item" onClick={() => handleEdit(row)}>
               <i className="fa fa-pencil m-r-5" /> Edit
             </a>
             <a
@@ -259,8 +255,6 @@ const ViewDestination = () => {
               <a
                 href="#"
                 className="btn add-btn"
-                // data-bs-toggle="modal"
-                // data-bs-target="#add_destination"
                 onClick={() => {
                   setShow(true);
                 }}
@@ -326,13 +320,13 @@ const ViewDestination = () => {
                 }}
                 style={{ overflowX: "auto" }}
                 columns={tour_columns}
-                // bordered
                 dataSource={tourMainArr}
                 rowKey={(record) => record.id}
               />
             </div>
           </div>
         </div>
+      
       </div>
       {/* /Page Content */}
       {/* Add Client Modal */}

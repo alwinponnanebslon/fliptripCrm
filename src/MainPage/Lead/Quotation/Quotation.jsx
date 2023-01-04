@@ -153,9 +153,9 @@ const Quotation = () => {
     if (input) { 
       // console.log(row,"input2121")
       html2canvas(input).then((canvas) => {
-        console.log("en2");
+        // console.log("en2");
         const imgData = canvas.toDataURL("image/png");
-        console.log("en3");
+        // console.log("en3");
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "px",
