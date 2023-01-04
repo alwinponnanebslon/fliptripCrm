@@ -118,8 +118,7 @@ function Index() {
                   </ul>
                   <ul className="detail list-circle">
                     <li>
-                      {QuotationObj?.durationOfTour} N
-                      {parseInt(QuotationObj?.durationOfTour) + 1} D
+                      {QuotationObj?.durationOfTour } "N " &nbsp;&nbsp; { parseInt(QuotationObj?.durationOfTour) + 1 } "D "
                     </li>
                     <li>{QuotationObj?.numberOfGuest} Passengers</li>
                     <li>

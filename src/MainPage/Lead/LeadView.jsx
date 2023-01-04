@@ -100,7 +100,9 @@ const LeadView = () => {
                       </span>
                       <span className="m-l-15 text-muted">Client: </span>
                       <a href="#">
-                        {leadObj?.clientObj?.name} {leadObj?.clientObj?.phone}
+                        {leadObj?.clientObj?.name}
+                        <span className="m-l-15 text-muted">Phone Number: </span>
+                        {leadObj?.clientObj?.phone}
                       </a>
                       <span className="m-l-15 text-muted">Created: </span>
                       <span>{new Date(leadObj?.createdAt).toDateString()}</span>
@@ -267,7 +269,7 @@ const LeadView = () => {
               <div className="fixed-header">
                 <div className="navbar">
                   <div className="task-assign">
-                    <span className="assign-title">Assigned to </span>
+                    <span className="assign-title">Assigned to Admin</span>
                     {/* <a href="#" data-bs-toggle="tooltip" data-placement="bottom" title="John Doe" className="avatar">
                       <img src={Avatar_02} alt="" />
                     </a> */}

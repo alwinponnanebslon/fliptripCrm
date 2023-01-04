@@ -11,7 +11,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 // import Pdf from "../MainPage/Pdf/Index";
 import Pdfile from "../../../MainPage/Pdf/Index";
 import { jsPDF } from "jspdf";
-import ReactToPdf from "react-to-pdf";
+// import ReactToPdf from "react-to-pdf";
 import { updateTour, setTour } from "../../../redux/features/tour/tourSlice";
 import { getById } from "../../../Services/lead.service";
 import moment from "moment";
@@ -60,6 +60,10 @@ const Quotation = () => {
   const [clearFunctionRun, setClearFunctionRun] = useState(false);
   const [printPdf, setPrintPdf] = useState(false);
   const [QuotationObj, setQuotationObj] = useState({});
+  const [tourObj, settourObj] = useState({
+    mainImage:images.top_left,
+    itenaryImage:images.location,
+  })
 
   useEffect(() => {
     handleInit();
@@ -124,6 +128,19 @@ const Quotation = () => {
     // const input = ;
     // localStorage.setItem("quotationPdf", JSON.stringify(row));
     setQuotationObj(row);
+    if(row && row?.tourListArr && row?.tourListArr.length > 0){
+        let currentObj = row.tourListArr.find(el => el.mainImage);
+        console.log(currentObj,"tourListArrtourListArrtourListArrtourListArr");
+        if(currentObj != ""){
+          let temptour ={
+            mainImage:generateFilePath(currentObj.mainImage),
+            itenaryImage:currentObj?.itenaryImage?generateFilePath(currentObj?.itenaryImage):images.location
+          }
+        console.log(temptour,"tourListArrtourListArrtourListArrtourListArr");
+
+          settourObj(temptour);
+        }
+    }
     // dispatch(setQuotationObj(row));
     // dispatch(setTour(row));
 
@@ -327,7 +344,7 @@ const Quotation = () => {
 
   const tour_columns = [
     {
-      title: "Created On",
+      title: "Date",
       dataIndex: "createdAt",
       render: (row, record) => (
         <div>
@@ -731,13 +748,16 @@ const Quotation = () => {
                   <div className="col-12 col-md-6">
                     <div className="left">
                       <div className="image">
-                        <img src={images.top_left} alt="" />
+                        <img src={tourObj.mainImage} alt="" />
                       </div>
                     </div>
                   </div>
                   <div className="col-12 col-md-6">
                     <div className="right">
                       <div className="d-flex align-items-end justify-content-between right-top">
+                        { QuotationObj && QuotationObj.tourListArr
+                        
+                        }
                         <img src={images.logo} alt="" className="main-logo" />
                         <ul>
                           <li>
@@ -782,7 +802,7 @@ const Quotation = () => {
                         </ul>
                         <ul className="detail list-circle">
                           <li>
-                            {QuotationObj?.durationOfTour} N
+                            {QuotationObj?.durationOfTour} N &nbsp;&nbsp;
                             {parseInt(QuotationObj?.durationOfTour) + 1} D
                           </li>
                           <li>{QuotationObj?.numberOfGuest} Passengers</li>
@@ -1191,7 +1211,7 @@ const Quotation = () => {
                             <div className="col-12" key={index}>
                               <div className="day">
                                 <h4>
-                                  <img src={images.location} alt="" />
+                                  <img src={tourObj.itenaryImage} alt="" />
                                   Day {index + 1}
                                 </h4>
                                 <p className="small">

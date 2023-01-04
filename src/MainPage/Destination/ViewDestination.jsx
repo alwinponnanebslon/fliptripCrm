@@ -30,6 +30,8 @@ const ViewDestination = () => {
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [show, setShow] = useState(false);
   const [destinationNameQuery, setDestinationNameQuery] = useState("");
+  const [mainImage , setMainImage] = useState("");
+  const [itenaryImage , setItenaryImage] = useState("");
 
   useEffect(() => {
     handleInit();
@@ -47,6 +49,8 @@ const ViewDestination = () => {
   const clearFunc = () => {
     setName("");
     setDescription("");
+    setMainImage("");
+    setItenaryImage("");
     setIsUpdateTour(false);
     dispatch(setTour({}));
     setTourId("");
@@ -70,12 +74,45 @@ const ViewDestination = () => {
 
     dispatch(updateTour(obj));
   };
+  
+  const getBase64 = (file, cb) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result);
+    };
+    reader.onerror = function (error) {
+      // // console.log('Error: ', error)
+    };
+  };
+
+  const handleFileSelection = (event) => {
+    console.log("wqewqeqe");
+    if (event.target.files[0]) {
+      getBase64(event.target.files[0], (result) => {
+        // // console.log(result, "result");
+        setMainImage(result);
+      });
+    }
+  };
+
+  const handleItenaryFileSelection = (event) => {
+    console.log("wqewqeqe");
+    if (event.target.files[0]) {
+      getBase64(event.target.files[0], (result) => {
+        // // console.log(result, "result");
+        setItenaryImage(result);
+      });
+    }
+  };
 
   useEffect(() => {
-    if (tourResultObj && tourResultObj._id) {
+    if(tourResultObj && tourResultObj._id) {
       setTourId(tourResultObj?._id);
       setName(tourResultObj?.name);
       setDescription(tourResultObj?.description);
+      setMainImage(tourResultObj?.mainImage);
+      setItenaryImage(tourResultObj?.itenaryImage);
     }
   }, [tourResultObj]);
 
@@ -89,8 +126,8 @@ const ViewDestination = () => {
       return;
     }
 
-    let obj = { name, description };
-    // console.log(obj, "obj23");
+    let obj = { name, description, mainImage, itenaryImage };
+    console.log(obj, "obj23");
     if (isUpdateTour) {
       obj.Id = tourId;
       setShow(false);
@@ -353,6 +390,32 @@ const ViewDestination = () => {
                         className="form-control"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Main Image <span className="text-danger"></span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        // value={mainImage}
+                        onChange={(e) => handleFileSelection(e)}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group row">
+                    <label className="col-form-label col-md-2">
+                      Itenary Image <span className="text-danger"></span>
+                    </label>
+                    <div className="col-md-10">
+                      <input
+                        type="file"
+                        className="form-control"
+                        // value={itenaryImage}
+                        onChange={(e) => handleItenaryFileSelection(e)}
                       />
                     </div>
                   </div>

@@ -62,7 +62,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [tourArr, setTourArr] = useState([]);
   const [airportTransfer, setAirportTransfer] = useState("");
   const [travelList, setTravelList] = useState([
-    { name: "", startDate: "", endDate: "" },
+    { name: "", startDate: "", endDate: "", mainImage: "", itenaryImage:"" },
   ]);
 
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
@@ -124,7 +124,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     dispatch(clientGet());
     // dispatch(leadGetById(leadId));
   }, []);
-
+ console.log(tourValueArr, "asdasdasdasd");
   useEffect(() => {
     if (show == true) {
       setShowModal(true);
@@ -515,7 +515,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       if (
         list.reduce((acc, el) => acc + parseInt(el.numberOfNight), 0) >
         parseInt(durationOfTour)
-      ) {
+      ){
         toastError(
           "Total number of nights cannot be more than duration of tour"
         );
@@ -760,7 +760,7 @@ console.log("eeeeeeeeee")
   };
 
   const handleAddClickTour = () => {
-    setTravelList([...travelList, { name: "", startDate: "", endDate: "" }]);
+    setTravelList([...travelList, { name: "", startDate: "", endDate: "" ,mainImage:"",itenaryImage:"" }]);
   };
 
   const handleLeadValueChange = (e) => {
@@ -803,16 +803,32 @@ console.log("eeeeeeeeee")
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
+    console.log(tourValueArr , "temp list");
+
     let tempList = [...travelList];
+    console.log(tempList , "temp list");
     // let totalAmount = 0;
-    let currentObj = Object.freeze(tempList[index]);
+    let currentObj = Object.freeze(travelList[index]);
     currentObj = {
       name: tempList[index].name,
       startDate: tempList[index].startDate,
       endDate: tempList[index].endDate,
+      mainImage: tempList[index].mainImage,
+      itenaryImage: tempList[index].itenaryImage,
     };
 
-    currentObj[name] = value;
+    currentObj[name] = value; 
+
+    if(name=='name'){
+      let current = tourValueArr.find(el => el.name == value);
+      console.log(current, "current");
+      if(current !=="" ){
+        currentObj.mainImage = current.mainImage ? current.mainImage:"";
+        currentObj.itenaryImage = current.itenaryImage ? current.itenaryImage: "";
+      }
+    }
+
+    console.log(currentObj,"itenaryImageitenaryImageitenaryImage")
     tempList[index] = currentObj;
     setTravelList([...tempList]);
   };
@@ -849,7 +865,7 @@ console.log("eeeeeeeeee")
     setTax(0);
     setIsUpdateTour(false);
     setAirportTransfer("");
-    setTravelList([{ name: "", startDate: "", endDate: "" }]);
+    setTravelList([{ name: "", startDate: "", endDate: "",mainImage: "",itenaryImage: "" }]);
     setShowModal(false);
     setHotelList([
       {
@@ -1075,7 +1091,7 @@ console.log("eeeeeeeeee")
       setNumberOfInfants(value);
     }
   };
-
+// console.log(tourArr, "tour Array")
   useEffect(() => {}, [
     numberofAdults,
     numberOfChildrenWithBed,
@@ -1129,15 +1145,14 @@ aria-label="Close"
             <Modal.Header>
               <Modal.Title>{isUpdateTour ? "Edit" : "Add"} Quote</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              <div
-                className="btn-close "
+            <div
+                className="btn-close pt-3"
                 onClick={() => {
                   clearFunc();
                   setShow(false);
                 }}
               ></div>
-
+            <Modal.Body>
               <form>
                 <div className="row ">
                   <div className="text-end">
@@ -1194,7 +1209,7 @@ aria-label="Close"
                                     tourArr.length > 0 &&
                                     tourArr.map((el, inde) => (
                                       <option key={inde} value={el.name}>
-                                        {el.name}
+                                        {el.name}{el.mainImage}{el.itenaryImage}
                                       </option>
                                     ))}
                                 </select>
@@ -1709,9 +1724,8 @@ aria-label="Close"
                         setVisaRequired(e.target.value);
                       }}
                     >
-                      <option value="Visa not Required">
-                        Visa not Required
-                      </option>
+                      <option value="Not includes">Not Includes</option>
+                      <option value="Visa not Required">Visa not Required</option>
                       <option value="Visa is required">Visa is Required</option>
                       <option value="Visa on Arrival">Visa on Arrival</option>
                     </select>
