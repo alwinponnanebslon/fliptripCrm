@@ -13,6 +13,7 @@ import { addnote } from "../../redux/features/note/noteSlice";
 
 import "react-accessible-accordion/dist/fancy-example.css";
 import { toastError } from "../../utils/toastUtils";
+import TextareaAutosize from "react-textarea-autosize";
 
 const LeadSidebar = (props) => {
   const userObj = useSelector((state) => state.auth.user);
@@ -50,7 +51,6 @@ const LeadSidebar = (props) => {
   const [sendDataToDb, setSendDataToDb] = useState(false);
   const [notesData, setNotesData] = useState("");
   const [clientPositionColor, setClientPositionColor] = useState(false);
-
   // const ParamsPathName = location.pathname.split("/").length;
 
   const [leadStatusReason, setLeadStatusReason] = useState([
@@ -95,8 +95,8 @@ const LeadSidebar = (props) => {
   const toggleLvelTwo = (value) => {
     setLevel2Menu(value);
   };
-  
-  
+
+
   const toggleLevelThree = (value) => {
     setLevel3Menu(value);
   };
@@ -109,7 +109,7 @@ const LeadSidebar = (props) => {
 
 
 
-  
+
   const params = useParams();
   const leadId = params.leadId;
   // console.log(params.leadId, "lead Id ");
@@ -131,11 +131,11 @@ const LeadSidebar = (props) => {
 
 
 
-  const handleSubmitStatusOfLead = (e) => { 
+  const handleSubmitStatusOfLead = (e) => {
 
     let obj = {
       reminderDate: leadStatusDate,
-      leadStatusTime,
+     reminderTime: leadStatusTime,
       note: notesData,
       otherReason,
       createdBy: { ...userObj, role: role },
@@ -143,7 +143,6 @@ const LeadSidebar = (props) => {
     obj.createdBy.role = role;
     obj.leadId = leadId;
     // obj.createdBy = createdBy;
-
 
     if (notesData == "Other Reason") {
       // obj.otherReason = otherReason;
@@ -162,6 +161,7 @@ const LeadSidebar = (props) => {
       dispatch(addnote(obj));
       setShowLeadStatusModal(false);
     }
+    clearFunc();
     // console.log(obj, "object  get");
   };
 
@@ -689,14 +689,14 @@ const LeadSidebar = (props) => {
                         toggleSidebar(isSideMenu == "notes" ? "" : "notes")
                       }
                     >
-                      <i className="fa fa-sticky-note-o" /> <span> 12NOTES</span>{" "}
-                      <span className="menu-arrow" />
+                      <i className="fa fa-sticky-note-o" /> <span> NOTES-</span>{" "}
+                      {/* <span className="menu-arrow" /> */}
                     </a>
-                    {isSideMenu == "notes" ? (
-                      <ul>
-                        <li>
-                          <Notes />
-                          {/* <Link
+                    {/* {isSideMenu == "notes" ? ( */}
+                    <ul>
+                      <li>
+                        <Notes />
+                        {/* <Link
                           // className={
                           //   pathname?.includes("admin/dashboard")
                           //     ? "active"
@@ -704,11 +704,11 @@ const LeadSidebar = (props) => {
                           // }
                           // to="/admin/dashboard"
                           ></Link> */}
-                        </li>
-                      </ul>
-                    ) : (
+                      </li>
+                    </ul>
+                    {/* ) : (
                       ""
-                    )}
+                    )} */}
                   </li>
                 )}
                 {/* 
@@ -758,12 +758,7 @@ const LeadSidebar = (props) => {
                     <i className="fa fa-back-arrow"></i> Back
                   </Link>
                 </li>
-                {/* <li className={pathname?.includes("lead") ? "active" : ""}>
-                  <Link to={`/admin/lead/${leadId}`}>
-                    <i className="la la-file" />
-                  
-                  </Link>
-                </li> */}
+
 
                 {role != "SUPERVISOR" && (
                   <li className="submenu">
@@ -778,12 +773,12 @@ const LeadSidebar = (props) => {
                       <i className="fa fa-sticky-note-o" /> <span> NOTES</span>{" "}
                       <span className="menu-arrow" />
                     </a>
-                    {isSideMenu == "notes" ? (
-                    // {isSideMenu  ? (
-                      <ul>
-                        <li>
-                          <Notes />
-                          {/* <Link
+                    {/* {isSideMenu == "notes" ? ( */}
+                    {/* // {isSideMenu  ? ( */}
+                    <ul>
+                      <li>
+                        <Notes />
+                        {/* <Link
                           // className={
                           //   pathname?.includes("admin/dashboard")
                           //     ? "active"
@@ -791,11 +786,11 @@ const LeadSidebar = (props) => {
                           // }
                           // to="/admin/dashboard"
                           ></Link> */}
-                        </li>
-                      </ul>
-                    ) : (
+                      </li>
+                    </ul>
+                    {/* ) : (
                       ""
-                    )}
+                    )} */}
                   </li>
                 )}
                 <li
@@ -803,8 +798,8 @@ const LeadSidebar = (props) => {
                     pathname?.includes("Notification")
                       ? "active"
                       : pathname?.includes("Notification")
-                      ? "active"
-                      : ""
+                        ? "active"
+                        : ""
                   }
                 >
                   <Link to="/admin/notification">
@@ -816,11 +811,6 @@ const LeadSidebar = (props) => {
           </div>
         )}
         {/* 
-        
-        
-        
-        
-        
         
         
         */}
@@ -901,11 +891,19 @@ const LeadSidebar = (props) => {
                         key={index}
                         variant="primary"
                         className={`btn-cancle clientPosition=${clientPositionColor} col-lg-12 mt-3`}
-                        // className="btn-cancle col-lg-12 mb-3"
-                        // onChange={()=>{setNotesData(el.heading)}}
                         onClick={(e) => {
-                          // setClientPositionColor(true)
                           setNotesData(el.heading);
+                        }}
+                        style={{
+                          alignSelf: el.heading ? "flex-end" : "flex-start",
+                          textAlign: el.heading ? "right" : "left",
+                          width: "50%",
+                          flexWrap: "wrap",
+                          wordBreak: "break-all",
+                          margin: "10px 0px",
+                          padding: "15px 15px",
+                          borderRadius: el.heading ? "15px 15px 0px 15px" : "15px 15px 15px 0px",
+                          backgroundColor: el.heading ? "rgba(132, 163, 163,1)" : "rgba(166, 173, 173,0.3)"
                         }}
                       >
                         {el.heading}
@@ -945,6 +943,7 @@ const LeadSidebar = (props) => {
               </div>
             )}
           </Modal.Body>
+
           <Modal.Footer>
             <Button
               variant="secondary"
@@ -955,22 +954,8 @@ const LeadSidebar = (props) => {
             >
               Close
             </Button>
-            {/* <Button
-              variant="secondary"
-              onClick={(e) => {
-                handleSubmit(e)
-                setShowLeadStatusModal(false);
-                clearFunc();
-              }}
-            >
-              Close
-            </Button> */}
-            {/* {isOtherReason &&
-              leadStatusReason.map((el, i) => { */}
-            {/* if (el.heading == "Other Reason") {
-                  return ( */}
+
             <Button
-              // key={i}
               variant="primary"
               className="btn-cancle col-lg-8   mt-3"
               onClick={(el) => {
@@ -978,13 +963,12 @@ const LeadSidebar = (props) => {
                 setSendDataToDb(true);
               }}
             >
-              Submit
+              Submit-
             </Button>
-            {/* );
-                }
-              // })} */}
+
           </Modal.Footer>
         </Modal>
+
         <Modal show={show} onHide={handleClose} className="add_details_modal">
           <Modal.Header>
             <Modal.Title> Add Details </Modal.Title>
@@ -1019,7 +1003,7 @@ const LeadSidebar = (props) => {
                     <input type="text" name="" className="form-control" />
                   </div>
                 </div>
-             c 
+                c
                 <div className="col-lg-3 col-sm-6 col-md-6">
                   <div className="form-group">
                     <label>Expiry Date DD/MM/YY</label>
@@ -1037,30 +1021,8 @@ const LeadSidebar = (props) => {
                   </div>
                 </div>
               </div>
-              <div className="row mt-1">
-                <div className="col-lg-5">
-                  <div className="form-group">
-                    <label>Passport Front Page </label>
-                    <input type="file" name="file" className="form-control" />
-                  </div>
-                </div>
-              </div>
-              <div className="row mt-1">
-                <div className="col-lg-5">
-                  <div className="form-group">
-                    <label>Pancard Number </label>
-                    <input type="text" name="file" className="form-control" />
-                  </div>
-                </div>
-              </div>
-              <div className="row mt-1">
-                <div className="col-lg-5">
-                  <div className="form-group">
-                    <label>Pancard Front Page </label>
-                    <input type="file" name="file" className="form-control" />
-                  </div>
-                </div>
-              </div>
+
+
               <div className="row mt-1">
                 <div className="col-lg-5">
                   <div className="form-group">
@@ -1080,7 +1042,6 @@ const LeadSidebar = (props) => {
                   </div>
                   <div className="col-lg-6 text-end">
                     <Button className="btn-cancle" onClick={handleClose}>
-                      {" "}
                       Cancel{" "}
                     </Button>{" "}
                     &nbsp;
@@ -1094,6 +1055,7 @@ const LeadSidebar = (props) => {
             </div>
           </Modal.Body>
         </Modal>
+
 
         {/* sedasdfasdfdddddddddddddddddddddddddddddddddddddd */}
         <Modal show={show1} onHide={handleClose1} className="add_note">
@@ -1143,12 +1105,10 @@ const LeadSidebar = (props) => {
                 <div className="row">
                   <div className="col-lg-12 text-end">
                     <Button className="btn-cancle" onClick={handleClose1}>
-                      {" "}
                       Cancel{" "}
                     </Button>{" "}
                     &nbsp;
                     <Button className="btn-submit" onClick={handleClose1}>
-                      {" "}
                       Submit
                     </Button>
                   </div>

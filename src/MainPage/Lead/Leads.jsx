@@ -346,7 +346,7 @@ const Leads = () => {
     // console.log(teamLeads, "teamslead23");
     if (teamLeads && teamLeads.length > 0) {
       let arr = teamLeads.filter((e) => e.role == "TEAMLEAD");
-      console.group(arr, "arr231231");
+      // console.group(arr, "arr231231");
       // let tempArr = teamLeads.map((el) => {
       let tempArr = arr.map((el) => {
         let obj = {
@@ -614,10 +614,8 @@ const Leads = () => {
   };
 
   const handleUpdateLeadsArray = (value1, value2, value3) => {
-    // handleUpdateLeadsArray("OPEN", "REOPENED");
 
     let tempArr = leadsArr;
-    // console.log(tempArr, "atemp23");
     if (value1 == "OPEN") {
       let temp = tempArr.filter(
         (el) => `${el.status}` == value1 //|| `${el.status}` == value2
@@ -678,6 +676,9 @@ const Leads = () => {
     // setLeadsArr(res.data);
     // dispatch(returnAllEmployees(res.data))
   };
+
+
+
   const handleSubmitLead = async (e) => {
     e.preventDefault();
     try {
@@ -745,7 +746,6 @@ const Leads = () => {
       }
 
       // console.log(obj, "ovvjb23");
-      // let { data: res } = await createLead(obj, role);
       if (!leadUpdateId) {
         let { data: res } = await createLead(obj, role);
         if (res.success) {
@@ -913,7 +913,6 @@ const Leads = () => {
           return obj;
         });
     }
-    // console.log(arr, "Arr23s123");
     setAgentsArr(arr);
     setLeadId(e);
   };
@@ -1505,7 +1504,7 @@ const Leads = () => {
       title: "Created Date",
       render: (text, record) => (
         <h2 className="table-avatar">
-          {new Date(record?.createdAt).toDateString()}
+          {moment(record?.createdAt).format("DD/MM/YYYY")}
         </h2>
       ),
     },
@@ -1541,8 +1540,6 @@ const Leads = () => {
               <a
                 className="dropdown-item"
                 href="#"
-                // data-bs-toggle="modal"
-                // data-bs-target="#add_Lead"
                 onClick={() => handleEdit(record)}
               >
                 <i className="fa fa-pencil m-r-5" /> Edit
@@ -1550,7 +1547,6 @@ const Leads = () => {
             </div>
           </div>
         </div>
-        // </div>
       ),
     },
   ];
@@ -1603,7 +1599,6 @@ const Leads = () => {
               >
                 NA
               </div>
-              {/* update_agent */}
             </>
           )}
 
@@ -1912,15 +1907,11 @@ const Leads = () => {
       title: "Created Date",
       render: (text, record) => (
         <h2 className="table-avatar">
-          {new Date(record?.createdAt).toDateString()}
+          {moment(record?.createdAt).format("DD/MM/YYYY")}
         </h2>
       ),
     },
-    // {
-    //   title: 'Last Reply',
-    //   dataIndex: 'lastreply',
-    //   sorter: (a, b) => a.lastreply.length - b.lastreply.length,
-    // },
+  
     {
       title: "Priority",
       render: (text, record) => (
@@ -2008,8 +1999,6 @@ const Leads = () => {
                 <a
                   className="dropdown-item"
                   href="#"
-                  // data-bs-toggle="modal"
-                  // data-bs-target="#add_Lead"
                   onClick={() => handleEdit(record)}
                 >
                   <i className="fa fa-pencil m-r-5" /> Edit
@@ -2090,7 +2079,7 @@ const Leads = () => {
       title: "Created Date",
       render: (text, record) => (
         <h2 className="table-avatar">
-          {new Date(record?.createdAt).toDateString()}
+          {moment(record?.createdAt).format("DD/MM/YYYY")}
         </h2>
       ),
     },
@@ -2255,7 +2244,6 @@ const Leads = () => {
             )}
           </div>
         </div>
-        {/* /Page Header */}
 
         {role != rolesObj.ACCOUNT && role != rolesObj.SUPERVISOR && (
           <div className="row">

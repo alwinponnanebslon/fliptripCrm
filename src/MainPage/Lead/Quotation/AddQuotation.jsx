@@ -169,7 +169,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
 
       setTotalPersonAirportPrice(
         quotationObject1?.travelPassengerObj?.noOfAdults *
-          quotationObject1?.perPersonAirPortPrice
+        quotationObject1?.perPersonAirPortPrice
       );
       setPerChildrenPersonAirportPrice(
         quotationObject1?.perChildrenPersonAirportPrice
@@ -186,25 +186,25 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           parseInt(
             quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
           )) *
-          quotationObject1?.perChildrenPersonAirportPrice
+        quotationObject1?.perChildrenPersonAirportPrice
       );
 
       setTotalInfantAirportPrice(
         parseInt(quotationObject1?.travelPassengerObj?.noOfInfants) *
-          parseInt(quotationObject1?.perInfantAirPortPrice)
+        parseInt(quotationObject1?.perInfantAirPortPrice)
       );
 
       setTotalInfantLandPrice(
         parseInt(quotationObject1?.perInfantLandPrice) *
-          parseInt(quotationObject1?.travelPassengerObj?.noOfInfants)
+        parseInt(quotationObject1?.travelPassengerObj?.noOfInfants)
       );
 
       setTotalChidrenLandPrice(
         parseInt(quotationObject1?.perChildrenLandPrice) *
-          (parseInt(quotationObject1?.travelPassengerObj?.noOfChildrenWithBed) +
-            parseInt(
-              quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
-            ))
+        (parseInt(quotationObject1?.travelPassengerObj?.noOfChildrenWithBed) +
+          parseInt(
+            quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
+          ))
       );
 
       // ======
@@ -212,7 +212,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       // =========
       setTotalPersonLandPrice(
         parseInt(quotationObject1?.travelPassengerObj?.noOfAdults) *
-          parseInt(quotationObject1?.perPersonLandPrice)
+        parseInt(quotationObject1?.perPersonLandPrice)
       );
 
       setIsItineraryDetailsRequired(
@@ -229,13 +229,13 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         quotationObject1?.flightList.length > 0
           ? quotationObject1?.flightList
           : [
-              {
-                flightName: "",
-                cost: 0,
-                childrenCost: 0,
-                infantCost: 0,
-              },
-            ]
+            {
+              flightName: "",
+              cost: 0,
+              childrenCost: 0,
+              infantCost: 0,
+            },
+          ]
       );
 
       setItineraryList(
@@ -248,16 +248,16 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         quotationObject1?.hotelDetail?.length > 0
           ? quotationObject1?.hotelDetail
           : [
-              {
-                hotelName: "",
-                roomType: "",
-                numberOfNight: 0,
-                checkIn: "",
-                checkOut: "",
-                rating: 0,
-                hotelAddress: "", // hotelAddress: "",
-              },
-            ]
+            {
+              hotelName: "",
+              roomType: "",
+              numberOfNight: 0,
+              checkIn: "",
+              checkOut: "",
+              rating: 0,
+              hotelAddress: "", // hotelAddress: "",
+            },
+          ]
       );
       setAirportTransfer(quotationObject1?.airportTransfer);
       setAmount(quotationObject1?.amount);
@@ -536,7 +536,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         return;
       }
     }
-    console.log( isUpdateTour,"isUpdateTourisUpdateTour")
+    console.log(isUpdateTour, "isUpdateTourisUpdateTour")
     if (isUpdateTour) {
       ("use strict");
       let list = [...flightList];
@@ -547,12 +547,12 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         childrenCost: list[index].childrenCost,
         infantCost: list[index].infantCost,
       };
-console.log("eeeeeeeeee")
+      console.log("eeeeeeeeee")
       currentObj[name] = value;
       list[index] = currentObj;
       setflightList([...list]);
-    } else { 
-      console.log("ppopopoppo") 
+    } else {
+      console.log("ppopopoppo")
       const list = [...flightList];
 
       const { name, value } = e.target;
@@ -582,11 +582,11 @@ console.log("eeeeeeeeee")
     setTotalChildrenPersonAirportPrice(
       (parseInt(numberOfChildrenWithBed) +
         parseInt(numberOfChildrenWithoutBed)) *
-        amountOfChildren
+      amountOfChildren
     );
 
     setTotalInfantAirportPrice(numberOfInfants * amountOfInfant);
-  }, [flightList]);
+  }, [flightList,numberofAdults, numberOfChildrenWithBed, numberOfChildrenWithoutBed, numberOfInfants]);
 
   const handleremoveFlight = (index) => {
     const list = [...flightList];
@@ -1009,7 +1009,7 @@ console.log("eeeeeeeeee")
       obj.itineraryList = itineraryList;
     }
 
-    console.log(obj, "234234");
+    // console.log(obj, "234234");
     if (!isUpdateTour) {
       dispatch(quotationAdd(obj));
       setShow(false);
@@ -1036,9 +1036,9 @@ console.log("eeeeeeeeee")
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1050,9 +1050,9 @@ console.log("eeeeeeeeee")
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1064,9 +1064,9 @@ console.log("eeeeeeeeee")
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1078,9 +1078,9 @@ console.log("eeeeeeeeee")
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1091,14 +1091,15 @@ console.log("eeeeeeeeee")
       setNumberOfInfants(value);
     }
   };
-// console.log(tourArr, "tour Array")
-  useEffect(() => {}, [
+
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
     numberOfInfants,
     numberOfGuest,
   ]);
+
   function textAreaAdjust(e) {
     let element = descriptionRef.current;
 
@@ -1108,9 +1109,25 @@ console.log("eeeeeeeeee")
           ? element.scrollHeight + "px"
           : "60px";
     }
-
     // element.style.height = 25 + element.scrollHeight + "px";
   }
+
+
+  // useEffect(() => {
+  //   setTotalPersonAirportPrice(numberofAdults * amount);
+  //   // setTotalChildrenPersonAirportPrice(
+  //   //   (parseInt(numberOfChildrenWithBed) +
+  //   //     parseInt(numberOfChildrenWithoutBed)) *
+  //   //   amountOfChildren
+  //   // );
+
+  //   setTotalInfantAirportPrice(numberOfInfants * amountOfInfant);
+  // }, [numberofAdults, numberOfChildrenWithBed, numberOfChildrenWithoutBed, numberOfInfants])
+
+
+
+
+
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
       <div
@@ -1280,9 +1297,8 @@ aria-label="Close"
                     <label className="col-form-label ">
                       Duration Of Tour <span className="text-danger">*</span>
                       (in Nights) (
-                      {`${durationOfTour ? durationOfTour : 0}N/${
-                        days ? days : 0
-                      }D`}
+                      {`${durationOfTour ? durationOfTour : 0}N/${days ? days : 0
+                        }D`}
                       )
                     </label>
                     <input
@@ -1303,7 +1319,7 @@ aria-label="Close"
                       className="form-control"
                       value={numberOfGuest}
                       onChange={(e) => handleSetNumberOfGuest(e.target.value)}
-                      // onChange={(e) => setNumberOfGuest(e.target.value)}
+                    // onChange={(e) => setNumberOfGuest(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1478,12 +1494,14 @@ aria-label="Close"
                                 className="form-control"
                                 onChange={(e) => handleinputchangeHotel(e, i)}
                               />
+
                             </div>
                             <div className="form-group col-md-4">
                               <label> Rating</label>
                               <input
                                 type="number"
                                 name="rating"
+                                defaultValue={"not selected"}
                                 value={`${hotel.rating}`}
                                 className="form-control"
                                 onChange={(e) => handleinputchangeHotel(e, i)}
@@ -1579,10 +1597,10 @@ aria-label="Close"
                               )}
                             </div>
                             {durationOfTour &&
-                            hotelList.reduce(
-                              (acc, el) => acc + parseInt(el.numberOfNight),
-                              0
-                            ) < durationOfTour ? (
+                              hotelList.reduce(
+                                (acc, el) => acc + parseInt(el.numberOfNight),
+                                0
+                              ) < durationOfTour ? (
                               <div className="col-md-12">
                                 {/* {hotelList.length - 1 === i && ( */}
                                 <button

@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-// import Pdf from "../MainPage/Pdf/Index";
+
+
 import Pdfile from "../../../MainPage/Pdf/Index";
 import { jsPDF } from "jspdf";
 // import ReactToPdf from "react-to-pdf";
@@ -31,7 +32,9 @@ import PopUp from "./PopUp";
 import { images } from "../../../MainPage/Pdf/Utility/Images";
 // import { images } from "./Utility/Images";
 import { generateFilePath } from "../../../utils/FileURL";
-// import { generateFilePath } from "../../utils/FileURL";
+
+
+
 
 const ref = React.createRef();
 
@@ -107,9 +110,7 @@ const Quotation = () => {
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
 
-  useEffect(() => {
-    // console.log(isConvert, "isConvert");
-  }, [isConvert]);
+
 
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
@@ -149,7 +150,8 @@ const Quotation = () => {
     const input = document.getElementById("mainPdfContainer");
     // console.log(input, "en2");
 
-    if (input) {
+    if (input) { 
+      // console.log(row,"input2121")
       html2canvas(input).then((canvas) => {
         console.log("en2");
         const imgData = canvas.toDataURL("image/png");
@@ -166,7 +168,7 @@ const Quotation = () => {
           hotfixes: ["px_scaling"],
         });
         pdf.addImage(imgData, "PNG", 0, 0);
-        pdf.save(`downloadQuotation.pdf`);
+        pdf.save(`${row?.leadObj?.clientObj?.name}__${row?.destinationName}.pdf`);
       });
     }
 
@@ -257,7 +259,6 @@ const Quotation = () => {
             };
             setIsStatusOf(true);
             dispatch(quotationUpdateStatus(obj));
-            // navigate("/path/to/push");
             history.push(`/admin/lead/${leadId}/quotePayment`);
             // history(`/admin/lead/${userId}/quotePayment`);
           },
@@ -348,9 +349,7 @@ const Quotation = () => {
       dataIndex: "createdAt",
       render: (row, record) => (
         <div>
-          {new Date(record.createdAt).toDateString()} 
-          {/* at ( {new Date(record.createdAt).getHours()}:
-          {new Date(record.createdAt).getMinutes()} */}
+          {moment(record.createdAt).format("DD/MM/YYYY")}
           
         </div>
       ),
@@ -500,12 +499,12 @@ const Quotation = () => {
                   <i className="fa fa-pencil m-r-5" /> Download
                 </a>
               </div> */}
-              <span
+              {/* <span
                 className="dropdown-item"
                 onClick={() => handleDownload(row)}
               >
                 <i className="fa fa-trash-o m-r-5" /> Download
-              </span>
+              </span> */}
             </>
           ) : (
             <>
@@ -528,12 +527,7 @@ const Quotation = () => {
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
                 </a>
-                {/* <span
-                  className="dropdown-item"
-                  onClick={() => handleDownload(row)}
-                >
-                  <i className="fa fa-trash-o m-r-5" /> Download
-                </span> */}
+             
               </div>
             </>
           )}
@@ -572,7 +566,6 @@ const Quotation = () => {
 
   // const quotationObj = useSelector((state) => state.quotation.quotationObj);
 
-  // const [QuotationObj, setQuotationObj] = useState({});
 
   // useEffect(() => {
   //   if (quotationObj) {
@@ -627,17 +620,12 @@ const Quotation = () => {
                 <div className="col-auto float-end ml-auto">
                   <a
                     className="btn add-btn"
-                    // data-bs-toggle="modal"
-                    // data-bs-target="#add_quote"
                     onClick={() => {
                       setShow(true);
                     }}
                   >
                     <i
                       className="fa fa-plus"
-                    // onClick={() => {
-                    //   setShow(true);
-                    // }}
                     />
                     Add Quote
                   </a>
