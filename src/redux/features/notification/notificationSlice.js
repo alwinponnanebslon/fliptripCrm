@@ -5,7 +5,7 @@ import {
   getNotificationApi,
   notificationDeleteApi,
   updateNotificationApi,
-  getNotificationForSpecificUserApi,
+  getNotificationForSpecificUserApi,getNotificationForSpecificLeadApi
 } from "../../../Services/notification.service";
 
 let initialState = {
@@ -58,10 +58,15 @@ export const addNotification = createAsyncThunk(
   "notification/addNotification",
   async (payload, thunkApi) => {
     try {
+      console.log(payload,"payload123")
       let { data: response } = await addNotificationApi(payload);
       if (response) {
         toastSuccess(response.message);
-        // thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));
+        // thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));  
+        if(payload?.isComment==true){
+
+          thunkApi.dispatch(notificationGetForSpecificLead(`${payload?.leadId}`));
+        }
       }
     } catch (error) {
       toastError(error);
@@ -92,6 +97,7 @@ export const updateNotification = createAsyncThunk(
   }
 );
 
+
 export const deleteNotification = createAsyncThunk(
   "notification/deletenotification",
   async (payload, thunkApi) => {
@@ -109,6 +115,7 @@ export const deleteNotification = createAsyncThunk(
   }
 );
 
+
 export const setNotification = createAsyncThunk(
   "notification/setnotification",
   async (row) => {
@@ -118,6 +125,7 @@ export const setNotification = createAsyncThunk(
     }
   }
 );
+
 
 const notificationSlice = createSlice({
   name: "notification",
@@ -138,6 +146,28 @@ const notificationSlice = createSlice({
     },
   },
 });
+
+
+export const notificationGetForSpecificLead = createAsyncThunk(
+  "notification/notificationGetForSpecificLead",
+  async (query) => {
+    try {
+      // console.log(query, "query21321");
+      let { data: response } = await getNotificationForSpecificLeadApi(query);
+      // console.log(response, "notifications34");
+      // console.log(response, "121");
+      if (response) {
+        // toastSuccess(response.message);
+        const notifications = response.data;
+        return notifications;
+      }
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+
 
 // export const { addnotificationd, notificationUpdate, setObj, } = notificationSlice.actions;
 

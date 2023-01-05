@@ -33,6 +33,11 @@ export const notificationDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
 };
 
-export const handleNotificationGetForSpecificLeadId = (id ) => {
+export const getNotificationForSpecificLeadApi = (id ) => {
+  return axios.get(`${serverUrl}/notificationGetForSpecificLeadId/${id}`);
+};
+
+export const handleNotificationGetForSpecificLeadId = (id ) => {  
+  
   return axios.get(`${serverUrl}/notificationGetForSpecificLeadId/${id}`);
 };

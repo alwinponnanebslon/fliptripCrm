@@ -13,8 +13,11 @@ import {
   paymentGetByQuotation,
   paymentUpdate,
 } from "../../../redux/features/payment/paymentSlice";
+
 import { getEmployessLinkedWithLeadId } from "../../../Services/user.service";
 import { handleNotificationGetForSpecificLeadId } from "../../../Services/notification.service";
+import Button from "react-bootstrap/Button";
+
 
 import {
   addPaymentInvoice,
@@ -24,7 +27,7 @@ import {
   updatePaymentInvoice,
 } from "../../../redux/features/paymentInvoice/paymentInvoiceSlice";
 
-import { addNotification } from "../../../redux/features/notification/notificationSlice";
+import { addNotification, setNotification } from "../../../redux/features/notification/notificationSlice";
 import { add } from "../../../Services/costingSheet.services";
 
 export const AddPayment = () => {
@@ -94,14 +97,20 @@ export const AddPayment = () => {
   const [showButtonVisibility, setShowButtonVisibility] = useState(false);
   const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
     []
-  );
+    );
+    
+    const userObj = useSelector((state) => state.auth.user);
+    const [createdBy, setCreatedBy] = useState({});
+    
+    const [notificationArr, setNotificationArr] = useState([]);
 
-  const userObj = useSelector((state) => state.auth.user);
-  const [createdBy, setCreatedBy] = useState({});
+
 
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
+
+
 
   const handleGetAllEmployees = async () => {
     try {
@@ -117,19 +126,36 @@ export const AddPayment = () => {
     }
   };
 
+
+
   const handleGetCommentFromNtoifcation = async () => {
-    let get = await handleNotificationGetForSpecificLeadId(`${leadId}`);
+    let { data: response }  = await handleNotificationGetForSpecificLeadId(`${leadId}`); 
+    console.log(response,"get2342")
+    setNotificationArr(response?.data)
   };
+
 
   const handleInit = () => {
     dispatch(quotationGet(`leadId=${leadId}`));
+    // dispatch(notificationGet(`leadId=${leadId}&role=${role}`));
   };
+
 
   useEffect(() => {
     handleInit();
     handleGetAllEmployees();
     handleGetCommentFromNtoifcation();
   }, []);
+
+
+
+  // useEffect(() => {
+  //   setNoteMainArr(notesResultArr);
+  // }, [notesResultArr]);
+
+
+
+
 
   useEffect(() => {
     setPaymentObj(quotationPaymentObj);
@@ -367,9 +393,13 @@ export const AddPayment = () => {
     dispatch(deletePaymentInvoice(id));
   };
 
+
+
   useEffect(() => {
     setPerfomaInvoiceArr(payMentInvoiceArr);
   }, [payMentInvoiceArr]);
+
+
 
   useEffect(() => {
     if (perfomaInvoiceObj) {
@@ -382,6 +412,8 @@ export const AddPayment = () => {
       );
     }
   }, [perfomaInvoiceObj]);
+
+
 
   const handlePerfomaInvoiceSubmit = (e) => {
     e.preventDefault();
@@ -429,45 +461,90 @@ export const AddPayment = () => {
     setTcs(e);
   };
 
+
+// useEffect(()=>{
+// console.log(connectEmplyeeWithThisLead,"12313")
+
+// },[])
+  
+  
+
   const handleKeyPress = (event) => {
     let object = {
       heading: comment,
       // description,
+      // userId, 
+      CommentUserId:[],
+      leadId,
+      followDate: new Date().toLocaleDateString(),
+      createdBy: { ...createdBy, role },
+      followTime: new Date().toLocaleTimeString(),
+      isComment:true
+    }; 
+    console.log(role,"12313")
+    if (event.key === "Enter") {
+      // dispatch(addNotification(object));
+      if (role == "SPOC") {
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
+
+     
+      } else if (role == "TEAMLEAD") {
+   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+
+    
+      } else if (role == "ADMIN") {
+        
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+
+      }
+      for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+
+        object.CommentUserId.push({userId:el._id}) 
+      }
+      dispatch(addNotification(object));
+    }
+  };
+
+
+  const handleSubmitComment = (event) => {
+    // console.log(role,"role23")
+    let object = {
+      heading: comment,
       // userId,
+      CommentUserId:[],
       leadId,
       followDate: new Date().toLocaleDateString(),
       createdBy: { ...createdBy, role },
       followTime: new Date().toLocaleTimeString(),
       isComment:true
     };
-    if (event.key === "Enter") {
-      console.log("0987");
-      dispatch(addNotification(object));
-      if (role == "SPOC") {
-        object.userId = connectEmplyeeWithThisLead?.leadId;
+        if (role == "SPOC") {
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
+  
+       
+        } else if (role == "TEAMLEAD") {
+     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+  
+      
+        } else if (role == "ADMIN") {
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+  
+        }
+        for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+          object.CommentUserId.push({userId:el._id}) 
+        }
         dispatch(addNotification(object));
-        //   console.log(leadObj, "leadObj?.adminObj?._id");
-        object.userId = connectEmplyeeWithThisLead?.adminObj?._id;
-        dispatch(addNotification(object));
-      } else if (role == "TEAMLEAD") {
-        object.userId = connectEmplyeeWithThisLead?.agentId;
-        dispatch(addNotification(object));
-        object.userId = connectEmplyeeWithThisLead?.adminObj?._id;
-        dispatch(addNotification(object));
-      } else if (role == "ADMIN") {
-        object.userId = connectEmplyeeWithThisLead?.agentId;
-        dispatch(addNotification(object));
-        object.userId = connectEmplyeeWithThisLead?.leadId;
-        dispatch(addNotification(object));
-      }
-      for (let el of connectEmplyeeWithThisLead?.AccountArr) {
-        object.userId = el._id;
-        dispatch(addNotification(object));
-      }
-      // handleSubmit(event);
-    }
+        
   };
 
+
+  
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -486,12 +563,13 @@ export const AddPayment = () => {
                 <li className="breadcrumb-item">
                   <Link to="/app/main/dashboard">Dashboard</Link>
                 </li>
-                <li className="breadcrumb-item active">Payment Details</li>
+                <li className="breadcrumb-item active"></li>
               </ul>
             </div>
           </div>
         </div>
         {/* {console.log(selectedQuotation, "selectedQuotation213")} */}
+
         {isQuotationapproved ? (
           <div className="modal-body">
             <div style={{ fontSize: 19 }}>
@@ -702,6 +780,9 @@ export const AddPayment = () => {
                 Save Payment
               </button>
             </div>
+
+
+
             <div className="container">
               <div className="row">
                 <div className="col-lg-12">
@@ -735,47 +816,48 @@ export const AddPayment = () => {
                   </div>
                 </div> */}
 
-                {showButtonVisibility && (
+                {/* {showButtonVisibility && ( */}
                   <Button
                     type="submit"
-                    className="btn-submit"
+                    className="btn-submit col-md-2" 
                     onClick={(e) => {
                       handleSubmitComment(e);
                     }}
                   >
                     Submit
                   </Button>
-                )}
+                {/* // )} */}
               </div>
             </div>
-            {/* {
-        noteMainArr &&
-        noteMainArr.map((noteItem, index) => {
+             {
+        notificationArr &&
+        notificationArr.map((noteItem, index) => {
           return (
             <div className="note_added_by_agent mt-4" key={index}>
               <div className="textnote">
-                <div className="alignright mb8">
+                <div className="alignright mb7">
                   <span className=" flexfull">
                     {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
                     {noteItem?.createdBy?.name ? noteItem?.createdBy?.name : "" + " "}
-                    {"[" + noteItem?.createdBy?.role + "]"}
+                    {"[" + noteItem?.createdBy?.role?noteItem?.createdBy?.role :"" + "]"}
                   </span>
                 </div>
                 <div className="noteMessage">
-                  <p className="post-heading  f12">{noteItem?.note}</p>
+                  <p className="post-heading  f10">{noteItem?.heading}</p>
                
                 </div>
               </div>
-              <span className="notesImageCorner">
+              {/* <span className="notesImageCorner">
                 <img
                   src={"../../../src/assets/img/NotesImageCorner.webp"}
                   alt=""
                 />
-              </span>
+              </span> */}
             </div>
           );
         })
-      } */}
+      } 
+      
             {/* <div style={{ fontSize: 19 }}>Payment Invoice</div>
 
             <div className="row">
@@ -852,7 +934,7 @@ export const AddPayment = () => {
             </div> */}
 
             {/* Add Client Modal */}
-            <div
+            <div  
               id="add_destination"
               className="modal custom-modal fade"
               role="dialog"

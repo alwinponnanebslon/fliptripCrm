@@ -11,6 +11,9 @@ import {
   updatenote,
   addnote,
 } from "../../../redux/features/note/noteSlice";
+
+
+
 import moment from "moment/moment";
 
 import { toastError } from "../../../utils/toastUtils";
@@ -39,24 +42,35 @@ const Notes = ({ show1, setShow1 }) => {
   const [isReadyOnlyNotes, setIsReadyOnlyNotes] = useState(false);
   const [show, setShow] = useState(show1);
   const [showButtonVisibility, setShowButtonVisibility] = useState(false);
+
+
+
+
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
+
+
+
 
   const handleInit = () => {
     dispatch(noteGet(`leadId=${leadId}&role=${role}`));
   };
 
+
+
   useEffect(() => {
     handleInit();
     if (params.search.includes("true")) {
-      console.log(true, "rewe");
+      // console.log(true, "rewe");
       setIsReadyOnlyNotes(true);
 
       setShow(true);
     }
   }, []);
   
+
+
   useEffect(() => {
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
@@ -65,6 +79,7 @@ const Notes = ({ show1, setShow1 }) => {
     // console.log(row, "row update"); //whole object
     dispatch(setnote(row));
   };
+
 
   const handleDelete = (id) => {
     dispatch(deletenote({ id, leadId }));
@@ -98,6 +113,8 @@ const Notes = ({ show1, setShow1 }) => {
 
       createdBy: { ...createdBy, role },
     };
+
+
     // console.log(obj, "obj a1folow");
     if (note != "" && note != undefined) {
       if (noteResultobj?._id) {
@@ -106,11 +123,16 @@ const Notes = ({ show1, setShow1 }) => {
         setShow(false);
         // setShow1(false);
         setIsReadyOnlyNotes(false);
+
+
+
       } else {
         dispatch(addnote(obj));
         setShow(false);
         // setShow1(false);
         setIsReadyOnlyNotes(false);
+
+
       }
       clearFunc()
     } else {
@@ -131,7 +153,7 @@ const Notes = ({ show1, setShow1 }) => {
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      console.log("0987")
+      // console.log("0987")
       handleSubmit(event);
       
       // console.log('enter press here!22222222222222222 ')

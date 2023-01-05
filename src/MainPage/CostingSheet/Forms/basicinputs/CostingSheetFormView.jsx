@@ -195,25 +195,7 @@ const ViewCostingSheetForm = () => {
       //   return;
       // }
 
-      // if (isNaN(value)) {
-      //   value = 0;
-      //   toastError("Cost should be number");
-      //   return;
-      // } else if (Number.parseInt(value)) {
-      //   // for (let ele of tempList) {
-      //   //   console.log(ele, "3ost");
-      //   //   console.log(ele.cost, "1222cost");
-      //   //   tempCost1 = tempCost1 + parseInt(ele.cost);
-      //   // }
-      //   // if (
-      //   //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
-      //   //   parseInt(landCost)
-      //   // ) {
-      //   //   console.log(tempList, "1tempList12");
-      //   //   toastError("Hotel price cannot be greater than land pricess");
-      //   //   return;
-      //   // }
-      //   // console.log(tempCost1, "1tempCost213412");
+   
       if (value > parseInt(landCost)) {
         value = 0;
         toastError("Hotel price cannot be greater than land price2");

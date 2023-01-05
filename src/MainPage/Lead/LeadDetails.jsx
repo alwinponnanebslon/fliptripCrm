@@ -5,10 +5,17 @@ import "antd/dist/antd.css";
 import "../antdstyle.css";
 import Table from "react-bootstrap/Table";
 import { costingSheetGet } from "../../redux/features/CostingSheet/CostingSheetSlice.js";
+import { handleNotificationGetForSpecificLeadId } from "../../Services/notification.service";
+import moment from "moment"
+import Button from "react-bootstrap/Button";
+
+import { getEmployessLinkedWithLeadId } from "../../Services/user.service";
+import { addNotification, setNotification } from "../../redux/features/notification/notificationSlice";
+
 
 const ViewCostingSheetForm = () => {
   const location = useLocation();
-  // console.log(location.pathname, "location.pathname321");
+  const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
@@ -32,10 +39,55 @@ const ViewCostingSheetForm = () => {
   const [totalCost, setTotalCost] = useState(0);
   const [obj, setObj] = useState({});
   const [paymentList, setPaymentList] = useState({});
+  const [notificationArr, setNotificationArr] = useState([]);
+  const [comment    , setComment] = useState("");
+
+  const userObj = useSelector((state) => state.auth.user);
+  const [createdBy, setCreatedBy] = useState({});
+  const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
+    []
+    );
+
+useEffect(() => {
+  setCreatedBy(userObj);
+}, [userObj]);
+  
+
+  const handleGetCommentFromNtoifcation = async () => {
+    let { data: response } = await handleNotificationGetForSpecificLeadId(
+      `${leadId}`
+    );
+    console.log(response, "get2342");
+    setNotificationArr(response?.data);
+  };
+
+  
+const handleGetAllEmployees = async () => {
+    try {
+      let { data: res } = await getEmployessLinkedWithLeadId(leadId);
+      // console.log(res, "resonp");
+      if (res?.message) {
+        setConnectEmplyeeWithThisLead(res.data);
+        // dispatch(returnAllEmployees(res.data));
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
+
+
+
+
 
   useEffect(() => {
     handleInit(leadId);
+    handleGetCommentFromNtoifcation();
+    handleGetAllEmployees()
   }, []);
+
+
+
 
   const handleInit = (leadId) => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
@@ -46,9 +98,7 @@ const ViewCostingSheetForm = () => {
     setObj(costingSheetResultObj);
   }, [costingSheetResultObj]);
 
-  useEffect(() => {
-    console.log(obj, "09");
-  }, [obj]);
+ 
 
   useEffect(() => {
     if (obj && obj._id) {
@@ -67,6 +117,91 @@ const ViewCostingSheetForm = () => {
       setTotalCost(obj.totalCost);
     }
   }, [obj]);
+
+
+
+  
+  const handleKeyPress = (event) => {
+    let object = {
+      heading: comment,
+      // description,
+      // userId, 
+      CommentUserId:[],
+      leadId,
+      followDate: new Date().toLocaleDateString(),
+      createdBy: { ...createdBy, role },
+      followTime: new Date().toLocaleTimeString(),
+      isComment:true
+    };
+    if (event.key === "Enter") {
+      // dispatch(addNotification(object));
+      if (role == "SPOC") {
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
+
+     
+      } else if (role == "TEAMLEAD") {
+   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+
+    
+      } else if (role == "ADMIN") {
+        
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+
+        }else if (role=="ACCOUNT"){
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
+        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+      } 
+      // for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+
+      //   object.CommentUserId.push({userId:el._id}) 
+      // }
+      dispatch(addNotification(object));
+    }
+  };
+
+
+  const handleSubmitComment = (event) => {
+    let object = {
+      heading: comment,
+      // userId, 
+      CommentUserId:[],
+      leadId,
+      followDate: new Date().toLocaleDateString(),
+      createdBy: { ...createdBy, role },
+      followTime: new Date().toLocaleTimeString(),
+      isComment:true
+    };
+    // console.log(role,"role23")
+        if (role == "SPOC") {
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
+  
+       
+        } else if (role == "TEAMLEAD") {
+     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+  
+      
+        } else if (role == "ADMIN") {
+          
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+  
+        }else if (role=="ACCOUNT"){
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
+          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
+          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+        } 
+        
+        dispatch(addNotification(object)); 
+  };
+
+
+
 
   return (
     <div className="page-wrapper">
@@ -280,7 +415,8 @@ const ViewCostingSheetForm = () => {
             <label className="blue-1 fs-12">Profit: &nbsp;{profit}</label>
           </div>
         </div>
-        {/*  */}
+
+
         <div>
           <div className="col-12 col-md-8 mb-3">
             <h2 className="blue-1 "> Quotation Details</h2>
@@ -498,7 +634,73 @@ const ViewCostingSheetForm = () => {
               </Table>
             </div>
           )}
-        </div>
+        </div> 
+
+
+        <div className="container">
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    {/* <TextareaAutosize */}
+                    <input
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      onKeyDown={(e) => handleKeyPress(e)}
+                      className="form-control"
+                      cols="1000"
+                      rows="100"
+                      placeholder="Add Comment"
+                    />
+                  </div>
+                </div>
+               
+
+                {/* {showButtonVisibility && ( */}
+                  <Button
+                    type="submit"
+                    className="btn-submit col-md-2" 
+                    onClick={(e) => {
+                      handleSubmitComment(e);
+                    }}
+                  >
+                    Submit-
+                  </Button>
+                {/* // )} */}
+              </div>
+            </div>
+
+
+        {notificationArr &&
+          notificationArr.map((noteItem, index) => {
+            return (
+              <div className="note_added_by_agent mt-4" key={index}>
+                <div className="textnote">
+                  <div className="alignright mb7">
+                    <span className=" flexfull">
+                      {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
+                      {noteItem?.createdBy?.name
+                        ? noteItem?.createdBy?.name
+                        : "" + " "}
+                      {"[" + noteItem?.createdBy?.role
+                        ? noteItem?.createdBy?.role
+                        : "" + "]"}
+                    </span>
+                  </div>
+                  <div className="noteMessage">
+                    <p className="post-heading  f10">{noteItem?.heading}</p>
+                  </div>
+                </div>
+                {/* <span className="notesImageCorner">
+                <img
+                  src={"../../../src/assets/img/NotesImageCorner.webp"}
+                  alt=""
+                />
+              </span> */}
+              </div>
+            );
+          })}
         {/*  */}
       </div>
     </div>

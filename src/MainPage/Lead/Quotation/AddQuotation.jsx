@@ -1337,7 +1337,6 @@ aria-label="Close"
                       className="form-control"
                       value={numberOfGuest}
                       onChange={(e) => handleSetNumberOfGuest(e.target.value)}
-                      // onChange={(e) => setNumberOfGuest(e.target.value)}
                     />
                   </div>
                 </div>
@@ -1538,7 +1537,6 @@ aria-label="Close"
                               <label> Check In </label>
                               <input
                                 type="date"
-                                // type="text"
                                 name="checkIn"
                                 value={`${moment(hotel.checkIn).format(
                                   "YYYY-MM-DD"
@@ -1574,16 +1572,7 @@ aria-label="Close"
                               />
                             </div>
 
-                            {/* <div className="form-group col-md-4">
-                          <label>Hotel Address</label>
-                          <input
-                            type="text"
-                            name="hotelAddress"
-                            className="form-control"
-                            value={hotel.hotelAddress}
-                            onChange={(e) => handleinputchangeHotel(e, i)}
-                          />
-                        </div> */}
+                           
                             <div className="form-group col-md-4">
                               <label>Hotel Address</label>
                               <input
@@ -1923,7 +1912,7 @@ aria-label="Close"
                     />
                   </div>
                 </div>
-                <div className="form-group col-md-6">
+                {/* <div className="form-group col-md-6">
                   <label className="col-form-label ">
                     Flight
                     <span className="text-danger">*</span>
@@ -1938,7 +1927,7 @@ aria-label="Close"
                       setIsAirport(!isAirport);
                     }}
                   />
-                </div>
+                </div> */}
 
                 <div className="form-group col-md-6">
                   <label className="col-form-label ">

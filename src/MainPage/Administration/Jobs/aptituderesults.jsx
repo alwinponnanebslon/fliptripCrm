@@ -132,6 +132,7 @@ const ApptitudeResults = () => {
                   // bordered
                   dataSource={data}
                   rowKey={record => record.id}
+               
                 //  onChange={this.handleTableChange}
                 />
               </div>

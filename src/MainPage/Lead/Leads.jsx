@@ -169,15 +169,24 @@ const Leads = () => {
     handleGetClient();
   }, [filterClientByName]);
 
+
+
+
   useEffect(() => {
     dispatch(quotationGet());
   }, []);
+
+
+
 
   useEffect(() => {
     if (quotationArray.length > 0) {
       setQuotationArrData(quotationArray);
     }
   }, [quotationArray]);
+
+
+
 
   const [data, setData] = useState([
     {
@@ -260,11 +269,7 @@ const Leads = () => {
           setDisplayLeadsArr(res.data);
           setLeadsArr(res.data);
         }
-        // let temp = tempArr.filter((el) => {
-        //   el?.agent;
-        // });
-        // setLeadsArr(res.data);
-        // dispatch(returnAllEmployees(res.data))
+    
       }
     } catch (error) {
       toastError(error);
@@ -276,8 +281,10 @@ const Leads = () => {
     // dispatch(clientGet());
   }, []);
 
+
+
   const handleEdit = (lead) => {
-    // console.log(lead, "rlad23q");
+
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
@@ -413,6 +420,8 @@ const Leads = () => {
     reader.onerror = function (error) { };
   };
 
+
+
   const handleFileSelection = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -420,6 +429,9 @@ const Leads = () => {
       });
     }
   };
+
+
+
   const handleFileSelectionPenCard = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -427,6 +439,8 @@ const Leads = () => {
       });
     }
   };
+
+
 
   const handleFileSelectionPassPortFront = (event) => {
     if (event.target.files[0]) {
@@ -436,6 +450,8 @@ const Leads = () => {
     }
   };
 
+
+
   const handleFileSelectionPassPortBack = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -443,6 +459,8 @@ const Leads = () => {
       });
     }
   };
+
+
 
   const handleFilterWithAgentName = (query) => {
     // console.log(query, "query3");
@@ -486,6 +504,9 @@ const Leads = () => {
       setDisplayLeadsArr([...leadsArr]);
     }
   };
+
+
+
   const handleClientByAllFilter = async (value1, value2, value3) => {
     // console.log(value1, value2, "value1, value2");(userObj?._id, role)
     let getFilterByTeam = await getAllLeadSearchFilter(
@@ -501,6 +522,9 @@ const Leads = () => {
   useEffect(() => {
     handleClientByAllFilter(leadArrFilterStatus, teamLeadFilterId);
   }, [teamLeadFilterId]);
+
+
+
 
   const handleFilterByTeamLead = (query) => {
     setRoleQuery(query.value);
@@ -2625,7 +2649,7 @@ const Leads = () => {
         <Modal.Header>
           <Modal.Title className="d-flex justify-content-between w-75">
             {leadObj && leadObj._id ? " Edit " : " Add "}Lead
-            <div >
+            {/* <div >
               <Button
                 variant="secondary"
                 onClick={() => {
@@ -2635,9 +2659,16 @@ const Leads = () => {
               >
                 Close
               </Button>
-            </div>
+            </div> */}
           </Modal.Title>
         </Modal.Header>
+        <div
+              className="btn-close pt-3"
+              onClick={() => {
+                clearFunc();
+                setShow(false);
+              }}
+            ></div>
         <Modal.Body>
           <form>
             <div className="col-md-12">

@@ -23,12 +23,18 @@ import { useSelector } from "react-redux";
 import { notificationGetForSpecificUser } from "../../redux/features/notification/notificationSlice";
 import { getAllLeadSearchQuery } from "../../Services/lead.service";
 import moment from "moment";
+
+
 import {
   reminderGetForOneDay,
   reminderGet,
 } from "../../redux/features/reminder/reminderSlice";
+
+
+
 import { leadGet } from "../../redux/features/lead/leadSlice";
-// import { Bell, BookOpen, AlertTriangle } from 'react-feather';
+import { handleNotificationGetForSpecificLeadId } from "../../Services/notification.service";
+
 
 const Header = (props) => {
   let history = useHistory();
@@ -54,22 +60,29 @@ const Header = (props) => {
 
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchDataArr, setSearchDataArr] = useState([]);
+  const [notificationArr, setNotificationArr] = useState([]);
+
   const dispatch = useDispatch();
   // const params = useParams();
   // const leadId = params.leadId;
+  
+  
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
+useEffect(()=>{},[])
 
   useEffect(() => {
     dispatch(leadGet());
   }, []);
+
+
   useEffect(() => {
     setLeadArr(leadArray);
     // dispatch(leadGet());
   }, [leadArray]);
 
-  const onMenuClik = () => {
+  const onMenuClik = () => {    
     props.onMenuClick();
   };
 
@@ -89,31 +102,40 @@ const Header = (props) => {
     // dispatch(reminderGet(userId));
   };
 
+
+  const handleGetCommentFromNtoifcation = async () => {
+    let { data: response }  = await handleNotificationGetForSpecificLeadId(`${leadId}`); 
+    console.log(response,"get2342333")
+    setNotificationArr(response?.data)
+  };
+
+
   useEffect(() => {
     handleInit();
+    handleGetCommentFromNtoifcation()
   }, []);
+
 
   useEffect(() => {
     // console.log(notificationResultArr, "12notificationResultArr23");
     // console.log(userId, "userId343");
     let filter = notificationResultArr.filter((el) => {
-      // console.log(el.userId, "el.user23");
       if (`${el?.userId}` == `${userId}`) {
         return el;
       }
     });
     // console.log(filter, "234");
-    // console.log(userId, "u1serId343");
     setDataArr(notificationResultArr);
-    // setDataArr(filter);
-
-    // setDataArr(notificationResultArr);
   }, [notificationResultArr]);
+
+
 
   useEffect(() => {
     // console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
+
+
 
   const handleSearchLead = async () => {
     // const filteredData = await getAllLeadSearchQuery(`name=${query}`);
@@ -133,25 +155,16 @@ const Header = (props) => {
     // });
     // setSearchDataArr(filteredData);
   };
-  // console.log(dataArr, "data23")
-  const handleClick = (index) => {
-    // let tempArr = [...dataArr]
-    // ("use strict");
-    let tempList = [...dataArr];
-    // let totalAmount = 0;
 
-    // if (currentObj) {
+
+  const handleClick = (index) => {
+    let tempList = [...dataArr];
     if (tempList[index]) {
-      // console.log(currentObj, "1325465")
       setChangeNotificationColor("LightGray");
     }
 
     setDataArr([...tempList]);
-
-    // console.log(value, "234567890")
-    // setChangeNotificationColor("LightGray")
-    // props.onMenuClick();
-    // setIsNotificationRead(true);
+  
   };
 
   const handleReadNotification = (value) => {
@@ -214,7 +227,6 @@ const Header = (props) => {
   ];
 
   const mystyle = {
-    // color: "white",
     // backgroundColor: "DodgerBlue",
     padding: "1px",
     fontFamily: "Arial",
@@ -222,7 +234,6 @@ const Header = (props) => {
 
   return (
     <div className="header" style={{ right: "0px" }}>
-      {/* Logo */}
       {/* <div className="header-left">
        <Link to="/app/main/dashboard" className="logo">
           <img src={headerlogo} width={40} height={40} alt="" />
@@ -247,10 +258,9 @@ const Header = (props) => {
         </span>
       </a> */}
       {/* Header Title */}
-      <div className="page-title-box">
-        <h3>Fliptrip Holidays</h3>
+      <div className="page-title-box"> 
+      <Link to="/admin/leads"> <h3>Fliptrip Holidays</h3></Link>
       </div>
-      {/* /Header Title */}
       {/* <a
         id="mobile_btn"
         className="mobile_btn"
@@ -343,7 +353,6 @@ const Header = (props) => {
                         // to="#"
                         // to="/admin/notification"
                         >
-                          {/* {!el.previousNotification && ( */}
                           {/* <button
                             onClick={() => {
                               history.push(`/admin/lead/${row._id}`);
@@ -372,7 +381,7 @@ const Header = (props) => {
                                 className="media notification-custom-box"
                                 key={index}
                                 onClick={() => {
-                                  history.push(`/admin/lead/${el?.leadId}`);
+                                  role=="ACCOUNT"?history.push(`/admin/lead/${el?.leadId}/ViewDetails`): history.push(`/admin/lead/${el?.leadId}`);
                                 }}
                               >
                                 <h4 className="title">
@@ -386,11 +395,8 @@ const Header = (props) => {
                                 </h4>
 
                                 <p className="desp">{el?.description}</p>
-
                                 <p className="time">
-                                  {new Date(
-                                    el?.followDate
-                                  ).toLocaleDateString()}
+                                  { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
                                   at {el?.followTime}
                                 </p>
                               </div>
@@ -408,7 +414,8 @@ const Header = (props) => {
                               <p className="desp">{el?.description}</p>
 
                               <p className="time">
-                                {new Date(el?.followDate).toLocaleDateString()}
+                              { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                {/* {new Date(el?.followDate).toLocaleDateString()} */}
                                 at {el?.followTime}
                               </p>
                             </div>
@@ -434,9 +441,10 @@ const Header = (props) => {
                                   <p className="desp">{ele?.description}</p>
 
                                   <p className="time">
-                                    {new Date(
+                                  { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                    {/* {new Date(
                                       ele?.followDate
-                                    ).toLocaleDateString()}{" "}
+                                    ).toLocaleDateString()}{" "} */}
                                     at {ele?.followTime}
                                   </p>
                                 </div>
@@ -486,7 +494,7 @@ const Header = (props) => {
         {/* 
         
         */}
-        {console.log(searchDataArr, "searchDataArr23")}
+        {/* {console.log(searchDataArr, "searchDataArr23")} */}
         {role != "SUPERVISOR" && (
           <li className="nav-item dropdown">
             <a
@@ -498,7 +506,6 @@ const Header = (props) => {
               {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
               <i className="fa fa-clock-o" />
               <span className="badge badge-pill">
-                {/* {console.log(reminderArrData, "reminderArrData?.length")} */}
                 {reminderArrData?.length}
               </span>
             </a>
@@ -539,9 +546,10 @@ const Header = (props) => {
                                 <p className="desp">{el?.description}</p>
 
                                 <p className="time">
-                                  {new Date(
+                                { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                  {/* {new Date(
                                     el?.followDate
-                                  ).toLocaleDateString()}{" "}
+                                  ).toLocaleDateString()}{" "} */}
                                   at {el?.followTime}
                                 </p>
                               </div>
@@ -641,7 +649,6 @@ const Header = (props) => {
             </div>
           </li>
         )}
-        {/* /Notifications */}
         <li className="nav-item dropdown has-arrow main-drop">
           <a
             href="#"

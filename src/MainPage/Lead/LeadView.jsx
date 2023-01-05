@@ -62,7 +62,7 @@ const LeadView = () => {
     // console.log(params.search.includes("true"), "params.search.include");
     // console.log(params, "params.search.include");
     if (params.search.includes("true")) {
-      console.log(true, "rewe");
+      // console.log(true, "rewe");
       // setIsReadyOnlyNotes(true);
       setShow(true);
     }
