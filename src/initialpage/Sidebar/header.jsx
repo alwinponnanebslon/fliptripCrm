@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 
 import { notificationGetForSpecificUser } from "../../redux/features/notification/notificationSlice";
 import { getAllLeadSearchQuery } from "../../Services/lead.service";
-
+import moment from "moment";
 import {
   reminderGetForOneDay,
   reminderGet,
@@ -115,22 +115,6 @@ const Header = (props) => {
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
-  // const handleSearchLead = (value) => {
-  //   // console.log(value, "vlue");
-  //   // console.log(leadArr, "123vlue");
-
-  //   const filteredData = leadArr.filter((el) => {
-  //     if (value === "") {
-  //       return el.clientObj.name;
-  //     } else {
-  //       // return el.clientObj.name.toLowerCase().includes(value);
-  //       setShowSearchResult(true);
-  //       return el?.clientObj?.phone.toLowerCase().includes(value);
-  //     }
-  //   });
-  //   setSearchDataArr(filteredData);
-
-  // };
   const handleSearchLead = async () => {
     // const filteredData = await getAllLeadSearchQuery(`name=${query}`);
     const filteredData = await getAllLeadSearchQuery(userId, role, `${query}`);
@@ -195,22 +179,23 @@ const Header = (props) => {
     {
       name: "Client Phone",
       selector: (row) => row?.clientObj?.phone,
-      width: "10%",
+      width: "15%",
+    },
+
+    {
+      name: "Created By",
+      selector: (row) =>
+        row?.createdBy?.name
+          ? row?.createdBy?.name
+          : "" + " " + row?.createdBy?.email,
+      width: "20%",
     },
     {
       name: "Created At",
       selector: (row) =>
-        new Date(row?.createdAt).toLocaleDateString() +
-        " at " +
-        new Date(row?.createdAt).toLocaleTimeString(),
+        row?.createdAt ? moment(row?.createdAt).format("DD/MM/YYYY") : "",
       width: "20%",
     },
-    {
-      name: "Created By",
-      selector: (row) => row?.createdBy?.name + " " + row?.createdBy?.email,
-      width: "20%",
-    },
-
     {
       name: "View Lead",
       minWidth: "190px",
@@ -226,22 +211,6 @@ const Header = (props) => {
       ),
       width: "15%",
     },
-    // {
-    //   name: (
-    //     <div className="col-auto float-end ml-auto">
-    //       <a
-    //         href="#"
-    //         className="btn add-btn"
-    //         onClick={() => {
-    //           setShowSearchResult(false);
-    //         }}
-    //       >
-    //         <i className="fa fa-close" />
-    //         Close Tab
-    //       </a>
-    //     </div>
-    //   ),
-    // },
   ];
 
   const mystyle = {
@@ -259,7 +228,6 @@ const Header = (props) => {
           <img src={headerlogo} width={40} height={40} alt="" />
         </Link> 
       </div> */}
-      {/* /Logo */}
       {/* <a
         id="toggle_btn"
         href="#"
@@ -331,39 +299,23 @@ const Header = (props) => {
 
 */}
 
-        {/* {searchDataArr && */}
-
         {/* 
 
  */}
         <li className="nav-item dropdown">
-          <a
-            // href=""
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
-            {/* <i className="fa fa-bell-o" /> */}
-            {/* <span className="badge badge-pill">{dataArr.length}</span> */}
-          </a>
+          <a className="dropdown-toggle nav-link" data-bs-toggle="dropdown"></a>
         </li>
 
         {/*
          */}
         <li className="nav-item dropdown">
-          <a
-            // href=""
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
+          <a className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <i className="fa fa-bell-o" />
             <span className="badge badge-pill">{dataArr?.length}</span>
           </a>
           <div className="dropdown-menu notifications">
             <div className="topnav-dropdown-header">
               <span className="notification-title">Notifications</span>
-              {/* <a href="" className="clear-noti">
-                Clear All
-              </a> */}
             </div>
             <div className="noti-content">
               <ul className="notification-list">
@@ -425,7 +377,9 @@ const Header = (props) => {
                               >
                                 <h4 className="title">
                                   <span>
-                                    {el?.createdBy?.name + " "}
+                                    {el?.createdBy?.name
+                                      ? el?.createdBy?.name
+                                      : "" + " "}
                                     {"[" + el?.createdBy?.role + "]"} :
                                   </span>
                                   {el?.heading}
@@ -532,7 +486,7 @@ const Header = (props) => {
         {/* 
         
         */}
-
+        {console.log(searchDataArr, "searchDataArr23")}
         {role != "SUPERVISOR" && (
           <li className="nav-item dropdown">
             <a
@@ -544,7 +498,7 @@ const Header = (props) => {
               {/*   <FontAwesomeIcon icon="fa-solid fa-alarm-clock" /> */}
               <i className="fa fa-clock-o" />
               <span className="badge badge-pill">
-                {console.log(reminderArrData, "reminderArrData?.length")}
+                {/* {console.log(reminderArrData, "reminderArrData?.length")} */}
                 {reminderArrData?.length}
               </span>
             </a>
@@ -555,7 +509,7 @@ const Header = (props) => {
                 Clear All
               </a> */}
               </div>
-              {console.log(reminderArrData, "reminderArrData123213")}
+              {/* {console.log(reminderArrData, "reminderArrData123213")} */}
               <div className="noti-content">
                 <ul className="notification-list">
                   {reminderArrData &&
@@ -688,9 +642,6 @@ const Header = (props) => {
           </li>
         )}
         {/* /Notifications */}
-        {/* Message Notifications */}
-
-        {/* /Message Notifications */}
         <li className="nav-item dropdown has-arrow main-drop">
           <a
             href="#"

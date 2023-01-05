@@ -32,3 +32,7 @@ export const getNotificationForSpecificUserApi = (id) => {
 export const notificationDeleteApi = (id) => {
   return axios.delete(`${serverUrl}/deleteById/${id}`);
 };
+
+export const handleNotificationGetForSpecificLeadId = (id ) => {
+  return axios.get(`${serverUrl}/notificationGetForSpecificLeadId/${id}`);
+};

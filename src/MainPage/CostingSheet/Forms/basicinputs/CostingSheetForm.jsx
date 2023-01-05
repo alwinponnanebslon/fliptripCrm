@@ -50,6 +50,8 @@ const ViewCostingSheetForm = () => {
       pending: false,
     },
   ]);
+
+  
   const [flightList, setFlightList] = useState([{ cost: 0, flightName: "" }]);
   const [totalCost, setTotalCost] = useState(0);
   const [quotationObj, setQuotationObj] = useState({});
@@ -67,6 +69,7 @@ const ViewCostingSheetForm = () => {
   const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
     {}
   );
+
   const currentLead = useSelector((state) => state.lead.lead);
   const [leadObj, setLeadObj] = useState(null);
   const descriptionRef = useRef();
@@ -76,14 +79,17 @@ const ViewCostingSheetForm = () => {
   const [createdBy, setCreatedBy] = useState({});
   const [tcs, setTcs] = useState(0);
 
+
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
+
 
   useEffect(() => {
     // console.log(currentLead, "123currentLead");
     setLeadObj(currentLead);
   }, [currentLead]);
+
 
   const getQuotation = async () => {
     let arr = await getApprovedQuotation(leadId);
@@ -108,6 +114,8 @@ const ViewCostingSheetForm = () => {
     dispatch(leadGetById(leadId));
   }, []);
 
+
+
   useEffect(() => {
     // console.log(quotationObj, "1quotationObj23");
     if (quotationObj && quotationObj?._id && isUpdatePrevDoc == false) {
@@ -126,6 +134,8 @@ const ViewCostingSheetForm = () => {
     }
     // }, [quotationObj, additionalLandPrices]);
   }, [quotationObj]);
+
+
 
   useEffect(() => {
     // console.log(costingSheetResultObj, "costingSheetResultObj23");
@@ -147,6 +157,8 @@ const ViewCostingSheetForm = () => {
       setAdditionalLandPrices(costingSheetResultObj?.additionalLandPrices);
     }
   }, [costingSheetResultObj]);
+
+
 
   // useEffect(() => {
   //   // // console.log(tempLocation, "21location");
@@ -178,12 +190,13 @@ const ViewCostingSheetForm = () => {
   //   // }
   // }, [location.pathname]);
 
+
+
   const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployessLinkedWithLeadId(leadId);
       if (res?.message) {
         setConnectEmplyeeWithThisLead(res.data);
-        // console.log(res, "resget employee with thsi ");
         // dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
@@ -196,13 +209,15 @@ const ViewCostingSheetForm = () => {
     handleGetAllEmployees();
   }, []);
 
-  useEffect(() => {
-    // console.log(connectEmplyeeWithThisLead, "connectEmplyeeWithThisLead314");
-  }, [connectEmplyeeWithThisLead]);
+
 
   const handleinputchange = (e, index) => {
     //hotel
     let { name, value, checked } = e.target;
+    if(value<0){
+      toastError(" Hotel Cost cannot be negative -")
+      return
+    }
     //hotel
     ("use strict");
     // console.log(name, "name, ", value, " value,", checked, " checked23");
@@ -362,8 +377,11 @@ const ViewCostingSheetForm = () => {
   };
 
   const handleinputchangeFlight = (e, index) => {
-    let { name, value } = e.target;
-    // console.log()
+    let { name, value } = e.target; 
+    if(value<0){
+      toastError("Flight cost cannot be negative ")
+      return
+    }
     ("use strict");
     let tempList = [...flightList];
     let totalAmount = 0;
@@ -420,26 +438,24 @@ const ViewCostingSheetForm = () => {
     setFlightList([...flightList, { cost: "", flightName: "" }]);
   };
 
+
   const handleChangePriceOfAdditionalCost = (value) => {
-    // console.log(value, "1Value23");
-    // console.log(isNaN(value), "valuwe23");
-    // console.log(parseInt(value), "valuwe231234");
+if(value<0){
+  toastError("Additional cost cannot be negative ")
+  return
+}
     let list = [];
     let totalAmount = 0;
     let tempList = inputList;
     let tempValues = Object.values(tempList);
-    // console.log(tempValues, "tempValues23");
     if (value == undefined) {
     } else if (isNaN(value) == true) {
       value = 0;
-      // if (parseInt(value) == "NaN") {
-      // value = 0;
-      // console.log(typeof value, "vlue", value);
+    
       toastError("Land package price should be number*");
       return;
     } else {
       for (let el of tempValues) {
-        // console.log(el, "cost23");
         if (el.cost) {
           totalAmount = totalAmount + parseInt(el.cost);
         }
@@ -450,7 +466,6 @@ const ViewCostingSheetForm = () => {
       //     tempCost = tempCost + Number.parseInt(ele?.cost);
       //   }
       // }
-      // let
       // if (
       //   tempList.reduce((acc, el) => acc + parseInt(el.cost), 0) >
       //   parseInt(totalCost)
@@ -460,8 +475,6 @@ const ViewCostingSheetForm = () => {
       //   );
       //   return;
       // }
-      // inputList;
-      // console.log(totalAmount, landCost, "1234");
       if (totalAmount + parseInt(value) > parseInt(landCost)) {
         toastError(
           "Addititonal land price cannot be greater than total land cost"
@@ -481,7 +494,6 @@ const ViewCostingSheetForm = () => {
     let tempCost = 0;
     let tempCostOf = 0;
     for (let ele of inputList) {
-      // console.log(ele, "oiinno");
       tempCost = tempCost + Number.parseInt(ele.cost);
     }
 
@@ -505,6 +517,8 @@ const ViewCostingSheetForm = () => {
       setIsButtonFlight(false);
     }
   }, [inputList, flightList, landCost, flightCost, additionalLandPrices]);
+
+
 
   const updateStatusOfLead = async (id, obj) => {
     let { data: res } = await updateLeadStatus(id, obj);

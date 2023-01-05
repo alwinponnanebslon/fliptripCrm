@@ -107,10 +107,7 @@ const AddNotification = ({
     // }
   }, [notificationObj]);
 
-  // useEffect(() => {
-  //
-  //   setEmployeeId(notificationObj?._id);
-  // }, [notificationObj]);
+
 
   useEffect(() => {
     setCreatedBy(userObj);
@@ -124,9 +121,10 @@ const AddNotification = ({
     setFollowTime("");
     setFollowupId("");
     setIsUpdate(false);
-    // dispatch(setNotification({}));
-    // setAllEmployees([]);
+ 
   };
+
+ 
   const handleSubmit = () => {
     // console.log(heading, "heading23");
     if (heading == "" || heading == undefined) {
@@ -149,7 +147,8 @@ const AddNotification = ({
       };
       // console.log(obj, "obj23");
       if (notificationObj && notificationObj._id) {
-        // console.log()
+
+
         obj.id = followupId;
         // dispatch(updateReminder(obj));
         dispatch(updateNotification(obj));
@@ -167,7 +166,8 @@ const AddNotification = ({
     }
   };
 
-  // console.log(followDate, "fooldate");
+
+
 
   return (
     <div id="add_Reminder" className="modal custom-modal fade" role="dialog">
@@ -214,7 +214,6 @@ const AddNotification = ({
                     />
                   </div>
                 </div>
-                {/* console.log(A ) */}
                 <div className="form-group row">
                   <label className="col-form-label col-md-2">
                     Send to <span className="text-danger">*</span>

@@ -8,13 +8,13 @@ import { quotationGet } from "../../../redux/features/quotation/quotationSlice";
 import { toastError } from "../../../utils/toastUtils";
 import { confirmAlert } from "react-confirm-alert";
 
-
 import {
   paymentAdd,
   paymentGetByQuotation,
   paymentUpdate,
 } from "../../../redux/features/payment/paymentSlice";
-
+import { getEmployessLinkedWithLeadId } from "../../../Services/user.service";
+import { handleNotificationGetForSpecificLeadId } from "../../../Services/notification.service";
 
 import {
   addPaymentInvoice,
@@ -24,6 +24,8 @@ import {
   updatePaymentInvoice,
 } from "../../../redux/features/paymentInvoice/paymentInvoiceSlice";
 
+import { addNotification } from "../../../redux/features/notification/notificationSlice";
+import { add } from "../../../Services/costingSheet.services";
 
 export const AddPayment = () => {
   let history = useHistory();
@@ -31,19 +33,18 @@ export const AddPayment = () => {
   const role = useSelector((state) => state.auth.role);
   const user = useSelector((state) => state.auth.user);
   const userId = useSelector((state) => state.auth.user._id);
+
   const quotationStateArr = useSelector(
     (state) => state.quotation.quotationArr
   );
   const payMentInvoiceArr = useSelector(
     (state) => state.paymentInvoice.paymentInvoices
   );
-  
-  
+
   const quotationPaymentObj = useSelector((state) => state.payment.paymentObj);
   const perfomaInvoiceObj = useSelector(
     (state) => state.paymentInvoice.paymentInvoiceObj
   );
-
 
   const [quotationArr, setQuotationArr] = useState([]);
   const { leadId } = useParams();
@@ -69,8 +70,6 @@ export const AddPayment = () => {
     },
   ]);
 
-
-
   const [perfomaInvoiceArr, setPerfomaInvoiceArr] = useState([]);
 
   const [invoiceNo, setInvoiceNo] = useState("");
@@ -87,23 +86,52 @@ export const AddPayment = () => {
       revivedOn: new Date(),
     },
   ]);
-  
+
   const [handleEditInputInTcs, setHandleEditInputInTcs] = useState(false);
 
-  useEffect(() => {
-    handleInit();
-  }, []);
+  const [comment, setComment] = useState("");
+  const [reminderDate, setReminderDate] = useState(new Date());
+  const [showButtonVisibility, setShowButtonVisibility] = useState(false);
+  const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
+    []
+  );
+
+  const userObj = useSelector((state) => state.auth.user);
+  const [createdBy, setCreatedBy] = useState({});
 
   useEffect(() => {
-    // console.log(quotationStateArr, "quotationStateArr");
-  }, [quotationStateArr]);
+    setCreatedBy(userObj);
+  }, [userObj]);
+
+  const handleGetAllEmployees = async () => {
+    try {
+      let { data: res } = await getEmployessLinkedWithLeadId(leadId);
+      // console.log(res, "resonp");
+      if (res?.message) {
+        setConnectEmplyeeWithThisLead(res.data);
+        // dispatch(returnAllEmployees(res.data));
+      }
+    } catch (error) {
+      console.error(error);
+      toastError(error);
+    }
+  };
+
+  const handleGetCommentFromNtoifcation = async () => {
+    let get = await handleNotificationGetForSpecificLeadId(`${leadId}`);
+  };
 
   const handleInit = () => {
     dispatch(quotationGet(`leadId=${leadId}`));
   };
 
   useEffect(() => {
-    // console.log(quotationPaymentObj, "q32uotationPaymentObj");
+    handleInit();
+    handleGetAllEmployees();
+    handleGetCommentFromNtoifcation();
+  }, []);
+
+  useEffect(() => {
     setPaymentObj(quotationPaymentObj);
   }, [quotationPaymentObj]);
 
@@ -127,20 +155,40 @@ export const AddPayment = () => {
     if (quotationStateArr) {
       let tempObj = quotationStateArr.find((el) => el.status == "Convert");
       if (tempObj) {
+        console.log(tempObj, "temp12");
         setIsQuotationapproved(true);
         setSelectedQuotation(tempObj);
-        setFlightCharges(
-          tempObj?.perPersonAirPortPrice
-            ? tempObj?.perPersonAirPortPrice * tempObj?.numberOfGuest
-            : 0
-        );
-        setLandCharges(
-          tempObj?.perPersonLandPrice
-            ? tempObj?.perPersonLandPrice * tempObj?.numberOfGuest
-            : 0
-        );
+        let totalFlightCharges =
+          parseInt(tempObj?.perPersonAirPortPrice) *
+            parseInt(tempObj?.travelPassengerObj?.noOfAdults) +
+          parseInt(tempObj?.perChildrenPersonAirPortPrice) *
+            (parseInt(tempObj?.travelPassengerObj?.noOfChildrenWithBed) +
+              parseInt(tempObj?.travelPassengerObj?.noOfChildrenWithoutBed)) +
+          parseInt(tempObj?.perInfantAirPortPrice) *
+            parseInt(tempObj?.travelPassengerObj?.noOfInfants);
+
+        setFlightCharges(totalFlightCharges);
+        // setFlightCharges(
+        //   tempObj?.perPersonAirPortPrice
+        //     ? tempObj?.perPersonAirPortPrice * tempObj?.numberOfGuest
+        //     : 0
+        // );
+        let totalLandCost =
+          parseInt(tempObj?.perPersonLandPrice) *
+            parseInt(tempObj?.travelPassengerObj?.noOfAdults) +
+          parseInt(tempObj?.perChildrenLandPrice) *
+            (parseInt(tempObj?.travelPassengerObj?.noOfChildrenWithBed) +
+              parseInt(tempObj?.travelPassengerObj?.noOfChildrenWithoutBed)) +
+          parseInt(tempObj?.perInfantLandPrice) *
+            parseInt(tempObj?.travelPassengerObj?.noOfInfants);
+
+        setLandCharges(totalLandCost);
+        // setLandCharges(
+        //   tempObj?.perPersonLandPrice
+        //     ? tempObj?.perPersonLandPrice * tempObj?.numberOfGuest
+        //     : 0
+        // );
         setQuotationId(tempObj._id);
-        // console.log(tempObj, "quotationId")
         dispatch(paymentGetByQuotation(tempObj?._id));
         dispatch(paymentInvoiceGet(`quotationId=${tempObj?._id}`));
       } else {
@@ -276,9 +324,6 @@ export const AddPayment = () => {
       ],
     });
   };
-  useEffect(() => {
-    // console.log(paymentReceviedArr, "paymentReceviedArr213");
-  }, [paymentReceviedArr]);
 
   const handleSubmit = () => {
     const validation = paymentReceviedArr.every(
@@ -312,17 +357,7 @@ export const AddPayment = () => {
       };
       submitPayment(obj);
     }
-
-    // if (paymentId) {
-    //   obj.paymentId = paymentId;
-
-    //   dispatch(paymentUpdate(obj));
-    // } else {
-    //   dispatch(paymentAdd(obj));
-    // }
   };
-
-  //  Payment Invoice Crud
 
   const handlePaymentEdit = (row) => {
     dispatch(setPaymentInvoice(row));
@@ -385,6 +420,54 @@ export const AddPayment = () => {
     }
   };
 
+  const handleCheckTcs = (e) => {
+    // console.log(e,"elllll")
+    if (e < 0) {
+      toastError("TCS cannot be negative");
+      return;
+    }
+    setTcs(e);
+  };
+
+  const handleKeyPress = (event) => {
+    let object = {
+      heading: comment,
+      // description,
+      // userId,
+      leadId,
+      followDate: new Date().toLocaleDateString(),
+      createdBy: { ...createdBy, role },
+      followTime: new Date().toLocaleTimeString(),
+      isComment:true
+    };
+    if (event.key === "Enter") {
+      console.log("0987");
+      dispatch(addNotification(object));
+      if (role == "SPOC") {
+        object.userId = connectEmplyeeWithThisLead?.leadId;
+        dispatch(addNotification(object));
+        //   console.log(leadObj, "leadObj?.adminObj?._id");
+        object.userId = connectEmplyeeWithThisLead?.adminObj?._id;
+        dispatch(addNotification(object));
+      } else if (role == "TEAMLEAD") {
+        object.userId = connectEmplyeeWithThisLead?.agentId;
+        dispatch(addNotification(object));
+        object.userId = connectEmplyeeWithThisLead?.adminObj?._id;
+        dispatch(addNotification(object));
+      } else if (role == "ADMIN") {
+        object.userId = connectEmplyeeWithThisLead?.agentId;
+        dispatch(addNotification(object));
+        object.userId = connectEmplyeeWithThisLead?.leadId;
+        dispatch(addNotification(object));
+      }
+      for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+        object.userId = el._id;
+        dispatch(addNotification(object));
+      }
+      // handleSubmit(event);
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <Helmet>
@@ -396,7 +479,6 @@ export const AddPayment = () => {
           <div className="row align-items-center">
             <div className="col">
               <h3 className="page-title">
-                {" "}
                 <i className="la la-file-text-o" />
                 Payment Details
               </h3>
@@ -409,7 +491,7 @@ export const AddPayment = () => {
             </div>
           </div>
         </div>
-
+        {/* {console.log(selectedQuotation, "selectedQuotation213")} */}
         {isQuotationapproved ? (
           <div className="modal-body">
             <div style={{ fontSize: 19 }}>
@@ -485,7 +567,7 @@ export const AddPayment = () => {
                   readOnly={handleEditInputInTcs == false ? true : false}
                   className="form-control mt-2"
                   value={tcs}
-                  onChange={(e) => setTcs(e.target.value)}
+                  onChange={(e) => handleCheckTcs(e.target.value)}
                   type="number"
                   // button="edit"
                 />
@@ -620,7 +702,80 @@ export const AddPayment = () => {
                 Save Payment
               </button>
             </div>
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-12">
+                  <div className="form-group">
+                    {/* <TextareaAutosize */}
+                    <input
+                      value={comment}
+                      onChange={(e) => {
+                        setComment(e.target.value);
+                      }}
+                      onKeyDown={(e) => handleKeyPress(e)}
+                      className="form-control"
+                      cols="1000"
+                      rows="100"
+                      placeholder="Add Comment"
+                    />
+                  </div>
+                </div>
+                {/* <div className="col-lg-12 mt-3">
+                  <div className="form-group">
+                    <input
+                      type="date"
+                      min={moment(new Date()).format("YYYY-MM-DD")}
+                      value={reminderDate}
+                      onChange={(e) => {
+                        setReminderDate(e.target.value);
+                        setShowButtonVisibility(true);
+                      }}
+                      className="form-control"
+                    />
+                  </div>
+                </div> */}
 
+                {showButtonVisibility && (
+                  <Button
+                    type="submit"
+                    className="btn-submit"
+                    onClick={(e) => {
+                      handleSubmitComment(e);
+                    }}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </div>
+            </div>
+            {/* {
+        noteMainArr &&
+        noteMainArr.map((noteItem, index) => {
+          return (
+            <div className="note_added_by_agent mt-4" key={index}>
+              <div className="textnote">
+                <div className="alignright mb8">
+                  <span className=" flexfull">
+                    {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
+                    {noteItem?.createdBy?.name ? noteItem?.createdBy?.name : "" + " "}
+                    {"[" + noteItem?.createdBy?.role + "]"}
+                  </span>
+                </div>
+                <div className="noteMessage">
+                  <p className="post-heading  f12">{noteItem?.note}</p>
+               
+                </div>
+              </div>
+              <span className="notesImageCorner">
+                <img
+                  src={"../../../src/assets/img/NotesImageCorner.webp"}
+                  alt=""
+                />
+              </span>
+            </div>
+          );
+        })
+      } */}
             {/* <div style={{ fontSize: 19 }}>Payment Invoice</div>
 
             <div className="row">
@@ -783,7 +938,6 @@ export const AddPayment = () => {
                           className="btn add-btn"
                           onClick={handlePerfomaInvoiceSubmit}
                         >
-                          {" "}
                           Save{" "}
                         </button>
                       </div>
