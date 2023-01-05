@@ -9,7 +9,6 @@ import { admin, leadStatus, rolesObj } from "../../../utils/roles";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
-
 import Pdfile from "../../../MainPage/Pdf/Index";
 import { jsPDF } from "jspdf";
 // import ReactToPdf from "react-to-pdf";
@@ -31,10 +30,7 @@ import PopUp from "./PopUp";
 
 import { images } from "../../../MainPage/Pdf/Utility/Images";
 // import { images } from "./Utility/Images";
-import { generateFilePath } from "../../../utils/FileURL";
-
-
-
+import { generateFilePath, generateFilePathUPload } from "../../../utils/FileURL";
 
 const ref = React.createRef();
 
@@ -65,11 +61,12 @@ const Quotation = () => {
   const [QuotationObj, setQuotationObj] = useState({});
   const [tourObj, settourObj] = useState({
     mainImage:images.top_left,
-    itenaryImage:images.location,
+    itenaryImage:images.travelling,
   })
 
   useEffect(() => {
     handleInit();
+    console.log(images,"tourObjonload")
   }, []);
 
   // useEffect(() => {
@@ -102,6 +99,10 @@ const Quotation = () => {
   // };
 
   useEffect(() => {
+console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
+  }, [tourObj]);
+
+  useEffect(() => {
     if (quotationStateArr && quotationStateArr?.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     } else {
@@ -109,8 +110,6 @@ const Quotation = () => {
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
-
-
 
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
@@ -124,27 +123,25 @@ const Quotation = () => {
     return new Promise((res) => setTimeout(() => res(), n));
   };
 
-  const handleDownload = async (row) => {
-    // console.log(row, "rowrowrow");
+  const handleDownload =  (row) => {
     // const input = ;
     // localStorage.setItem("quotationPdf", JSON.stringify(row));
     setQuotationObj(row);
     if(row && row?.tourListArr && row?.tourListArr.length > 0){
         let currentObj = row.tourListArr.find(el => el.mainImage);
-        console.log(currentObj,"tourListArrtourListArrtourListArrtourListArr");
+
         if(currentObj != ""){
           let temptour ={
-            mainImage:generateFilePath(currentObj.mainImage),
-            itenaryImage:currentObj?.itenaryImage?generateFilePath(currentObj?.itenaryImage):images.location
+            mainImage:currentObj?.mainImage?generateFilePathUPload(currentObj?.mainImage):images.top_left,
+            itenaryImage:currentObj?.itenaryImage?generateFilePathUPload(currentObj?.itenaryImage):images.travelling
           }
-        console.log(temptour,"tourListArrtourListArrtourListArrtourListArr");
-
           settourObj(temptour);
         }
     }
-    // dispatch(setQuotationObj(row));
-    // dispatch(setTour(row));
+    dispatch(setQuotationObject(row));
+    dispatch(setTour(row));
 
+    
     setPrintPdf(true);
     // setTimeout(() => {
     const input = document.getElementById("mainPdfContainer");
@@ -168,11 +165,11 @@ const Quotation = () => {
           hotfixes: ["px_scaling"],
         });
         pdf.addImage(imgData, "PNG", 0, 0);
-        pdf.save(`${row?.leadObj?.clientObj?.name}__${row?.destinationName}.pdf`);
+        pdf.save(`${row?.leadObj?.clientObj?.name} - ${row?.destinationName}.pdf`);
       });
     }
 
-    console.log("en22");
+    // console.log("en22");
     // if (toPdf) {
     //   toPdf(e);
     // }
@@ -451,7 +448,6 @@ const Quotation = () => {
             onClick={() => handleDownload(row)
             }
           >
-
             Download
           </a>
         </div>
@@ -736,16 +732,14 @@ const Quotation = () => {
                   <div className="col-12 col-md-6">
                     <div className="left">
                       <div className="image">
-                        <img src={tourObj.mainImage} alt="" />
+                        <img src={tourObj?.mainImage} alt="" />
                       </div>
                     </div>
                   </div>
                   <div className="col-12 col-md-6">
                     <div className="right">
                       <div className="d-flex align-items-end justify-content-between right-top">
-                        { QuotationObj && QuotationObj.tourListArr
-                        
-                        }
+                     
                         <img src={images.logo} alt="" className="main-logo" />
                         <ul>
                           <li>
@@ -790,7 +784,7 @@ const Quotation = () => {
                         </ul>
                         <ul className="detail list-circle">
                           <li>
-                            {QuotationObj?.durationOfTour} N &nbsp;&nbsp;
+                            {QuotationObj?.durationOfTour} N &nbsp;/ &nbsp;
                             {parseInt(QuotationObj?.durationOfTour) + 1} D
                           </li>
                           <li>{QuotationObj?.numberOfGuest} Passengers</li>
@@ -833,7 +827,7 @@ const Quotation = () => {
             {/* 
       
       
-      */}
+      */}  {(QuotationObj?.destinationName)?
             <section className="payment-detail mb-80">
               <div className="container">
                 <h1 className="fw-bold text-center mb-5 heading">
@@ -849,8 +843,8 @@ const Quotation = () => {
                         <div className="col-12">
                           <div className="inclusions">
                             <div className="box mb-0">
-                              <h4 className="purple bg-white">
-                                {el.name} Description
+                              <h4 style={{fontSize:25}} className="purple bg-white">
+                                {el.name}
                               </h4>
                               <div className="row">
                                 <div className="col-12 ">
@@ -869,6 +863,7 @@ const Quotation = () => {
                   })}
               </div>
             </section>
+            :""}
             {/* 
       
       
@@ -903,7 +898,7 @@ const Quotation = () => {
                       <div className="icon">
                         <img src={images.activity} alt="" />
                       </div>
-                      <h4>Activity</h4>
+                      <h4>Sight Seeing</h4>
                     </div>
                   </li>
                   <li>
@@ -1100,7 +1095,6 @@ const Quotation = () => {
                 <section className="hotels">
                   <div className="container">
                     <h1 className="fw-bold text-center mb-5">Hotels</h1>
-
                     {QuotationObj?.hotelDetail &&
                       QuotationObj?.hotelDetail?.length > 0 &&
                       QuotationObj?.hotelDetail.map((el, index) => {
@@ -1199,11 +1193,15 @@ const Quotation = () => {
                             <div className="col-12" key={index}>
                               <div className="day">
                                 <h4>
-                                  <img src={tourObj.itenaryImage} alt="" />
+                                  <img src={images.location} alt="" />
                                   Day {index + 1}
                                 </h4>
                                 <p className="small">
-                                  in {QuotationObj?.destinationName}
+                                  {/* in {(el.checkIn)} */}
+                                  {/* {new Date(el.checkIn).toDateString()} */} 
+                                  {(index == 0) && moment(QuotationObj?.hotelDetail[0].checkIn).format("DD-MM-YYYY")}
+                                  {/* {(index ==  QuotationObj?.itineraryDetails.length-1) &&  moment(QuotationObj?.hotelDetail[0].checkOut).format("DD-MM-YYYY")} */}
+                                  {(index == QuotationObj?.itineraryDetails?.length-1) && moment(QuotationObj?.hotelDetail[QuotationObj?.hotelDetail?.length-1].checkOut).format("DD-MM-YYYY")}
                                 </p>
                               </div>
                               <div className="box">
@@ -1211,9 +1209,7 @@ const Quotation = () => {
                                   <li>
                                     <div className="left">
                                       <img
-                                        src={generateFilePath(
-                                          QuotationObj?.agentObj?.photoUrl
-                                        )}
+                                        src={tourObj?.itenaryImage}
                                         alt=""
                                         style={{ width: 100 }}
                                         className="img-fluid"
@@ -1366,7 +1362,7 @@ const Quotation = () => {
                           <div className="col-12 col-md-5">
                             <div className="right">
                               <div className="bank">
-                                <img src={images.icici} alt="" />
+                                <img src={images.yes_bank} alt="" />
                               </div>
                               <ul className="list-circle">
                                 <li>
@@ -1393,17 +1389,19 @@ const Quotation = () => {
                                   </span>
                                 </li>
                                 <li>
+                                Paytm : &nbsp;
                                   <a
                                     href={`tel:${QuotationObj?.agentObj?.phone}`}
                                   >
-                                    Paytm : 9999 316587{" "}
+                                     9999 316587{" "}
                                   </a>
                                 </li>
                                 <li>
+                                  Google pay : &nbsp;
                                   <a
                                     href={`tel:${QuotationObj?.agentObj?.phone}`}
                                   >
-                                    Google pay : 9999 316597{" "}
+                                     9999 316597{" "}
                                   </a>
                                 </li>
                               </ul>

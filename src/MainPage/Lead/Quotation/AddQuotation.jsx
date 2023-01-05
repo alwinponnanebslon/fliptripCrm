@@ -62,7 +62,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [tourArr, setTourArr] = useState([]);
   const [airportTransfer, setAirportTransfer] = useState("");
   const [travelList, setTravelList] = useState([
-    { name: "", startDate: "", endDate: "", mainImage: "", itenaryImage:"" },
+    { name: "", startDate: "", endDate: "", mainImage: "", itenaryImage: "" },
   ]);
 
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
@@ -547,12 +547,12 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         childrenCost: list[index].childrenCost,
         infantCost: list[index].infantCost,
       };
-      console.log("eeeeeeeeee")
+      // console.log("eeeeeeeeee")
       currentObj[name] = value;
       list[index] = currentObj;
       setflightList([...list]);
     } else {
-      console.log("ppopopoppo")
+      // console.log("ppopopoppo");
       const list = [...flightList];
 
       const { name, value } = e.target;
@@ -760,7 +760,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   };
 
   const handleAddClickTour = () => {
-    setTravelList([...travelList, { name: "", startDate: "", endDate: "" ,mainImage:"",itenaryImage:"" }]);
+    setTravelList([...travelList, { name: "", startDate: "", endDate: "" , mainImage:"", itenaryImage:"" }]);
   };
 
   const handleLeadValueChange = (e) => {
@@ -816,15 +816,14 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       mainImage: tempList[index].mainImage,
       itenaryImage: tempList[index].itenaryImage,
     };
-
+  console.log(currentObj ,"currentObj currentObj currentObj");
     currentObj[name] = value; 
 
     if(name=='name'){
       let current = tourValueArr.find(el => el.name == value);
-      console.log(current, "current");
       if(current !=="" ){
-        currentObj.mainImage = current.mainImage ? current.mainImage:"";
-        currentObj.itenaryImage = current.itenaryImage ? current.itenaryImage: "";
+        currentObj.mainImage = current.mainImage?current.mainImage:"";
+        currentObj.itenaryImage = current.itenaryImage?current.itenaryImage:"";
       }
     }
 
@@ -1210,7 +1209,6 @@ aria-label="Close"
                                 <label className="col-form-label ">
                                   Tour <span className="text-danger">*</span>
                                 </label>
-
                                 <select
                                   className="form-control"
                                   name="name"
@@ -1226,7 +1224,7 @@ aria-label="Close"
                                     tourArr.length > 0 &&
                                     tourArr.map((el, inde) => (
                                       <option key={inde} value={el.name}>
-                                        {el.name}{el.mainImage}{el.itenaryImage}
+                                        {el.name}
                                       </option>
                                     ))}
                                 </select>
@@ -1731,7 +1729,7 @@ aria-label="Close"
                   <div className="form-group col-3">
                     <label className="col-form-label ">
                       Visa Required
-                      <span className="text-danger">*</span>
+                      <span className="text-danger"></span>
                     </label>
                   </div>
                   <div className="col-md-9">
