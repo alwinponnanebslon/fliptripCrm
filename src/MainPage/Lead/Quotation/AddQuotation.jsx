@@ -1702,7 +1702,7 @@ aria-label="Close"
                                 </button>
                               )}
                             </div>
-                            <div className="col-md-12">
+                            {/* <div className="col-md-12">
                               <button
                                 type="button"
                                 className="btn btn-success"
@@ -1710,7 +1710,7 @@ aria-label="Close"
                               >
                                 Add More
                               </button>
-                            </div>
+                            </div> */}
                           </div>
                         );
                       })}

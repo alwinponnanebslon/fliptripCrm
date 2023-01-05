@@ -862,11 +862,9 @@ function Index() {
                             ? QuotationObj?.agentObj?.phone
                             : "+91 9310 985 146"}
 
-                          {/* +91 9310 985 146 */}
                         </li>
                         <li className="fw-semibold gap-2">
                           <img src={images.gmail} alt="" />
-                          {/* sales15.nitsaholidays@gmail.com */}
                           {QuotationObj?.agentObj?.email
                             ? QuotationObj?.agentObj?.email
                             : " sales15.nitsaholidays@gmail.com "}

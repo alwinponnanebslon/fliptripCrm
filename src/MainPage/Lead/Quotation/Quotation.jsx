@@ -30,7 +30,10 @@ import PopUp from "./PopUp";
 
 import { images } from "../../../MainPage/Pdf/Utility/Images";
 // import { images } from "./Utility/Images";
-import { generateFilePath, generateFilePathUPload } from "../../../utils/FileURL";
+import {
+  generateFilePath,
+  generateFilePathUPload,
+} from "../../../utils/FileURL";
 
 const ref = React.createRef();
 
@@ -60,13 +63,14 @@ const Quotation = () => {
   const [printPdf, setPrintPdf] = useState(false);
   const [QuotationObj, setQuotationObj] = useState({});
   const [tourObj, settourObj] = useState({
-    mainImage:images.top_left,
-    itenaryImage:images.travelling,
-  })
+    mainImage: images.top_left,
+    itenaryImage: images.travelling,
+  });
 
+  const [spocImageBase64, setspocImageBase64] = useState("");
   useEffect(() => {
     handleInit();
-    console.log(images,"tourObjonload")
+    // console.log(images, "tourObjonload");
   }, []);
 
   // useEffect(() => {
@@ -99,10 +103,6 @@ const Quotation = () => {
   // };
 
   useEffect(() => {
-console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
-  }, [tourObj]);
-
-  useEffect(() => {
     if (quotationStateArr && quotationStateArr?.length > 0) {
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     } else {
@@ -110,6 +110,19 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
+
+  const getBase64 = (file, cb) => {
+    if (file) {
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        cb(reader.result);
+      };
+      reader.onerror = function (error) {
+        // console.log('Error: ', error)
+      };
+    }
+  };
 
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
@@ -123,34 +136,41 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
     return new Promise((res) => setTimeout(() => res(), n));
   };
 
-  const handleDownload =  (row) => {
+  const handleDownload = async (row) => {
     // const input = ;
     // localStorage.setItem("quotationPdf", JSON.stringify(row));
     setQuotationObj(row);
-    if(row && row?.tourListArr && row?.tourListArr.length > 0){
-        let currentObj = row.tourListArr.find(el => el.mainImage);
+    let blob = await fetch(
+      generateFilePath(QuotationObj?.agentObj?.photoUrl)
+    ).then((r) => r.blob());
+    getBase64(blob, (result) => {
+      setspocImageBase64(result);
+    });
 
-        if(currentObj != ""){
-          let temptour ={
-            mainImage:currentObj?.mainImage?generateFilePathUPload(currentObj?.mainImage):images.top_left,
-            itenaryImage:currentObj?.itenaryImage?generateFilePathUPload(currentObj?.itenaryImage):images.travelling
-          }
-          settourObj(temptour);
-        }
+    if (row && row?.tourListArr && row?.tourListArr.length > 0) {
+      let currentObj = row.tourListArr.find((el) => el.mainImage);
+
+      if (currentObj != "") {
+        let temptour = {
+          mainImage: currentObj?.mainImage
+            ? generateFilePathUPload(currentObj?.mainImage)
+            : images.top_left,
+          itenaryImage: currentObj?.itenaryImage
+            ? generateFilePathUPload(currentObj?.itenaryImage)
+            : images.travelling,
+        };
+        settourObj(temptour);
+      }
     }
     dispatch(setQuotationObject(row));
     dispatch(setTour(row));
 
-    
     setPrintPdf(true);
     // setTimeout(() => {
     const input = document.getElementById("mainPdfContainer");
-    // console.log(input, "en2");
 
-    if (input) { 
-      // console.log(row,"input2121")
+    if (input) {
       html2canvas(input).then((canvas) => {
-        // console.log("en2");
         const imgData = canvas.toDataURL("image/png");
         // console.log("en3");
         const pdf = new jsPDF({
@@ -165,7 +185,9 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
           hotfixes: ["px_scaling"],
         });
         pdf.addImage(imgData, "PNG", 0, 0);
-        pdf.save(`${row?.leadObj?.clientObj?.name} - ${row?.destinationName}.pdf`);
+        pdf.save(
+          `${row?.leadObj?.clientObj?.name} - ${row?.destinationName}.pdf`
+        );
       });
     }
 
@@ -331,6 +353,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
       // }
     }
   };
+
   const optionsOfPDF = {
     orientation: "portrait",
     unit: "px",
@@ -345,10 +368,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
       title: "Date",
       dataIndex: "createdAt",
       render: (row, record) => (
-        <div>
-          {moment(record.createdAt).format("DD/MM/YYYY")}
-          
-        </div>
+        <div>{moment(record.createdAt).format("DD/MM/YYYY")}</div>
       ),
     },
     {
@@ -443,11 +463,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
       title: "Download Pdf",
       render: (row, record) => (
         <div className="col-auto float-end ml-auto">
-          <a
-            className="btn add-btn"
-            onClick={() => handleDownload(row)
-            }
-          >
+          <a className="btn add-btn" onClick={() => handleDownload(row)}>
             Download
           </a>
         </div>
@@ -523,7 +539,6 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                 >
                   <i className="fa fa-trash-o m-r-5" /> Delete
                 </a>
-             
               </div>
             </>
           )}
@@ -562,7 +577,6 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
 
   // const quotationObj = useSelector((state) => state.quotation.quotationObj);
 
-
   // useEffect(() => {
   //   if (quotationObj) {
   //     setQuotationObj(quotationObj);
@@ -590,6 +604,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
   };
   //
   //
+
   return (
     <>
       <div className="page-wrapper">
@@ -620,45 +635,21 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                       setShow(true);
                     }}
                   >
-                    <i
-                      className="fa fa-plus"
-                    />
+                    <i className="fa fa-plus" />
                     Add Quote
                   </a>
                 </div>
               )}
             </div>
-            {/* <div className="list_group_qoute pt-5">
-            <div className="row">
-              <div className="col-lg-12">
-                <div className="list_qoute">
-                  <ul>
-                    <li>
-                      <a className="active">All</a>{" "}
-                    </li>
-                    <li>
-                      <a>Home</a>{" "}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div> */}
           </div>
           <div className="drp-area">
             <div className="row">
-              {/* <div className="col-lg-2">
-              <Select options={options} placeholder="Destinations " />
-            </div> */}
               <div className="col-lg-2">
                 <Select
                   options={options1}
                   placeholder="Month of Travel"
-                  // value={Obj}
                   onChange={(e) => {
-                    // console.log(e, "asd");
                     setMonthValued(e.value);
-                    // setCitiesObj(e);
                   }}
                 />
               </div>
@@ -667,9 +658,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                   options={options2}
                   placeholder="Status Type"
                   onChange={(e) => {
-                    // console.log(e, "asd");
                     setStatusValued(e.value);
-                    // setCitiesObj(e);
                   }}
                 />
               </div>
@@ -679,7 +668,6 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
             </div> */}
             </div>
           </div>
-          {/* {console.log(quotationMainArr, "quotationMainArr234")} */}
 
           <div className="row">
             <div className="col-md-12">
@@ -713,15 +701,16 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
 
       {printPdf && (
         <div
-          style={{
-            //  pointerEvents: "none",
-            zIndex: 11011,
-          }}
+          style={
+            {
+              // zIndex: "11011",
+              // display:none
+              // visibility:"hidden"
+              // opacity: "0",
+            }
+          }
         >
-          {/* <div ref={ref}  <main id="mainPdfContainer" > */}
           <div main id="mainPdfContainer">
-            {/* <Pdfile /> */}
-
             {/* 
             
             */}
@@ -739,7 +728,6 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                   <div className="col-12 col-md-6">
                     <div className="right">
                       <div className="d-flex align-items-end justify-content-between right-top">
-                     
                         <img src={images.logo} alt="" className="main-logo" />
                         <ul>
                           <li>
@@ -755,7 +743,10 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                           <li>As quoted on</li>
                           <li>
                             <h5 className="mb-0">
-                              {new Date(QuotationObj?.createdAt).toDateString()}
+                              {moment(QuotationObj?.createdAt).format(
+                                "DD/MM/YYYY"
+                              )}
+                              {/* {new Date(QuotationObj?.createdAt).toDateString()} */}
                               ,{new Date(QuotationObj?.createdAt).getHours()}:
                               {new Date(QuotationObj?.createdAt).getMinutes()}
                             </h5>
@@ -827,43 +818,50 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
             {/* 
       
       
-      */}  {(QuotationObj?.destinationName)?
-            <section className="payment-detail mb-80">
-              <div className="container">
-                <h1 className="fw-bold text-center mb-5 heading">
-                  Destination
-                </h1>
-                {QuotationObj &&
-                  QuotationObj?.tourListArr &&
-                  QuotationObj?.tourListArr.length > 0 &&
-                  QuotationObj?.tourListArr.map((el, i) => {
-                    let str = el?.destinationObj?.description.split(/[.;]/g);
-                    return (
-                      <div className="row" key={i}>
-                        <div className="col-12">
-                          <div className="inclusions">
-                            <div className="box mb-0">
-                              <h4 style={{fontSize:25}} className="purple bg-white">
-                                {el.name}
-                              </h4>
-                              <div className="row">
-                                <div className="col-12 ">
-                                  <ul className="list-circle">
-                                    {str.map((le, i) => {
-                                      return <li key={i}>{le}.</li>;
-                                    })}
-                                  </ul>
+      */}
+            {console.log(QuotationObj, "311323")}
+            {QuotationObj?.destinationName ? (
+              <section className="payment-detail mb-80">
+                <div className="container">
+                  <h1 className="fw-bold text-center mb-5 heading">
+                    Destination
+                  </h1>
+                  {QuotationObj &&
+                    QuotationObj?.tourListArr &&
+                    QuotationObj?.tourListArr.length > 0 &&
+                    QuotationObj?.tourListArr.map((el, i) => {
+                      let str = el?.destinationObj?.description.split(/[.;]/g);
+                      return (
+                        <div className="row" key={i}>
+                          <div className="col-12">
+                            <div className="inclusions">
+                              <div className="box mb-0">
+                                <h4
+                                  style={{ fontSize: 25 }}
+                                  className="purple bg-white"
+                                >
+                                  {el.name}
+                                </h4>
+                                <div className="row">
+                                  <div className="col-12 ">
+                                    <ul className="list-circle">
+                                      {str.map((le, i) => {
+                                        return <li key={i}>{le}.</li>;
+                                      })}
+                                    </ul>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </section>
-            :""}
+                      );
+                    })}
+                </div>
+              </section>
+            ) : (
+              ""
+            )}
             {/* 
       
       
@@ -942,26 +940,66 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                     {QuotationObj?.perPersonAirPortPrice > 0 && (
                       <tr>
                         <td>FLIGHT</td>
-                        <td>{QuotationObj?.perPersonAirPortPrice}</td>
+                        <td>
+                          {QuotationObj?.perPersonAirPortPrice +
+                            QuotationObj?.perChildrenPersonAirPortPrice +
+                            QuotationObj?.perInfantAirPortPrice}
+                        </td>
                         <td>
                           {parseInt(QuotationObj?.perPersonAirPortPrice) *
-                            parseInt(QuotationObj?.numberOfGuest)}
+                            parseInt(
+                              QuotationObj?.travelPassengerObj?.noOfAdults
+                            ) +
+                            parseInt(
+                              QuotationObj?.perChildrenPersonAirPortPrice
+                            ) *
+                              (parseInt(
+                                QuotationObj?.travelPassengerObj
+                                  ?.noOfChildrenWithBed
+                              ) +
+                                parseInt(
+                                  QuotationObj?.travelPassengerObj
+                                    ?.noOfChildrenWithoutBed
+                                )) +
+                            parseInt(QuotationObj?.perInfantAirPortPrice) *
+                              parseInt(
+                                QuotationObj?.travelPassengerObj?.noOfInfants
+                              )}
                         </td>
                       </tr>
                     )}
                     {QuotationObj?.perPersonLandPrice > 0 && (
                       <tr>
                         <td>LAND</td>
-                        <td>{QuotationObj?.perPersonLandPrice}</td>
+                        <td>
+                          {QuotationObj?.perPersonLandPrice +
+                            QuotationObj?.perChildrenLandPrice +
+                            QuotationObj?.perInfantLandPrice}
+                        </td>
                         <td>
                           {parseInt(QuotationObj?.perPersonLandPrice) *
-                            parseInt(QuotationObj?.numberOfGuest)}
+                            parseInt(
+                              QuotationObj?.travelPassengerObj?.noOfAdults
+                            ) +
+                            parseInt(QuotationObj?.perChildrenLandPrice) *
+                              (parseInt(
+                                QuotationObj?.travelPassengerObj
+                                  ?.noOfChildrenWithBed
+                              ) +
+                                parseInt(
+                                  QuotationObj?.travelPassengerObj
+                                    ?.noOfChildrenWithoutBed
+                                )) +
+                            parseInt(QuotationObj?.perInfantLandPrice) *
+                              parseInt(
+                                QuotationObj?.travelPassengerObj?.noOfInfants
+                              )}
                         </td>
                       </tr>
                     )}
                   </tbody>
                   <tfoot>
-                    <tr>
+                    {/* <tr>
                       <td>TOTAL</td>
                       <td>
                         {parseInt(QuotationObj?.perPersonAirPortPrice) *
@@ -971,7 +1009,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                         {parseInt(QuotationObj?.perPersonLandPrice) *
                           parseInt(QuotationObj?.numberOfGuest)}
                       </td>
-                    </tr>
+                    </tr> */}
                   </tfoot>
                 </table>
                 <ul className="amount mb-0">
@@ -1035,6 +1073,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                 </div>
               </div>
             </section>
+            {console.log(QuotationObj, "QuotationObjQuotationObj1")}
             {QuotationObj &&
               QuotationObj?.flightList &&
               QuotationObj?.flightList?.length > 0 && (
@@ -1047,11 +1086,11 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                     <div className="position-relative">
                       <div className="row">
                         {QuotationObj?.flightList &&
-                          QuotationObj?.flightList &&
                           QuotationObj?.flightList.length > 0 &&
-                          QuotationObj?.flightList
+                          QuotationObj?.flightList[0]?.flightName
+                            ?.split("\n")
                             .filter((el, index, arr) => arr.length - 1 != index)
-                            .map((el, index, arr) => {
+                            .map((ele, index) => {
                               return (
                                 <div className="col-12" key={index}>
                                   <div
@@ -1061,7 +1100,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                                   >
                                     <h6>
                                       <img src={images.location} alt="" />
-                                      {el?.flightName} {index % 2}
+                                      {ele} {index % 2}
                                     </h6>
                                   </div>
                                 </div>
@@ -1070,15 +1109,20 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
 
                         {QuotationObj?.flightList &&
                           QuotationObj?.flightList?.length > 0 &&
-                          QuotationObj?.flightList[
-                          QuotationObj?.flightList.length - 1
+                          QuotationObj?.flightList[0]?.flightName?.split("\n")[
+                            QuotationObj?.flightList[0]?.flightName?.split("\n")
+                              .length - 1
                           ] && (
                             <div className="destination">
                               <h6>
                                 {
-                                  QuotationObj?.flightList[
-                                    QuotationObj?.flightList.length - 1
-                                  ]?.flightName
+                                  QuotationObj?.flightList[0]?.flightName?.split(
+                                    "\n"
+                                  )[
+                                    QuotationObj?.flightList[0]?.flightName?.split(
+                                      "\n"
+                                    ).length - 1
+                                  ]
                                 }
                                 <img src={images.location} alt="" />
                               </h6>
@@ -1198,10 +1242,20 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                                 </h4>
                                 <p className="small">
                                   {/* in {(el.checkIn)} */}
-                                  {/* {new Date(el.checkIn).toDateString()} */} 
-                                  {(index == 0) && moment(QuotationObj?.hotelDetail[0].checkIn).format("DD-MM-YYYY")}
+                                  {/* {new Date(el.checkIn).toDateString()} */}
+                                  {index == 0 &&
+                                    moment(
+                                      QuotationObj?.hotelDetail[0].checkIn
+                                    ).format("DD-MM-YYYY")}
                                   {/* {(index ==  QuotationObj?.itineraryDetails.length-1) &&  moment(QuotationObj?.hotelDetail[0].checkOut).format("DD-MM-YYYY")} */}
-                                  {(index == QuotationObj?.itineraryDetails?.length-1) && moment(QuotationObj?.hotelDetail[QuotationObj?.hotelDetail?.length-1].checkOut).format("DD-MM-YYYY")}
+                                  {index ==
+                                    QuotationObj?.itineraryDetails?.length -
+                                      1 &&
+                                    moment(
+                                      QuotationObj?.hotelDetail[
+                                        QuotationObj?.hotelDetail?.length - 1
+                                      ].checkOut
+                                    ).format("DD-MM-YYYY")}
                                 </p>
                               </div>
                               <div className="box">
@@ -1341,7 +1395,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                       <div className="box mb-0">
                         <h4 className="purple bg-white">Account Details</h4>
                         <div className="row">
-                          <div className="col-12 col-md-7">
+                          <div className="col-12 col-md-5">
                             <ul className="list-circle">
                               <li>
                                 Payment acceptance Mode: IMPS/NEFT Bank transfer
@@ -1359,7 +1413,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                               </li>
                             </ul>
                           </div>
-                          <div className="col-12 col-md-5">
+                          <div className="col-12 col-md-7">
                             <div className="right">
                               <div className="bank">
                                 <img src={images.yes_bank} alt="" />
@@ -1373,7 +1427,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                                 <li>
                                   A/c Num:{" "}
                                   <span className="fw-semibold">
-                                    0184 6190 0001 430
+                                    018461900001430
                                   </span>
                                 </li>
                                 <li>
@@ -1389,11 +1443,11 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                                   </span>
                                 </li>
                                 <li>
-                                Paytm : &nbsp;
+                                  Paytm : &nbsp;
                                   <a
                                     href={`tel:${QuotationObj?.agentObj?.phone}`}
                                   >
-                                     9999 316587{" "}
+                                    9999 316587{" "}
                                   </a>
                                 </li>
                                 <li>
@@ -1401,7 +1455,7 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                                   <a
                                     href={`tel:${QuotationObj?.agentObj?.phone}`}
                                   >
-                                     9999 316597{" "}
+                                    9999 316597{" "}
                                   </a>
                                 </li>
                               </ul>
@@ -1634,13 +1688,14 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                           borderRadius: "55px",
                           height: "120px",
                           width: "120px",
-                          backgroundColor: "red",
+                          backgroundColor: "white",
                         }}
-                        alt={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
-                        src={generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                        alt={QuotationObj?.agentObj?.photoUrl}
+                        src={QuotationObj?.agentObj?.baseImage}
+                        // src={images.yes_bank}
                       />
                     </div>
-                    {generateFilePath(QuotationObj?.agentObj?.photoUrl)}
+                    {/* {generateFilePath(QuotationObj?.agentObj?.photoUrl)}w */}
 
                     <h4 className="name_info">
                       {QuotationObj?.agentObj?.firstName + " "}
@@ -1683,20 +1738,6 @@ console.log(tourObj,"tourObj tourObjtourObjtourObjtourObj")
                             <span>
                               <img src={images.whatsapp} alt="" />{" "}
                             </span>
-                            <img
-                              style={{
-                                borderRadius: "55px",
-                                height: "120px",
-                                width: "120px",
-                                backgroundColor: "red",
-                              }}
-                              alt={generateFilePath(
-                                QuotationObj?.agentObj?.photoUrl
-                              )}
-                              src={generateFilePath(
-                                QuotationObj?.agentObj?.photoUrl
-                              )}
-                            />
                           </a>
                         </li>
 
