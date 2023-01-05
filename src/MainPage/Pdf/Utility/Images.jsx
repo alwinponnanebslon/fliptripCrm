@@ -1,4 +1,4 @@
-import top_left from "../../../assets/images/top-left.png";
+import top_left from "../../../assets/images/top-left.png"
 import logo from "../../../assets/images/logo.png";
 import whatsapp from "../../../assets/images/icon/whatsapp.png";
 import hotel from "../../../assets/images/hotel.png";
@@ -25,6 +25,7 @@ import phone from "../../../assets/images/icon/phone.png";
 import thankyou3 from "../../../assets/images/icon/thankyou3.png";
 import gpay from "../../../assets/images/icon/gpay.png";
 import paytm from "../../../assets/images/icon/paytm.png";
+import yes_bank from "../../../assets/images/yesBank.jpg";
 
 // import img_avatar from "../../../assets/images/img_avatar.png";
 export const images = {
@@ -56,4 +57,5 @@ export const images = {
   // thankyou2,
   // img_avatar,
   thankyou3,
+  yes_bank,
 };

@@ -550,7 +550,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       list[index] = currentObj;
       setflightList([...list]);
     } else {
-      // console.log("ppopopoppo")
+      // console.log("ppopopoppo");
       const list = [...flightList];
 
       const { name, value } = e.target;
@@ -772,10 +772,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   };
 
   const handleAddClickTour = () => {
-    setTravelList([
-      ...travelList,
-      { name: "", startDate: "", endDate: "", mainImage: "", itenaryImage: "" },
-    ]);
+    setTravelList([...travelList, { name: "", startDate: "", endDate: "" , mainImage:"", itenaryImage:"" }]);
   };
 
   const handleLeadValueChange = (e) => {
@@ -833,17 +830,14 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       mainImage: tempList[index].mainImage,
       itenaryImage: tempList[index].itenaryImage,
     };
+  console.log(currentObj ,"currentObj currentObj currentObj");
+    currentObj[name] = value; 
 
-    currentObj[name] = value;
-
-    if (name == "name") {
-      let current = tourValueArr.find((el) => el.name == value);
-      console.log(current, "current");
-      if (current !== "") {
-        currentObj.mainImage = current.mainImage ? current.mainImage : "";
-        currentObj.itenaryImage = current.itenaryImage
-          ? current.itenaryImage
-          : "";
+    if(name=='name'){
+      let current = tourValueArr.find(el => el.name == value);
+      if(current !=="" ){
+        currentObj.mainImage = current.mainImage?current.mainImage:"";
+        currentObj.itenaryImage = current.itenaryImage?current.itenaryImage:"";
       }
     }
 
@@ -1226,7 +1220,6 @@ aria-label="Close"
                                 <label className="col-form-label ">
                                   Tour <span className="text-danger">*</span>
                                 </label>
-
                                 <select
                                   className="form-control"
                                   name="name"
@@ -1243,8 +1236,6 @@ aria-label="Close"
                                     tourArr.map((el, inde) => (
                                       <option key={inde} value={el.name}>
                                         {el.name}
-                                        {el.mainImage}
-                                        {el.itenaryImage}
                                       </option>
                                     ))}
                                 </select>
@@ -1730,7 +1721,7 @@ aria-label="Close"
                   <div className="form-group col-3">
                     <label className="col-form-label ">
                       Visa Required
-                      <span className="text-danger">*</span>
+                      <span className="text-danger"></span>
                     </label>
                   </div>
                   <div className="col-md-9">
