@@ -28,7 +28,16 @@
       src="https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js"
       crossorigin
     ></script>
-
+    <script>
+      $("form").on("focus", "input[type=number]", function (e) {
+        $(this).on("wheel.disableScroll", function (e) {
+          e.preventDefault();
+        });
+      });
+      $("form").on("blur", "input[type=number]", function (e) {
+        $(this).off("wheel.disableScroll");
+      });
+    </script>
     <!-- <base href="/blue/"> -->
     <!-- <base href="/blue/"> -->
     <title>Fliptrip Holidays CRM</title>

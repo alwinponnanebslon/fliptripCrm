@@ -7,7 +7,6 @@ import {
   setQuotationObject,
 } from "../../../redux/features/quotation/quotationSlice";
 
-
 import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
 
 import { clientGet } from "../../../redux/features/client/clientSlice";
@@ -18,7 +17,6 @@ import Button from "react-bootstrap/Button";
 import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateLeadStatus, getById } from "../../../Services/lead.service";
-
 
 const AddQuotation = ({ show, setShow, clearFunction }) => {
   const descriptionRef = useRef();
@@ -40,29 +38,28 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   ]);
   const [isAirport, setIsAirport] = useState(false);
   const [island, setIsLand] = useState(false);
-  const [perPersonLandPrice, setPerPersonLandPrice] = useState(0);
-  const [perPersonAirPortPrice, setPerPersonAirportPrice] = useState(0);
-  const [totalPersonLandPrice, setTotalPersonLandPrice] = useState(0);
-  const [totalPersonAirPortPrice, setTotalPersonAirportPrice] = useState(0);
+  const [perPersonLandPrice, setPerPersonLandPrice] = useState("");
+  const [totalPersonLandPrice, setTotalPersonLandPrice] = useState("");
+  const [totalPersonAirPortPrice, setTotalPersonAirportPrice] = useState("");
   const [quotationObject1, setQuotationObject1] = useState({});
   const [quotationId, setQuotationId] = useState("");
   const [clientsArr, setClientsArr] = useState([]);
 
   ////////traveler details
   const [numberofAdults, setNumberofAdults] = useState(1);
-  const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState(0);
+  const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState("");
   const [numberOfChildrenWithoutBed, setNumberOfChildrenWithoutBed] =
-    useState(0);
-  const [numberOfInfants, setNumberOfInfants] = useState(0);
-
+  useState(0);
+  const [numberOfInfants, setNumberOfInfants] = useState("");
+  
   const [visaRequired, setVisaRequired] = useState(false);
-
+  
   ////
   const [termAndCondition, setTermAndCondition] = useState("");
   //////product details
-
-  const [amount, setAmount] = useState(0);
-  const [tax, setTax] = useState(0);
+  
+  const [amount, setAmount] = useState("");
+  const [tax, setTax] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
   const [tourArr, setTourArr] = useState([]);
   const [airportTransfer, setAirportTransfer] = useState("");
@@ -73,18 +70,18 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isUpateDoc, setIsUpateDoc] = useState(false);
-
+  
   const [IsHotelDetailsRequired, setIsHotelDetailsRequired] = useState(false);
   const [IsFlightDetailsRequired, setIsFlightDetailsRequired] = useState(false);
-
+  
   const [isItineraryDetailsRequired, setIsItineraryDetailsRequired] =
-    useState(false);
-
+  useState(false);
+  
   //hotels details
   const [itineraryList, setItineraryList] = useState([
     { day: "", itineraryName: "", itineraryHeading: "" },
   ]);
-
+  
   const [hotelList, setHotelList] = useState([
     {
       hotelName: "",
@@ -100,27 +97,28 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [flightList, setflightList] = useState([
     {
       flightName: "",
-      cost: 0,
-      childrenCost: 0,
-      infantCost: 0,
+      cost: "",
+      childrenCost: "",
+      infantCost: "",
     },
   ]);
-
+  
   const [isInclusionRequired, setIsInclusionRequired] = useState(false);
   const [inclusionData, setInclusionData] = useState("");
-
+  
+  const [perPersonAirPortPrice, setPerPersonAirportPrice] = useState("");
   const [perChildrenPersonAirPortPrice, setPerChildrenPersonAirportPrice] =
-    useState(0);
+    useState("");
   const [totalChildrenPersonAirportPrice, setTotalChildrenPersonAirportPrice] =
-    useState(0);
+    useState("");
 
-  const [perInfantAirPortPrice, setPerInfantAirportPrice] = useState(0);
-  const [totalInfantAirportPrice, setTotalInfantAirportPrice] = useState(0);
+  const [perInfantAirPortPrice, setPerInfantAirportPrice] = useState("");
+  const [totalInfantAirportPrice, setTotalInfantAirportPrice] = useState("");
 
-  const [perChildrenLandPrice, setPerChildrenLandPrice] = useState(0);
-  const [totalChildrenLandPrice, setTotalChidrenLandPrice] = useState(0);
-  const [perInfantLandPrice, setPerInfantLandPrice] = useState(0);
-  const [totalInfantLandPrice, setTotalInfantLandPrice] = useState(0);
+  const [perChildrenLandPrice, setPerChildrenLandPrice] = useState("");
+  const [totalChildrenLandPrice, setTotalChidrenLandPrice] = useState("");
+  const [perInfantLandPrice, setPerInfantLandPrice] = useState("");
+  const [totalInfantLandPrice, setTotalInfantLandPrice] = useState("");
 
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
@@ -236,9 +234,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           : [
               {
                 flightName: "",
-                cost: 0,
-                childrenCost: 0,
-                infantCost: 0,
+                cost: "",
+                childrenCost: "",
+                infantCost: "",
               },
             ]
       );
@@ -480,11 +478,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           toastError(`Number of nights cannot be less than 0`);
           return;
         }
-        let checkInDate = new Date(list[index]["checkIn"]); 
-        console.log(checkInDate,"checkin date")
+        let checkInDate = new Date(list[index]["checkIn"]);
+        console.log(checkInDate, "checkin date");
         let checkOutDate = new Date();
         checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-        console.log(checkOutDate,"checkoutdat21")
+        console.log(checkOutDate, "checkoutdat21");
         list[index]["checkOut"] = checkOutDate;
       }
 
@@ -620,9 +618,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       ...tempFlightArr,
       {
         flightName: "",
-        cost: 0,
-        childrenCost: 0,
-        infantCost: 0,
+        cost: "",
+        childrenCost: "",
+        infantCost: "",
       },
     ]);
   };
@@ -801,7 +799,6 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setNumberOfInfants(0);
   };
 
-
   const handleEnterNumberOfDays = (value) => {
     if (value < 0 && value) {
       toastError(`Duration of tour cannot be less than 0`);
@@ -824,7 +821,6 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setItineraryList([...itenaryArr]);
     // }
   };
-
 
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
@@ -884,8 +880,8 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   };
 
   const clearFunc = () => {
-    setPerPersonLandPrice(0);
-    setTotalPersonLandPrice(0);
+    setPerPersonLandPrice("");
+    setTotalPersonLandPrice("");
     setDestinationName("");
     setDays(0);
     setDurationOfTour(1);
@@ -895,20 +891,20 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     ]);
     setIsAirport(false);
     setIsLand(false);
-    setNumberofAdults(0);
+    setNumberofAdults("");
     setInclusionData("");
-    setNumberOfChildrenWithBed(0);
-    setNumberOfChildrenWithoutBed(0);
-    setNumberOfInfants(0);
+    setNumberOfChildrenWithBed("");
+    setNumberOfChildrenWithoutBed("");
+    setNumberOfInfants("");
     dispatch(setQuotationObject({}));
-    setPerChildrenPersonAirportPrice(0);
-    setTotalChildrenPersonAirportPrice(0);
-    setPerInfantAirportPrice(0);
-    setTotalInfantAirportPrice(0);
-    setPerChildrenLandPrice(0);
-    setTotalChidrenLandPrice(0);
-    setPerInfantLandPrice(0);
-    setTotalInfantLandPrice(0);
+    setPerChildrenPersonAirportPrice("");
+    setTotalChildrenPersonAirportPrice("");
+    setPerInfantAirportPrice("");
+    setTotalInfantAirportPrice("");
+    setPerChildrenLandPrice("");
+    setTotalChidrenLandPrice("");
+    setPerInfantLandPrice("");
+    setTotalInfantLandPrice("");
     setTermAndCondition("");
     //////product details
     setAmount(0);
@@ -935,11 +931,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setIsItineraryDetailsRequired(false);
     setItineraryList([{ day: "", itineraryName: "" }]);
     setflightList([
-      { flightName: "", cost: 0, childrenCost: 0, infantCost: 0 },
+      { flightName: "", cost: "", childrenCost: "", infantCost: "" },
     ]);
   };
 
-        const updateStatusOfLead = async (id, obj) => {
+  const updateStatusOfLead = async (id, obj) => {
     let { data: res } = await updateLeadStatus(id, obj);
     if (res.success) {
       // handleGetAllLeads();
@@ -1085,14 +1081,13 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       dispatch(quotationAdd(obj));
       setShow(false);
       // window.location.reload();
-      clearFunc(); 
+      clearFunc();
 
       let object = {
         status: "IN_PROGRESS",
       };
 
-updateStatusOfLead(leadId, object);
-
+      updateStatusOfLead(leadId, object);
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
       setShow(false);
@@ -1190,15 +1185,15 @@ updateStatusOfLead(leadId, object);
     }
   }
 
-//   import { updateLeadStatus, getById } from "../../../../Services/lead.service";
+  //   import { updateLeadStatus, getById } from "../../../../Services/lead.service";
 
-//   const updateStatusOfLead = async (id, obj) => {
-//     let { data: res } = await updateLeadStatus(id, obj);
-//     if (res.success) {
-//       // handleGetAllLeads();
-//     }
-//   };
-// updateStatusOfLead(leadId, object);
+  //   const updateStatusOfLead = async (id, obj) => {
+  //     let { data: res } = await updateLeadStatus(id, obj);
+  //     if (res.success) {
+  //       // handleGetAllLeads();
+  //     }
+  //   };
+  // updateStatusOfLead(leadId, object);
 
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
@@ -1947,9 +1942,7 @@ aria-label="Close"
                 
                 */}
                 <div className="form-group row">
-                  <label className="col-form-label col-md-2">
-                    Notes
-                  </label>
+                  <label className="col-form-label col-md-2">Notes</label>
                   <div className="col-md-10">
                     <input
                       type="text"
@@ -2071,7 +2064,7 @@ aria-label="Close"
                             <td>
                               <div className="col-md-10">
                                 <input
-                                  type="number"
+                                  type="text"
                                   className="form-control"
                                   value={[perPersonLandPrice]}
                                   onChange={(e) => {
