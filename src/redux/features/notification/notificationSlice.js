@@ -64,7 +64,7 @@ export const addNotification = createAsyncThunk(
         toastSuccess(response.message);
         // thunkApi.dispatch(notificationGet(`leadId=${payload?.leadId}`));  
         if(payload?.isComment==true){
-
+console.log("indise")
           thunkApi.dispatch(notificationGetForSpecificLead(`${payload?.leadId}`));
         }
       }
@@ -154,7 +154,7 @@ export const notificationGetForSpecificLead = createAsyncThunk(
     try {
       // console.log(query, "query21321");
       let { data: response } = await getNotificationForSpecificLeadApi(query);
-      // console.log(response, "notifications34");
+      console.log(response, "notifications34")    ;
       // console.log(response, "121");
       if (response) {
         // toastSuccess(response.message);

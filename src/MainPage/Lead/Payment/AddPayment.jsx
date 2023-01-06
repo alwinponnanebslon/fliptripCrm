@@ -181,7 +181,7 @@ export const AddPayment = () => {
     if (quotationStateArr) {
       let tempObj = quotationStateArr.find((el) => el.status == "Convert");
       if (tempObj) {
-        console.log(tempObj, "temp12");
+        // console.log(tempObj, "temp12");
         setIsQuotationapproved(true);
         setSelectedQuotation(tempObj);
         let totalFlightCharges =
@@ -226,6 +226,7 @@ export const AddPayment = () => {
     }
   }, [quotationStateArr]);
 
+  
   const handleAddPaymentReceviedRow = () => {
     const list = [...paymentReceviedArr];
     list.push({
@@ -237,6 +238,7 @@ export const AddPayment = () => {
     });
     setPaymentReceviedArr(list);
   };
+
   const handlePaymentInput = (e, index) => {
     const { name, value } = e.target;
     // console.log(name, value);
@@ -462,12 +464,6 @@ export const AddPayment = () => {
   };
 
 
-// useEffect(()=>{
-// console.log(connectEmplyeeWithThisLead,"12313")
-
-// },[])
-  
-  
 
   const handleKeyPress = (event) => {
     let object = {
@@ -505,7 +501,9 @@ export const AddPayment = () => {
         object.CommentUserId.push({userId:el._id}) 
       }
       dispatch(addNotification(object));
-    }
+      setComment("") 
+       handleGetCommentFromNtoifcation() 
+    } 
   };
 
 
@@ -534,13 +532,14 @@ export const AddPayment = () => {
         } else if (role == "ADMIN") {
           object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
           object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-  
+          
         }
         for (let el of connectEmplyeeWithThisLead?.AccountArr) {
           object.CommentUserId.push({userId:el._id}) 
         }
         dispatch(addNotification(object));
-        
+        handleGetCommentFromNtoifcation() 
+        setComment("")
   };
 
 
@@ -712,7 +711,7 @@ export const AddPayment = () => {
                               onChange={(e) => {
                                 handlePaymentInput(e, index);
                               }}
-                            />{" "}
+                            />
                           </td>
                           <td>
                             <input
@@ -793,7 +792,7 @@ export const AddPayment = () => {
                       onChange={(e) => {
                         setComment(e.target.value);
                       }}
-                      onKeyDown={(e) => handleKeyPress(e)}
+                      // onKeyDown={(e) => handleKeyPress(e)}
                       className="form-control"
                       cols="1000"
                       rows="100"
@@ -970,19 +969,7 @@ export const AddPayment = () => {
                           />
                         </div>
                       </div>
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-2">
-                          Invoice Date
-                        </label>
-                        <div className="col-md-10">
-                          <input
-                            type="date"
-                            className="form-control"
-                            value={invoiceDate}
-                            onChange={(e) => setInvoiceDate(e.target.value)}
-                          />
-                        </div>
-                      </div>
+                    
                       <div className="form-group row">
                         <label className="col-form-label col-md-2">
                           Invoice Description

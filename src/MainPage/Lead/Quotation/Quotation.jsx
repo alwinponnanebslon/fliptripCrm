@@ -24,6 +24,7 @@ import {
   quotationFilterGet,
   quotationFilterByStatusGet,
 } from "../../../redux/features/quotation/quotationSlice";
+
 import html2canvas from "html2canvas";
 import AddQuotation from "./AddQuotation";
 import PopUp from "./PopUp";
@@ -68,10 +69,14 @@ const Quotation = () => {
   });
 
   const [spocImageBase64, setspocImageBase64] = useState("");
+
+
   useEffect(() => {
     handleInit();
     // console.log(images, "tourObjonload");
   }, []);
+
+
 
   // useEffect(() => {
   //   if (changeStatus == false) {
@@ -79,6 +84,8 @@ const Quotation = () => {
   //   }
   //   // handleInit();
   // }, [changeStatus]);
+
+
 
   const handleInit = () => {
     //  handleGetAllLeads();
@@ -98,12 +105,14 @@ const Quotation = () => {
       toastError(error);
     }
   };
+
   // const MyDoc = () => {
   //   return <Pdfile />;
   // };
 
-  useEffect(() => {
-    if (quotationStateArr && quotationStateArr?.length > 0) {
+  useEffect(() => { 
+    if (quotationStateArr && quotationStateArr?.length > 0) { 
+
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     } else {
       setIsConvert(false);
@@ -124,6 +133,7 @@ const Quotation = () => {
     }
   };
 
+
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
     setShow(true);
@@ -131,6 +141,7 @@ const Quotation = () => {
     dispatch(setQuotationObject(row)); //=============
     dispatch(setTour(row));
   };
+
 
   const sleep = async (n) => {
     return new Promise((res) => setTimeout(() => res(), n));
@@ -162,6 +173,7 @@ const Quotation = () => {
         settourObj(temptour);
       }
     }
+
     dispatch(setQuotationObject(row));
     dispatch(setTour(row));
 
@@ -253,6 +265,7 @@ const Quotation = () => {
     }
   }, [monthValued]);
 
+
   useEffect(() => {
     if (statusValued != "") {
       let data = {
@@ -263,6 +276,7 @@ const Quotation = () => {
     }
   }, [statusValued]);
 
+  
   const submitQuotation = (row, status) => {
     confirmAlert({
       title: "Are you sure to Convert the Quotation",
@@ -706,7 +720,7 @@ const Quotation = () => {
               // zIndex: "11011",
               // display:none
               // visibility:"hidden"
-              // opacity: "0",
+              opacity: "0",
             }
           }
         >
@@ -807,7 +821,7 @@ const Quotation = () => {
                           <img src={images.gmail} alt="" />
                           {QuotationObj?.agentObj?.email
                             ? QuotationObj?.agentObj?.email
-                            : " sales15.nitsaholidays@gmail.com "}
+                            : "info@fliptrip.in"}
                         </li>
                       </ul>
                     </div>

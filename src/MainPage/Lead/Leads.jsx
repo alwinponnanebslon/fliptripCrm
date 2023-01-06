@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useHistory } from "react-router-dom";
-import {
-  Avatar_02,
-} from "../../Entryfile/imagepath";
+import { Avatar_02 } from "../../Entryfile/imagepath";
 import EditLead from "../../_components/modelbox/EditLead";
 import { Table } from "antd";
 import "antd/dist/antd.css";
@@ -41,17 +39,16 @@ import {
 
 import { admin, leadStatus, rolesObj } from "../../utils/roles";
 
+import { setclientObj } from "../../redux/features/client/clientSlice";
 import {
-  setclientObj,
-} from "../../redux/features/client/clientSlice";
-import { get, updateClient, getFilter } from "../../Services/client.service";
+  get,
+  updateClient,
+  getFilter,
+  searchClientByName,
+} from "../../Services/client.service";
 import { handleCheckCostingSheetExist } from "../../Services/costingSheet.services";
 import { getAllLeadSearchFilter } from "../../Services/lead.service";
 import ViewCostingSheetForm from "../CostingSheet/Forms/basicinputs/CostingSheetForm";
-
-
-
-
 
 const Leads = () => {
   const dispatch = useDispatch();
@@ -59,11 +56,8 @@ const Leads = () => {
   const history = useHistory();
   // const teamLeads = useSelector(getAllTeamLeadsEmployees); //teamlead
 
-
-
   const teamLeads = useSelector((state) => state.employee.employeesArr);
   // // console.log(agents, "12agents");
-
 
   const quotationArray = useSelector((state) => state.quotation.quotationArr);
 
@@ -77,10 +71,6 @@ const Leads = () => {
   const userAuthorise = useSelector((state) => state.auth);
 
   const [clientArr, setClientArr] = useState([]);
-
-
-
-
 
   const userObj = useSelector((state) => state.auth.user);
   const [displayLeadsArr, setDisplayLeadsArr] = useState([]);
@@ -102,10 +92,6 @@ const Leads = () => {
   const [priorityQuery, setPriorityQuery] = useState("");
   const [roleQuery, setRoleQuery] = useState("");
   ///////////////////////////////////////////
-
-
-
-
 
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
@@ -131,11 +117,6 @@ const Leads = () => {
   const [leadArrFilterStatus, setLeadArrFilterStatus] = useState("");
   const [teamLeadFilterId, setTeamLeadFilterId] = useState("");
 
-
-
-
-
-
   const agentSelect = useRef();
 
   const getAllClients = async () => {
@@ -159,9 +140,9 @@ const Leads = () => {
   }, [newClient]);
 
   const handleGetClient = async () => {
-    console.log(filterClientByName)
+    // console.log(filterClientByName, "121212");
     let get1 = await getFilter(`name=${filterClientByName}`);
-
+    // console.log(get1, "get123");
     setClientArr(get1.data.data);
   };
 
@@ -169,24 +150,15 @@ const Leads = () => {
     handleGetClient();
   }, [filterClientByName]);
 
-
-
-
   useEffect(() => {
     dispatch(quotationGet());
   }, []);
-
-
-
 
   useEffect(() => {
     if (quotationArray.length > 0) {
       setQuotationArrData(quotationArray);
     }
   }, [quotationArray]);
-
-
-
 
   const [data, setData] = useState([
     {
@@ -213,8 +185,8 @@ const Leads = () => {
           ? "rgba(255,155,68,0.5)"
           : "#FF9B44"
         : isSelected
-          ? "rgba(255,155,68,0.5)"
-          : "white",
+        ? "rgba(255,155,68,0.5)"
+        : "white",
       padding: 10,
       zIndex: 5,
     }),
@@ -269,7 +241,6 @@ const Leads = () => {
           setDisplayLeadsArr(res.data);
           setLeadsArr(res.data);
         }
-    
       }
     } catch (error) {
       toastError(error);
@@ -281,10 +252,7 @@ const Leads = () => {
     // dispatch(clientGet());
   }, []);
 
-
-
   const handleEdit = (lead) => {
-
     if (lead) {
       setLeadObj(lead);
       setLeadUpdateId(lead._id);
@@ -417,10 +385,8 @@ const Leads = () => {
     reader.onload = function () {
       cb(reader.result);
     };
-    reader.onerror = function (error) { };
+    reader.onerror = function (error) {};
   };
-
-
 
   const handleFileSelection = (event) => {
     if (event.target.files[0]) {
@@ -430,8 +396,6 @@ const Leads = () => {
     }
   };
 
-
-
   const handleFileSelectionPenCard = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -439,8 +403,6 @@ const Leads = () => {
       });
     }
   };
-
-
 
   const handleFileSelectionPassPortFront = (event) => {
     if (event.target.files[0]) {
@@ -450,8 +412,6 @@ const Leads = () => {
     }
   };
 
-
-
   const handleFileSelectionPassPortBack = (event) => {
     if (event.target.files[0]) {
       getBase64(event.target.files[0], (result) => {
@@ -459,8 +419,6 @@ const Leads = () => {
       });
     }
   };
-
-
 
   const handleFilterWithAgentName = (query) => {
     // console.log(query, "query3");
@@ -505,8 +463,6 @@ const Leads = () => {
     }
   };
 
-
-
   const handleClientByAllFilter = async (value1, value2, value3) => {
     // console.log(value1, value2, "value1, value2");(userObj?._id, role)
     let getFilterByTeam = await getAllLeadSearchFilter(
@@ -522,9 +478,6 @@ const Leads = () => {
   useEffect(() => {
     handleClientByAllFilter(leadArrFilterStatus, teamLeadFilterId);
   }, [teamLeadFilterId]);
-
-
-
 
   const handleFilterByTeamLead = (query) => {
     setRoleQuery(query.value);
@@ -638,7 +591,6 @@ const Leads = () => {
   };
 
   const handleUpdateLeadsArray = (value1, value2, value3) => {
-
     let tempArr = leadsArr;
     if (value1 == "OPEN") {
       let temp = tempArr.filter(
@@ -700,8 +652,6 @@ const Leads = () => {
     // setLeadsArr(res.data);
     // dispatch(returnAllEmployees(res.data))
   };
-
-
 
   const handleSubmitLead = async (e) => {
     e.preventDefault();
@@ -959,6 +909,30 @@ const Leads = () => {
       value: "Low",
     },
   ];
+
+  const options_For_FilterClient = [
+    {
+      label: "ALL CLIENT",
+      value: "",
+    },
+    // {
+    //   label: "OPEN",
+    //   value: "OPEN",
+    // },
+    // {
+    //   label: "CONVERTED",
+    //   value: "CONVERTED",
+    // },
+    // {
+    //   label: "INPROGRESS",
+    //   value: "INPROGRESS",
+    // },
+    // {
+    //   label: "CANCEL",
+    //   value: "CANCEL",
+    // },
+  ];
+
   const options_For_Role = [
     {
       label: "Select Priority",
@@ -1003,7 +977,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1116,7 +1090,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1138,7 +1112,7 @@ const Leads = () => {
         <>
           <div>
             {record?.status == leadStatus.on_Hold ||
-              record?.status == leadStatus.cancelled ? (
+            record?.status == leadStatus.cancelled ? (
               <i className="fa fa-dot-circle-o text-danger" />
             ) : record?.status == leadStatus.open ||
               record?.status == leadStatus.reopened ? (
@@ -1162,7 +1136,7 @@ const Leads = () => {
             aria-expanded="false"
           >
             {record?.status == leadStatus.open ||
-              record?.status == leadStatus.reopened ? (
+            record?.status == leadStatus.reopened ? (
               <i className="fa fa-dot-circle-o text-info" />
             ) : record?.status == leadStatus.on_Hold ||
               record?.status == leadStatus.cancelled ? (
@@ -1264,7 +1238,6 @@ const Leads = () => {
     }
   };
 
-
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
     console.log(record, "Record23");
@@ -1315,8 +1288,6 @@ const Leads = () => {
       setShowClientDetails(false);
     }
   };
-
-
 
   // const handleReturndropDown = (record) => {
   //   // // console.log(record?.status, "role");
@@ -1476,10 +1447,6 @@ const Leads = () => {
   // };
 
   const columns_SUPERVISOR = [
-    // {
-    //   title: "Guest Name",
-    //   render: (text, record) => <div>{record.clientName}</div>,
-    // },
     {
       title: "Guest Name",
       dataIndex: "clientName",
@@ -1508,9 +1475,7 @@ const Leads = () => {
       title: "Trip Id",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.uniqueTripId}
-          </div>
+          <div>{record?.uniqueTripId}</div>
         </h2>
       ),
     },
@@ -1518,9 +1483,7 @@ const Leads = () => {
       title: "Lead Subject",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.subject}
-          </div>
+          <div>{record?.subject}</div>
         </h2>
       ),
     },
@@ -1600,9 +1563,11 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -1642,9 +1607,7 @@ const Leads = () => {
       title: "Trip Id",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.uniqueTripId}
-          </div>
+          <div>{record?.uniqueTripId}</div>
         </h2>
       ),
     },
@@ -1652,13 +1615,10 @@ const Leads = () => {
       title: "Lead Subject",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.subject}
-          </div>
+          <div>{record?.subject}</div>
         </h2>
       ),
     },
-
 
     // {
     //   title: "Assigned Team Lead",
@@ -1840,8 +1800,8 @@ const Leads = () => {
       ),
     },
   ];
+
   const columns_TeamLeader = [
-    // { title: "Lead Subject", dataIndex: "subject" },
     {
       title: "Guest Name",
       // dataIndex: "clientName",
@@ -1853,7 +1813,6 @@ const Leads = () => {
         </div>
       ),
     },
-
     {
       title: "Assigned Spoc",
       render: (text, record) => (
@@ -1866,9 +1825,11 @@ const Leads = () => {
               >
                 {/* <img alt="" src={record?.image} /> */}
               </Link>
-              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
-                } ${record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
-                }`}</Link>
+              <Link to={`/admin/employee-profile/${record?.agentObj?._id}`}>{`${
+                record?.agentObj?.firstName ? record?.agentObj?.firstName : "NA"
+              } ${
+                record?.agentObj?.lastName ? record?.agentObj?.lastName : ""
+              }`}</Link>
             </>
           ) : (
             <>
@@ -1889,7 +1850,6 @@ const Leads = () => {
               >
                 NA
               </div>
-              {/* update_agent */}
             </>
           )}
 
@@ -1909,9 +1869,7 @@ const Leads = () => {
       title: "Trip Id",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.uniqueTripId}
-          </div>
+          <div>{record?.uniqueTripId}</div>
         </h2>
       ),
     },
@@ -1919,13 +1877,10 @@ const Leads = () => {
       title: "Lead Subject",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.subject}
-          </div>
+          <div>{record?.subject}</div>
         </h2>
       ),
     },
-    
 
     {
       title: "Created Date",
@@ -1935,7 +1890,7 @@ const Leads = () => {
         </h2>
       ),
     },
-  
+
     {
       title: "Priority",
       render: (text, record) => (
@@ -2067,6 +2022,7 @@ const Leads = () => {
       ),
     },
   ];
+
   const columns_SPOC = [
     {
       title: "Guest Name",
@@ -2083,9 +2039,7 @@ const Leads = () => {
       title: "Trip Id",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.uniqueTripId}
-          </div>
+          <div>{record?.uniqueTripId}</div>
         </h2>
       ),
     },
@@ -2093,9 +2047,7 @@ const Leads = () => {
       title: "Lead Subject",
       render: (text, record) => (
         <h2 className="table-avatar">
-          <div>
-            {record?.subject}
-          </div>
+          <div>{record?.subject}</div>
         </h2>
       ),
     },
@@ -2129,25 +2081,7 @@ const Leads = () => {
         </div>
       ),
     },
-    {
-      title: "Profit",
-      dataIndex: "profit",
-      render: (text, record) => (
-        <div>
-          {role != rolesObj.ACCOUNT ? (
-            <div className="dropdown action-label text-center">
-              {record?.profit > 0 ? (
-                <h4 style={{ color: "green" }}> {record?.profit} </h4>
-              ) : (
-                <h4 style={{ color: "red" }}>{record?.profit}</h4>
-              )}
-            </div>
-          ) : (
-            <div>{record?.status} </div>
-          )}
-        </div>
-      ),
-    },
+
     {
       title: "Personal Details",
       dataIndex: "aasd",
@@ -2537,7 +2471,6 @@ const Leads = () => {
               </div>
             )}
 
-
           {leadArrFilterStatus == "" && (
             <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
               <div className="form-group form-focus select-focus">
@@ -2588,8 +2521,27 @@ const Leads = () => {
               <label className="focus-label">To </label>
             </div>
           </div>
+          <div className="col-sm-6 col-md-3 col-lg-3 col-xl-2 col-12">
+            <div className="form-group form-focus select-focus">
+              <Select
+                onChange={handleFilterByPriority}
+                // menuPortalTarget={document.body}
+                styles={customStyles}
+                options={options_For_FilterClient}
+              />
+              {/* <select className="select floating">
+                <option> -- Select -- </option>
+                <option> High </option>
+                <option> Low </option>
+                <option> Medium </option>
+              </select> */}
+              <label className="focus-label">Client Status</label>
+            </div>
+          </div>
+         
         </div>
-        {console.log(displayLeadsArr, "displayLeadsArrdisplayLeadsArr")}
+
+        {/* {console.log(displayLeadsArr, "displayLeadsArrdisplayLeadsArr")} */}
         <div className="row">
           <div className="col-md-12">
             <div className="table-responsive">
@@ -2608,12 +2560,12 @@ const Leads = () => {
                   role == "ADMIN" || role == "ACCOUNT"
                     ? columns
                     : role == "TEAMLEAD"
-                      ? columns_TeamLeader
-                      : role == "SPOC"
-                        ? columns_SPOC
-                        : role == "SUPERVISOR"
-                          ? columns_SUPERVISOR
-                          : []
+                    ? columns_TeamLeader
+                    : role == "SPOC"
+                    ? columns_SPOC
+                    : role == "SUPERVISOR"
+                    ? columns_SUPERVISOR
+                    : []
                 }
                 // columns={columns}
                 // bordered
@@ -2663,15 +2615,15 @@ const Leads = () => {
           </Modal.Title>
         </Modal.Header>
         <div
-              className="btn-close pt-3"
-              onClick={() => {
-                clearFunc();
-                setShow(false);
-              }}
-            ></div>
+          className="btn-close pt-3"
+          onClick={() => {
+            clearFunc();
+            setShow(false);
+          }}
+        ></div>
         <Modal.Body>
           <form>
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div className="form-group">
                 <label>
                   Lead Subject <span className="text-danger">*</span>{" "}
@@ -2835,7 +2787,7 @@ const Leads = () => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   type={"tel"}
-                  maxLength={10}
+                  // maxLength={10}
                   className="form-control"
                 />
               </div>
@@ -2843,9 +2795,7 @@ const Leads = () => {
 
             <div className="col-md-6">
               <div className="form-group">
-                <label>
-                  Email
-                </label>
+                <label>Email</label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -2868,7 +2818,6 @@ const Leads = () => {
                   <option value="Medium"> Medium</option>
                   <option value="Low">Low</option>
                 </select>
-
               </div>
             </div>
             {/* <Select
@@ -2893,9 +2842,7 @@ const Leads = () => {
               role != rolesObj.ACCOUNT && (
                 <div className="col-md-6">
                   <div className="form-group">
-                    <label>
-                      Assign to Team Lead ({teamLeadsArr.length}){" "}
-                    </label>
+                    <label>Assign to Team Lead ({teamLeadsArr.length}) </label>
 
                     <select
                       className="select form-control"
@@ -2986,9 +2933,7 @@ const Leads = () => {
             )}
 
             <div className="form-group">
-              <label>
-                Description
-              </label>
+              <label>Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}

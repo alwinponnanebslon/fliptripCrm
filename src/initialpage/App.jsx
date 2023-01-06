@@ -50,7 +50,7 @@ export function PublicRoute({ children }) {
   const isAuthorized = useSelector((state) => state.auth.isAuthorized);
   if (!isAuthorized) return <>{children}</>;
   else {
-    return <Redirect to="/admin/dashboard" />;
+    return <Redirect to="/admin/leads" />;
   }
 }
 

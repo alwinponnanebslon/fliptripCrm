@@ -436,8 +436,8 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       for (let el of list) {
         // console.log(el, "el");
         if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
-          toastError("check-Out wil be less than checkin ");
-          return;
+          toastError("check-Out wil be less than checkin. ");
+          // return;
         }
       }
       currentObj[name] = value;
@@ -475,9 +475,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           toastError(`Number of nights cannot be less than 0`);
           return;
         }
-        let checkInDate = new Date(list[index]["checkIn"]);
+        let checkInDate = new Date(list[index]["checkIn"]); 
+        console.log(checkInDate,"checkin date")
         let checkOutDate = new Date();
         checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+        console.log(checkOutDate,"checkoutdat21")
         list[index]["checkOut"] = checkOutDate;
       }
 
@@ -503,7 +505,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       for (let el of list) {
         if (Date.parse(el.checkOut) < Date.parse(el.checkIn)) {
           toastError("check-Out wil be less than checkin ");
-          return;
+          // return;
         }
       }
       list[index][name] = value;
@@ -772,7 +774,10 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   };
 
   const handleAddClickTour = () => {
-    setTravelList([...travelList, { name: "", startDate: "", endDate: "" , mainImage:"", itenaryImage:"" }]);
+    setTravelList([
+      ...travelList,
+      { name: "", startDate: "", endDate: "", mainImage: "", itenaryImage: "" },
+    ]);
   };
 
   const handleLeadValueChange = (e) => {
@@ -817,10 +822,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
-    console.log(tourValueArr, "temp list");
+    console.log(name, value, "799898");
+    // console.log(tourValueArr, "temp list");
 
     let tempList = [...travelList];
-    console.log(tempList, "temp list");
+    // console.log(tempList, "temp list");
     // let totalAmount = 0;
     let currentObj = Object.freeze(travelList[index]);
     currentObj = {
@@ -830,16 +836,40 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       mainImage: tempList[index].mainImage,
       itenaryImage: tempList[index].itenaryImage,
     };
-  console.log(currentObj ,"currentObj currentObj currentObj");
-    currentObj[name] = value; 
+    console.log(currentObj, "currentObj currentObj currentObj");
+    currentObj[name] = value;
 
-    if(name=='name'){
-      let current = tourValueArr.find(el => el.name == value);
-      if(current !=="" ){
-        currentObj.mainImage = current.mainImage?current.mainImage:"";
-        currentObj.itenaryImage = current.itenaryImage?current.itenaryImage:"";
+    if (name == "name") {
+      let current = tourValueArr.find((el) => el.name == value);
+      if (current !== "") {
+        currentObj.mainImage = current.mainImage ? current.mainImage : "";
+        currentObj.itenaryImage = current.itenaryImage
+          ? current.itenaryImage
+          : "";
       }
     }
+    // ================================================
+    // ===================================
+
+    // let list = [...hotelList];
+    // let currentObj1 = Object.freeze(list[0]);
+    // currentObj1 = {
+    //   hotelName: list[0].hotelName,
+    //   roomType: list[0].roomType,
+    //   numberOfNight: list[0].numberOfNight,
+    //   checkIn: list[0].checkIn,
+    //   checkOut: list[0].checkOut,
+    //   rating: list[0].rating,
+    //   hotelAddress: list[0].hotelAddress,
+    // };
+    // if (name == "startDate") {
+    //   let checkInDate = new Date(value);
+    //   currentObj1["checkIn"] = checkInDate;
+    //   // list[index][name] = value;
+    //   list[0] = currentObj1;
+    //   setHotelList([...list]);
+    // }
+    // =====================================
 
     // console.log(currentObj,"itenaryImageitenaryImageitenaryImage")
     tempList[index] = currentObj;
@@ -1050,6 +1080,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     }
     // console.log(obj, "send Obj9");
   };
+
   const options = [
     { value: "true", label: "true" },
     { value: "false", label: "false" },
@@ -1137,7 +1168,6 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           : "60px";
     }
   }
-
 
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
@@ -1423,9 +1453,7 @@ aria-label="Close"
                           </select>
                         </div>
                         <div className="col-2">
-                          <label className="col-form-label ">
-                            Infants
-                          </label>
+                          <label className="col-form-label ">Infants</label>
                           <select
                             className="form-control"
                             value={parseInt(numberOfInfants)}
@@ -1454,9 +1482,7 @@ aria-label="Close"
                   </div>
                 </div>
                 <div className="form-group col-md-6 mt-5">
-                  <label className="text-danger ">
-                    Hotel Details Required
-                  </label>
+                  <label className="text-danger ">Hotel Details Required</label>
                   <input
                     type="checkbox"
                     name="IsHotelDetailsRequired"
@@ -1563,7 +1589,6 @@ aria-label="Close"
                               />
                             </div>
 
-                           
                             <div className="form-group col-md-4">
                               <label>Hotel Address</label>
                               <input
@@ -2045,40 +2070,41 @@ aria-label="Close"
                           </tr>
                         )}
 
-                        {island && (parseInt(numberOfChildrenWithBed)  > 0 ||
-                             parseInt(numberOfChildrenWithoutBed) > 0) &&(
-                          <tr>
-                            <td>Land Children cost</td>
-                            <td>
-                              {parseInt(numberOfChildrenWithBed) +
-                                parseInt(numberOfChildrenWithoutBed)}
-                            </td>
-                            <td>
-                              <div className="col-md-10">
-                                <input
-                                  type="number"
-                                  className="form-control"
-                                  value={perChildrenLandPrice}
-                                  onChange={(e) => {
-                                    if (e.target.value < 0) {
-                                      toastError("cost cannot be negative ");
-                                      return;
-                                    }
-                                    setPerChildrenLandPrice(e.target.value);
-                                    let childrenNumber =
-                                      parseInt(numberOfChildrenWithBed) +
-                                      parseInt(numberOfChildrenWithoutBed);
-                                    setTotalChidrenLandPrice(
-                                      +childrenNumber * e.target.value
-                                    );
-                                  }}
-                                />
-                              </div>
-                            </td>
-                            <td>{totalChildrenLandPrice}</td>
-                          </tr>
-                        )}
-                        {island &&numberOfInfants > 0 &&  (
+                        {island &&
+                          (parseInt(numberOfChildrenWithBed) > 0 ||
+                            parseInt(numberOfChildrenWithoutBed) > 0) && (
+                            <tr>
+                              <td>Land Children cost</td>
+                              <td>
+                                {parseInt(numberOfChildrenWithBed) +
+                                  parseInt(numberOfChildrenWithoutBed)}
+                              </td>
+                              <td>
+                                <div className="col-md-10">
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    value={perChildrenLandPrice}
+                                    onChange={(e) => {
+                                      if (e.target.value < 0) {
+                                        toastError("cost cannot be negative ");
+                                        return;
+                                      }
+                                      setPerChildrenLandPrice(e.target.value);
+                                      let childrenNumber =
+                                        parseInt(numberOfChildrenWithBed) +
+                                        parseInt(numberOfChildrenWithoutBed);
+                                      setTotalChidrenLandPrice(
+                                        +childrenNumber * e.target.value
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              </td>
+                              <td>{totalChildrenLandPrice}</td>
+                            </tr>
+                          )}
+                        {island && numberOfInfants > 0 && (
                           <tr>
                             <td>Land Infant Cost</td>
                             <td>{parseInt(numberOfInfants)}</td>

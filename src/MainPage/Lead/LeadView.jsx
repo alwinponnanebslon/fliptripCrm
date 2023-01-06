@@ -58,7 +58,6 @@ const LeadView = () => {
 
 
   useEffect(() => {
-    // handleInit();
     // console.log(params.search.includes("true"), "params.search.include");
     // console.log(params, "params.search.include");
     if (params.search.includes("true")) {
@@ -67,6 +66,7 @@ const LeadView = () => {
       setShow(true);
     }
   }, []);
+
 
   useEffect(() => {
     let firstload = localStorage.getItem("minheight");
@@ -77,6 +77,8 @@ const LeadView = () => {
       }, 1000);
     }
   });
+
+  
   return (
     <div className="page-wrapper">
       <Helmet>

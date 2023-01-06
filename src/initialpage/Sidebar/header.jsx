@@ -63,8 +63,8 @@ const Header = (props) => {
   const [notificationArr, setNotificationArr] = useState([]);
 
   const dispatch = useDispatch();
-  // const params = useParams();
-  // const leadId = params.leadId;
+  const params = useParams();
+  const leadId = params.leadId;
   
   
   const handlesidebar = () => {

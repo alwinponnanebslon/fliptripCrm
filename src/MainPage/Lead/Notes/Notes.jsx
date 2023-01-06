@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
 import { useLocation, useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+
 import {
   noteGet,
   setnote,
@@ -74,6 +75,7 @@ const Notes = ({ show1, setShow1 }) => {
   useEffect(() => {
     setNoteMainArr(notesResultArr);
   }, [notesResultArr]);
+
 
   const handleEdit = (row) => {
     // console.log(row, "row update"); //whole object
@@ -156,7 +158,6 @@ const Notes = ({ show1, setShow1 }) => {
       // console.log("0987")
       handleSubmit(event);
       
-      // console.log('enter press here!22222222222222222 ')
     }
   }
 
@@ -195,7 +196,7 @@ const Notes = ({ show1, setShow1 }) => {
             <input
                 value={note}
                 onChange={(e) => {
-                  console.log(e.target.value,"12")
+                  // console.log(e.target.value,"12")
                   setNote(e.target.value)
                 }}
                 // useKeypress={(e) => { 
@@ -210,7 +211,7 @@ const Notes = ({ show1, setShow1 }) => {
               />
             </div>
           </div>
-          <div className="col-lg-12 mt-3">
+          {/* <div className="col-lg-12 mt-3">
             <div className="form-group">
               <input
                 type="date"
@@ -223,7 +224,7 @@ const Notes = ({ show1, setShow1 }) => {
                 className="form-control"
               />
             </div>
-          </div>
+          </div> */}
 
           {showButtonVisibility &&
             <Button

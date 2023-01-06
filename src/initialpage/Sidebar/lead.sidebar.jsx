@@ -529,18 +529,7 @@ const LeadSidebar = (props) => {
                                   </li>
 
 
-                                  <li>
-                                    <div className="flex-row">
-                                      <div className="icon">
-                                        <i className="fa fa-phone" aria-hidden="true"></i>
-                                      </div>
-                                      <div className="datanumber">
-                                        <span className="pfc3">Call not picked?</span>
-                                        <span className="pfc2" onClick={handleShow1}>Mark unable to reach customer</span>
-
-                                      </div>
-                                    </div>
-                                  </li>
+                                  
                                   <li>
                                     <div className="flex-row">
                                       <div className="icon">
@@ -678,9 +667,22 @@ const LeadSidebar = (props) => {
                   <Notes />
                 </li> */}
 
-                {/* 
-                
-                */}
+                           {role != "SUPERVISOR" && (
+                  <li
+                    className={pathname?.includes("LeadStatus") ? "active" : ""}
+                  >
+                    <Link
+                      to={`/admin/lead/${leadId}`}
+                      onClick={() => setShowLeadStatusModal(true)}
+                    >
+                      <i className="la la-file-text-o" />
+                      <div className="textblock2">
+                        <span>Lead Status Update</span>
+                      </div>
+                    </Link>
+                  </li>
+                )}
+           
                 {role != "SUPERVISOR" && (
                   <li className="submenu">
                     <a
@@ -717,22 +719,7 @@ const LeadSidebar = (props) => {
 
                 
                 */}
-                {/* z */}
-                {role != "SUPERVISOR" && (
-                  <li
-                    className={pathname?.includes("LeadStatus") ? "active" : ""}
-                  >
-                    <Link
-                      to={`/admin/lead/${leadId}`}
-                      onClick={() => setShowLeadStatusModal(true)}
-                    >
-                      <i className="la la-file-text-o" />
-                      <div className="textblock2">
-                        <span>Lead Status Update</span>
-                      </div>
-                    </Link>
-                  </li>
-                )}
+             
                 {/* <li
                   className={
                     pathname?.includes("Notification")
