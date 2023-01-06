@@ -20,6 +20,7 @@ import { updateLeadStatus, getById } from "../../../../Services/lead.service";
 import { leadGetById } from "../../../../redux/features/lead/leadSlice";
 import { useRef } from "react";
 
+
 const ViewCostingSheetForm = () => {
   const location = useLocation();
   // console.log(location, "location3");
@@ -31,6 +32,7 @@ const ViewCostingSheetForm = () => {
   const costingSheetResultObj = useSelector(
     (state) => state.costingSheet.costingSheets
   );
+
   const [leadName, setLeadName] = useState("");
   const [locationName, setLocationName] = useState("");
   const [profit, setProfit] = useState(0);
@@ -440,10 +442,10 @@ const ViewCostingSheetForm = () => {
 
 
   const handleChangePriceOfAdditionalCost = (value) => {
-if(value<0){
-  toastError("Additional cost cannot be negative ")
-  return
-}
+     if(value<0){
+     toastError("Additional cost cannot be negative ")
+     return
+   }
     let list = [];
     let totalAmount = 0;
     let tempList = inputList;

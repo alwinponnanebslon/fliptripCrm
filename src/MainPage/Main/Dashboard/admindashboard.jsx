@@ -1325,7 +1325,7 @@ const AdminDashboard = () => {
                     </p> */}
                       <p className="mb-0">
                         <i className="fa fa-dot-circle-o text-info me-2" />
-                        Declined Lead
+                        Cancel Lead
                         <span className="float-end">{declinedArr.length}</span>
                       </p>
                     </div>

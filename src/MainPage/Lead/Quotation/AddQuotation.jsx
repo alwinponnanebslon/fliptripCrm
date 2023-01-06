@@ -6,7 +6,10 @@ import {
   quotationUpdate,
   setQuotationObject,
 } from "../../../redux/features/quotation/quotationSlice";
+
+
 import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
+
 import { clientGet } from "../../../redux/features/client/clientSlice";
 import { toastError } from "../../../utils/toastUtils";
 import moment from "moment";
@@ -14,6 +17,8 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import { updateLeadStatus, getById } from "../../../Services/lead.service";
+
 
 const AddQuotation = ({ show, setShow, clearFunction }) => {
   const descriptionRef = useRef();
@@ -796,6 +801,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setNumberOfInfants(0);
   };
 
+
   const handleEnterNumberOfDays = (value) => {
     if (value < 0 && value) {
       toastError(`Duration of tour cannot be less than 0`);
@@ -819,10 +825,11 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     // }
   };
 
+
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
-    console.log(name, value, "799898");
+    // console.log(name, value, "799898");
     // console.log(tourValueArr, "temp list");
 
     let tempList = [...travelList];
@@ -930,6 +937,13 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setflightList([
       { flightName: "", cost: 0, childrenCost: 0, infantCost: 0 },
     ]);
+  };
+
+        const updateStatusOfLead = async (id, obj) => {
+    let { data: res } = await updateLeadStatus(id, obj);
+    if (res.success) {
+      // handleGetAllLeads();
+    }
   };
 
   const handleSubmit = (e) => {
@@ -1071,7 +1085,14 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       dispatch(quotationAdd(obj));
       setShow(false);
       // window.location.reload();
-      clearFunc();
+      clearFunc(); 
+
+      let object = {
+        status: "IN_PROGRESS",
+      };
+
+updateStatusOfLead(leadId, object);
+
     } else {
       dispatch(quotationUpdate({ obj, quotationId }));
       setShow(false);
@@ -1168,6 +1189,16 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           : "60px";
     }
   }
+
+//   import { updateLeadStatus, getById } from "../../../../Services/lead.service";
+
+//   const updateStatusOfLead = async (id, obj) => {
+//     let { data: res } = await updateLeadStatus(id, obj);
+//     if (res.success) {
+//       // handleGetAllLeads();
+//     }
+//   };
+// updateStatusOfLead(leadId, object);
 
   return (
     <div id="add_quote" className="modal custom-modal fade" role="dialog">
@@ -1917,7 +1948,7 @@ aria-label="Close"
                 */}
                 <div className="form-group row">
                   <label className="col-form-label col-md-2">
-                    Term And Condition
+                    Notes
                   </label>
                   <div className="col-md-10">
                     <input

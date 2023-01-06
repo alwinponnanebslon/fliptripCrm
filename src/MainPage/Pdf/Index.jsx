@@ -819,7 +819,7 @@ function Index() {
                     </thead>
                     <tbody>
                       <tr>
-                        <td>FLIGHT</td>
+                        <td>    {QuotationObj?.destinationName}</td>
                         {QuotationObj?.paymentObj?.paymentReceviedArr &&
                           QuotationObj?.paymentObj?.paymentReceviedArr.length >
                             0 &&
@@ -983,115 +983,115 @@ function Index() {
         </div>
       </section>
 
-      <section className="faq mb-80">
-        <div className="container">
-          <h1 className="fw-bold text-center mb-5 heading">FAQ</h1>
-          <div className="row">
-            <div className="col-12">
-              <div className="inclusions">
-                <div className="box mb-0">
-                  <h4 className="purple bg-white">Important Notes</h4>
-                  <ul className="list-auto">
-                    <li>
-                      We are not responsible for any Visa Rejection as it is
-                      government agency that issue visa.
-                    </li>
-                    <li>
-                      Passport should be valid of minimum 06 months till return
-                      date for travelling.
-                    </li>
-                    <li>
-                      Above quotation is valid for Indian Nationals and minimum
-                      of 2 adults travelling together at all times.
-                    </li>
-                    <li>
-                      Above all are subject to availability, no booking made
-                      yet, in case of non- availability similar hotel/services
-                      will be provided.
-                    </li>
-                    <li>
-                      Any request of King Bed or Twin Bed, room near to each
-                      other in case of 2 or more rooms booking in the same hotel
-                      is subject to hotel availability.
-                    </li>
-                    <li>
-                      We have limited inventory hence prices can change without
-                      prior notice. In order to get benefit at the current
-                      proposed prices, we recommend you to book with us
-                      immediately.
-                    </li>
-                    <li>
-                      Early check-in and late checkout is subject to
-                      availability of rooms at the time of check-in and the same
-                      is not guaranteed, you may be charged for guaranteed early
-                      check-in and late checkout.
-                    </li>
-                    <li>
-                      Tourism tax is imposed by Govt. of (Malaysia of 10-15
-                      Ringgit) / (Dubai of 10-15 Dirham) per room per night
-                      which is to be paid at hotel only, and cost is not
-                      included in the cost of package.
-                      <ul className="list-circle">
-                        <li>
-                          National Park fee is charged on island visit in
-                          Thailand 400 PHB per Adult/ 200 PHB per Child which is
-                          to be paid at island directly, and cost is not
-                          included in the cost of package.
-                        </li>
-                        <li>
-                          Hotels may charge security fee which is refundable at
-                          Check-out time.
-                        </li>
-                        <li>
-                          Gratuities imposed on cruise are not included in the
-                          package unless mentioned separately.
-                        </li>
-                        <li>
-                          All inclusions / Activities remain same but sometimes
-                          the sequence of day to day schedule (itinerary) may
-                          change depending upon availability and local
-                          conditions when the final itinerary received.
-                        </li>
-                        <li>
-                          RTPCR test is not included in the package unless
-                          mentioned. RTPCR to be given by hotel/resort as
-                          complimentary is solely hotel discretion. NitSa has no
-                          role and liability on it.
-                        </li>
-                        <li>
-                          Please pay in the company’s account only - Earth
-                          travels (Registered name of NitSa Holidays). Payments
-                          in individual account of agents are not acceptable by
-                          the company.
-                        </li>
-                        <li>
-                          Courier charges / Photo charges developed by us at the
-                          time of visa are not included in the package cost as
-                          it may vary and will be paid additionally by the
-                          client.
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      Flights booking and prices are dynamic and will be
-                      applicable at the time of booking; any difference in fare
-                      amount will be borne by customer before flights being
-                      booked.
-                    </li>
-                    <li>
-                      USD/SGD fluctuation will be taken into consideration. ROE
-                      Calculation = Current XE + 1.5. Final amount of the
-                      package will be as per the USD/SGD rate on the date of
-                      final payment and difference amount will be adjusted in
-                      package amount.
-                    </li>
-                  </ul>
+        {/* <section className="faq mb-80">
+          <div className="container">
+            <h1 className="fw-bold text-center mb-5 heading">FAQ</h1>
+            <div className="row">
+              <div className="col-12">
+                <div className="inclusions">
+                  <div className="box mb-0">
+                    <h4 className="purple bg-white">Important Notes</h4>
+                    <ul className="list-auto">
+                      <li>
+                        We are not responsible for any Visa Rejection as it is
+                        government agency that issue visa.
+                      </li>
+                      <li>
+                        Passport should be valid of minimum 06 months till return
+                        date for travelling.
+                      </li>
+                      <li>
+                        Above quotation is valid for Indian Nationals and minimum
+                        of 2 adults travelling together at all times.
+                      </li>
+                      <li>
+                        Above all are subject to availability, no booking made
+                        yet, in case of non- availability similar hotel/services
+                        will be provided.
+                      </li>
+                      <li>
+                        Any request of King Bed or Twin Bed, room near to each
+                        other in case of 2 or more rooms booking in the same hotel
+                        is subject to hotel availability.
+                      </li>
+                      <li>
+                        We have limited inventory hence prices can change without
+                        prior notice. In order to get benefit at the current
+                        proposed prices, we recommend you to book with us
+                        immediately.
+                      </li>
+                      <li>
+                        Early check-in and late checkout is subject to
+                        availability of rooms at the time of check-in and the same
+                        is not guaranteed, you may be charged for guaranteed early
+                        check-in and late checkout.
+                      </li>
+                      <li>
+                        Tourism tax is imposed by Govt. of (Malaysia of 10-15
+                        Ringgit) / (Dubai of 10-15 Dirham) per room per night
+                        which is to be paid at hotel only, and cost is not
+                        included in the cost of package.
+                        <ul className="list-circle">
+                          <li>
+                            National Park fee is charged on island visit in
+                            Thailand 400 PHB per Adult/ 200 PHB per Child which is
+                            to be paid at island directly, and cost is not
+                            included in the cost of package.
+                          </li>
+                          <li>
+                            Hotels may charge security fee which is refundable at
+                            Check-out time.
+                          </li>
+                          <li>
+                            Gratuities imposed on cruise are not included in the
+                            package unless mentioned separately.
+                          </li>
+                          <li>
+                            All inclusions / Activities remain same but sometimes
+                            the sequence of day to day schedule (itinerary) may
+                            change depending upon availability and local
+                            conditions when the final itinerary received.
+                          </li>
+                          <li>
+                            RTPCR test is not included in the package unless
+                            mentioned. RTPCR to be given by hotel/resort as
+                            complimentary is solely hotel discretion. NitSa has no
+                            role and liability on it.
+                          </li>
+                          <li>
+                            Please pay in the company’s account only - Earth
+                            travels (Registered name of NitSa Holidays). Payments
+                            in individual account of agents are not acceptable by
+                            the company.
+                          </li>
+                          <li>
+                            Courier charges / Photo charges developed by us at the
+                            time of visa are not included in the package cost as
+                            it may vary and will be paid additionally by the
+                            client.
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        Flights booking and prices are dynamic and will be
+                        applicable at the time of booking; any difference in fare
+                        amount will be borne by customer before flights being
+                        booked.
+                      </li>
+                      <li>
+                        USD/SGD fluctuation will be taken into consideration. ROE
+                        Calculation = Current XE + 1.5. Final amount of the
+                        package will be as per the USD/SGD rate on the date of
+                        final payment and difference amount will be adjusted in
+                        package amount.
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section> */}
 
       <section className="faq mb-80">
         <div className="container">

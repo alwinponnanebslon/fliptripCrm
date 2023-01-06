@@ -130,6 +130,7 @@ const Leads = () => {
     }
   };
 
+
   useEffect(() => {
     if (newClient) {
       setPhone("");
@@ -139,6 +140,8 @@ const Leads = () => {
     }
   }, [newClient]);
 
+
+
   const handleGetClient = async () => {
     // console.log(filterClientByName, "121212");
     let get1 = await getFilter(`name=${filterClientByName}`);
@@ -146,13 +149,16 @@ const Leads = () => {
     setClientArr(get1.data.data);
   };
 
+
   useEffect(() => {
     handleGetClient();
   }, [filterClientByName]);
 
+
   useEffect(() => {
     dispatch(quotationGet());
   }, []);
+
 
   useEffect(() => {
     if (quotationArray.length > 0) {
@@ -479,6 +485,8 @@ const Leads = () => {
     handleClientByAllFilter(leadArrFilterStatus, teamLeadFilterId);
   }, [teamLeadFilterId]);
 
+
+
   const handleFilterByTeamLead = (query) => {
     setRoleQuery(query.value);
     if (leadArrFilterStatus != "") {
@@ -506,9 +514,13 @@ const Leads = () => {
     }
   };
 
+
+
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
   };
+
+
 
   const handleFilterDateFromAndTo = async () => {
     if (leadArrFilterStatus != "") {
@@ -530,6 +542,8 @@ const Leads = () => {
       }
     }
   };
+
+
 
   const handleFilterDateFromAndToAndStatus = async () => {
     if (dateTo != "" && dateFrom != "") {
@@ -841,17 +855,29 @@ const Leads = () => {
       toastError(error);
     }
   };
+
+
+
   const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
   };
+
+
+
 
   useEffect(() => {
     handleCheckCostingSheet(leadId);
   }, []);
 
+
+
+
   const handlePriorityChange = (e) => {
     setPriority(e.value);
   };
+
+
+
 
   const handleAgentChange = (e) => {
     // setLeadId("");
@@ -864,6 +890,8 @@ const Leads = () => {
     setAgentId(e.value);
     // setDestinationId(e.value);
   };
+
+
 
   const handleTeamLeadChange = (e) => {
     // let tempArr = teamLeads.map((el) => {
@@ -933,6 +961,7 @@ const Leads = () => {
     // },
   ];
 
+  
   const options_For_Role = [
     {
       label: "Select Priority",
@@ -1240,7 +1269,7 @@ const Leads = () => {
 
   const handleUpdateClentDetails = (record) => {
     setShowClientDetails(true);
-    console.log(record, "Record23");
+    // console.log(record, "Record23");
     setClientIdForUpdate(record?.clientObj?._id);
   };
 
@@ -2242,7 +2271,7 @@ const Leads = () => {
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
-                        <span className="d-block">New Leads</span>
+                        <span className="d-block">Open Leads</span>
                       </div>
                       {/* <div>
                         <span className="text-danger">-75%</span>

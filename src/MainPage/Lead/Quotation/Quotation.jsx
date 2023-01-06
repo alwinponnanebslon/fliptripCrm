@@ -13,8 +13,8 @@ import Pdfile from "../../../MainPage/Pdf/Index";
 import { jsPDF } from "jspdf";
 // import ReactToPdf from "react-to-pdf";
 import { updateTour, setTour } from "../../../redux/features/tour/tourSlice";
-import { getById } from "../../../Services/lead.service";
 import moment from "moment";
+import { updateLeadStatus, getById } from "../../../Services/lead.service";
 
 import {
   quotationGet,
@@ -31,6 +31,7 @@ import PopUp from "./PopUp";
 
 import { images } from "../../../MainPage/Pdf/Utility/Images";
 // import { images } from "./Utility/Images";
+
 import {
   generateFilePath,
   generateFilePathUPload,
@@ -109,16 +110,29 @@ const Quotation = () => {
   // const MyDoc = () => {
   //   return <Pdfile />;
   // };
+//   
 
-  useEffect(() => { 
-    if (quotationStateArr && quotationStateArr?.length > 0) { 
-
+  const updateStatusOfLead = async (id, obj) => {
+    let { data: res } = await updateLeadStatus(id, obj);
+    if (res.success) {
+      // handleGetAllLeads();
+    }
+  };
+  
+useEffect(() => { 
+  if (quotationStateArr && quotationStateArr?.length > 0) { 
+    // let object = {
+    //   status: "IN_PROGRESS",
+    // };
+    // updateStatusOfLead(leadId, object);
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     } else {
       setIsConvert(false);
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
+
+
 
   const getBase64 = (file, cb) => {
     if (file) {
@@ -276,7 +290,7 @@ const Quotation = () => {
     }
   }, [statusValued]);
 
-  
+
   const submitQuotation = (row, status) => {
     confirmAlert({
       title: "Are you sure to Convert the Quotation",
@@ -833,7 +847,7 @@ const Quotation = () => {
       
       
       */}
-            {console.log(QuotationObj, "311323")}
+            {/* {console.log(QuotationObj, "311323")} */}
             {QuotationObj?.destinationName ? (
               <section className="payment-detail mb-80">
                 <div className="container">
@@ -1087,7 +1101,7 @@ const Quotation = () => {
                 </div>
               </div>
             </section>
-            {console.log(QuotationObj, "QuotationObjQuotationObj1")}
+            {/* {console.log(QuotationObj, "QuotationObjQuotationObj1")} */}
             {QuotationObj &&
               QuotationObj?.flightList &&
               QuotationObj?.flightList?.length > 0 && (
@@ -1147,6 +1161,7 @@ const Quotation = () => {
                   </div>
                 </section>
               )}
+
             {QuotationObj &&
               QuotationObj?.hotelDetail &&
               QuotationObj?.hotelDetail?.length > 0 && (
@@ -1230,6 +1245,7 @@ const Quotation = () => {
                   </div>
                 </section>
               )}
+
             <div className="desp purple-bg py-2 px-4 my-5">
               <p className="text-white m-0 text-center">
                 Prices of Flights and hotels are subject to availability
@@ -1330,7 +1346,7 @@ const Quotation = () => {
                           </thead>
                           <tbody>
                             <tr>
-                              <td>FLIGHT</td>
+                              <td> {QuotationObj?.destinationName}</td>
                               {QuotationObj?.paymentObj?.paymentReceviedArr &&
                                 QuotationObj?.paymentObj?.paymentReceviedArr
                                   .length > 0 &&
@@ -1483,7 +1499,7 @@ const Quotation = () => {
               </div>
             </section>
 
-            <section className="faq mb-80">
+            {/* <section className="faq mb-80">
               <div className="container">
                 <h1 className="fw-bold text-center mb-5 heading">FAQ</h1>
                 <div className="row">
@@ -1594,7 +1610,7 @@ const Quotation = () => {
                   </div>
                 </div>
               </div>
-            </section>
+            </section> */}
 
             <section className="faq mb-80">
               <div className="container">

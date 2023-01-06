@@ -24,17 +24,14 @@ import { notificationGetForSpecificUser } from "../../redux/features/notificatio
 import { getAllLeadSearchQuery } from "../../Services/lead.service";
 import moment from "moment";
 
-
 import {
   reminderGetForOneDay,
   reminderGet,
 } from "../../redux/features/reminder/reminderSlice";
-
-
+import { getFilter } from "../../Services/client.service";
 
 import { leadGet } from "../../redux/features/lead/leadSlice";
 import { handleNotificationGetForSpecificLeadId } from "../../Services/notification.service";
-
 
 const Header = (props) => {
   let history = useHistory();
@@ -65,24 +62,23 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const params = useParams();
   const leadId = params.leadId;
-  
-  
+
   const handlesidebar = () => {
     document.body.classList.toggle("mini-sidebar");
   };
-useEffect(()=>{},[])
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     dispatch(leadGet());
   }, []);
-
 
   useEffect(() => {
     setLeadArr(leadArray);
     // dispatch(leadGet());
   }, [leadArray]);
 
-  const onMenuClik = () => {    
+  const onMenuClik = () => {
     props.onMenuClick();
   };
 
@@ -102,19 +98,18 @@ useEffect(()=>{},[])
     // dispatch(reminderGet(userId));
   };
 
-
   const handleGetCommentFromNtoifcation = async () => {
-    let { data: response }  = await handleNotificationGetForSpecificLeadId(`${leadId}`); 
-    console.log(response,"get2342333")
-    setNotificationArr(response?.data)
+    let { data: response } = await handleNotificationGetForSpecificLeadId(
+      `${leadId}`
+    );
+    // console.log(response,"get2342333")
+    setNotificationArr(response?.data);
   };
-
 
   useEffect(() => {
     handleInit();
-    handleGetCommentFromNtoifcation()
+    handleGetCommentFromNtoifcation();
   }, []);
-
 
   useEffect(() => {
     // console.log(notificationResultArr, "12notificationResultArr23");
@@ -128,33 +123,44 @@ useEffect(()=>{},[])
     setDataArr(notificationResultArr);
   }, [notificationResultArr]);
 
-
-
   useEffect(() => {
     // console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
-
-
   const handleSearchLead = async () => {
-    // const filteredData = await getAllLeadSearchQuery(`name=${query}`);
+    if(query.length>0){
     const filteredData = await getAllLeadSearchQuery(userId, role, `${query}`);
     if (filteredData && filteredData?.data && filteredData?.data?.data) {
       setSearchDataArr(filteredData?.data?.data);
       setShowSearchResult(true);
+    }}
+    if(query.length==0){
+      setSearchDataArr("");
+      setShowSearchResult(false );
     }
-    // const filteredData = await getAllLeadSearchQuery.filter((el) => {
-    // if (value === "") {
-    //   return el.clientObj.name;
-    // } else {
-    //   // return el.clientObj.name.toLowerCase().includes(value);
-    //   setShowSearchResult(true);
-    //   return el?.clientObj?.phone.toLowerCase().includes(value);
-    // }
-    // });
-    // setSearchDataArr(filteredData);
   };
+
+  const handleGetClient = async () => { 
+    if(query.length>0){
+
+    
+    let get1 = await getFilter(`name=${query}`);
+    // console.log(get1, "get123"); 
+    if(get1&&get1?.data&&get1?.data?.data){
+console.log(get1?.data?.data,"get1")
+      setSearchDataArr(get1?.data?.data);
+      setShowSearchResult(true);
+    }}
+  };
+
+  useEffect(() => {
+    // handleGetClient();
+    handleSearchLead()
+    // console.log(query, "1234");
+  }, [query]);
+
+
 
 
   const handleClick = (index) => {
@@ -164,7 +170,6 @@ useEffect(()=>{},[])
     }
 
     setDataArr([...tempList]);
-  
   };
 
   const handleReadNotification = (value) => {
@@ -177,52 +182,26 @@ useEffect(()=>{},[])
       name: "S.NO.",
       selector: (row, index) => index + 1,
       sortable: true,
-      width: "7%",
     },
-    {
-      name: "Subject",
-      selector: (row) => row?.subject,
-      width: "14%",
-    },
+   
     {
       name: "Client Name",
-      selector: (row) => row?.clientObj?.name,
-      width: "10%",
-    },
-    {
-      name: "Client Phone",
-      selector: (row) => row?.clientObj?.phone,
-      width: "15%",
-    },
-
-    {
-      name: "Created By",
-      selector: (row) =>
-        row?.createdBy?.name
-          ? row?.createdBy?.name
-          : "" + " " + row?.createdBy?.email,
-      width: "20%",
-    },
-    {
-      name: "Created At",
-      selector: (row) =>
-        row?.createdAt ? moment(row?.createdAt).format("DD/MM/YYYY") : "",
-      width: "20%",
-    },
-    {
-      name: "View Lead",
-      minWidth: "190px",
-      maxWidth: "181px",
-      cell: (row) => (
-        <button
-          onClick={() => {
-            history.push(`/admin/lead/${row._id}`);
-          }}
-        >
-          <h6 style={{ color: "blue" }}>VIEW</h6>
-        </button>
+      minWidth: "290px",
+      maxWidth: "281px",
+      cell: (row) => ( 
+        <Link
+        to={`/admin/lead/${row._id}`}
+        className="card"
+        
+      >{row?.clientObj?.name}</Link>
+        // <button
+        //   onClick={() => {
+        //     history.push(`/admin/lead/${row._id}`);
+        //   }}
+        // >
+        //   <h6 style={{ color: "blue" }}>{row?.clientObj?.name}</h6>
+        // </button>
       ),
-      width: "15%",
     },
   ];
 
@@ -258,8 +237,11 @@ useEffect(()=>{},[])
         </span>
       </a> */}
       {/* Header Title */}
-      <div className="page-title-box"> 
-      <Link to="/admin/leads"> <h3>Fliptrip Holidays</h3></Link>
+      <div className="page-title-box">
+        <Link to="/admin/leads">
+         
+          <h3>Fliptrip Holidays</h3>
+        </Link>
       </div>
       {/* <a
         id="mobile_btn"
@@ -381,7 +363,11 @@ useEffect(()=>{},[])
                                 className="media notification-custom-box"
                                 key={index}
                                 onClick={() => {
-                                  role=="ACCOUNT"?history.push(`/admin/lead/${el?.leadId}/ViewDetails`): history.push(`/admin/lead/${el?.leadId}`);
+                                  role == "ACCOUNT"
+                                    ? history.push(
+                                        `/admin/lead/${el?.leadId}/ViewDetails`
+                                      )
+                                    : history.push(`/admin/lead/${el?.leadId}`);
                                 }}
                               >
                                 <h4 className="title">
@@ -396,7 +382,11 @@ useEffect(()=>{},[])
 
                                 <p className="desp">{el?.description}</p>
                                 <p className="time">
-                                  { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                  {el?.followDate
+                                    ? moment(el?.followDate).format(
+                                        "DD/MM/YYYY"
+                                      )
+                                    : ""}
                                   at {el?.followTime}
                                 </p>
                               </div>
@@ -414,7 +404,9 @@ useEffect(()=>{},[])
                               <p className="desp">{el?.description}</p>
 
                               <p className="time">
-                              { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                {el?.followDate
+                                  ? moment(el?.followDate).format("DD/MM/YYYY")
+                                  : ""}
                                 {/* {new Date(el?.followDate).toLocaleDateString()} */}
                                 at {el?.followTime}
                               </p>
@@ -441,7 +433,11 @@ useEffect(()=>{},[])
                                   <p className="desp">{ele?.description}</p>
 
                                   <p className="time">
-                                  { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                    {el?.followDate
+                                      ? moment(el?.followDate).format(
+                                          "DD/MM/YYYY"
+                                        )
+                                      : ""}
                                     {/* {new Date(
                                       ele?.followDate
                                     ).toLocaleDateString()}{" "} */}
@@ -546,7 +542,11 @@ useEffect(()=>{},[])
                                 <p className="desp">{el?.description}</p>
 
                                 <p className="time">
-                                { el?.followDate?  moment(el?.followDate).format("DD/MM/YYYY") :""}
+                                  {el?.followDate
+                                    ? moment(el?.followDate).format(
+                                        "DD/MM/YYYY"
+                                      )
+                                    : ""}
                                   {/* {new Date(
                                     el?.followDate
                                   ).toLocaleDateString()}{" "} */}
@@ -680,12 +680,27 @@ useEffect(()=>{},[])
       {/* /Header Menu */}
       {/* Mobile Menu */}
       {showSearchResult && (
-        <div className="container">
+      //   <div
+      //   // onClick={() => setResultsVisible(false)}
+      //   style={{
+      //     cursor: "pointer",
+      //     fontSize: 18,
+      //     fontWeight: "bold",
+      //     position: "sticky",
+      //     top: "-10px",
+      //     right: 0,
+      //     color: "black",
+      //   }}
+      //   className={"ms-auto col-1"}
+      // >
+      //   xe
+      // </div>
+        <div className="container col-4">
           <DashboardTable>
             <DataTable
               columns={category_columns}
               data={
-                searchDataArr && searchDataArr.length > 0 ? searchDataArr : []
+                searchDataArr && searchDataArr.length > 0 ? searchDataArr : ""
               }
               pagination
             />
