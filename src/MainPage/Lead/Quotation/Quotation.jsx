@@ -718,7 +718,7 @@ const Quotation = () => {
               // zIndex: "11011",
               // display:none
               // visibility:"hidden"
-              // opacity: "0",
+              opacity: "0",
             }
           }
         >
