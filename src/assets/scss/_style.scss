@@ -134,6 +134,7 @@
   }
 }
 
+
 .flights {
   background-image: url("../images/flight-bg.png");
   background-size: cover;
@@ -178,6 +179,22 @@
       }
     }
   }
+  
+  .destination-reverse {
+    left: auto;
+    right: 0;
+    text-align: left;
+    h6 {
+     flex-direction: row-reverse;
+    }
+  }
+
+
+
+
+
+
+  
   .box {
     border: 2px dashed #00000040;
     padding: 2pc 2pc;

@@ -49,15 +49,15 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [numberofAdults, setNumberofAdults] = useState(1);
   const [numberOfChildrenWithBed, setNumberOfChildrenWithBed] = useState("");
   const [numberOfChildrenWithoutBed, setNumberOfChildrenWithoutBed] =
-  useState(0);
+    useState(0);
   const [numberOfInfants, setNumberOfInfants] = useState("");
-  
+
   const [visaRequired, setVisaRequired] = useState(false);
-  
+
   ////
   const [termAndCondition, setTermAndCondition] = useState("");
   //////product details
-  
+
   const [amount, setAmount] = useState("");
   const [tax, setTax] = useState("");
   const [isUpdateTour, setIsUpdateTour] = useState(false);
@@ -70,23 +70,23 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [selectedLeadIdArr, setSelectedLeadIdArr] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [isUpateDoc, setIsUpateDoc] = useState(false);
-  
+
   const [IsHotelDetailsRequired, setIsHotelDetailsRequired] = useState(false);
   const [IsFlightDetailsRequired, setIsFlightDetailsRequired] = useState(false);
-  
+
   const [isItineraryDetailsRequired, setIsItineraryDetailsRequired] =
-  useState(false);
-  
+    useState(false);
+
   //hotels details
   const [itineraryList, setItineraryList] = useState([
     { day: "", itineraryName: "", itineraryHeading: "" },
   ]);
-  
+
   const [hotelList, setHotelList] = useState([
     {
       hotelName: "",
       roomType: "",
-      numberOfNight: 0,
+      numberOfNight: 1,
       checkIn: "",
       checkOut: "",
       rating: 0,
@@ -102,10 +102,10 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       infantCost: "",
     },
   ]);
-  
+
   const [isInclusionRequired, setIsInclusionRequired] = useState(false);
   const [inclusionData, setInclusionData] = useState("");
-  
+
   const [perPersonAirPortPrice, setPerPersonAirportPrice] = useState("");
   const [perChildrenPersonAirPortPrice, setPerChildrenPersonAirportPrice] =
     useState("");
@@ -254,7 +254,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
               {
                 hotelName: "",
                 roomType: "",
-                numberOfNight: 0,
+                numberOfNight: 1,
                 checkIn: "",
                 checkOut: "",
                 rating: 0,
@@ -413,8 +413,10 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           return;
         }
         let checkInDate = new Date(currentObj["checkIn"]);
-        let checkOutDate = new Date();
-        checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
+        let checkOutDate = new Date(checkInDate);
+
+        console.log(checkOutDate, "checkOutDate");
+        checkOutDate.setDate(checkOutDate.getDate() + parseInt(value));
         currentObj["checkOut"] = checkOutDate;
       }
 
@@ -480,7 +482,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         }
         let checkInDate = new Date(list[index]["checkIn"]);
         console.log(checkInDate, "checkin date");
-        let checkOutDate = new Date();
+        let checkOutDate = new Date(checkInDate);
         checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
         console.log(checkOutDate, "checkoutdat21");
         list[index]["checkOut"] = checkOutDate;
@@ -705,7 +707,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       {
         hotelName: "",
         roomType: "",
-        numberOfNight: 0,
+        numberOfNight: 1,
         checkIn: tempHotelArr[tempHotelArr.length - 1].checkOut,
         checkOut: "",
         rating: 0,
@@ -797,6 +799,14 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     setNumberOfChildrenWithBed(0);
     setNumberOfChildrenWithoutBed(0);
     setNumberOfInfants(0);
+
+    setPerChildrenLandPrice("");
+    setTotalChidrenLandPrice("");
+    setPerInfantLandPrice("");
+    setTotalInfantLandPrice("");
+    // setflightList([
+    //   {  childrenCost: "", infantCost: "" },
+    // ]);
   };
 
   const handleEnterNumberOfDays = (value) => {
@@ -850,6 +860,27 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           ? current.itenaryImage
           : "";
       }
+    }
+    if (name == "startDate") {
+      let list = [...hotelList];
+      let currentObj1 = Object.freeze(list[0]);
+      let selectedLastDate = new Date(value);
+      selectedLastDate.setDate(selectedLastDate.getDate() + 1);
+
+      currentObj1 = {
+        hotelName: list[0].hotelName,
+        roomType: list[0].roomType,
+        numberOfNight: list[0].numberOfNight,
+        checkIn: new Date(value),
+        checkOut: new Date(selectedLastDate),
+        rating: list[0].rating,
+        hotelAddress: list[0].hotelAddress,
+      };
+      let checkInDate = new Date(value);
+      console.log(value, "checkInDate");
+      currentObj1.checkIn = value;
+      console.log(list, "list", currentObj1);
+      setHotelList([currentObj1]);
     }
     // ================================================
     // ===================================
@@ -919,7 +950,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       {
         hotelName: "",
         roomType: "",
-        numberOfNight: 0,
+        numberOfNight: 1,
         checkIn: "",
         checkOut: "",
         rating: 0,
@@ -1058,9 +1089,18 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         +totalChildrenLandPrice +
         +totalInfantLandPrice,
       //===================
-      perPersonLandPrice,
-      perChildrenLandPrice,
-      perInfantLandPrice,
+      perPersonLandPrice:
+        perPersonLandPrice == "" || perPersonLandPrice == null
+          ? 0
+          : perPersonLandPrice,
+      perChildrenLandPrice:
+        perChildrenLandPrice == "" || perPersonLandPrice == null
+          ? 0
+          : perChildrenLandPrice,
+      perInfantLandPrice:
+        perInfantLandPrice == "" || perPersonLandPrice == null
+          ? 0
+          : perInfantLandPrice,
       // amount,
       termAndCondition,
       inclusionData,
@@ -1578,6 +1618,7 @@ aria-label="Close"
 
                             <div className="form-group col-md-4">
                               <label> Check In </label>
+                              {/* {hotel.checkIn} */}
                               <input
                                 type="date"
                                 name="checkIn"

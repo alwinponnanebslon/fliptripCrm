@@ -28,7 +28,10 @@ import {
   updatePaymentInvoice,
 } from "../../../redux/features/paymentInvoice/paymentInvoiceSlice";
 
-import { addNotification, setNotification } from "../../../redux/features/notification/notificationSlice";
+import {
+  addNotification,
+  setNotification,
+} from "../../../redux/features/notification/notificationSlice";
 import { add } from "../../../Services/costingSheet.services";
 import { updateLeadStatus, getById } from "../../../Services/lead.service";
 import { getApprovedQuotation } from "../../../Services/quotation.service.js";
@@ -59,7 +62,7 @@ export const AddPayment = () => {
 
   const [quotationArr, setQuotationArr] = useState([]);
   const { leadId } = useParams();
-  console.log(leadId,"leadid12")
+  console.log(leadId, "leadid12");
   const [selectedQuotation, setSelectedQuotation] = useState({});
   const [isQuotationapproved, setIsQuotationapproved] = useState(false);
   const [quotationId, setQuotationId] = useState("");
@@ -106,25 +109,23 @@ export const AddPayment = () => {
   const [showButtonVisibility, setShowButtonVisibility] = useState(false);
   const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
     []
-    );
-    
-    const userObj = useSelector((state) => state.auth.user);
-    const [createdBy, setCreatedBy] = useState({});
-    
-    const [notificationArr, setNotificationArr] = useState([]);
-    const [printPdf, setPrintPdf] = useState(false);
-    const [QuotationObj, setQuotationObj] = useState({});
-    const [spocImageBase64, setspocImageBase64] = useState("");
-    const [tourObj, settourObj] = useState({
-      mainImage: images.top_left,
-      itenaryImage: images.travelling,
-    });
+  );
+
+  const userObj = useSelector((state) => state.auth.user);
+  const [createdBy, setCreatedBy] = useState({});
+
+  const [notificationArr, setNotificationArr] = useState([]);
+  const [printPdf, setPrintPdf] = useState(false);
+  const [QuotationObj, setQuotationObj] = useState({});
+  const [spocImageBase64, setspocImageBase64] = useState("");
+  const [tourObj, settourObj] = useState({
+    mainImage: images.top_left,
+    itenaryImage: images.travelling,
+  });
 
   useEffect(() => {
     setCreatedBy(userObj);
   }, [userObj]);
-
-
 
   const handleGetAllEmployees = async () => {
     try {
@@ -140,28 +141,24 @@ export const AddPayment = () => {
     }
   };
 
-
-
   const handleGetCommentFromNtoifcation = async () => {
-    let { data: response }  = await handleNotificationGetForSpecificLeadId(`${leadId}`); 
-    console.log(response,"get2342")
-    setNotificationArr(response?.data)
+    let { data: response } = await handleNotificationGetForSpecificLeadId(
+      `${leadId}`
+    );
+    console.log(response, "get2342");
+    setNotificationArr(response?.data);
   };
-
 
   const handleInit = () => {
     dispatch(quotationGet(`leadId=${leadId}`));
     // dispatch(notificationGet(`leadId=${leadId}&role=${role}`));
   };
 
-
   useEffect(() => {
     handleInit();
     handleGetAllEmployees();
     handleGetCommentFromNtoifcation();
   }, []);
-
-
 
   // useEffect(() => {
   //   setNoteMainArr(notesResultArr);
@@ -179,10 +176,9 @@ export const AddPayment = () => {
     }
   };
 
-
-  const handleDownload = async () => { 
+  const handleDownload = async () => {
     let arr = await getApprovedQuotation(leadId);
-    let row=arr?.data?.data
+    let row = arr?.data?.data;
     setQuotationObj(arr?.data?.data);
     // const input = ;
     // localStorage.setItem("quotationPdf", JSON.stringify(row));
@@ -238,11 +234,7 @@ export const AddPayment = () => {
         );
       });
     }
-
-  
   };
-
-
 
   useEffect(() => {
     setPaymentObj(quotationPaymentObj);
@@ -313,7 +305,6 @@ export const AddPayment = () => {
     }
   }, [quotationStateArr]);
 
-  
   const handleAddPaymentReceviedRow = () => {
     const list = [...paymentReceviedArr];
     list.push({
@@ -447,11 +438,7 @@ export const AddPayment = () => {
     }
   };
 
-
-
-
-  const handleSubmit = () => { 
-    
+  const handleSubmit = () => {
     const validation = paymentReceviedArr.every(
       (item) => item.installmentAmount
     );
@@ -498,13 +485,9 @@ export const AddPayment = () => {
     dispatch(deletePaymentInvoice(id));
   };
 
-
-
   useEffect(() => {
     setPerfomaInvoiceArr(payMentInvoiceArr);
   }, [payMentInvoiceArr]);
-
-
 
   useEffect(() => {
     if (perfomaInvoiceObj) {
@@ -517,8 +500,6 @@ export const AddPayment = () => {
       );
     }
   }, [perfomaInvoiceObj]);
-
-
 
   const handlePerfomaInvoiceSubmit = (e) => {
     e.preventDefault();
@@ -566,268 +547,285 @@ export const AddPayment = () => {
     setTcs(e);
   };
 
-
-
   const handleKeyPress = (event) => {
     let object = {
       heading: comment,
       // description,
-      // userId, 
-      CommentUserId:[],
+      // userId,
+      CommentUserId: [],
       leadId,
       followDate: new Date().toLocaleDateString(),
       createdBy: { ...createdBy, role },
       followTime: new Date().toLocaleTimeString(),
-      isComment:true
-    }; 
-    console.log(role,"12313")
+      isComment: true,
+    };
+    console.log(role, "12313");
     if (event.key === "Enter") {
       // dispatch(addNotification(object));
       if (role == "SPOC") {
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
-
-     
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.adminObj?._id,
+        });
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.leadId,
+        });
       } else if (role == "TEAMLEAD") {
-   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-
-    
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.agentId,
+        });
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.adminObj?._id,
+        });
       } else if (role == "ADMIN") {
-        
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.agentId,
+        });
+        object.CommentUserId.push({
+          userId: connectEmplyeeWithThisLead?.leadId,
+        });
       }
       for (let el of connectEmplyeeWithThisLead?.AccountArr) {
-
-        object.CommentUserId.push({userId:el._id}) 
+        object.CommentUserId.push({ userId: el._id });
       }
       dispatch(addNotification(object));
-      setComment("") 
-       handleGetCommentFromNtoifcation() 
-    } 
+      setComment("");
+      handleGetCommentFromNtoifcation();
+    }
   };
-
 
   const handleSubmitComment = (event) => {
     // console.log(role,"role23")
     let object = {
       heading: comment,
       // userId,
-      CommentUserId:[],
+      CommentUserId: [],
       leadId,
       followDate: new Date().toLocaleDateString(),
       createdBy: { ...createdBy, role },
       followTime: new Date().toLocaleTimeString(),
-      isComment:true
+      isComment: true,
     };
-        if (role == "SPOC") {
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
-  
-       
-        } else if (role == "TEAMLEAD") {
-     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-  
-      
-        } else if (role == "ADMIN") {
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-          
-        }
-        for (let el of connectEmplyeeWithThisLead?.AccountArr) {
-          object.CommentUserId.push({userId:el._id}) 
-        }
-        dispatch(addNotification(object));
-        handleGetCommentFromNtoifcation() 
-        setComment("")
+    if (role == "SPOC") {
+      object.CommentUserId.push({
+        userId: connectEmplyeeWithThisLead?.adminObj?._id,
+      });
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId });
+    } else if (role == "TEAMLEAD") {
+      object.CommentUserId.push({
+        userId: connectEmplyeeWithThisLead?.agentId,
+      });
+      object.CommentUserId.push({
+        userId: connectEmplyeeWithThisLead?.adminObj?._id,
+      });
+    } else if (role == "ADMIN") {
+      object.CommentUserId.push({
+        userId: connectEmplyeeWithThisLead?.agentId,
+      });
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId });
+    }
+    for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+      object.CommentUserId.push({ userId: el._id });
+    }
+    dispatch(addNotification(object));
+    handleGetCommentFromNtoifcation();
+    setComment("");
   };
 
+  const getDates = (startDate, stopDate) => {
+    var dateArray = [];
+    var currentDate = moment(startDate);
+    var stopDate = moment(stopDate);
+    while (currentDate <= stopDate) {
+      dateArray.push(moment(currentDate).format("YYYY-MM-DD"));
+      currentDate = moment(currentDate).add(1, "days");
+    }
 
-  
-  return ( 
+    return dateArray.map((el, index) => {
+      return <li key={index}>{new Date(el).toDateString()}</li>;
+    });
+  };
+
+  return (
     <>
-    <div className="page-wrapper">
-      <Helmet>
-        <title>Payment</title>
-        <meta name="description" content="Login page" />
-      </Helmet>
-      <div className="container-fluid p-0">
-        <div className="page-header caret_qotepage">
-          <div className="row align-items-center">
-            <div className="col">
-              <h3 className="page-title">
-                <i className="la la-file-text-o" />
-                Payment Details
-              </h3>
-              <ul className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <Link to="/app/main/dashboard">Dashboard</Link>
-                </li>
-                <li className="breadcrumb-item active"></li>
-              </ul>
+      <div className="page-wrapper">
+        <Helmet>
+          <title>Payment</title>
+          <meta name="description" content="Login page" />
+        </Helmet>
+        <div className="container-fluid p-0">
+          <div className="page-header caret_qotepage">
+            <div className="row align-items-center">
+              <div className="col">
+                <h3 className="page-title">
+                  <i className="la la-file-text-o" />
+                  Payment Details
+                </h3>
+                <ul className="breadcrumb">
+                  <li className="breadcrumb-item">
+                    <Link to="/app/main/dashboard">Dashboard</Link>
+                  </li>
+                  <li className="breadcrumb-item active"></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        {/* {console.log(selectedQuotation, "selectedQuotation213")} */}
+          {/* {console.log(selectedQuotation, "selectedQuotation213")} */}
 
-        {isQuotationapproved ? (
-          <div className="modal-body">
-            <div style={{ fontSize: 19 }}>
-              Quotation Details{" "}
-              <Link
-                to={`/admin/lead/${leadId}/viewquotePayment`}
-                className="btn btn-primary"
-              >
-                View Payment
-              </Link>
-            </div>
-            <div className="row">
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <label className="col-form-label">
-                    Quotation Name : {selectedQuotation?.destinationName}
-                  </label>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <label className="col-form-label">
-                    Number Of Guest : {selectedQuotation?.numberOfGuest}
-                  </label>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <label className="col-form-label">
-                    Duration Of Tour: {selectedQuotation?.durationOfTour}{" "}
-                  </label>
-                </div>
-              </div>
-              <div className="col-sm-6">
-                <div className="form-group">
-                  <label className="col-form-label">
-                    Status:{selectedQuotation?.status}
-                  </label>
-                </div>
-              </div>
-            </div>
-            <hr />
-
-            <div style={{ fontSize: 19 }}>Payment Details</div>
-
-            <div className="row">
-              <div className="col-sm-4"></div>
-              <div className="col-sm-4">
-                <div className="form-group">
-                  <label className="col-form-label">Flight Price</label>
-                  <br />
-                  <label className="col-form-label">
-                    Land Price<span className="text-danger">*</span>
-                  </label>
-                  <br />
-                  <label className="col-form-label mt-4">
-                    TCS <span className="text-danger">*</span>
-                    {/* <button> edit</button> */}
-                  </label>
-                  <br />
-
-                  <label className="col-form-label mt-3">TOTAL</label>
-                  <br />
-                </div>
-              </div>
-              <div className="col-sm-4">
-                {/* <input className="form-control" value={flightCharges} disabled onChange={(e) => setFlightCharges(e.target.value)} type="number" /> */}
-                {/* <input className="form-control mt-2" value={landCharges} disabled onChange={(e) => setLandCharges(e.target.value)} type="number" /> */}
-                <p>Rs. {flightCharges}</p>
-                <p>Rs. {landCharges}</p>
-
-                <input
-                  readOnly={handleEditInputInTcs == false ? true : false}
-                  className="form-control mt-2"
-                  value={tcs}
-                  onChange={(e) => handleCheckTcs(e.target.value)}
-                  type="number"
-                  // button="edit"
-                />
-                <button
-                  className="btn btn-primary mt-4"
-                  onClick={(e) => {
-                    setHandleEditInputInTcs(!handleEditInputInTcs);
-                  }}
+          {isQuotationapproved ? (
+            <div className="modal-body">
+              <div style={{ fontSize: 19 }}>
+                Quotation Details{" "}
+                <Link
+                  to={`/admin/lead/${leadId}/viewquotePayment`}
+                  className="btn btn-primary"
                 >
-                  {handleEditInputInTcs ? "FREEZE" : "EDIT"}
-                </button>
-                <p className="mt-5">Rs. {total}</p>
+                  View Payment
+                </Link>
               </div>
-            </div>
-            <hr />
+              <div className="row">
+                <div className="col-sm-6">
+                  <div className="form-group">
+                    <label className="col-form-label">
+                      Quotation Name : {selectedQuotation?.destinationName}
+                    </label>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="form-group">
+                    <label className="col-form-label">
+                      Number Of Guest : {selectedQuotation?.numberOfGuest}
+                    </label>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="form-group">
+                    <label className="col-form-label">
+                      Duration Of Tour: {selectedQuotation?.durationOfTour}{" "}
+                    </label>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="form-group">
+                    <label className="col-form-label">
+                      Status:{selectedQuotation?.status}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <hr />
 
-            <div style={{ fontSize: 19 }}>Payment Details</div>
+              <div style={{ fontSize: 19 }}>Payment Details</div>
 
-            <div className="row">
-              <div className="col-md-12">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th scope="col">#</th>
-                      <th scope="col">Receiving Date</th>
-                      <th scope="col">Installment Amount</th>
-                      <th scope="col">Amount Transfer/ Status</th>
-                      {/* <th scope="col">Transferable to You</th> */}
-                      <th scope="col">Mark Payment</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paymentReceviedArr &&
-                      paymentReceviedArr.map((item, index) => (
-                        <tr key={index}>
-                          <th scope="row">{index + 1}</th>
-                          <td>
-                            <input
-                              className="form-control mt-2"
-                              type="date"
-                              min={moment(new Date()).format("YYYY-MM-DD")}
-                              onChange={(e) => {
-                                handlePaymentInput(e, index);
-                              }}
-                              name="receviedDate"
-                              value={moment(item.receviedDate).format(
-                                "YYYY-MM-DD"
-                              )}
-                            />
-                          </td>
-                          <td>
-                            {/* <input
+              <div className="row">
+                <div className="col-sm-4"></div>
+                <div className="col-sm-4">
+                  <div className="form-group">
+                    <label className="col-form-label">Flight Price</label>
+                    <br />
+                    <label className="col-form-label">
+                      Land Price<span className="text-danger">*</span>
+                    </label>
+                    <br />
+                    <label className="col-form-label mt-4">
+                      TCS <span className="text-danger">*</span>
+                      {/* <button> edit</button> */}
+                    </label>
+                    <br />
+
+                    <label className="col-form-label mt-3">TOTAL</label>
+                    <br />
+                  </div>
+                </div>
+                <div className="col-sm-4">
+                  {/* <input className="form-control" value={flightCharges} disabled onChange={(e) => setFlightCharges(e.target.value)} type="number" /> */}
+                  {/* <input className="form-control mt-2" value={landCharges} disabled onChange={(e) => setLandCharges(e.target.value)} type="number" /> */}
+                  <p>Rs. {flightCharges}</p>
+                  <p>Rs. {landCharges}</p>
+
+                  <input
+                    readOnly={handleEditInputInTcs == false ? true : false}
+                    className="form-control mt-2"
+                    value={tcs}
+                    onChange={(e) => handleCheckTcs(e.target.value)}
+                    type="number"
+                    // button="edit"
+                  />
+                  <button
+                    className="btn btn-primary mt-4"
+                    onClick={(e) => {
+                      setHandleEditInputInTcs(!handleEditInputInTcs);
+                    }}
+                  >
+                    {handleEditInputInTcs ? "FREEZE" : "EDIT"}
+                  </button>
+                  <p className="mt-5">Rs. {total}</p>
+                </div>
+              </div>
+              <hr />
+
+              <div style={{ fontSize: 19 }}>Payment Details</div>
+
+              <div className="row">
+                <div className="col-md-12">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Receiving Date</th>
+                        <th scope="col">Installment Amount</th>
+                        <th scope="col">Amount Transfer/ Status</th>
+                        {/* <th scope="col">Transferable to You</th> */}
+                        <th scope="col">Mark Payment</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paymentReceviedArr &&
+                        paymentReceviedArr.map((item, index) => (
+                          <tr key={index}>
+                            <th scope="row">{index + 1}</th>
+                            <td>
+                              <input
+                                className="form-control mt-2"
+                                type="date"
+                                min={moment(new Date()).format("YYYY-MM-DD")}
+                                onChange={(e) => {
+                                  handlePaymentInput(e, index);
+                                }}
+                                name="receviedDate"
+                                value={moment(item.receviedDate).format(
+                                  "YYYY-MM-DD"
+                                )}
+                              />
+                            </td>
+                            <td>
+                              {/* <input
                   className="form-control mt-2"
                   value={tcs}
                   onChange={(e) => setTcs(e.target.value)}
                   type="number"
                 /> */}
-                            <input
-                              className="form-control"
-                              type="number"
-                              name="installmentAmount"
-                              value={item.installmentAmount}
-                              onChange={(e) => {
-                                handlePaymentInput(e, index);
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <input
-                              className="form-control"
-                              onChange={(e) => {
-                                handlePaymentInput(e, index);
-                              }}
-                              name="transferStatus"
-                              value={item.transferStatus}
-                            ></input>
-                          </td>
-                          {/* <td>
+                              <input
+                                className="form-control"
+                                type="number"
+                                name="installmentAmount"
+                                value={item.installmentAmount}
+                                onChange={(e) => {
+                                  handlePaymentInput(e, index);
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <input
+                                className="form-control"
+                                onChange={(e) => {
+                                  handlePaymentInput(e, index);
+                                }}
+                                name="transferStatus"
+                                value={item.transferStatus}
+                              ></input>
+                            </td>
+                            {/* <td>
                             <input
                               type="text"
                               name="transferAmount"
@@ -838,78 +836,79 @@ export const AddPayment = () => {
                             />{" "}
                           </td> */}
 
-                          <td>
-                            <select
-                              className="form-control"
-                              value={item.status}
-                              onChange={(e) => {
-                                handlePaymentInput(e, index);
-                              }}
-                              name="status"
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Marked">Marked</option>
-                            </select>
-                          </td>
-                          <td>
-                            {index > 0 && (
-                              <button
-                                className="btn btn-danger"
-                                onClick={(e) => {
-                                  handleRemovePaymentRow(index);
+                            <td>
+                              <select
+                                className="form-control"
+                                value={item.status}
+                                onChange={(e) => {
+                                  handlePaymentInput(e, index);
                                 }}
+                                name="status"
                               >
-                                <i className="fa fa-times"></i>
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-                <div className="col-md-12">
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleAddPaymentReceviedRow}
-                  >
-                    <i className="fa fa-plus"></i> Add
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="submit-section">
-              <button className="btn btn-primary" onClick={handleSubmit}>
-                Save Payment
-              </button> 
-              {/* <div className="col-auto float-end ml-auto"> */}
-          {/* <a className="btn add-btn" onClick={() => handleDownload()}>
-            Download
-          </a> */}
-        {/* </div> */}
-            </div>
-
-
-
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="form-group">
-                    {/* <TextareaAutosize */}
-                    <input
-                      value={comment}
-                      onChange={(e) => {
-                        setComment(e.target.value);
-                      }}
-                      // onKeyDown={(e) => handleKeyPress(e)}
-                      className="form-control"
-                      cols="1000"
-                      rows="100"
-                      placeholder="Add Comment"
-                    />
+                                <option value="Pending">Pending</option>
+                                <option value="Marked">Marked</option>
+                              </select>
+                            </td>
+                            <td>
+                              {index > 0 && (
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={(e) => {
+                                    handleRemovePaymentRow(index);
+                                  }}
+                                >
+                                  <i className="fa fa-times"></i>
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                  <div className="col-md-12">
+                    <button
+                      className="btn btn-primary"
+                      onClick={handleAddPaymentReceviedRow}
+                    >
+                      <i className="fa fa-plus"></i> Add
+                    </button>
                   </div>
                 </div>
-                {/* <div className="col-lg-12 mt-3">
+              </div>
+
+              <div className="submit-section">
+                <button className="btn btn-primary" onClick={handleSubmit}>
+                  Save Payment
+                </button>
+                {/* <div className="col-auto float-end ml-auto"> */}
+                <Link to={`/admin/lead/${leadId}/quotes`} className="card">
+                  Download
+                </Link>
+                {/* <a className="btn add-btn" onClick={() => handleDownload()}>
+            Download
+          </a> */}
+                {/* </div> */}
+              </div>
+
+              <div className="container">
+                <div className="row">
+                  <div className="col-lg-12">
+                    <div className="form-group">
+                      {/* <TextareaAutosize */}
+                      <input
+                        value={comment}
+                        onChange={(e) => {
+                          setComment(e.target.value);
+                        }}
+                        // onKeyDown={(e) => handleKeyPress(e)}
+                        className="form-control"
+                        cols="1000"
+                        rows="100"
+                        placeholder="Add Comment"
+                      />
+                    </div>
+                  </div>
+                  {/* <div className="col-lg-12 mt-3">
                   <div className="form-group">
                     <input
                       type="date"
@@ -924,49 +923,55 @@ export const AddPayment = () => {
                   </div>
                 </div> */}
 
-                {/* {showButtonVisibility && ( */}
+                  {/* {showButtonVisibility && ( */}
                   <Button
                     type="submit"
-                    className="btn-submit col-md-2" 
+                    className="btn-submit col-md-2"
                     onClick={(e) => {
                       handleSubmitComment(e);
                     }}
                   >
                     Submit
                   </Button>
-                {/* // )} */}
-              </div>
-            </div>
-             {
-        notificationArr &&
-        notificationArr.map((noteItem, index) => {
-          return (
-            <div className="note_added_by_agent mt-4" key={index}>
-              <div className="textnote">
-                <div className="alignright mb7">
-                  <span className=" flexfull">
-                    {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
-                    {noteItem?.createdBy?.name ? noteItem?.createdBy?.name : "" + " "}
-                    {"[" + noteItem?.createdBy?.role?noteItem?.createdBy?.role :"" + "]"}
-                  </span>
-                </div>
-                <div className="noteMessage">
-                  <p className="post-heading  f10">{noteItem?.heading}</p>
-               
+                  {/* // )} */}
                 </div>
               </div>
-              {/* <span className="notesImageCorner">
+              {notificationArr &&
+                notificationArr.map((noteItem, index) => {
+                  return (
+                    <div className="note_added_by_agent mt-4" key={index}>
+                      <div className="textnote">
+                        <div className="alignright mb7">
+                          <span className=" flexfull">
+                            {moment(noteItem?.reminderDate).format(
+                              "DD-MM-YYYY"
+                            )}{" "}
+                            By{" "}
+                            {noteItem?.createdBy?.name
+                              ? noteItem?.createdBy?.name
+                              : "" + " "}
+                            {"[" + noteItem?.createdBy?.role
+                              ? noteItem?.createdBy?.role
+                              : "" + "]"}
+                          </span>
+                        </div>
+                        <div className="noteMessage">
+                          <p className="post-heading  f10">
+                            {noteItem?.heading}
+                          </p>
+                        </div>
+                      </div>
+                      {/* <span className="notesImageCorner">
                 <img
                   src={"../../../src/assets/img/NotesImageCorner.webp"}
                   alt=""
                 />
               </span> */}
-            </div>
-          );
-        })
-      } 
-      
-            {/* <div style={{ fontSize: 19 }}>Payment Invoice</div>
+                    </div>
+                  );
+                })}
+
+              {/* <div style={{ fontSize: 19 }}>Payment Invoice</div>
 
             <div className="row">
               <div className="col-md-12">
@@ -1041,108 +1046,106 @@ export const AddPayment = () => {
               </div>
             </div> */}
 
-            {/* Add Client Modal */}
-            <div  
-              id="add_destination"
-              className="modal custom-modal fade"
-              role="dialog"
-            >
+              {/* Add Client Modal */}
               <div
-                className="modal-dialog modal-dialog-centered modal-lg"
-                role="document"
+                id="add_destination"
+                className="modal custom-modal fade"
+                role="dialog"
               >
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title"> Invoice</h5>
-                    <button
-                      type="button"
-                      className="close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">×</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    <form onSubmit={handleSubmit}>
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-2">
-                          Invoice No <span className="text-danger">*</span>
-                        </label>
-                        <div className="col-md-10">
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={invoiceNo}
-                            onChange={(e) => setInvoiceNo(e.target.value)}
-                          />
+                <div
+                  className="modal-dialog modal-dialog-centered modal-lg"
+                  role="document"
+                >
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h5 className="modal-title"> Invoice</h5>
+                      <button
+                        type="button"
+                        className="close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">×</span>
+                      </button>
+                    </div>
+                    <div className="modal-body">
+                      <form onSubmit={handleSubmit}>
+                        <div className="form-group row">
+                          <label className="col-form-label col-md-2">
+                            Invoice No <span className="text-danger">*</span>
+                          </label>
+                          <div className="col-md-10">
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={invoiceNo}
+                              onChange={(e) => setInvoiceNo(e.target.value)}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-2">
-                          Invoice Description
-                        </label>
-                        <div className="col-md-10">
-                          <textarea
-                            className="form-control"
-                            value={invoiceDescription}
-                            onChange={(e) =>
-                              setInvoiceDescription(e.target.value)
-                            }
+
+                        <div className="form-group row">
+                          <label className="col-form-label col-md-2">
+                            Invoice Description
+                          </label>
+                          <div className="col-md-10">
+                            <textarea
+                              className="form-control"
+                              value={invoiceDescription}
+                              onChange={(e) =>
+                                setInvoiceDescription(e.target.value)
+                              }
+                            >
+                              {invoiceDescription}
+                            </textarea>
+                          </div>
+                        </div>
+
+                        <div className="form-group row">
+                          <label className="col-form-label col-md-2">
+                            Invoice Amount
+                          </label>
+                          <div className="col-md-10">
+                            <input
+                              type="number"
+                              className="form-control"
+                              value={invoiceAmount}
+                              onChange={(e) => setInvoiceAmount(e.target.value)}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-12">
+                          <button
+                            data-bs-dismiss="modal"
+                            className="btn add-btn"
+                            onClick={handlePerfomaInvoiceSubmit}
                           >
-                            {invoiceDescription}
-                          </textarea>
+                            Save{" "}
+                          </button>
                         </div>
-                      </div>
-
-                      <div className="form-group row">
-                        <label className="col-form-label col-md-2">
-                          Invoice Amount
-                        </label>
-                        <div className="col-md-10">
-                          <input
-                            type="number"
-                            className="form-control"
-                            value={invoiceAmount}
-                            onChange={(e) => setInvoiceAmount(e.target.value)}
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-12">
-                        <button
-                          data-bs-dismiss="modal"
-                          className="btn add-btn"
-                          onClick={handlePerfomaInvoiceSubmit}
-                        >
-                          Save{" "}
-                        </button>
-                      </div>
-                    </form>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <div className="modal-body">
-            <div>Please get a quotation Converted to view</div>
-          </div>
-        )}
+          ) : (
+            <div className="modal-body">
+              <div>Please get a quotation Converted to view</div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
 
-    {printPdf && (
+      {printPdf && (
         <div
-          style={
-            {
-              // zIndex: "11011",
-              // display:none
-              // visibility:"hidden"
-              opacity: "0",
-            }
-          }
+          style={{
+            // zIndex: "11011",
+            // display:none
+            // visibility:"hidden"
+            opacity: "0",
+          }}
         >
           <div main id="mainPdfContainer">
             {/* 
@@ -1264,7 +1267,7 @@ export const AddPayment = () => {
                     QuotationObj?.tourListArr &&
                     QuotationObj?.tourListArr.length > 0 &&
                     QuotationObj?.tourListArr.map((el, i) => {
-                      let str = el?.destinationObj?.description.split(/[.;]/g);
+                      var str = el?.destinationObj?.description.split(/[.;]/g);
                       return (
                         <div className="row" key={i}>
                           <div className="col-12">
@@ -1279,9 +1282,11 @@ export const AddPayment = () => {
                                 <div className="row">
                                   <div className="col-12 ">
                                     <ul className="list-circle">
-                                      {str.map((le, i) => {
-                                        return <li key={i}>{le}.</li>;
-                                      })}
+                                      {el?.destinationObj?.description
+                                        .split(/[.;]/g)
+                                        .map((le, i) => {
+                                          return <li key={i}>{le}.</li>;
+                                        })}
                                     </ul>
                                   </div>
                                 </div>

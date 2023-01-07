@@ -130,7 +130,6 @@ const Leads = () => {
     }
   };
 
-
   useEffect(() => {
     if (newClient) {
       setPhone("");
@@ -140,8 +139,6 @@ const Leads = () => {
     }
   }, [newClient]);
 
-
-
   const handleGetClient = async () => {
     // console.log(filterClientByName, "121212");
     let get1 = await getFilter(`name=${filterClientByName}`);
@@ -149,16 +146,13 @@ const Leads = () => {
     setClientArr(get1.data.data);
   };
 
-
   useEffect(() => {
     handleGetClient();
   }, [filterClientByName]);
 
-
   useEffect(() => {
     dispatch(quotationGet());
   }, []);
-
 
   useEffect(() => {
     if (quotationArray.length > 0) {
@@ -485,8 +479,6 @@ const Leads = () => {
     handleClientByAllFilter(leadArrFilterStatus, teamLeadFilterId);
   }, [teamLeadFilterId]);
 
-
-
   const handleFilterByTeamLead = (query) => {
     setRoleQuery(query.value);
     if (leadArrFilterStatus != "") {
@@ -514,13 +506,9 @@ const Leads = () => {
     }
   };
 
-
-
   const handleFilterDateFrom = async (query) => {
     setDateFrom(new Date(query).toISOString());
   };
-
-
 
   const handleFilterDateFromAndTo = async () => {
     if (leadArrFilterStatus != "") {
@@ -542,8 +530,6 @@ const Leads = () => {
       }
     }
   };
-
-
 
   const handleFilterDateFromAndToAndStatus = async () => {
     if (dateTo != "" && dateFrom != "") {
@@ -593,7 +579,8 @@ const Leads = () => {
     setPhone("");
     setName("");
     setEmail("");
-    setPriority("");
+    setPriority(""); 
+    setClientArr([]);
     // setAgentId("");
     // setSpocId("");
     setDescription("");
@@ -856,28 +843,17 @@ const Leads = () => {
     }
   };
 
-
-
   const handleCheckCostingSheet = async () => {
     let check = await handleCheckCostingSheetExist(leadId);
   };
-
-
-
 
   useEffect(() => {
     handleCheckCostingSheet(leadId);
   }, []);
 
-
-
-
   const handlePriorityChange = (e) => {
     setPriority(e.value);
   };
-
-
-
 
   const handleAgentChange = (e) => {
     // setLeadId("");
@@ -890,8 +866,6 @@ const Leads = () => {
     setAgentId(e.value);
     // setDestinationId(e.value);
   };
-
-
 
   const handleTeamLeadChange = (e) => {
     // let tempArr = teamLeads.map((el) => {
@@ -961,7 +935,6 @@ const Leads = () => {
     // },
   ];
 
-  
   const options_For_Role = [
     {
       label: "Select Priority",
@@ -2436,7 +2409,7 @@ const Leads = () => {
                     onChange={handleFilterByTeamLead}
                     menuPortalTarget={document.body}
                     styles={customStyles}
-                    options={teamLeadsArr.map((el, i) => {
+                    options={teamLeadsArr.map((el) => {
                       // return (
                       //   <option key={i} value={el?.value}>
                       //     {el?.firstName + el?.lastName}
@@ -2495,7 +2468,7 @@ const Leads = () => {
                     type="text"
                     className="form-control floating"
                   />
-                  <label className="focus-label">Employee Name</label>
+                  <label className="focus-label">Spoc Name</label>
                 </div>
               </div>
             )}
@@ -2567,7 +2540,6 @@ const Leads = () => {
               <label className="focus-label">Client Status</label>
             </div>
           </div>
-         
         </div>
 
         {/* {console.log(displayLeadsArr, "displayLeadsArrdisplayLeadsArr")} */}
@@ -2694,24 +2666,36 @@ const Leads = () => {
                           return (
                             <tr key={i}>
                               <th scope="row">{i + 1}</th>
-                              <td
+                              <td>
+                              <Link
+                                className="dropdown-item"
+                                to={`/admin/leads`}
+                                onClick={() =>{
+                                  handleClientSelection(client?._id)
+                                  setClientArr([])
+                                }}
+                              >
+                                  {client?.name}
+                              </Link> 
+                              </td>
+                              {/* <td
                                 onClick={() =>
                                   handleClientSelection(client?._id)
                                 }
                               >
                                 {client?.name}
-                              </td>
+                              </td> */}
                               <td
-                                onClick={() =>
+                                onClick={() =>{
                                   handleClientSelection(client?._id)
-                                }
+                                  setClientArr([])}}
                               >
                                 {client?.email}
                               </td>
                               <td
-                                onClick={() =>
+                                onClick={() =>{
                                   handleClientSelection(client?._id)
-                                }
+                                  setClientArr([])}}
                               >
                                 {client?.phone}
                               </td>
@@ -2938,7 +2922,6 @@ const Leads = () => {
                       agentsArr &&
                       agentsArr.map((spoc, i) => {
                         // console.log(spoc, i, "2132");
-                        // spoc .leadId == leadId;
                         return (
                           <option key={i} value={spoc.value}>
                             {spoc.label}
@@ -2949,7 +2932,6 @@ const Leads = () => {
                       agentsArr &&
                       agentsArr.map((spoc, i) => {
                         // console.log(spoc, i, "2132");
-                        // spoc .leadId == leadId;
                         return (
                           <option key={i} value={spoc.value}>
                             {spoc.label}

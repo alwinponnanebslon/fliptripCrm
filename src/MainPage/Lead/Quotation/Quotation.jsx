@@ -1,6 +1,6 @@
+import { Link, useParams, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useParams, useHistory } from "react-router-dom";
 import Select from "react-select";
 import { Table } from "antd";
 import { toastError, toastSuccess } from "../../../utils/toastUtils";
@@ -71,13 +71,10 @@ const Quotation = () => {
 
   const [spocImageBase64, setspocImageBase64] = useState("");
 
-
   useEffect(() => {
     handleInit();
     // console.log(images, "tourObjonload");
   }, []);
-
-
 
   // useEffect(() => {
   //   if (changeStatus == false) {
@@ -85,8 +82,6 @@ const Quotation = () => {
   //   }
   //   // handleInit();
   // }, [changeStatus]);
-
-
 
   const handleInit = () => {
     //  handleGetAllLeads();
@@ -110,7 +105,7 @@ const Quotation = () => {
   // const MyDoc = () => {
   //   return <Pdfile />;
   // };
-//   
+  //
 
   const updateStatusOfLead = async (id, obj) => {
     let { data: res } = await updateLeadStatus(id, obj);
@@ -118,21 +113,19 @@ const Quotation = () => {
       // handleGetAllLeads();
     }
   };
-  
-useEffect(() => { 
-  if (quotationStateArr && quotationStateArr?.length > 0) { 
-    // let object = {
-    //   status: "IN_PROGRESS",
-    // };
-    // updateStatusOfLead(leadId, object);
+
+  useEffect(() => {
+    if (quotationStateArr && quotationStateArr?.length > 0) {
+      // let object = {
+      //   status: "IN_PROGRESS",
+      // };
+      // updateStatusOfLead(leadId, object);
       setIsConvert(quotationStateArr.some((el) => el.status == "Convert"));
     } else {
       setIsConvert(false);
     }
     setQuotationMainArr(quotationStateArr);
   }, [quotationStateArr]);
-
-
 
   const getBase64 = (file, cb) => {
     if (file) {
@@ -147,7 +140,6 @@ useEffect(() => {
     }
   };
 
-
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
     setShow(true);
@@ -156,14 +148,11 @@ useEffect(() => {
     dispatch(setTour(row));
   };
 
-
   const sleep = async (n) => {
     return new Promise((res) => setTimeout(() => res(), n));
   };
 
   const handleDownload = async (row) => {
-    // const input = ;
-    // localStorage.setItem("quotationPdf", JSON.stringify(row));
     setQuotationObj(row);
     let blob = await fetch(
       generateFilePath(QuotationObj?.agentObj?.photoUrl)
@@ -192,7 +181,6 @@ useEffect(() => {
     dispatch(setTour(row));
 
     setPrintPdf(true);
-    // setTimeout(() => {
     const input = document.getElementById("mainPdfContainer");
 
     if (input) {
@@ -216,15 +204,6 @@ useEffect(() => {
         );
       });
     }
-
-    // console.log("en22");
-    // if (toPdf) {
-    //   toPdf(e);
-    // }
-    // }, 500);
-
-    // console.log(row, "row update"); //whole object
-    // history.push("/pdf");
   };
 
   // const handleDownload = async (row) => {
@@ -279,7 +258,6 @@ useEffect(() => {
     }
   }, [monthValued]);
 
-
   useEffect(() => {
     if (statusValued != "") {
       let data = {
@@ -289,7 +267,6 @@ useEffect(() => {
       dispatch(quotationFilterByStatusGet(data));
     }
   }, [statusValued]);
-
 
   const submitQuotation = (row, status) => {
     confirmAlert({
@@ -413,6 +390,9 @@ useEffect(() => {
     {
       title: "Amount",
       dataIndex: "amount",
+      // render: (row, record) => (
+      // <h4>{row?.amount}</h4>
+      // ),
       sorter: (a, b) => a.amount.length - b.amount.length,
     },
     {
@@ -491,7 +471,12 @@ useEffect(() => {
       title: "Download Pdf",
       render: (row, record) => (
         <div className="col-auto float-end ml-auto">
-          <a className="btn add-btn" onClick={() => handleDownload(row)}>
+          <a
+            className="btn add-btn"
+            onClick={() => {
+              handleDownload(row);
+            }}
+          >
             Download
           </a>
         </div>
@@ -644,13 +629,12 @@ useEffect(() => {
           <div className="page-header caret_qotepage">
             <div className="row align-items-center">
               <div className="col">
+                <Link to="/admin/dashboard">Dashboard</Link>
                 <h3 className="page-title">
                   <i className="la la-file" /> Create Quote
                 </h3>
                 <ul className="breadcrumb">
-                  <li className="breadcrumb-item">
-                    <Link to="/admin/dashboard">Dashboard</Link>
-                  </li>
+                  <li className="breadcrumb-item"></li>
                   <li className="breadcrumb-item active">Create Quote</li>
                 </ul>
               </div>
@@ -734,7 +718,7 @@ useEffect(() => {
               // zIndex: "11011",
               // display:none
               // visibility:"hidden"
-              opacity: "0",
+              // opacity: "0",
             }
           }
         >
@@ -957,7 +941,21 @@ useEffect(() => {
                         DETAILS
                       </th>
                       <th scope="col" className="fw-normal">
-                        PER PAX (₹)
+                        ADULT : {QuotationObj?.travelPassengerObj?.noOfAdults}
+                        {QuotationObj?.travelPassengerObj?.noOfChildrenWithBed >
+                          0 &&
+                          ` CHILDREN :
+                        ${
+                          QuotationObj?.travelPassengerObj
+                            ?.noOfChildrenWithBed +
+                          QuotationObj?.travelPassengerObj
+                            ?.noOfChildrenWithoutBed
+                        }
+                        `}
+                        {QuotationObj?.travelPassengerObj?.noOfInfants > 0 &&
+                          ` INFANT :
+                         ${QuotationObj?.travelPassengerObj?.noOfInfants} 
+                                                 `}
                       </th>
                       <th scope="col" className="fw-normal">
                         TOTAL (₹)
@@ -971,7 +969,22 @@ useEffect(() => {
                         <td>
                           {QuotationObj?.perPersonAirPortPrice +
                             QuotationObj?.perChildrenPersonAirPortPrice +
-                            QuotationObj?.perInfantAirPortPrice}
+                            QuotationObj?.perInfantAirPortPrice}{" "}
+                          [
+                          {`  PER ADULT (₹):
+                               ${QuotationObj?.perPersonAirPortPrice} ,`}{" "}
+                          {QuotationObj?.perChildrenPersonAirPortPrice > 0 &&
+                            QuotationObj?.travelPassengerObj
+                              ?.noOfChildrenWithBed > 0 &&
+                            ` PER CHILDREN (₹) :
+                         ${QuotationObj?.perChildrenPersonAirPortPrice} 
+                                                 ,`}
+                          {QuotationObj?.perInfantAirPortPrice > 0 &&
+                            QuotationObj?.travelPassengerObj?.noOfInfants > 0 &&
+                            ` PER INFANT (₹):
+                         ${QuotationObj?.perInfantAirPortPrice} 
+                                                 `}
+                          ]
                         </td>
                         <td>
                           {parseInt(QuotationObj?.perPersonAirPortPrice) *
@@ -997,33 +1010,52 @@ useEffect(() => {
                       </tr>
                     )}
                     {QuotationObj?.perPersonLandPrice > 0 && (
-                      <tr>
-                        <td>LAND</td>
-                        <td>
-                          {QuotationObj?.perPersonLandPrice +
-                            QuotationObj?.perChildrenLandPrice +
-                            QuotationObj?.perInfantLandPrice}
-                        </td>
-                        <td>
-                          {parseInt(QuotationObj?.perPersonLandPrice) *
-                            parseInt(
-                              QuotationObj?.travelPassengerObj?.noOfAdults
-                            ) +
-                            parseInt(QuotationObj?.perChildrenLandPrice) *
-                              (parseInt(
-                                QuotationObj?.travelPassengerObj
-                                  ?.noOfChildrenWithBed
-                              ) +
-                                parseInt(
-                                  QuotationObj?.travelPassengerObj
-                                    ?.noOfChildrenWithoutBed
-                                )) +
-                            parseInt(QuotationObj?.perInfantLandPrice) *
+                      <>
+                        <tr>
+                          <td>LAND</td>
+                          <td>
+                            {QuotationObj?.perPersonLandPrice +
+                              QuotationObj?.perChildrenLandPrice +
+                              QuotationObj?.perInfantLandPrice}
+                            [
+                            {`  PER ADULT (₹):
+                               ${QuotationObj?.perPersonLandPrice}`}
+                            ,
+                            {QuotationObj?.perChildrenLandPrice > 0 &&
+                              QuotationObj?.travelPassengerObj
+                                ?.noOfChildrenWithBed > 0 &&
+                              ` PER CHILDREN (₹):
+                         ${QuotationObj?.perChildrenLandPrice} 
+                                                 ,`}
+                            {QuotationObj?.perInfantLandPrice > 0 &&
+                              QuotationObj?.travelPassengerObj?.noOfInfants >
+                                0 &&
+                              ` PER INFANT (₹):
+                         ${QuotationObj?.perInfantLandPrice} 
+                                                 `}
+                            ]
+                          </td>
+                          <td>
+                            {parseInt(QuotationObj?.perPersonLandPrice) *
                               parseInt(
-                                QuotationObj?.travelPassengerObj?.noOfInfants
-                              )}
-                        </td>
-                      </tr>
+                                QuotationObj?.travelPassengerObj?.noOfAdults
+                              ) +
+                              parseInt(QuotationObj?.perChildrenLandPrice) *
+                                (parseInt(
+                                  QuotationObj?.travelPassengerObj
+                                    ?.noOfChildrenWithBed
+                                ) +
+                                  parseInt(
+                                    QuotationObj?.travelPassengerObj
+                                      ?.noOfChildrenWithoutBed
+                                  )) +
+                              parseInt(QuotationObj?.perInfantLandPrice) *
+                                parseInt(
+                                  QuotationObj?.travelPassengerObj?.noOfInfants
+                                )}
+                          </td>
+                        </tr>
+                      </>
                     )}
                   </tbody>
                   <tfoot>
@@ -1064,22 +1096,30 @@ useEffect(() => {
 
             <section className="inclusions">
               <div className="container">
-                <h1 className="fw-bold text-center mb-5">Inclusions</h1>
+                {QuotationObj?.inclusionData &&
+                  QuotationObj?.inclusionData.length > 0 && (
+                    <h1 className="fw-bold text-center mb-5">Inclusions</h1>
+                  )}
+
                 <div className="row">
                   <div className="col-12">
                     <div className="box">
-                      <h4 className="purple bg-white">Tours</h4>
-                      <ul className="list-circle">
-                        {QuotationObj?.tourListArr &&
-                          QuotationObj?.tourListArr.length > 0 &&
-                          QuotationObj?.tourListArr.map((el, index) => {
-                            return (
-                              <li key={index}>
-                                {el.name} (
-                                {new Date(el.startDate).toDateString()})
-                              </li>
-                            );
-                          })}
+                      <ul className="list-circle mt-4 pt-4">
+                        {
+                          QuotationObj?.inclusionData &&
+                            QuotationObj?.inclusionData != "" &&
+                            QuotationObj.inclusionData
+                              .split(/[.;]/g)
+                              .filter((el) => el && el != "")
+                              .map((el, index) => {
+                                return <li key={index}>{el}</li>;
+                              })
+                          // {el.name} (
+                          // {new Date(el.startDate).toDateString()})
+                          // </li>
+                          // );
+                          // })
+                        }
                       </ul>
                     </div>
                   </div>
@@ -1117,6 +1157,7 @@ useEffect(() => {
                           QuotationObj?.flightList.length > 0 &&
                           QuotationObj?.flightList[0]?.flightName
                             ?.split("\n")
+                            .filter((el) => el && el != "")
                             .filter((el, index, arr) => arr.length - 1 != index)
                             .map((ele, index) => {
                               return (
@@ -1128,7 +1169,7 @@ useEffect(() => {
                                   >
                                     <h6>
                                       <img src={images.location} alt="" />
-                                      {ele} {index % 2}
+                                      {ele}
                                     </h6>
                                   </div>
                                 </div>
@@ -1137,19 +1178,55 @@ useEffect(() => {
 
                         {QuotationObj?.flightList &&
                           QuotationObj?.flightList?.length > 0 &&
-                          QuotationObj?.flightList[0]?.flightName?.split("\n")[
-                            QuotationObj?.flightList[0]?.flightName?.split("\n")
-                              .length - 1
+                          QuotationObj?.flightList[0]?.flightName
+                            ?.split("\n")
+                            .filter((el) => el && el != "")[
+                            QuotationObj?.flightList[0]?.flightName
+                              ?.split("\n")
+                              .filter((el) => el && el != "").length - 1
                           ] && (
-                            <div className="destination">
-                              <h6>
+                            <div
+                              className={
+                                QuotationObj?.flightList[0]?.flightName
+                                  ?.split("\n")
+                                  .filter((el) => el && el != "").length %
+                                  2 ==
+                                0
+                                  ? "destination destination-reverse"
+                                  : "destination"
+                              }
+                              style={
+                                QuotationObj?.flightList[0]?.flightName
+                                  ?.split("\n")
+                                  .filter((el) => el && el != "").length %
+                                  2 ==
+                                0
+                                  ? {
+                                      left: "auto",
+                                      right: 0,
+                                      textAlign: "left",
+                                    }
+                                  : {}
+                              }
+                            >
+                              <h6
+                                style={
+                                  QuotationObj?.flightList[0]?.flightName
+                                    ?.split("\n")
+                                    .filter((el) => el && el != "").length %
+                                    2 ==
+                                  0
+                                    ? { flexDirection: "row-reverse" }
+                                    : {}
+                                }
+                              >
                                 {
-                                  QuotationObj?.flightList[0]?.flightName?.split(
-                                    "\n"
-                                  )[
-                                    QuotationObj?.flightList[0]?.flightName?.split(
-                                      "\n"
-                                    ).length - 1
+                                  QuotationObj?.flightList[0]?.flightName
+                                    ?.split("\n")
+                                    .filter((el) => el && el != "")[
+                                    QuotationObj?.flightList[0]?.flightName
+                                      ?.split("\n")
+                                      .filter((el) => el && el != "").length - 1
                                   ]
                                 }
                                 <img src={images.location} alt="" />
@@ -1424,6 +1501,7 @@ useEffect(() => {
                     <div className="inclusions">
                       <div className="box mb-0">
                         <h4 className="purple bg-white">Account Details</h4>
+
                         <div className="row">
                           <div className="col-12 col-md-5">
                             <ul className="list-circle">
