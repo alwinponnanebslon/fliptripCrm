@@ -8,6 +8,7 @@ import {
   setNotification,
   notificationGetForSpecificUser,
 } from "../../redux/features/notification/notificationSlice";
+import moment from "moment";
 
 import { Table } from "antd";
 
@@ -124,13 +125,13 @@ function Notification() {
       render: (row, record) => (
         <div>
           {new Date(record?.followDate).getDate() == new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() + " " + " Today"
+            ? moment(record?.followDate).format("DD/MM/YYYY") + " " + " Today"
             : new Date(record?.followDate).getDate() > new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ? moment(record?.followDate).format("DD/MM/YYYY") +
               " " +
               " Upcoming"
             : new Date(record?.followDate).getDate() < new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ? moment(record?.followDate).format("DD/MM/YYYY") +
               " " +
               " Previous"
             : ""}
@@ -186,23 +187,21 @@ function Notification() {
     {
       title: "Description",
       dataIndex: "description",
-      // sorter: (a, b) => a.description.length - b.description.length,
       render: (row, record) => <div>{record?.description}</div>,
     },
     {
       title: "Follow Date",
       dataIndex: "followDate",
-      // sorter: (a, b) => a.followDate.length - b.followDate.length,
       render: (row, record) => (
         <div>
           {new Date(record?.followDate).getDate() == new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() + " " + " Today"
+            ? moment(record?.followDate).format("DD/MM/YYYY") + " " + " Today"
             : new Date(record?.followDate).getDate() > new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ? moment(record?.followDate).format("DD/MM/YYYY") +
               " " +
               " Upcoming"
             : new Date(record?.followDate).getDate() < new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ? moment(record?.followDate).format("DD/MM/YYYY") +
               " " +
               " Previous"
             : ""}
@@ -237,7 +236,7 @@ function Notification() {
       // sorter: (a, b) => a.followDate.length - b.followDate.length,
       render: (row, record) => (
         <div>
-          {record?.createdBy?.name + " "}
+          {record?.createdBy?.name?record?.createdBy?.name:"" + " "}
           {" " + record?.createdBy?.role}
         </div>
       ),

@@ -90,7 +90,11 @@ const Clients = () => {
     {
       title: "Email",
       dataIndex: "email",
-      sorter: (a, b) => a.email.length - b.email.length,
+      render: (text, record) => (
+        <h2 className="table-avatar">
+          <div>{record?.email}</div>
+        </h2>
+      ),
     },
     {
       title: "Phone",

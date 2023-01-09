@@ -960,7 +960,7 @@ setTotalPersonLandPrice("")
     setTotalInfantLandPrice("");
     setTermAndCondition("");
     //////product details
-    setAmount(0);
+    setAmount("");
     setTax(0);
     setIsUpdateTour(false);
     setAirportTransfer("");
@@ -2102,7 +2102,7 @@ aria-label="Close"
                               <td>{totalChildrenPersonAirportPrice}</td>
                             </tr>
                           )}
-                          
+
                         {isAirport && numberOfInfants > 0 && (
                           <tr>
                             <td>Flight Infant Cost</td>

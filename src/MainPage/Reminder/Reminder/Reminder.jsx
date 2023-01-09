@@ -23,10 +23,7 @@ import {
 
 import { Table } from "antd";
 
-// import {
-//   getfollowUpApi,
-//   getfollowUpCheckForNotificatin,
-// } from "../../../Services/followUp";
+import moment from 'moment'
 
 export const GeneralReminder = () => {
   const role = useSelector((state) => state.auth.role);
@@ -35,9 +32,6 @@ export const GeneralReminder = () => {
   const reminderResultArr = useSelector((state) => state.reminder.reminders);
   const [reminderArr, setReminderArr] = useState([]);
 
-  // const [name, setName] = useState("");
-  // const [description, setDescription] = useState("");
-  // const [tourId, setTourId] = useState("");
 
   const [followUpCheck, setFollowUpCheck] = useState([]);
   const userLeadId = useSelector((state) => state.auth?.user?._id);
@@ -117,15 +111,15 @@ export const GeneralReminder = () => {
       render: (row, record) => (
         <div>
           {new Date(record.followDate).getDate() == new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ?moment(record?.followDate).format("DD/MM/YYYY")  +
               " " +
               "Today Reminder"
             : new Date(record.followDate).getDate() > new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ?moment(record?.followDate).format("DD/MM/YYYY")  +
               " " +
               " Upcoming Reminder"
             : new Date(record.followDate).getDate() < new Date().getDate()
-            ? new Date(record?.followDate).toLocaleDateString() +
+            ? moment(record?.followDate).format("DD/MM/YYYY")  +
               " " +
               "Previous Reminder"
             : record.leadStatusDate}

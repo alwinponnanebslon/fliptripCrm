@@ -58,6 +58,7 @@ const Header = (props) => {
   const [showSearchResult, setShowSearchResult] = useState(false);
   const [searchDataArr, setSearchDataArr] = useState([]);
   const [notificationArr, setNotificationArr] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const dispatch = useDispatch();
   const params = useParams();
@@ -113,7 +114,6 @@ const Header = (props) => {
 
   useEffect(() => {
     // console.log(notificationResultArr, "12notificationResultArr23");
-    // console.log(userId, "userId343");
     let filter = notificationResultArr.filter((el) => {
       if (`${el?.userId}` == `${userId}`) {
         return el;
@@ -124,7 +124,6 @@ const Header = (props) => {
   }, [notificationResultArr]);
 
   useEffect(() => {
-    // console.log(reminderArray, "reminderArray324");
     setReminderArrData(reminderArray);
   }, [reminderArray]);
 
@@ -359,7 +358,7 @@ const Header = (props) => {
                             <Link
                             // to={`/admin/lead/${leadId}`}
                             >
-                              <div
+                              <div 
                                 className="media notification-custom-box"
                                 key={index}
                                 onClick={() => {
@@ -392,7 +391,7 @@ const Header = (props) => {
                               </div>
                             </Link>
                           ) : (
-                            <div
+                            <div   backgroundColor={isChecked?"red":"green"}
                               className="media notification-custom-box"
                               key={index}
                             >
@@ -412,7 +411,7 @@ const Header = (props) => {
                               </p>
                             </div>
                           )}
-                          {/* // )} */}
+                      
                           {/* {el?.previousNotification &&
                             el?.previousNotification?.length > 0 && (
                               <h3>Previous Notification</h3>
@@ -423,14 +422,17 @@ const Header = (props) => {
                               return (
                                 <div
                                   className="media notification-custom-box"
-                                  key={index}
-                                >
-                                  <h4 className="title">
+                                  key={index} 
+                                  >
+                                  <h4 className="title" 
+                                  backgroundColor={isChecked?"red":"green"}
+                                  
+                                  >
                                     <span>{ele?.createdBy?.name}:</span>
                                     {ele?.heading}
                                   </h4>
 
-                                  <p className="desp">{ele?.description}</p>
+                                  <p className="desp"    backgroundColor={isChecked?"red":"green"}    >{ele?.description}</p>
 
                                   <p className="time">
                                     {el?.followDate
@@ -438,9 +440,7 @@ const Header = (props) => {
                                           "DD/MM/YYYY"
                                         )
                                       : ""}
-                                    {/* {new Date(
-                                      ele?.followDate
-                                    ).toLocaleDateString()}{" "} */}
+                              
                                     at {ele?.followTime}
                                   </p>
                                 </div>
@@ -530,7 +530,7 @@ const Header = (props) => {
                             index={index}
                           > */}
                             {!el.futureReminder && (
-                              <div
+                              <div 
                                 className="media notification-custom-box"
                                 key={index}
                               >
@@ -582,12 +582,7 @@ const Header = (props) => {
                               //   </p>
                               // </div>
                             )}
-                            {/* {el.futureReminder &&
-                            el?.futureReminder?.length > 0 && (
-                              <h3 className="text-danger ">
-                                Upcoming Reminder
-                              </h3>
-                            )} */}
+                         
                             {/* {el.futureReminder &&
                             el.futureReminder?.length > 0 &&
                             el.futureReminder.map((ele, index) => {

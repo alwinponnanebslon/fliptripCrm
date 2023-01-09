@@ -2337,7 +2337,7 @@ const Leads = () => {
                   <div className="card-body">
                     <div className="d-flex justify-content-between mb-3">
                       <div>
-                        <span className="d-block">Working Leads</span>
+                        <span className="d-block">In_Progress Leads</span>
                       </div>
                     </div>
                     <h3 className="mb-3">
