@@ -71,7 +71,7 @@ const AddNotification = ({
       let { data: res } = await getAllEmployess(
         `role=${role}&id=${userLeadId}`
       );
-      console.log(res, "1Res23");
+      // console.log(res, "1Res23");
       if (res.status) {
         setAllEmployees(res.data);
         // dispatch(returnAllEmployees(res.data));

@@ -30,7 +30,7 @@ import styles from "./selectStyles.module.css";
 // } from "../../../redux/features/employee/employeeSlice";
 
 const Addemployee = ({ show, setShow, userPassword, setUserPassword }) => {
-  console.log(userPassword, "userPAsword12");
+  // console.log(userPassword, "userPAsword12");
   // console.log(userPassword, "userPAswor23d12");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

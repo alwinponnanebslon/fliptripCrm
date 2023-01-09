@@ -71,13 +71,13 @@ const AddNotification = ({
       let { data: res } = await getAllEmployess(
         `role=${role}&id=${userLeadId}`
       );
-      console.log(res, "1Res23");
+      // console.log(res, "1Res23");
       if (res.status) {
         setAllEmployees(res.data);
         // dispatch(returnAllEmployees(res.data));
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toastError(error);
     }
   };
@@ -87,7 +87,7 @@ const AddNotification = ({
   }, [userObj]);
 
   useEffect(() => {
-    console.log(notificationObj, "notificationObj23");
+    // console.log(notificationObj, "notificationObj23");
     if (notificationObj && notificationObj._id) {
       setIsUpdate(true);
       setEmployeeId(notificationObj?._id);

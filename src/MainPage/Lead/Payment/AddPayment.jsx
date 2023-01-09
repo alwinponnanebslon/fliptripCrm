@@ -62,7 +62,7 @@ export const AddPayment = () => {
 
   const [quotationArr, setQuotationArr] = useState([]);
   const { leadId } = useParams();
-  console.log(leadId, "leadid12");
+  // console.log(leadId, "leadid12");
   const [selectedQuotation, setSelectedQuotation] = useState({});
   const [isQuotationapproved, setIsQuotationapproved] = useState(false);
   const [quotationId, setQuotationId] = useState("");
@@ -145,7 +145,7 @@ export const AddPayment = () => {
     let { data: response } = await handleNotificationGetForSpecificLeadId(
       `${leadId}`
     );
-    console.log(response, "get2342");
+    // console.log(response, "get2342");
     setNotificationArr(response?.data);
   };
 
@@ -559,7 +559,7 @@ export const AddPayment = () => {
       followTime: new Date().toLocaleTimeString(),
       isComment: true,
     };
-    console.log(role, "12313");
+    // console.log(role, "12313");
     if (event.key === "Enter") {
       // dispatch(addNotification(object));
       if (role == "SPOC") {

@@ -152,7 +152,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
 
   useEffect(() => {
     if (quotationObject1 && quotationObject1._id) {
-      console.log(quotationObject1, "qoationboj----------");
+      // console.log(quotationObject1, "qoationboj----------");
 
       setInclusionData(quotationObject1?.inclusionData);
       setQuotationId(quotationObject1?._id);
@@ -415,7 +415,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         let checkInDate = new Date(currentObj["checkIn"]);
         let checkOutDate = new Date(checkInDate);
 
-        console.log(checkOutDate, "checkOutDate");
+        // console.log(checkOutDate, "checkOutDate");
         checkOutDate.setDate(checkOutDate.getDate() + parseInt(value));
         currentObj["checkOut"] = checkOutDate;
       }
@@ -481,10 +481,10 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
           return;
         }
         let checkInDate = new Date(list[index]["checkIn"]);
-        console.log(checkInDate, "checkin date");
+        // console.log(checkInDate, "checkin date");
         let checkOutDate = new Date(checkInDate);
         checkOutDate.setDate(checkInDate.getDate() + parseInt(value));
-        console.log(checkOutDate, "checkoutdat21");
+        // console.log(checkOutDate, "checkoutdat21");
         list[index]["checkOut"] = checkOutDate;
       }
 
@@ -535,7 +535,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
 
   const handleinputchangeFlight = (e, index) => {
     let { name, value } = e.target;
-    console.log(name, value, "!231313");
+    // console.log(name, value, "!231313");
     if (name == "cost" || name == "childrenCost" || name == "infantCost") {
       if (value < 0) {
         toastError(" Cost cannot be less than zero");
@@ -849,7 +849,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
       mainImage: tempList[index].mainImage,
       itenaryImage: tempList[index].itenaryImage,
     };
-    console.log(currentObj, "currentObj currentObj currentObj");
+    // console.log(currentObj, "currentObj currentObj currentObj");
     currentObj[name] = value;
 
     if (name == "name") {
@@ -877,9 +877,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
         hotelAddress: list[0].hotelAddress,
       };
       let checkInDate = new Date(value);
-      console.log(value, "checkInDate");
+      // console.log(value, "checkInDate");
       currentObj1.checkIn = value;
-      console.log(list, "list", currentObj1);
+      // console.log(list, "list", currentObj1);
       setHotelList([currentObj1]);
     }
     // ================================================

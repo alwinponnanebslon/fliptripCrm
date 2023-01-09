@@ -20,7 +20,7 @@ export const reminderGet = createAsyncThunk(
   "reminder/reminderGet",
   async (payload, thunkApi) => {
     try {
-      console.log(payload, "od324");
+      // console.log(payload, "od324");
       let { data: response } = await getReminderApi(payload);
       // console.log(response, "respo12");
       if (response) {
@@ -56,7 +56,7 @@ export const updateReminder = createAsyncThunk(
   "reminder/updatereminder",
   async (formData, thunkApi) => {
     try {
-      console.log(formData, "formadadt");
+      // console.log(formData, "formadadt");
       let { data: response } = await updateReminderApi(formData, formData.Id);
       if (response) {
         toastSuccess(response.message);

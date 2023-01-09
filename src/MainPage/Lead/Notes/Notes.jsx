@@ -99,7 +99,7 @@ const Notes = ({ show1, setShow1 }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(note,"hnalde sunmit ")
+    // console.log(note,"hnalde sunmit ")
     if (note == "") {
       toastError("note is mandatory ");
       return;

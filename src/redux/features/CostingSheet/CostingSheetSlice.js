@@ -18,7 +18,7 @@ export const costingSheetGet = createAsyncThunk(
   "costingSheet/costingSheetGet",
   async (query) => {
     try {
-      console.log(query, "query312");
+      // console.log(query, "query312");
       let { data: response } = await get(query);
       // console.log(response, " response 231 in");
       if (response) {
@@ -42,7 +42,7 @@ export const addCosting = createAsyncThunk(
   "costingSheet/add",
   async (payload, thunkApi) => {
     try {
-      console.log(payload, "payload23");
+      // console.log(payload, "payload23");
       let { data: response } = await add(payload, payload.id);
       if (response) {
         toastSuccess(response.message);

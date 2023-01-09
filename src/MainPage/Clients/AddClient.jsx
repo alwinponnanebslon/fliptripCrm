@@ -39,7 +39,7 @@ const AddClient = ({ show, setShowModal }) => {
     setClientId("");
   };
   useEffect(() => {
-    console.log(clientObj, "clientObj23")
+    // console.log(clientObj, "clientObj23")
     if (clientObj && clientObj._id) {
       setClientId(clientObj?._id);
       setDob(moment(clientObj?.dob).format("YYYY-MM-DD"));

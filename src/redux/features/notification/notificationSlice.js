@@ -58,7 +58,7 @@ export const addNotification = createAsyncThunk(
   "notification/addNotification",
   async (payload, thunkApi) => {
     try {
-      console.log(payload,"payload123")
+      // console.log(payload,"payload123")
       let { data: response } = await addNotificationApi(payload);
       if (response) {
         toastSuccess(response.message);
@@ -102,7 +102,7 @@ export const deleteNotification = createAsyncThunk(
   "notification/deletenotification",
   async (payload, thunkApi) => {
     try {
-      console.log(payload, "123payload231");
+      // console.log(payload, "123payload231");
       let { data: response } = await notificationDeleteApi(payload);
       if (response) {
         toastSuccess(response.message);
@@ -154,7 +154,7 @@ export const notificationGetForSpecificLead = createAsyncThunk(
     try {
       // console.log(query, "query21321");
       let { data: response } = await getNotificationForSpecificLeadApi(query);
-      console.log(response, "notifications34")    ;
+      // console.log(response, "notifications34")    ;
       // console.log(response, "121");
       if (response) {
         // toastSuccess(response.message);

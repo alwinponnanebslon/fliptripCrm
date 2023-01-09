@@ -128,7 +128,7 @@ const ViewDestination = () => {
     }
 
     let obj = { name, description, mainImage, itenaryImage };
-    console.log(obj, "obj23");
+    // console.log(obj, "obj23");
     if (isUpdateTour) {
       obj.Id = tourId;
       setShow(false);

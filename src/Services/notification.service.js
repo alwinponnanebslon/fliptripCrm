@@ -16,7 +16,7 @@ export const getNotificationApi = (query) => {
 // };
 
 export const updateNotificationApi = (formData, id) => {
-  console.log(id, formData, "11111111234");
+  // console.log(id, formData, "11111111234");
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
 

@@ -57,7 +57,7 @@ useEffect(() => {
     let { data: response } = await handleNotificationGetForSpecificLeadId(
       `${leadId}`
     );
-    console.log(response, "get2342");
+    // console.log(response, "get2342");
     setNotificationArr(response?.data);
   };
 

@@ -63,7 +63,7 @@ const EmployeeProfile = () => {
     try {
       let { data: res } = await getEmployesById(params.id);
       if (res.success) {
-        console.log(res, "res employee");
+        // console.log(res, "res employee");
         dispatch(serCurrentEmployee(res.data));
       }
     } catch (error) {

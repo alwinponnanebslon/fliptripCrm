@@ -10,7 +10,6 @@ export const AddClient = (obj) => {
 };
 
 export const get = (query) => {
-  console.log("23333333")
   return axios.get(`${serverUrl}/?${query}`);
 };
 
@@ -19,7 +18,7 @@ export const deleteClient = (id) => {
 };
 
 export const updateClient = (formData, id) => {
-  console.log(formData, id, "dbcall update");
+  // console.log(formData, id, "dbcall update");
   return axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
 

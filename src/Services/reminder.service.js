@@ -7,7 +7,7 @@ export const addReminderApi = (obj) => {
 };
 
 export const getReminderApi = (id) => {
-  console.log(id, "0po90p");
+  // console.log(id, "0po90p");
   return axios.get(`${serverUrl}/${id}`);
 };
 export const reminderDeleteApi = (id) => {

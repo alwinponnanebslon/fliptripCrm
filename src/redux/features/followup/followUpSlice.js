@@ -37,7 +37,7 @@ export const followUpGetByStatus = createAsyncThunk(
   "followUp/followUpGetByFilter",
   async (payload) => {
     try {
-      console.log(payload, "paylaod32s");
+      // console.log(payload, "paylaod32s");
       let { data: response } = await getfollowUpByStatus(
         `status=${payload?.statusValued}&leadId=${payload?.leadId}`
       );
@@ -56,7 +56,7 @@ export const followUpGetByMonth = createAsyncThunk(
   "followUp/followUpGetByFilterMonth",
   async (payload) => {
     try {
-      console.log(payload, "paylaod32s");
+      // console.log(payload, "paylaod32s");
       let { data: response } = await getfollowUpByMonth(
         `month=${payload?.monthValued}&leadId=${payload?.leadId}`
       );

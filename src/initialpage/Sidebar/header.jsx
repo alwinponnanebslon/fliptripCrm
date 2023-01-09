@@ -148,7 +148,7 @@ const Header = (props) => {
     let get1 = await getFilter(`name=${query}`);
     // console.log(get1, "get123"); 
     if(get1&&get1?.data&&get1?.data?.data){
-console.log(get1?.data?.data,"get1")
+// console.log(get1?.data?.data,"get1")
       setSearchDataArr(get1?.data?.data);
       setShowSearchResult(true);
     }}

@@ -156,13 +156,13 @@ const LeadSidebar = (props) => {
   };
 
   const handleClickButton = (i) => {
-    console.log(i, "123123");
+    // console.log(i, "123123");
 
     let check = leadStatusReason.map((el, index) => {
       i == index ? (el.active = true) : (el.active = false);
       return el;
     });
-    console.log(check, "ckheck1");
+    // console.log(check, "ckheck1");
     setLeadStatusReason([...check]);
   };
 

@@ -105,7 +105,7 @@ export const QuotationFollowup = () => {
   }, [statusValued]);
 
   useEffect(() => {
-    console.log(monthValued, "setMonthValued34");
+    // console.log(monthValued, "setMonthValued34");
     if (monthValued != "") {
       let obj = {
         monthValued,

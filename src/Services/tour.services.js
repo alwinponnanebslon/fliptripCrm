@@ -7,7 +7,7 @@ export const addTourApi = (obj) => {
 };
 
 export const getToursApi = (query) => {
-  console.log(query, "queryqe")
+  // console.log(query, "queryqe")
   return axios.get(`${serverUrl}/?${query}`)
 };
 export const tourDeleteApi = (id) => {
@@ -19,6 +19,6 @@ export const updateTourApi = (formData, id) => {
 };
 
 export const getActiveToursApi = (query) => {
-  console.log(query, "queryqe")
+  // console.log(query, "queryqe")
   return axios.get(`${serverUrl}/getActiveTours?${query}`)
 };

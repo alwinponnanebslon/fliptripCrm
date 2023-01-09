@@ -139,6 +139,8 @@ const Leads = () => {
     }
   }, [newClient]);
 
+
+  
   const handleGetClient = async () => {
     // console.log(filterClientByName, "121212");
     let get1 = await getFilter(`name=${filterClientByName}`);
@@ -150,9 +152,12 @@ const Leads = () => {
     handleGetClient();
   }, [filterClientByName]);
 
+
   useEffect(() => {
     dispatch(quotationGet());
   }, []);
+
+
 
   useEffect(() => {
     if (quotationArray.length > 0) {
@@ -252,6 +257,7 @@ const Leads = () => {
     // dispatch(clientGet());
   }, []);
 
+
   const handleEdit = (lead) => {
     if (lead) {
       setLeadObj(lead);
@@ -270,6 +276,8 @@ const Leads = () => {
       setLeadObj({});
     }
   };
+
+
 
   useEffect(() => {
     // console.log(leadObj, "setLeadObj2134");
@@ -317,12 +325,12 @@ const Leads = () => {
   //     setAgentsArr([...tempArr]);
   //   }
   // }, [agents]);
+
+
   useEffect(() => {
     // console.log(teamLeads, "teamslead23");
     if (teamLeads && teamLeads.length > 0) {
       let arr = teamLeads.filter((e) => e.role == "TEAMLEAD");
-      // console.group(arr, "arr231231");
-      // let tempArr = teamLeads.map((el) => {
       let tempArr = arr.map((el) => {
         let obj = {
           label: `${el.firstName} ${el.lastName}`,
@@ -333,6 +341,8 @@ const Leads = () => {
       setTeamLeadsArr([...tempArr]);
     }
   }, [teamLeads]);
+
+
 
   useEffect(() => {
     // if (teamLeads && teamLeads.length > 0) {
@@ -378,6 +388,7 @@ const Leads = () => {
   useEffect(() => {
     handleGetAllEmployees();
   }, []);
+
 
   const getBase64 = (file, cb) => {
     let reader = new FileReader();
@@ -2502,7 +2513,7 @@ const Leads = () => {
             <div className="form-group form-focus">
               <input
                 type="date"
-                // value={employeeNameQuery}
+                // value={employeeNameQuery}  
                 onChange={(e) => {
                   handleFilterDateFrom(e.target.value);
                 }}

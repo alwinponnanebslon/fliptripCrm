@@ -311,7 +311,7 @@ const Quotation = () => {
   // };
 
   const handleSatus = (row, status) => {
-    console.log(row, status, "3423");
+    // console.log(row, status, "3423");
     if (status == "Convert" && row && row._id) {
       submitQuotation(row, status);
     }

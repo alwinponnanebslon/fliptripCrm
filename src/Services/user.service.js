@@ -36,11 +36,11 @@ export const getAllEmployess = async (query) => {
 };
 export const updateEmployeeToDb = async (id, formData, query) => {
   //for admin can update rmeployee
-  console.log(id, formData, "in services234");
+  // console.log(id, formData, "in services234");
   return await axios.patch(`${serverUrl}/updateUserByAdmin/${id}`, formData);
 };
 export const updateEmployee = async (id, formData, query) => {
-  console.log(id, formData, "in services234");
+  // console.log(id, formData, "in services234");
   return await axios.patch(`${serverUrl}/updateById/${id}`, formData);
 };
 
