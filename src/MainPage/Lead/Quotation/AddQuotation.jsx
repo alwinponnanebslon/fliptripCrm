@@ -126,7 +126,29 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     dispatch(activeTourGet());
     dispatch(clientGet());
     // dispatch(leadGetById(leadId));
-  }, []);
+  }, []); 
+
+  useEffect(()=>{ if(island==false){
+    setTotalChidrenLandPrice("")
+setTotalInfantLandPrice("")
+    setPerChildrenLandPrice('')
+    setPerInfantLandPrice('')
+    setPerPersonLandPrice("")
+setTotalPersonLandPrice("")
+  }
+  if(isAirport==false){
+    setTotalPersonAirportPrice("")
+    setPerPersonAirportPrice("")
+    setPerChildrenPersonAirportPrice("")
+    setTotalChildrenPersonAirportPrice("")
+    setPerInfantAirportPrice("")
+    setTotalInfantAirportPrice("") 
+    // setflightList([{ cost: "",
+    // childrenCost: "",
+    // infantCost: "",}])
+  }
+  
+  },[island,isAirport])
   //  console.log(tourValueArr, "asdasdasdasd");
   useEffect(() => {
     if (show == true) {
@@ -2080,6 +2102,7 @@ aria-label="Close"
                               <td>{totalChildrenPersonAirportPrice}</td>
                             </tr>
                           )}
+                          
                         {isAirport && numberOfInfants > 0 && (
                           <tr>
                             <td>Flight Infant Cost</td>
