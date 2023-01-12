@@ -245,7 +245,7 @@ const Notes = ({ show1, setShow1 }) => {
             } 
         </div>
       </div>
-
+{console.log(noteMainArr,"noteMainArr1")}
       {
         noteMainArr &&
         noteMainArr.map((noteItem, index) => {
@@ -254,7 +254,11 @@ const Notes = ({ show1, setShow1 }) => {
               <div className="textnote">
                 <div className="alignright mb8">
                   <span className=" flexfull">
-                    {moment(noteItem?.reminderDate).format("DD-MM-YYYY")} By{" "}
+                    {moment(noteItem?.reminderDate).format("DD-MM-YYYY")}
+                    {noteItem?.reminderTime!=""&&
+                    ` at ${noteItem?.reminderTime} `}
+                    
+                     By{" "}
                     {noteItem?.createdBy?.name ? noteItem?.createdBy?.name : "" + " "}
                     {"[" + noteItem?.createdBy?.role + "]"}
                   </span>

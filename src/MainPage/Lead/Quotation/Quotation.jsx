@@ -70,7 +70,8 @@ const Quotation = () => {
   });
 
   const [spocImageBase64, setspocImageBase64] = useState("");
-
+  const [readOnly, setReadOnly] = useState(false);
+console.log( readOnly,"readOnly23")
   useEffect(() => {
     handleInit();
     // console.log(images, "tourObjonload");
@@ -142,6 +143,7 @@ const Quotation = () => {
 
   const handleEdit = (row) => {
     // setClearFunctionRun(false);
+
     setShow(true);
     // console.log(row, "row update"); //whole object
     dispatch(setQuotationObject(row)); //=============
@@ -390,9 +392,6 @@ const Quotation = () => {
     {
       title: "Amount",
       dataIndex: "amount",
-      // render: (row, record) => (
-      // <h4>{row?.amount}</h4>
-      // ),
       sorter: (a, b) => a.amount.length - b.amount.length,
     },
     {
@@ -401,28 +400,43 @@ const Quotation = () => {
       render: (row, record) => (
         <div className="dropdown">
           {isConvert ? (
-            <a className="btn btn-white btn-sm ">
-              <i
-                className={
-                  record.status === "Convert"
-                    ? "fa fa-dot-circle-o text-success"
-                    : "fa fa-dot-circle-o text-danger"
-                }
-              />
-              {/* <i
-              className={
-                // record.status === "Approved"
-                record.status === "Convert"
-                  ? //window.confirm("Are you sure to convert this Quotation?")
-                    // deleteFleet()
-                    // confirmAlert(options)
+            <>
+              <a className="btn btn-white btn-sm  "
+                data-bs-toggle={role == "ADMIN" ? "dropdown" : ""}
+                aria-expanded={role == "ADMIN" ? "false" : ""}>
+                <i
+                  className={
+                    record.status === "Convert"
+                      ? "fa fa-dot-circle-o text-success"
+                      : "fa fa-dot-circle-o text-danger"
+                  }
+                />
 
-                  : // alert('"Are you sure to convert this Quotation?"')
-                    "fa fa-dot-circle-o text-danger"
-              } 
-              />*/}
-              {record.status}
-            </a>
+                {record.status}
+              </a>
+              <div className="dropdown-menu">
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleSatus(record, "Created")}
+                >
+                  <i className="fa fa-dot-circle-o text-danger" /> Created
+                </a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => handleSatus(record, "Pending")}
+                >
+                  <i className="fa fa-dot-circle-o text-danger" /> Pending
+                </a>
+                <a
+                  className="dropdown-item"
+                  onClick={() => {
+                    handleSatus(record, "Convert");
+                  }}
+                >
+                  <i className="fa fa-dot-circle-o text-success" /> Convert
+                </a>
+              </div>
+            </>
           ) : (
             <>
               <a
@@ -497,7 +511,15 @@ const Quotation = () => {
               >
                 <i className="material-icons">more_vert</i>
               </a>
+              <div className="dropdown-menu dropdown-menu-right">
+                <a className="dropdown-item" onClick={() => {
+                  handleEdit(row)
+                  setReadOnly(true)
+                }}>
+                  <i className="fa fa-view m-r-5" /> View
+                </a>
 
+              </div>
               {/* <div className="dropdown-menu dropdown-menu-right">
                 <ReactToPdf
                   targetRef={ref}
@@ -706,9 +728,10 @@ const Quotation = () => {
           show={show}
           setShow={setShow}
           clearFunction={clearFunctionRun}
+          readOnly={readOnly}
+          setReadOnly={setReadOnly}
         />
-        {/* <div style={{ opacity: 0, height: 0 }}> */}
-        {/* </div> */}
+
       </div>
 
       {printPdf && (
@@ -945,12 +968,11 @@ const Quotation = () => {
                         {QuotationObj?.travelPassengerObj?.noOfChildrenWithBed >
                           0 &&
                           ` CHILDREN :
-                        ${
-                          QuotationObj?.travelPassengerObj
+                        ${QuotationObj?.travelPassengerObj
                             ?.noOfChildrenWithBed +
                           QuotationObj?.travelPassengerObj
                             ?.noOfChildrenWithoutBed
-                        }
+                          }
                         `}
                         {QuotationObj?.travelPassengerObj?.noOfInfants > 0 &&
                           ` INFANT :
@@ -994,18 +1016,18 @@ const Quotation = () => {
                             parseInt(
                               QuotationObj?.perChildrenPersonAirPortPrice
                             ) *
-                              (parseInt(
-                                QuotationObj?.travelPassengerObj
-                                  ?.noOfChildrenWithBed
-                              ) +
-                                parseInt(
-                                  QuotationObj?.travelPassengerObj
-                                    ?.noOfChildrenWithoutBed
-                                )) +
-                            parseInt(QuotationObj?.perInfantAirPortPrice) *
+                            (parseInt(
+                              QuotationObj?.travelPassengerObj
+                                ?.noOfChildrenWithBed
+                            ) +
                               parseInt(
-                                QuotationObj?.travelPassengerObj?.noOfInfants
-                              )}
+                                QuotationObj?.travelPassengerObj
+                                  ?.noOfChildrenWithoutBed
+                              )) +
+                            parseInt(QuotationObj?.perInfantAirPortPrice) *
+                            parseInt(
+                              QuotationObj?.travelPassengerObj?.noOfInfants
+                            )}
                         </td>
                       </tr>
                     )}
@@ -1029,7 +1051,7 @@ const Quotation = () => {
                                                  ,`}
                             {QuotationObj?.perInfantLandPrice > 0 &&
                               QuotationObj?.travelPassengerObj?.noOfInfants >
-                                0 &&
+                              0 &&
                               ` PER INFANT (₹):
                          ${QuotationObj?.perInfantLandPrice} 
                                                  `}
@@ -1041,18 +1063,18 @@ const Quotation = () => {
                                 QuotationObj?.travelPassengerObj?.noOfAdults
                               ) +
                               parseInt(QuotationObj?.perChildrenLandPrice) *
-                                (parseInt(
-                                  QuotationObj?.travelPassengerObj
-                                    ?.noOfChildrenWithBed
-                                ) +
-                                  parseInt(
-                                    QuotationObj?.travelPassengerObj
-                                      ?.noOfChildrenWithoutBed
-                                  )) +
-                              parseInt(QuotationObj?.perInfantLandPrice) *
+                              (parseInt(
+                                QuotationObj?.travelPassengerObj
+                                  ?.noOfChildrenWithBed
+                              ) +
                                 parseInt(
-                                  QuotationObj?.travelPassengerObj?.noOfInfants
-                                )}
+                                  QuotationObj?.travelPassengerObj
+                                    ?.noOfChildrenWithoutBed
+                                )) +
+                              parseInt(QuotationObj?.perInfantLandPrice) *
+                              parseInt(
+                                QuotationObj?.travelPassengerObj?.noOfInfants
+                              )}
                           </td>
                         </tr>
                       </>
@@ -1107,13 +1129,13 @@ const Quotation = () => {
                       <ul className="list-circle mt-4 pt-4">
                         {
                           QuotationObj?.inclusionData &&
-                            QuotationObj?.inclusionData != "" &&
-                            QuotationObj.inclusionData
-                              .split(/[.;]/g)
-                              .filter((el) => el && el != "")
-                              .map((el, index) => {
-                                return <li key={index}>{el}</li>;
-                              })
+                          QuotationObj?.inclusionData != "" &&
+                          QuotationObj.inclusionData
+                            .split(/[.;]/g)
+                            .filter((el) => el && el != "")
+                            .map((el, index) => {
+                              return <li key={index}>{el}</li>;
+                            })
                           // {el.name} (
                           // {new Date(el.startDate).toDateString()})
                           // </li>
@@ -1181,9 +1203,9 @@ const Quotation = () => {
                           QuotationObj?.flightList[0]?.flightName
                             ?.split("\n")
                             .filter((el) => el && el != "")[
-                            QuotationObj?.flightList[0]?.flightName
-                              ?.split("\n")
-                              .filter((el) => el && el != "").length - 1
+                          QuotationObj?.flightList[0]?.flightName
+                            ?.split("\n")
+                            .filter((el) => el && el != "").length - 1
                           ] && (
                             <div
                               className={
@@ -1191,7 +1213,7 @@ const Quotation = () => {
                                   ?.split("\n")
                                   .filter((el) => el && el != "").length %
                                   2 ==
-                                0
+                                  0
                                   ? "destination destination-reverse"
                                   : "destination"
                               }
@@ -1200,12 +1222,12 @@ const Quotation = () => {
                                   ?.split("\n")
                                   .filter((el) => el && el != "").length %
                                   2 ==
-                                0
+                                  0
                                   ? {
-                                      left: "auto",
-                                      right: 0,
-                                      textAlign: "left",
-                                    }
+                                    left: "auto",
+                                    right: 0,
+                                    textAlign: "left",
+                                  }
                                   : {}
                               }
                             >
@@ -1215,7 +1237,7 @@ const Quotation = () => {
                                     ?.split("\n")
                                     .filter((el) => el && el != "").length %
                                     2 ==
-                                  0
+                                    0
                                     ? { flexDirection: "row-reverse" }
                                     : {}
                                 }
@@ -1224,9 +1246,9 @@ const Quotation = () => {
                                   QuotationObj?.flightList[0]?.flightName
                                     ?.split("\n")
                                     .filter((el) => el && el != "")[
-                                    QuotationObj?.flightList[0]?.flightName
-                                      ?.split("\n")
-                                      .filter((el) => el && el != "").length - 1
+                                  QuotationObj?.flightList[0]?.flightName
+                                    ?.split("\n")
+                                    .filter((el) => el && el != "").length - 1
                                   ]
                                 }
                                 <img src={images.location} alt="" />
@@ -1357,7 +1379,7 @@ const Quotation = () => {
                                   {/* {(index ==  QuotationObj?.itineraryDetails.length-1) &&  moment(QuotationObj?.hotelDetail[0].checkOut).format("DD-MM-YYYY")} */}
                                   {index ==
                                     QuotationObj?.itineraryDetails?.length -
-                                      1 &&
+                                    1 &&
                                     moment(
                                       QuotationObj?.hotelDetail[
                                         QuotationObj?.hotelDetail?.length - 1
@@ -1800,7 +1822,7 @@ const Quotation = () => {
                         }}
                         alt={QuotationObj?.agentObj?.photoUrl}
                         src={QuotationObj?.agentObj?.baseImage}
-                        // src={images.yes_bank}
+                      // src={images.yes_bank}
                       />
                     </div>
                     {/* {generateFilePath(QuotationObj?.agentObj?.photoUrl)}w */}

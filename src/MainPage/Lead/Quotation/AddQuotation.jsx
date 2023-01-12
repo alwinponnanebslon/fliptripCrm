@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   quotationAdd,
   quotationUpdate,
-  setQuotationObject,
+  setQuotationObject,savedQuotationAdd,savedQuotationGet
 } from "../../../redux/features/quotation/quotationSlice";
 
 import { tourGet, activeTourGet } from "../../../redux/features/tour/tourSlice";
@@ -17,8 +17,9 @@ import Button from "react-bootstrap/Button";
 import { useRef } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { updateLeadStatus, getById } from "../../../Services/lead.service";
+import { getSavedQuotation } from "../../../Services/quotation.service";
 
-const AddQuotation = ({ show, setShow, clearFunction }) => {
+const AddQuotation = ({ show, setShow, clearFunction, setReadOnly, readOnly }) => {
   const descriptionRef = useRef();
   const { leadId } = useParams();
 
@@ -30,6 +31,9 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const tourValueArr = useSelector((state) => state.tour.tours);
   const quotationStateObj = useSelector(
     (state) => state.quotation.quotationObj
+  );
+  const quotationStateArr = useSelector(
+    (state) => state.quotation.quotationArr
   );
 
   const clients = useSelector((state) => state.client.clientArr);
@@ -77,10 +81,12 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [isItineraryDetailsRequired, setIsItineraryDetailsRequired] =
     useState(false);
 
+
   //hotels details
   const [itineraryList, setItineraryList] = useState([
     { day: "", itineraryName: "", itineraryHeading: "" },
   ]);
+
 
   const [hotelList, setHotelList] = useState([
     {
@@ -94,6 +100,7 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
     },
   ]);
 
+  
   const [flightList, setflightList] = useState([
     {
       flightName: "",
@@ -116,39 +123,60 @@ const AddQuotation = ({ show, setShow, clearFunction }) => {
   const [totalInfantAirportPrice, setTotalInfantAirportPrice] = useState("");
 
   const [perChildrenLandPrice, setPerChildrenLandPrice] = useState("");
+  
   const [totalChildrenLandPrice, setTotalChidrenLandPrice] = useState("");
   const [perInfantLandPrice, setPerInfantLandPrice] = useState("");
   const [totalInfantLandPrice, setTotalInfantLandPrice] = useState("");
+  
+  const [perChildrenLandPriceWithBed, setPerChildrenLandPriceWithBed] = useState("");
+  const [totalChildrenPriceWithBedPrice, setTotalChildrenPriceWithBedPrice] = useState("");
 
+  const [perChildrenLandPriceWithoutBed, setPerChildrenLandPriceWithoutBed] = useState("");
+  const [totalChildrenPriceWithoutBedPrice, setTotalChildrenPriceWithoutBedPrice] = useState("");
+  const [saveForLater, setSaveForLater] = useState(false);
+  const [quotationArray, setQuotationArray] = useState([]);
+  const [savedQuotationName, setSavedQuotationName] = useState("");
+
+const savedQuotationGet=async ()=>{
+  let {data:arr}  = await getSavedQuotation()
+console.log(arr,"arr1234")
+  setQuotationArray(arr?.data)
+}
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
     // dispatch(tourGet());
     dispatch(activeTourGet());
     dispatch(clientGet());
     // dispatch(leadGetById(leadId));
-  }, []); 
+  savedQuotationGet()
+  }, []);
 
-  useEffect(()=>{ if(island==false){
-    setTotalChidrenLandPrice("")
-setTotalInfantLandPrice("")
-    setPerChildrenLandPrice('')
-    setPerInfantLandPrice('')
-    setPerPersonLandPrice("")
-setTotalPersonLandPrice("")
-  }
-  if(isAirport==false){
-    setTotalPersonAirportPrice("")
-    setPerPersonAirportPrice("")
-    setPerChildrenPersonAirportPrice("")
-    setTotalChildrenPersonAirportPrice("")
-    setPerInfantAirportPrice("")
-    setTotalInfantAirportPrice("") 
-    // setflightList([{ cost: "",
-    // childrenCost: "",
-    // infantCost: "",}])
-  }
-  
-  },[island,isAirport])
+useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
+
+  useEffect(() => {
+    if (island == false) {
+      // setTotalChidrenLandPrice("")
+      setTotalInfantLandPrice("")
+      setPerChildrenLandPrice('')
+      setPerInfantLandPrice('')
+      setPerPersonLandPrice("")
+      setTotalPersonLandPrice("")
+    }
+    if (isAirport == false) {
+      setTotalPersonAirportPrice("")
+      setPerPersonAirportPrice("")
+      setPerChildrenPersonAirportPrice("")
+      setTotalChildrenPersonAirportPrice("")
+      setPerInfantAirportPrice("")
+      setTotalInfantAirportPrice("")
+      // setflightList([{ cost: "",
+      // childrenCost: "",
+      // infantCost: "",}])
+    }
+
+  }, [island, isAirport])
+
+
   //  console.log(tourValueArr, "asdasdasdasd");
   useEffect(() => {
     if (show == true) {
@@ -159,6 +187,9 @@ setTotalPersonLandPrice("")
     }
   }, [show]);
 
+
+
+
   useEffect(() => {
     if (quotationStateObj) {
       // console.log(quotationStateObj, "quotationStateObj213");
@@ -166,11 +197,16 @@ setTotalPersonLandPrice("")
     }
   }, [quotationStateObj]);
 
+
+
   useEffect(() => {
     if (clients) {
       setClientsArr(clients);
     }
   }, [clients]);
+
+
+
 
   useEffect(() => {
     if (quotationObject1 && quotationObject1._id) {
@@ -194,14 +230,25 @@ setTotalPersonLandPrice("")
 
       setTotalPersonAirportPrice(
         quotationObject1?.travelPassengerObj?.noOfAdults *
-          quotationObject1?.perPersonAirPortPrice
+        quotationObject1?.perPersonAirPortPrice
       );
       setPerChildrenPersonAirportPrice(
         quotationObject1?.perChildrenPersonAirportPrice
       );
 
       setPerInfantAirportPrice(quotationObject1?.perInfantAirPortPrice);
-
+      setPerChildrenLandPriceWithBed(quotationObject1?.perChildrenLandPriceWithBed);
+      setPerChildrenLandPriceWithoutBed(quotationObject1?.perChildrenLandPriceWithoutBed);
+      setTotalChildrenPriceWithoutBedPrice(
+        (parseInt(quotationObject1?.perChildrenLandPriceWithoutBed) *
+      parseInt(
+        quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
+      )))
+      setTotalChildrenPriceWithBedPrice(
+        (parseInt(quotationObject1?.perChildrenLandPriceWithBed) *
+      parseInt(
+        quotationObject1?.travelPassengerObj?.noOfChildrenWithBed
+      )))
       // ======
       setPerChildrenLandPrice(quotationObject1?.perChildrenLandPrice);
       setPerInfantLandPrice(quotationObject1?.perInfantLandPrice);
@@ -211,25 +258,25 @@ setTotalPersonLandPrice("")
           parseInt(
             quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
           )) *
-          quotationObject1?.perChildrenPersonAirportPrice
+        quotationObject1?.perChildrenPersonAirportPrice
       );
 
       setTotalInfantAirportPrice(
         parseInt(quotationObject1?.travelPassengerObj?.noOfInfants) *
-          parseInt(quotationObject1?.perInfantAirPortPrice)
+        parseInt(quotationObject1?.perInfantAirPortPrice)
       );
 
       setTotalInfantLandPrice(
         parseInt(quotationObject1?.perInfantLandPrice) *
-          parseInt(quotationObject1?.travelPassengerObj?.noOfInfants)
+        parseInt(quotationObject1?.travelPassengerObj?.noOfInfants)
       );
 
       setTotalChidrenLandPrice(
         parseInt(quotationObject1?.perChildrenLandPrice) *
-          (parseInt(quotationObject1?.travelPassengerObj?.noOfChildrenWithBed) +
-            parseInt(
-              quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
-            ))
+        (parseInt(quotationObject1?.travelPassengerObj?.noOfChildrenWithBed) +
+          parseInt(
+            quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
+          ))
       );
 
       // ======
@@ -237,7 +284,7 @@ setTotalPersonLandPrice("")
       // =========
       setTotalPersonLandPrice(
         parseInt(quotationObject1?.travelPassengerObj?.noOfAdults) *
-          parseInt(quotationObject1?.perPersonLandPrice)
+        parseInt(quotationObject1?.perPersonLandPrice)
       );
 
       setIsItineraryDetailsRequired(
@@ -254,13 +301,13 @@ setTotalPersonLandPrice("")
         quotationObject1?.flightList.length > 0
           ? quotationObject1?.flightList
           : [
-              {
-                flightName: "",
-                cost: "",
-                childrenCost: "",
-                infantCost: "",
-              },
-            ]
+            {
+              flightName: "",
+              cost: "",
+              childrenCost: "",
+              infantCost: "",
+            },
+          ]
       );
 
       setItineraryList(
@@ -273,16 +320,16 @@ setTotalPersonLandPrice("")
         quotationObject1?.hotelDetail?.length > 0
           ? quotationObject1?.hotelDetail
           : [
-              {
-                hotelName: "",
-                roomType: "",
-                numberOfNight: 1,
-                checkIn: "",
-                checkOut: "",
-                rating: 0,
-                hotelAddress: "", // hotelAddress: "",
-              },
-            ]
+            {
+              hotelName: "",
+              roomType: "",
+              numberOfNight: 1,
+              checkIn: "",
+              checkOut: "",
+              rating: 0,
+              hotelAddress: "", // hotelAddress: "",
+            },
+          ]
       );
       setAirportTransfer(quotationObject1?.airportTransfer);
       setAmount(quotationObject1?.amount);
@@ -294,12 +341,12 @@ setTotalPersonLandPrice("")
       setNumberOfChildrenWithoutBed(
         quotationObject1?.travelPassengerObj?.noOfChildrenWithoutBed
       );
-      setIsUpdateTour(true);
+      setIsUpdateTour(savedQuotationName!=""?false:true);
       setNumberOfInfants(quotationObject1?.travelPassengerObj?.noOfInfants);
       setTourArr(quotationObject1?.tourListArr);
-      setIsUpateDoc(true);
+      setIsUpateDoc(savedQuotationName!=""?false:true);
     }
-  }, [quotationObject1]);
+  }, [quotationObject1,savedQuotationName]);
 
   useEffect(() => {
     // console.log(travelList, "tyuertret--------------------------------------------------------")
@@ -331,7 +378,9 @@ setTotalPersonLandPrice("")
       AirportPrice +
       perChildrenPersonAirPortPrice +
       perInfantAirPortPrice +
-      totalChildrenLandPrice +
+      // totalChildrenLandPrice + 
+      +totalChildrenPriceWithBedPrice+
+      +totalChildrenPriceWithoutBedPrice
       totalInfantLandPrice;
     setAmount(totalAmountPrice);
   }, [
@@ -609,7 +658,7 @@ setTotalPersonLandPrice("")
     setTotalChildrenPersonAirportPrice(
       (parseInt(numberOfChildrenWithBed) +
         parseInt(numberOfChildrenWithoutBed)) *
-        amountOfChildren
+      amountOfChildren
     );
 
     setTotalInfantAirportPrice(numberOfInfants * amountOfInfant);
@@ -618,7 +667,7 @@ setTotalPersonLandPrice("")
     setTotalChidrenLandPrice(
       (parseInt(numberOfChildrenWithBed) +
         parseInt(numberOfChildrenWithoutBed)) *
-        perChildrenLandPrice
+      perChildrenLandPrice
     );
     setTotalInfantLandPrice(numberOfInfants * perInfantLandPrice);
   }, [
@@ -854,6 +903,13 @@ setTotalPersonLandPrice("")
     // }
   };
 
+  const handleSaveQuotatonData=(e )=>{ 
+    setSavedQuotationName(e.target.value)
+    let findOBj= quotationArray.find((x)=>x.destinationName==e.target.value)
+    // console. log(findOBj,"findO")
+    setQuotationObject1(findOBj)
+// console.log(e,"eeeeee1")
+  }
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
@@ -953,6 +1009,8 @@ setTotalPersonLandPrice("")
     setPerChildrenPersonAirportPrice("");
     setTotalChildrenPersonAirportPrice("");
     setPerInfantAirportPrice("");
+
+    setPerChildrenLandPriceWithBed("");
     setTotalInfantAirportPrice("");
     setPerChildrenLandPrice("");
     setTotalChidrenLandPrice("");
@@ -995,7 +1053,8 @@ setTotalPersonLandPrice("")
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => { 
+
     e.preventDefault();
     if (destinationName == "") {
       toastError("Destination name is mandatory");
@@ -1074,9 +1133,9 @@ setTotalPersonLandPrice("")
     if (
       parseInt(numberOfGuest) !=
       parseInt(numberofAdults) +
-        parseInt(numberOfChildrenWithBed) +
-        parseInt(numberOfChildrenWithoutBed) +
-        parseInt(numberOfInfants)
+      parseInt(numberOfChildrenWithBed) +
+      parseInt(numberOfChildrenWithoutBed) +
+      parseInt(numberOfInfants)
     ) {
       toastError(
         "Total number of guest must be equal to sum of adult,children with bed and without bed and infants"
@@ -1102,13 +1161,18 @@ setTotalPersonLandPrice("")
       perPersonAirPortPrice,
       perChildrenPersonAirPortPrice,
       perInfantAirPortPrice,
+      perChildrenLandPriceWithBed,
+      perChildrenLandPriceWithoutBed,
+
       // ======================
       amount:
         +totalPersonAirPortPrice +
         +totalChildrenPersonAirportPrice +
         +totalInfantAirportPrice +
         +totalPersonLandPrice +
-        +totalChildrenLandPrice +
+        +totalChildrenPriceWithBedPrice
+        +totalChildrenPriceWithoutBedPrice
+        // +totalChildrenLandPrice +
         +totalInfantLandPrice,
       //===================
       perPersonLandPrice:
@@ -1137,7 +1201,10 @@ setTotalPersonLandPrice("")
     if (isItineraryDetailsRequired) {
       obj.itineraryList = itineraryList;
     }
-
+  if(saveForLater==true){
+    dispatch(savedQuotationAdd(obj))
+  } 
+  setSavedQuotationName("")
     // console.log(obj, "234234");
     if (!isUpdateTour) {
       dispatch(quotationAdd(obj));
@@ -1172,9 +1239,9 @@ setTotalPersonLandPrice("")
     if (setterFunctionName == "numberofAdults") {
       if (
         parseInt(value) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1186,9 +1253,9 @@ setTotalPersonLandPrice("")
     } else if (setterFunctionName == "numberOfChildrenWithBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(value) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(numberOfInfants) >
+        parseInt(value) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1200,9 +1267,9 @@ setTotalPersonLandPrice("")
     } else if (setterFunctionName == "numberOfChildrenWithoutBed") {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(value) +
-          parseInt(numberOfInfants) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(value) +
+        parseInt(numberOfInfants) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1214,9 +1281,9 @@ setTotalPersonLandPrice("")
     } else {
       if (
         parseInt(numberofAdults) +
-          parseInt(numberOfChildrenWithBed) +
-          parseInt(numberOfChildrenWithoutBed) +
-          parseInt(value) >
+        parseInt(numberOfChildrenWithBed) +
+        parseInt(numberOfChildrenWithoutBed) +
+        parseInt(value) >
         parseInt(numberOfGuest)
       ) {
         toastError(
@@ -1228,7 +1295,7 @@ setTotalPersonLandPrice("")
     }
   };
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     numberofAdults,
     numberOfChildrenWithBed,
     numberOfChildrenWithoutBed,
@@ -1296,6 +1363,8 @@ aria-label="Close"
               onClick={() => {
                 clearFunc();
                 setShow(false);
+                setReadOnly(false)
+                setSavedQuotationName("")
               }}
             ></div>
             <Modal.Body>
@@ -1313,11 +1382,42 @@ aria-label="Close"
                       Close Form
                     </Button> */}
                   </div>
+                  {/* {console.log(readOnly, "123")} */}
+                  <div className="col-md-6 mb-3">
+                                <label className="col-form-label ">
+                               get from saved Quotation 
+                                </label>
+                                <select
+                                  readOnly={readOnly ? true : false}
+                                  className="form-control"
+                                  name="name"
+                                  // value={item?.name}
+                                  onChange={(e) =>
+                                    handleSaveQuotatonData(e)
+                                  }
+                                >
+                                  <option value="">
+                                    --select an option--
+                                  </option>
+                                  {quotationArray &&
+                                    quotationArray.length > 0 &&
+                                    quotationArray.map((el, inde) => (
+                                      <option key={inde} value={el.destinationName}>
+                                        {el.destinationName}
+                                      </option>
+                                    ))}
+                                </select>
+                              </div>
+                           
+
+
+
                   <div className=" form-group col-md-8">
                     <label className="col-form-label ">
                       Destination Name <span className="text-danger">*</span>
                     </label>
                     <input
+                      readOnly={readOnly ? true : false}
                       type="text"
                       className="form-control"
                       value={destinationName}
@@ -1339,6 +1439,7 @@ aria-label="Close"
                                   Tour <span className="text-danger">*</span>
                                 </label>
                                 <select
+                                  readOnly={readOnly ? true : false}
                                   className="form-control"
                                   name="name"
                                   value={item?.name}
@@ -1365,6 +1466,7 @@ aria-label="Close"
                                 </label>
                                 <div className="col-sm-8">
                                   <input
+                                    readOnly={readOnly ? true : false}
                                     type="date"
                                     className="form-control"
                                     name="startDate"
@@ -1394,9 +1496,11 @@ aria-label="Close"
                               <div className="form-group col-md-2 mt-4">
                                 {travelList.length !== 1 && (
                                   <button
+                                    readOnly={readOnly ? true : false}
                                     type="button"
                                     className="btn btn-danger"
                                     onClick={() => handleRemoveTravel(index)}
+
                                   >
                                     Remove
                                   </button>
@@ -1423,12 +1527,12 @@ aria-label="Close"
                     <label className="col-form-label ">
                       Duration Of Tour <span className="text-danger">*</span>
                       (in Nights) (
-                      {`${durationOfTour ? durationOfTour : 0}N/${
-                        days ? days : 0
-                      }D`}
+                      {`${durationOfTour ? durationOfTour : 0}N/${days ? days : 0
+                        }D`}
                       )
                     </label>
                     <input
+                      readOnly={readOnly ? true : false}
                       type="number"
                       className="form-control"
                       value={durationOfTour}
@@ -1442,6 +1546,7 @@ aria-label="Close"
                       Number Of Guest <span className="text-danger">*</span>
                     </label>
                     <input
+                      readOnly={readOnly ? true : false}
                       type="number"
                       className="form-control"
                       value={numberOfGuest}
@@ -1461,6 +1566,7 @@ aria-label="Close"
                             <span className="text-danger">*</span>
                           </label>
                           <select
+                            readOnly={readOnly ? true : false}
                             className="form-control"
                             value={parseInt(numberofAdults)}
                             // value={parseInt(numberOfGuest)}
@@ -1491,6 +1597,7 @@ aria-label="Close"
                             Children with Bed
                           </label>
                           <select
+                            readOnly={readOnly ? true : false}
                             className="form-control"
                             value={parseInt(numberOfChildrenWithBed)}
                             onChange={(e) => {
@@ -1518,6 +1625,7 @@ aria-label="Close"
                             Children without Bed
                           </label>
                           <select
+                            readOnly={readOnly ? true : false}
                             className="form-control"
                             value={parseInt(numberOfChildrenWithoutBed)}
                             onChange={(e) => {
@@ -1543,6 +1651,7 @@ aria-label="Close"
                         <div className="col-2">
                           <label className="col-form-label ">Infants</label>
                           <select
+                            readOnly={readOnly ? true : false}
                             className="form-control"
                             value={parseInt(numberOfInfants)}
                             onChange={(e) => {
@@ -1572,6 +1681,7 @@ aria-label="Close"
                 <div className="form-group col-md-6 mt-5">
                   <label className="text-danger ">Hotel Details Required</label>
                   <input
+                    readOnly={readOnly ? true : false}
                     type="checkbox"
                     name="IsHotelDetailsRequired"
                     style={{ marginLeft: 10 }}
@@ -1592,6 +1702,7 @@ aria-label="Close"
                             <div className="form-group col-md-4">
                               <label>Hotel Name</label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="text"
                                 name="hotelName"
                                 className="form-control"
@@ -1604,6 +1715,7 @@ aria-label="Close"
                             <div className="form-group col-md-4">
                               <label> Room Type</label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="text"
                                 name="roomType"
                                 value={hotel.roomType}
@@ -1614,6 +1726,7 @@ aria-label="Close"
                             <div className="form-group col-md-2">
                               <label> Rating</label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="number"
                                 name="rating"
                                 defaultValue={"not selected"}
@@ -1642,6 +1755,10 @@ aria-label="Close"
                               <label> Check In </label>
                               {/* {hotel.checkIn} */}
                               <input
+                                readOnly={readOnly ? true : false}
+                                min={`${moment(hotel.checkIn).format(
+                                  "YYYY-MM-DD"
+                                )}`}
                                 type="date"
                                 name="checkIn"
                                 value={`${moment(hotel.checkIn).format(
@@ -1655,6 +1772,7 @@ aria-label="Close"
                             <div className="form-group col-md-3">
                               <label> Number Of Night</label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="number"
                                 name="numberOfNight"
                                 value={`${hotel.numberOfNight}`}
@@ -1666,6 +1784,7 @@ aria-label="Close"
                             <div className="form-group col-md-4">
                               <label> Check Out </label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="date"
                                 // type="text"
                                 name="checkOut"
@@ -1681,6 +1800,7 @@ aria-label="Close"
                             <div className="form-group col-md-4">
                               <label>Hotel Address</label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="text"
                                 name="hotelAddress"
                                 className="form-control"
@@ -1692,6 +1812,7 @@ aria-label="Close"
                             <div className="form-group col-md-2 mt-4">
                               {hotelList.length !== 1 && (
                                 <button
+                                  readOnly={readOnly ? true : false}
                                   type="button"
                                   className="btn btn-danger mx-1"
                                   onClick={() => handleremoveHotel(i)}
@@ -1701,13 +1822,14 @@ aria-label="Close"
                               )}
                             </div>
                             {durationOfTour &&
-                            hotelList.reduce(
-                              (acc, el) => acc + parseInt(el.numberOfNight),
-                              0
-                            ) < durationOfTour ? (
+                              hotelList.reduce(
+                                (acc, el) => acc + parseInt(el.numberOfNight),
+                                0
+                              ) < durationOfTour ? (
                               <div className="col-md-12">
                                 {/* {hotelList.length - 1 === i && ( */}
                                 <button
+                                  readOnly={readOnly ? true : false}
                                   type="button"
                                   className="btn btn-success"
                                   onClick={handleaddclickHotel}
@@ -1729,6 +1851,7 @@ aria-label="Close"
                     Flight Details Required
                   </label>
                   <input
+                    readOnly={readOnly ? true : false}
                     type="checkbox"
                     name="IsFlightDetailsRequired"
                     style={{ marginLeft: 10 }}
@@ -1748,13 +1871,14 @@ aria-label="Close"
                         return (
                           <div className="row mb-3" key={i}>
                             <div className="form-group col-md-4">
-                              <label>Flight Name</label>
+                              <label>Flight Details</label>
 
                               <TextareaAutosize
                                 // ref={descriptionRef}
                                 // onKeyUp={(e) => {
                                 //   textAreaAdjust(e);
                                 // }}
+                                readOnly={readOnly ? true : false}
                                 type="text"
                                 name="flightName"
                                 className="form-control"
@@ -1776,6 +1900,7 @@ aria-label="Close"
                             <div className="form-group col-md-2">
                               <label>Adults Cost </label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="number"
                                 name="cost"
                                 className="form-control"
@@ -1786,6 +1911,7 @@ aria-label="Close"
                             <div className="form-group col-md-2">
                               <label>Children Cost </label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="number"
                                 name="childrenCost"
                                 className="form-control"
@@ -1796,6 +1922,7 @@ aria-label="Close"
                             <div className="form-group col-md-2">
                               <label>Infant Cost </label>
                               <input
+                                readOnly={readOnly ? true : false}
                                 type="number"
                                 name="infantCost"
                                 className="form-control"
@@ -1807,6 +1934,7 @@ aria-label="Close"
                             <div className="form-group col-md-2 mt-4">
                               {flightList.length !== 1 && (
                                 <button
+                                  readOnly={readOnly ? true : false}
                                   type="button"
                                   // className="btn btn-success"
                                   className="btn btn-danger mx-1"
@@ -1840,6 +1968,7 @@ aria-label="Close"
                   </div>
                   <div className="col-md-9">
                     <select
+                      readOnly={readOnly ? true : false}
                       className="form-control"
                       value={visaRequired}
                       onChange={(e) => {
@@ -1861,6 +1990,7 @@ aria-label="Close"
                   </label>
                   <div className="col-md-9">
                     <select
+                      readOnly={readOnly ? true : false}
                       className="form-control"
                       value={airportTransfer}
                       onChange={(e) => {
@@ -1889,6 +2019,7 @@ aria-label="Close"
                     Itinerary Details Required
                   </label>
                   <input
+                    readOnly={readOnly ? true : false}
                     type="checkbox"
                     name="isItineraryDetailsRequired"
                     style={{ marginLeft: 10 }}
@@ -1919,6 +2050,7 @@ aria-label="Close"
                                 <div className="form-group col-md-5">
                                   <label>Itinerary Heading</label>
                                   <input
+                                    readOnly={readOnly ? true : false}
                                     type="text"
                                     name="itineraryHeading"
                                     className="form-control"
@@ -1937,6 +2069,8 @@ aria-label="Close"
                                     // onKeyUp={(e) => {
                                     //   textAreaAdjust(e);
                                     // }}
+
+                                    readOnly={readOnly ? true : false}
                                     type="text"
                                     name="itineraryName"
                                     className="form-control"
@@ -1971,6 +2105,7 @@ aria-label="Close"
                 <div className="form-group col-md-6 mt-5">
                   <label className="text-danger ">Inclusion Required</label>
                   <input
+                    readOnly={readOnly ? true : false}
                     type="checkbox"
                     name="isInclusionRequired"
                     style={{ marginLeft: 10 }}
@@ -1988,6 +2123,7 @@ aria-label="Close"
                         <div className="form-group col-md-12">
                           <label> Description</label>
                           <TextareaAutosize
+                            readOnly={readOnly ? true : false}
                             type="text"
                             name="inclusion"
                             className="form-control"
@@ -2008,12 +2144,16 @@ aria-label="Close"
                   <label className="col-form-label col-md-2">Notes</label>
                   <div className="col-md-10">
                     <input
+                      readOnly={readOnly ? true : false}
                       type="text"
                       className="form-control"
                       value={termAndCondition}
                       onChange={(e) => setTermAndCondition(e.target.value)}
                     />
                   </div>
+                </div>
+                <div className="form-group row">
+                  <h2 className="col-form-label text-danger "> COSTING DETAILS</h2>
                 </div>
                 {/* <div className="form-group col-md-6">
                   <label className="col-form-label ">
@@ -2038,6 +2178,7 @@ aria-label="Close"
                     <span className="text-danger">*</span>
                   </label>
                   <input
+                    readOnly={readOnly ? true : false}
                     type="checkbox"
                     name="Island"
                     style={{ marginLeft: 10 }}
@@ -2069,8 +2210,9 @@ aria-label="Close"
                             <td>
                               <div className="col-md-10">
                                 <input
+                                  readOnly={readOnly ? true : false}
                                   className="form-control"
-                                  readOnly
+
                                   type="text"
                                   value={perPersonAirPortPrice}
                                 />
@@ -2092,8 +2234,8 @@ aria-label="Close"
                               <td>
                                 <div className="col-md-10">
                                   <input
+                                    readOnly={readOnly ? true : false}
                                     className="form-control"
-                                    readOnly
                                     type="text"
                                     value={perChildrenPersonAirPortPrice}
                                   />
@@ -2110,7 +2252,7 @@ aria-label="Close"
                             <td>
                               <div className="col-md-10">
                                 <input
-                                  readOnly
+                                  readOnly={readOnly ? true : false}
                                   type="text"
                                   className="form-control"
                                   value={perInfantAirPortPrice}
@@ -2128,9 +2270,10 @@ aria-label="Close"
                             <td>
                               <div className="col-md-10">
                                 <input
+                                  readOnly={readOnly ? true : false}
                                   type="text"
                                   className="form-control"
-                                  value={[perPersonLandPrice]}
+                                  value={perPersonLandPrice}
                                   onChange={(e) => {
                                     if (e.target.value < 0) {
                                       toastError("cost cannot be negative ");
@@ -2143,55 +2286,83 @@ aria-label="Close"
                                   }}
                                 />
                               </div>
-                              {/* <input
-                                type="text"
-                                value={[perPersonLandPrice]}
-                                onChange={(e) => {
-                                  setPerPersonLandPrice(e.target.value);
-                                  setTotalPersonLandPrice(
-                                    numberOfGuest * e.target.value
-                                  );
-                                }}
-                              /> */}
+                          
                             </td>
                             <td>{totalPersonLandPrice}</td>
                           </tr>
                         )}
 
                         {island &&
-                          (parseInt(numberOfChildrenWithBed) > 0 ||
-                            parseInt(numberOfChildrenWithoutBed) > 0) && (
+                          parseInt(numberOfChildrenWithBed) > 0 && (
                             <tr>
-                              <td>Land Children cost</td>
+                              <td>Land Children cost with bed</td>
                               <td>
-                                {parseInt(numberOfChildrenWithBed) +
-                                  parseInt(numberOfChildrenWithoutBed)}
+                                {parseInt(numberOfChildrenWithBed)}
+
                               </td>
                               <td>
                                 <div className="col-md-10">
                                   <input
+                                    readOnly={readOnly ? true : false}
                                     type="number"
                                     className="form-control"
-                                    value={perChildrenLandPrice}
+                                    value={perChildrenLandPriceWithBed}
                                     onChange={(e) => {
                                       if (e.target.value < 0) {
                                         toastError("cost cannot be negative ");
                                         return;
                                       }
-                                      setPerChildrenLandPrice(e.target.value);
-                                      let childrenNumber =
-                                        parseInt(numberOfChildrenWithBed) +
-                                        parseInt(numberOfChildrenWithoutBed);
-                                      setTotalChidrenLandPrice(
-                                        +childrenNumber * e.target.value
-                                      );
+                                      setPerChildrenLandPriceWithBed(e.target.value);
+                                        setTotalChildrenPriceWithBedPrice(e.target.value
+                                        * parseInt(numberOfChildrenWithBed))
+                                      // let childrenNumber =
+                                      //   parseInt(numberOfChildrenWithBed) +
+                                      //   parseInt(numberOfChildrenWithoutBed);
+                                      // setTotalChidrenLandPrice(
+                                      //   +childrenNumber * e.target.value
+                                      // );
                                     }}
                                   />
                                 </div>
                               </td>
-                              <td>{totalChildrenLandPrice}</td>
+                              <td>{totalChildrenPriceWithBedPrice}</td>
                             </tr>
                           )}
+                        {island && parseInt(numberOfChildrenWithoutBed) > 0 && (
+                          <tr>
+                            <td>Land Children cost without bed</td>
+                            <td>
+                              {parseInt(numberOfChildrenWithoutBed)}
+
+                            </td>
+                            <td>
+                              <div className="col-md-10">
+                                <input
+                                  readOnly={readOnly ? true : false}
+                                  type="number"
+                                  className="form-control"
+                                  value={perChildrenLandPriceWithoutBed}
+                                  onChange={(e) => {
+                                    if (e.target.value < 0) {
+                                      toastError("cost cannot be negative ");
+                                      return;
+                                    }
+                                    setPerChildrenLandPriceWithoutBed(e.target.value);
+                                    setTotalChildrenPriceWithoutBedPrice(e.target.value * parseInt(numberOfChildrenWithoutBed))
+                                    // let childrenNumber =
+                                    //   parseInt(numberOfChildrenWithBed) +
+                                    //   parseInt(numberOfChildrenWithoutBed);
+                                    // setTotalChidrenLandPrice(
+                                    //   +childrenNumber * e.target.value
+                                    // );
+                                  }}
+                                />
+                              </div>
+                            </td>
+                            <td>{totalChildrenPriceWithoutBedPrice}</td>
+                          </tr>
+                        )}
+
                         {island && numberOfInfants > 0 && (
                           <tr>
                             <td>Land Infant Cost</td>
@@ -2199,6 +2370,7 @@ aria-label="Close"
                             <td>
                               <div className="col-md-10">
                                 <input
+                                  readOnly={readOnly ? true : false}
                                   type="number"
                                   className="form-control"
                                   value={perInfantLandPrice}
@@ -2225,12 +2397,14 @@ aria-label="Close"
                           <td>Total</td>
                           {/* <td>{amount}</td> */}
                           <td>
-                            {+totalPersonAirPortPrice +
-                              +totalChildrenPersonAirportPrice +
-                              +totalInfantAirportPrice +
-                              +totalPersonLandPrice +
-                              +totalChildrenLandPrice +
-                              +totalInfantLandPrice}
+                          {/* {console.log(tdddddotalPersonAirPortPrice,"totalPersonAirPortPrice")} */}
+                            {parseInt(totalPersonAirPortPrice) +
+                              parseInt(totalChildrenPersonAirportPrice) +
+                              parseInt(totalInfantAirportPrice) +
+                              parseInt(totalPersonLandPrice) + 
+                              parseInt(totalChildrenPriceWithBedPrice) + 
+                              parseInt(totalChildrenPriceWithoutBedPrice) + 
+                              parseInt(totalInfantLandPrice)}
                           </td>
                         </tr>
                       </tbody>
@@ -2247,6 +2421,8 @@ aria-label="Close"
                   setShow(false);
                   // window.location.reload();
                   clearFunc();
+                  setReadOnly(false)
+                  setSavedQuotationName("")
                 }}
               >
                 Close
@@ -2254,6 +2430,46 @@ aria-label="Close"
               <Button variant="primary" onClick={(e) => handleSubmit(e)}>
                 {isUpdateTour ? "Edit" : "Add"} Quote
               </Button>
+              {/* <Button variant="primary" onClick={(e) => {
+                setSaveForLater(true)
+                handleSubmit(e)}}>
+               Save For Later
+              </Button> */}
+              <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                  Save For Later
+                  </label>
+                  <input
+                    readOnly={readOnly ? true : false}
+                    type="checkbox"
+                    name="saveForLater"
+                    style={{ marginLeft: 10 }}
+                    value={saveForLater}
+                    checked={saveForLater}
+                    onChange={(e) => {
+                      setSaveForLater(!saveForLater);
+                    }}
+                  />
+                </div>
+                
+                {/* <div className="form-group col-md-6">
+                  <label className="col-form-label ">
+                    Land Packages
+                    <span className="text-danger">*</span>
+                  </label>
+                  <input
+                    readOnly={readOnly ? true : false}
+                    type="checkbox"
+                    name="Island"
+                    style={{ marginLeft: 10 }}
+                    value={island}
+                    checked={island}
+                    onChange={(e) => {
+                      setIsLand(!island);
+                    }}
+                  />
+                </div> */}
+
             </Modal.Footer>
           </Modal>
         </div>

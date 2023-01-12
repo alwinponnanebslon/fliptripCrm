@@ -40,18 +40,21 @@ const ViewCostingSheetForm = () => {
   const [obj, setObj] = useState({});
   const [paymentList, setPaymentList] = useState({});
   const [notificationArr, setNotificationArr] = useState([]);
-  const [comment    , setComment] = useState("");
+  const [comment, setComment] = useState("");
 
   const userObj = useSelector((state) => state.auth.user);
   const [createdBy, setCreatedBy] = useState({});
   const [connectEmplyeeWithThisLead, setConnectEmplyeeWithThisLead] = useState(
     []
-    );
+  );
+  const [commentInPAyemnt, setCommentInPAyemnt] = useState(false);
 
-useEffect(() => {
-  setCreatedBy(userObj);
-}, [userObj]);
-  
+
+  useEffect(() => {
+    setCreatedBy(userObj);
+  }, [userObj]);
+
+
 
   const handleGetCommentFromNtoifcation = async () => {
     let { data: response } = await handleNotificationGetForSpecificLeadId(
@@ -61,8 +64,8 @@ useEffect(() => {
     setNotificationArr(response?.data);
   };
 
-  
-const handleGetAllEmployees = async () => {
+
+  const handleGetAllEmployees = async () => {
     try {
       let { data: res } = await getEmployessLinkedWithLeadId(leadId);
       // console.log(res, "resonp");
@@ -88,6 +91,12 @@ const handleGetAllEmployees = async () => {
 
 
 
+  useEffect(() => {
+    handleGetCommentFromNtoifcation();
+  }, [commentInPAyemnt]);
+
+
+
 
   const handleInit = (leadId) => {
     dispatch(costingSheetGet(`leadId=${leadId}`));
@@ -98,7 +107,7 @@ const handleGetAllEmployees = async () => {
     setObj(costingSheetResultObj);
   }, [costingSheetResultObj]);
 
- 
+
 
   useEffect(() => {
     if (obj && obj._id) {
@@ -120,46 +129,45 @@ const handleGetAllEmployees = async () => {
 
 
 
-  
+
   const handleKeyPress = (event) => {
     let object = {
       heading: comment,
       // description,
       // userId, 
-      CommentUserId:[],
+      CommentUserId: [],
       leadId,
       followDate: new Date().toLocaleDateString(),
       createdBy: { ...createdBy, role },
       followTime: new Date().toLocaleTimeString(),
-      isComment:true
+      isComment: true
     };
     if (event.key === "Enter") {
       // dispatch(addNotification(object));
       if (role == "SPOC") {
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.adminObj?._id })
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId })
 
-     
+
       } else if (role == "TEAMLEAD") {
-   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-   object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.adminObj?._id })
 
-    
+
       } else if (role == "ADMIN") {
-        
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
 
-        }else if (role=="ACCOUNT"){
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
-        object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-        object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-      } 
-      // for (let el of connectEmplyeeWithThisLead?.AccountArr) {
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId })
 
-      //   object.CommentUserId.push({userId:el._id}) 
-      // }
+      } else if (role == "ACCOUNT") {
+        // object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
+        object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+        // object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+      }
+
       dispatch(addNotification(object));
+      setCommentInPAyemnt(!commentInPAyemnt)
+      handleGetCommentFromNtoifcation();
     }
   };
 
@@ -168,36 +176,40 @@ const handleGetAllEmployees = async () => {
     let object = {
       heading: comment,
       // userId, 
-      CommentUserId:[],
+      CommentUserId: [],
       leadId,
       followDate: new Date().toLocaleDateString(),
       createdBy: { ...createdBy, role },
       followTime: new Date().toLocaleTimeString(),
-      isComment:true
+      isComment: true
     };
     // console.log(role,"role23")
-        if (role == "SPOC") {
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.leadId}) 
-  
-       
-        } else if (role == "TEAMLEAD") {
-     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-     object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id}) 
-  
-      
-        } else if (role == "ADMIN") {
-          
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-  
-        }else if (role=="ACCOUNT"){
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
-          object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.agentId}) 
-          object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
-        } 
-        
-        dispatch(addNotification(object)); 
+    if (role == "SPOC") {
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.adminObj?._id })
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId })
+
+
+    } else if (role == "TEAMLEAD") {
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.adminObj?._id })
+
+
+    } else if (role == "ADMIN") {
+
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.leadId })
+
+    } else if (role == "ACCOUNT") {
+      console.log("3333333")
+      // object.CommentUserId.push({userId:connectEmplyeeWithThisLead?.adminObj?._id})
+      object.CommentUserId.push({ userId: connectEmplyeeWithThisLead?.agentId })
+      // object.CommentUserId.push({ userId:connectEmplyeeWithThisLead?.leadId}) 
+    }
+
+    dispatch(addNotification(object));
+    setCommentInPAyemnt(!commentInPAyemnt)
+    handleGetCommentFromNtoifcation();
+    setComment("")
   };
 
 
@@ -634,42 +646,42 @@ const handleGetAllEmployees = async () => {
               </Table>
             </div>
           )}
-        </div> 
+        </div>
 
 
         <div className="container">
-              <div className="row">
-                <div className="col-lg-12">
-                  <div className="form-group">
-                    {/* <TextareaAutosize */}
-                    <input
-                      value={comment}
-                      onChange={(e) => {
-                        setComment(e.target.value);
-                      }}
-                      onKeyDown={(e) => handleKeyPress(e)}
-                      className="form-control"
-                      cols="1000"
-                      rows="100"
-                      placeholder="Add Comment"
-                    />
-                  </div>
-                </div>
-               
-
-                {/* {showButtonVisibility && ( */}
-                  <Button
-                    type="submit"
-                    className="btn-submit col-md-2" 
-                    onClick={(e) => {
-                      handleSubmitComment(e);
-                    }}
-                  >
-                    Submit-
-                  </Button>
-                {/* // )} */}
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="form-group">
+                {/* <TextareaAutosize */}
+                <input
+                  value={comment}
+                  onChange={(e) => {
+                    setComment(e.target.value);
+                  }}
+                  onKeyDown={(e) => handleKeyPress(e)}
+                  className="form-control"
+                  cols="1000"
+                  rows="100"
+                  placeholder="Add Comment"
+                />
               </div>
             </div>
+
+
+            {/* {showButtonVisibility && ( */}
+            <Button
+              type="submit"
+              className="btn-submit col-md-2"
+              onClick={(e) => {
+                handleSubmitComment(e);
+              }}
+            >
+              Submit-
+            </Button>
+            {/* // )} */}
+          </div>
+        </div>
 
 
         {notificationArr &&

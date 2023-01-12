@@ -6,7 +6,8 @@ import {
   updateQuotation,
   updateQuotationStatus,
   getFilter,
-  getFilterByStatus,
+  getFilterByStatus, 
+  AddSavedQuotation,getSavedQuotation
 } from "../../../Services/quotation.service";
 
 let initialState = {
@@ -32,6 +33,22 @@ export const quotationGet = createAsyncThunk(
     }
   }
 );
+// getSavedQuotation
+export const savedQuotationGet = createAsyncThunk(
+  "auth/savedQuotationGet",
+  async (payload) => {
+    try {
+      // console.log(payload, "12");
+      let { data: response } = await getSavedQuotation(payload);
+      // console.log(response, "12342");
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+
 export const quotationFilterGet = createAsyncThunk(
   "auth/quotationFilterGet",
   async (payload) => {
@@ -77,6 +94,23 @@ export const quotationAdd = createAsyncThunk(
   }
 );
 
+export const savedQuotationAdd = createAsyncThunk(
+  "auth/savedQuotationAdd",
+  async (payload, thunkApi) => {
+    try {
+      let { data: response } = await AddSavedQuotation(payload);
+      thunkApi.dispatch(quotationGet(`leadId=${payload?.leadId}`));
+      toastSuccess(response.message);
+
+      return response;
+    } catch (error) {
+      toastError(error);
+      throw error;
+    }
+  }
+);
+
+
 export const setQuotationObject = createAsyncThunk(
   "auth/setQuotationObject",
   async (payload) => {
@@ -88,6 +122,7 @@ export const setQuotationObject = createAsyncThunk(
     }
   }
 );
+
 
 export const quotationUpdate = createAsyncThunk(
   "auth/quotationUpdate",
@@ -104,6 +139,7 @@ export const quotationUpdate = createAsyncThunk(
     }
   }
 );
+
 
 export const quotationUpdateStatus = createAsyncThunk(
   "auth/quotationStatusUpdate",
@@ -124,6 +160,7 @@ export const quotationUpdateStatus = createAsyncThunk(
     }
   }
 );
+
 // export const quotationAdd = createSlice({
 //   name: "quotationObj",
 //   initialState: initialState,
@@ -145,6 +182,8 @@ export const quotationUpdateStatus = createAsyncThunk(
 //   },
 // });
 
+
+
 export const quotationDelete = createAsyncThunk(
   "auth/quotationDelete",
   async (payload, thunkApi) => {
@@ -160,6 +199,7 @@ export const quotationDelete = createAsyncThunk(
     }
   }
 );
+
 
 const quotationSlice = createSlice({
   name: "quotation",
@@ -212,6 +252,18 @@ const quotationSlice = createSlice({
       state.error = true;
       state.isAuthorized = false;
     },
+    [savedQuotationGet.pending]: (state, action) => {
+      state.loading = true;
+      state.error = false;
+    },
+    [savedQuotationGet.fulfilled]: (state, { payload }) => {
+      state.quotationArr = payload.data;
+    },
+    [savedQuotationGet.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.isAuthorized = false;
+    },
     //
     [quotationFilterGet.pending]: (state, action) => {
       state.loading = true;
@@ -232,6 +284,17 @@ const quotationSlice = createSlice({
     },
     [quotationAdd.fulfilled]: (state, { payload }) => {},
     [quotationAdd.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.isAuthorized = false;
+      // toastError(action.data.message);
+    },
+    [savedQuotationAdd.pending]: (state, action) => {
+      state.loading = true;
+      state.error = false;
+    },
+    [savedQuotationAdd.fulfilled]: (state, { payload }) => {},
+    [savedQuotationAdd.rejected]: (state, action) => {
       state.loading = false;
       state.error = true;
       state.isAuthorized = false;

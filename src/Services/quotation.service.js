@@ -8,6 +8,17 @@ export const AddQuotation = (obj) => {
   return axios.post(`${serverUrl}/add`, obj);
 };
 
+
+
+export const AddSavedQuotation = (obj) => {
+  // console.log(obj, "obj axios");
+  // // console.log(serverUrl, "serverUrl");
+  return axios.post(`${serverUrl}/addSavedQuote`, obj);
+};
+
+export const getSavedQuotation = (query) => {
+  return axios.get(`${serverUrl}/getSavedQuotation?${query}`);
+};
 export const get = (query) => {
   return axios.get(`${serverUrl}?${query}`);
 };

@@ -371,7 +371,7 @@ const Leads = () => {
           return obj;
         });
       } else {
-        tempArr = agents.map((el) => {
+        tempArr = agents.filter((e)=>e.role=="SPOC").map((el) => {
           let obj = {
             label: `${el.firstName} ${el.lastName}`,
             value: el?._id,
@@ -593,9 +593,9 @@ const Leads = () => {
     setPriority(""); 
     setClientArr([]);
     // setAgentId("");
+    setLeadObj({})
     // setSpocId("");
     setDescription("");
-    // setLeadObj({});
     setLeadUpdateId("");
     // setAgentsArr([]);
     // setLeadsArr([]);
@@ -768,7 +768,7 @@ const Leads = () => {
       }
       let obj = {
         agentId: agentId,
-      };
+      };console.log(obj,"obj8")
       let { data: res } = await assignLeadToagent(selectedLeadId, obj);
       if (res.success) {
         handleGetAllLeads();
@@ -2282,46 +2282,8 @@ const Leads = () => {
                     </div>
                   </div>
                 </Link>
-                <Link
-                  to="/admin/leads"
-                  className="card"
-                  onClick={() => {
-                    setLeadArrFilterStatus("CONVERT");
-                    handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
-                  }}
-                >
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between mb-3">
-                      <div>
-                        <span className="d-block">Converted Leads</span>
-                      </div>
-                      {/* <div>
-                        <span className="text-success">+12.5%</span>
-                      </div> */}
-                    </div>
 
-                    <h3 className="mb-3">
-                      {
-                        leadsArr.filter((x) => {
-                          return x.status == "CONVERT" ||
-                            x.status == "CONVERT_BY_SPOC"
-                            ? "CONVERT"
-                            : "";
-                        }).length
-                      }
-                    </h3>
-                    <div className="progress mb-2" style={{ height: "5px" }}>
-                      <div
-                        className="progress-bar bg-primary"
-                        role="progressbar"
-                        style={{ width: "70%" }}
-                        aria-valuenow={40}
-                        aria-valuemin={0}
-                        aria-valuemax={100}
-                      />
-                    </div>
-                  </div>
-                </Link>
+
                 <Link
                   to="/admin/leads"
                   className="card"
@@ -2363,6 +2325,52 @@ const Leads = () => {
                     </div>
                   </div>
                 </Link>
+
+
+
+
+                <Link
+                  to="/admin/leads"
+                  className="card"
+                  onClick={() => {
+                    setLeadArrFilterStatus("CONVERT");
+                    handleUpdateLeadsArray("CONVERT", "CONVERT_BY_SPOC");
+                  }}
+                >
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between mb-3">
+                      <div>
+                        <span className="d-block">Converted Leads</span>
+                      </div>
+                    
+                    </div>
+
+                    <h3 className="mb-3">
+                      {
+                        leadsArr.filter((x) => {
+                          return x.status == "CONVERT" ||
+                            x.status == "CONVERT_BY_SPOC"
+                            ? "CONVERT"
+                            : "";
+                        }).length
+                      }
+                    </h3>
+                    <div className="progress mb-2" style={{ height: "5px" }}>
+                      <div
+                        className="progress-bar bg-primary"
+                        role="progressbar"
+                        style={{ width: "70%" }}
+                        aria-valuenow={40}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                      />
+                    </div>
+                  </div>
+                </Link>
+
+
+
+               
 
                 <Link
                   to="/admin/leads"
@@ -3186,7 +3194,7 @@ const Leads = () => {
                       onClick={() => handleAssignLeadToAgent()}
                       className="btn btn-primary continue-btn"
                     >
-                      Assign
+                      Assign,
                     </a>
                   </div>
                   <div className="col-6">
