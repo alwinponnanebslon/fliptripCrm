@@ -137,11 +137,16 @@ const AddQuotation = ({ show, setShow, clearFunction, setReadOnly, readOnly }) =
   const [quotationArray, setQuotationArray] = useState([]);
   const [savedQuotationName, setSavedQuotationName] = useState("");
 
+
+  
 const savedQuotationGet=async ()=>{
   let {data:arr}  = await getSavedQuotation()
-console.log(arr,"arr1234")
+// console.log(arr,"arr1234")
   setQuotationArray(arr?.data)
 }
+
+
+
   useEffect(() => {
     // dispatch(tourGet({ "status"= statusOfTour }));
     // dispatch(tourGet());
@@ -151,7 +156,10 @@ console.log(arr,"arr1234")
   savedQuotationGet()
   }, []);
 
-useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
+// useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
+
+
+
 
   useEffect(() => {
     if (island == false) {
@@ -910,6 +918,7 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
     setQuotationObject1(findOBj)
 // console.log(e,"eeeeee1")
   }
+  
   const handleTourValueChange = (e, index) => {
     let { name, value } = e.target;
     ("use strict");
@@ -988,6 +997,7 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
     setTravelList([...tempList]);
   };
 
+
   const clearFunc = () => {
     setPerPersonLandPrice("");
     setTotalPersonLandPrice("");
@@ -1046,6 +1056,7 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
     ]);
   };
 
+
   const updateStatusOfLead = async (id, obj) => {
     let { data: res } = await updateLeadStatus(id, obj);
     if (res.success) {
@@ -1053,8 +1064,8 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
     }
   };
 
-  const handleSubmit = (e) => { 
 
+  const handleSubmit = (e) => { 
     e.preventDefault();
     if (destinationName == "") {
       toastError("Destination name is mandatory");
@@ -1204,7 +1215,8 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
   if(saveForLater==true){
     dispatch(savedQuotationAdd(obj))
   } 
-  setSavedQuotationName("")
+  setSavedQuotationName("") 
+  setSaveForLater(false)
     // console.log(obj, "234234");
     if (!isUpdateTour) {
       dispatch(quotationAdd(obj));
@@ -1223,8 +1235,9 @@ useEffect(()=>{console.log(quotationStateArr,"12-=")},[quotationStateArr])
       // window.location.reload();
       clearFunc();
     }
-    // console.log(obj, "send Obj9");
+    handleSaveQuotatonData()
   };
+
 
   const options = [
     { value: "true", label: "true" },
@@ -2422,7 +2435,8 @@ aria-label="Close"
                   // window.location.reload();
                   clearFunc();
                   setReadOnly(false)
-                  setSavedQuotationName("")
+                  setSavedQuotationName("") 
+                  setSaveForLater(false)
                 }}
               >
                 Close
